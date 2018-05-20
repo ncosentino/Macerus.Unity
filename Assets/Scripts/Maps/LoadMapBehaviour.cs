@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using Assets.Scripts.Unity.Resources.Sprites;
+using Tiled.Net.Dto.Tilesets;
 using Tiled.Net.Maps;
 using Tiled.Net.Parsers;
 using UnityEngine;
@@ -10,18 +12,25 @@ namespace Assets.Scripts.Maps
     {
         public IMapParser MapParser { get; set; }
 
+        public ITileLoader TileLoader { get; set; }
+
         public string MapResourcePath { get; set; }
 
         private void Start()
         {
             if (MapParser == null)
             {
-                throw new InvalidOperationException("The map parser was not set.");
+                throw new InvalidOperationException($"{nameof(MapParser)} was not set.");
+            }
+
+            if (TileLoader == null)
+            {
+                throw new InvalidOperationException($"{nameof(TileLoader)} was not set.");
             }
 
             if (string.IsNullOrWhiteSpace(MapResourcePath))
             {
-                throw new InvalidOperationException("The map resource path was not set.");
+                throw new InvalidOperationException($"{nameof(MapResourcePath)} was null or whitespace.");
             }
 
             Debug.Log($"Loading map '{MapResourcePath}'...");
@@ -31,6 +40,14 @@ namespace Assets.Scripts.Maps
             {
                 map = MapParser.ParseMap(mapResourceStream);
             }
+
+            var tilesetCache = new TilesetCache(map.Tilesets);
+            var flipY = map.RenderOrder.IndexOf("-down", StringComparison.OrdinalIgnoreCase) != -1
+                ? -1
+                : 1;
+            var flipX = map.RenderOrder.IndexOf("left-", StringComparison.OrdinalIgnoreCase) != -1
+                ? -1
+                : 1;
 
             var parentMapObjectTransform = this.gameObject.transform;
 
@@ -44,14 +61,22 @@ namespace Assets.Scripts.Maps
                 {
                     for (int y = 0; y < mapLayer.Height; y++)
                     {
-                        var tileObject = Instantiate(
-                            Resources.Load("Maps/Prefabs/Tile", typeof(GameObject)),
-                            mapLayerObject.transform) as GameObject;
-                        tileObject.name = $"Tile ({x}x{y})";
-                        tileObject.transform.position = new Vector3(x, y, z);
+                        var tile = mapLayer.GetTile(x, y);
+                        if (tile.Gid == 0)
+                        {
+                            continue;
+                        }
 
-                        var renderer = tileObject.GetComponent<SpriteRenderer>();
-                        renderer.sprite = Instantiate(Resources.Load("Maps/Tilesets/Test/sprite", typeof(Sprite))) as Sprite;
+                        var tileset = tilesetCache.ForGid(tile.Gid);
+                        var tilesetTile = tileset.Tiles[tile.Gid - 1];
+
+                        var tileObject = TileLoader.CreateTile(
+                            tileset,
+                            tile,
+                            x * flipX,
+                            y * flipY,
+                            z);
+                        tileObject.transform.parent = mapLayerObject.transform;
                     }
                 }
 

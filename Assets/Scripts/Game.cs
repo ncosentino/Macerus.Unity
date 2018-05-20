@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Autofac;
+﻿using System.IO;
+using Assets.Scripts.Autofac;
 using Assets.Scripts.Maps;
 using Autofac;
 using ProjectXyz.Game.Interface.Engine;
@@ -17,7 +18,7 @@ namespace Assets.Scripts
             var mapLoader = dependencyContainer.Resolve<IMapLoader>();
             mapLoader.LoadMap(
                 GameObject.Find("Map"),
-                @"C:\dev\nexus\products\Archive\__macerus-unity\Assets\Resources\Maps\swamp.tmx");
+                Path.Combine(Application.dataPath, @"Resources\Mapping\Maps\swamp.tmx"));
         }
 
         private void Update()

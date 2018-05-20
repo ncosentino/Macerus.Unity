@@ -6,10 +6,14 @@ namespace Assets.Scripts.Maps
     public sealed class MapLoader : IMapLoader
     {
         private readonly IMapParser _mapParser;
+        private readonly ITileLoader _tileLoader;
 
-        public MapLoader(IMapParser mapParser)
+        public MapLoader(
+            IMapParser mapParser,
+            ITileLoader tileLoader)
         {
             _mapParser = mapParser;
+            _tileLoader = tileLoader;
         }
 
         public void LoadMap(
@@ -17,7 +21,8 @@ namespace Assets.Scripts.Maps
             string mapResourcePath)
         {
             var loadMapBehaviour = mapGameObject.AddComponent<LoadMapBehaviour>();
-            loadMapBehaviour.MapResourcePath = @"C:\dev\nexus\products\Archive\__macerus-unity\Assets\Resources\Maps\swamp.tmx";
+            loadMapBehaviour.MapResourcePath = mapResourcePath;
+            loadMapBehaviour.TileLoader = _tileLoader;
             loadMapBehaviour.MapParser = _mapParser;
         }
     }

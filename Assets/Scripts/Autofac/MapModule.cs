@@ -11,6 +11,14 @@ namespace Assets.Scripts.Autofac
                 .RegisterType<MapLoader>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<TileLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<TilesetSpriteResourceResolver>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
