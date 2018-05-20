@@ -1,90 +1,93 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
-public sealed class UpdateDependencies
+namespace Assets.Scripts.UnityEditor
 {
-    [MenuItem("Macerus Tools/Update Dependencies")]
-    public static void BuildGame()
+    public sealed class UpdateDependencies
     {
-        Debug.Log($"Copying dependencies...");
-
-        var projectsDirectory = Path.Combine(
-            Application.dataPath,
-            @"..\..\");
-        Debug.Log($"Projects Directory: '{projectsDirectory}'");
-
-        var destinationDependenciesDirectory = Path.Combine(
-            Application.dataPath,
-            @"Dependencies");
-        Debug.Log($"Destination Dependencies Directory: '{destinationDependenciesDirectory}'");
-
-        var dependencyEntries = new[]
+        [MenuItem("Macerus Tools/Update Dependencies")]
+        public static void BuildGame()
         {
-            new DependencyEntry(
-                "Project XYZ",
-                @"projextXyz2\ConsoleApplication1\bin\Debug",
-                "*.dll"),
-            new DependencyEntry(
-                "Tiled.NET",
-                @"Tiled.Net\Tiled.Net\bin\Debug",
-                "*.dll"),
-        };
+            Debug.Log($"Copying dependencies...");
 
-        foreach (var dependencyEntry in dependencyEntries)
-        {
-            ProcessDependencyEntry(
-                projectsDirectory,
-                destinationDependenciesDirectory,
-                dependencyEntry);
-        }
-    }
+            var projectsDirectory = Path.Combine(
+                Application.dataPath,
+                @"..\..\");
+            Debug.Log($"Projects Directory: '{projectsDirectory}'");
 
-    private static void ProcessDependencyEntry(
-        string projectsDirectory,
-        string destinationDependenciesDirectory,
-        DependencyEntry dependencyEntry)
-    {
-        var dependencyDirectory = Path.Combine(
-            projectsDirectory,
-            dependencyEntry.RelativePath);
-        Debug.Log($"{dependencyEntry.Name} Directory: '{dependencyDirectory}'");
+            var destinationDependenciesDirectory = Path.Combine(
+                Application.dataPath,
+                @"Dependencies");
+            Debug.Log($"Destination Dependencies Directory: '{destinationDependenciesDirectory}'");
 
-        foreach (var searchPattern in dependencyEntry.SearchPatterns)
-        {
-            foreach (var sourceDependencyFilePath in Directory.GetFiles(dependencyDirectory, searchPattern))
+            var dependencyEntries = new[]
             {
-                var destinationFilePath = Path.Combine(
-                    destinationDependenciesDirectory,
-                    Path.GetFileName(sourceDependencyFilePath));
+                new DependencyEntry(
+                    "Project XYZ",
+                    @"projextXyz2\ConsoleApplication1\bin\Debug",
+                    "*.dll"),
+                new DependencyEntry(
+                    "Tiled.NET",
+                    @"Tiled.Net\Tiled.Net.Tmx.Xml\bin\Debug",
+                    "*.dll"),
+            };
 
-                Debug.Log($"Copying '{sourceDependencyFilePath}' to '{destinationFilePath}'...");
-                File.Copy(
-                    sourceDependencyFilePath,
-                    destinationFilePath,
-                    true);
+            foreach (var dependencyEntry in dependencyEntries)
+            {
+                ProcessDependencyEntry(
+                    projectsDirectory,
+                    destinationDependenciesDirectory,
+                    dependencyEntry);
             }
         }
-    }
 
-    private sealed class DependencyEntry
-    {
-        public DependencyEntry(
-            string name,
-            string relativePath,
-            params string[] searchPatterns)
+        private static void ProcessDependencyEntry(
+            string projectsDirectory,
+            string destinationDependenciesDirectory,
+            DependencyEntry dependencyEntry)
         {
-            Name = name;
-            RelativePath = relativePath;
-            SearchPatterns = searchPatterns.ToArray();
+            var dependencyDirectory = Path.Combine(
+                projectsDirectory,
+                dependencyEntry.RelativePath);
+            Debug.Log($"{dependencyEntry.Name} Directory: '{dependencyDirectory}'");
+
+            foreach (var searchPattern in dependencyEntry.SearchPatterns)
+            {
+                foreach (var sourceDependencyFilePath in Directory.GetFiles(dependencyDirectory, searchPattern))
+                {
+                    var destinationFilePath = Path.Combine(
+                        destinationDependenciesDirectory,
+                        Path.GetFileName(sourceDependencyFilePath));
+
+                    Debug.Log($"Copying '{sourceDependencyFilePath}' to '{destinationFilePath}'...");
+                    File.Copy(
+                        sourceDependencyFilePath,
+                        destinationFilePath,
+                        true);
+                }
+            }
         }
 
-        public string Name { get; }
+        private sealed class DependencyEntry
+        {
+            public DependencyEntry(
+                string name,
+                string relativePath,
+                params string[] searchPatterns)
+            {
+                Name = name;
+                RelativePath = relativePath;
+                SearchPatterns = searchPatterns.ToArray();
+            }
 
-        public string RelativePath { get; }
+            public string Name { get; }
 
-        public IReadOnlyCollection<string> SearchPatterns { get; }
+            public string RelativePath { get; }
+
+            public IReadOnlyCollection<string> SearchPatterns { get; }
+        }
     }
 }
