@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Assets.Scripts.Autofac;
 using Assets.Scripts.Maps;
+using Assets.Scripts.Scenes.Explore.Input;
 using Autofac;
 using ProjectXyz.Game.Interface.Engine;
 using UnityEngine;
@@ -19,6 +20,9 @@ namespace Assets.Scripts
             mapLoader.LoadMap(
                 GameObject.Find("Map"),
                 Path.Combine(Application.dataPath, @"Resources\Mapping\Maps\swamp.tmx"));
+
+            var guiInputStitcher = dependencyContainer.Resolve<IGuiInputStitcher>();
+            guiInputStitcher.Attach(gameObject);
         }
 
         private void Update()
