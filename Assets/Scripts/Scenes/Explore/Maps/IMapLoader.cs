@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Maps
+namespace Assets.Scripts.Scenes.Explore.Maps
 {
     public interface IMapLoader
     {

@@ -2,7 +2,9 @@
 
 namespace Assets.Scripts.Scenes.Explore.Camera
 {
-    public class CameraFollowBehaviour : MonoBehaviour, ICameraTargetting
+    public sealed class CameraFollowBehaviour :
+        MonoBehaviour,
+        ICameraTargetting
     {
         #region Unity Properties
         public float Dampening = 10;

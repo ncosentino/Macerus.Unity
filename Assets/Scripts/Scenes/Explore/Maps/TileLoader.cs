@@ -1,36 +1,24 @@
-using System.IO;
-using System.Linq;
-using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Resources.Sprites;
-using Tiled.Net.Layers;
-using Tiled.Net.Tilesets;
 using UnityEngine;
 
-namespace Assets.Scripts.Maps
+namespace Assets.Scripts.Scenes.Explore.Maps
 {
     public sealed class TileLoader : ITileLoader
     {
-        private readonly ITilesetSpriteResourceResolver _tilesetSpriteResourceResolver;
         private readonly ISpriteLoader _spriteLoader;
 
-        public TileLoader(
-            ITilesetSpriteResourceResolver tilesetSpriteResourceResolver,
-            ISpriteLoader spriteLoader)
-        {
-            _tilesetSpriteResourceResolver = tilesetSpriteResourceResolver;
+        public TileLoader(ISpriteLoader spriteLoader)
+        {;
             _spriteLoader = spriteLoader;
         }
 
         public GameObject CreateTile(
-            ITileset tileset,
-            IMapLayerTile tile,
             int x,
             int y,
-            int z)
+            int z,
+            string relativeResourcePath,
+            string spriteResourceName)
         {
-            var relativeResourcePath = _tilesetSpriteResourceResolver.ResolveResourcePath(tileset);
-            var spriteResourceName = $"{Path.GetFileNameWithoutExtension(relativeResourcePath)}_{tile.Gid - tileset.FirstGid}";
-
             var tileObject = Object.Instantiate(Resources.Load(
                 "Mapping/Prefabs/Tile",
                 typeof(GameObject))) as GameObject;
