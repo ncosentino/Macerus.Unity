@@ -37,3 +37,4 @@ sysinfo.txt
 
 # Macerus Specific
 /Assets/Dependencies/*
+/bin/
