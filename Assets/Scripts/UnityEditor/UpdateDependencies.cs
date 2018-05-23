@@ -40,7 +40,7 @@ namespace Assets.Scripts.UnityEditor
             {
                 new DependencyEntry(
                     "Project XYZ",
-                    @"projextXyz\ConsoleApplication1\bin\Debug",
+                    @"projectXyz\ConsoleApplication1\bin\Debug",
                     "*.dll"),
                 new DependencyEntry(
                     "Tiled.NET",
