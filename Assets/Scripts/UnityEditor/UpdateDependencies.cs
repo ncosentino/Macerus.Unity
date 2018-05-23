@@ -19,6 +19,16 @@ namespace Assets.Scripts.UnityEditor
                 @"Dependencies");
             Debug.Log($"Destination Dependencies Directory: '{destinationDependenciesDirectory}'");
 
+            if (Directory.Exists(destinationDependenciesDirectory))
+            {
+                Debug.Log($"Deleting '{destinationDependenciesDirectory}'...");
+                Directory.Delete(destinationDependenciesDirectory, true);
+
+                Debug.Log($"Recreating '{destinationDependenciesDirectory}'...");
+                Directory.CreateDirectory(destinationDependenciesDirectory);
+                Debug.Log($"Recreated '{destinationDependenciesDirectory}'.");
+            }
+
             CopySharedLibraries(destinationDependenciesDirectory);
             CopyMacerusDependencies(destinationDependenciesDirectory);
         }
