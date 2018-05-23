@@ -7,6 +7,7 @@ using Assets.Scripts.Unity.GameObjects;
 using Autofac;
 using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore
@@ -33,6 +34,10 @@ namespace Assets.Scripts.Scenes.Explore
                 .Find("FollowCamera")
                 .GetRequiredComponent<ICameraTargetting>();
             cameraTargetting.SetTarget(GameObject.Find("PlayerPlaceholder").transform);
+
+            // REMOVE THIS
+            var actorFactory = dependencyContainer.Resolve<IActorFactory>();
+            var someActor = actorFactory.Create();
         }
     }
 }
