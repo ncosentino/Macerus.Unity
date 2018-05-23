@@ -14,21 +14,33 @@ namespace Assets.Scripts.UnityEditor
         {
             Debug.Log($"Copying dependencies...");
 
-            var projectsDirectory = Path.Combine(
-                Application.dataPath,
-                @"..\..\");
-            Debug.Log($"Projects Directory: '{projectsDirectory}'");
-
             var destinationDependenciesDirectory = Path.Combine(
                 Application.dataPath,
                 @"Dependencies");
             Debug.Log($"Destination Dependencies Directory: '{destinationDependenciesDirectory}'");
 
+            CopySharedLibraries(destinationDependenciesDirectory);
+            CopyMacerusDependencies(destinationDependenciesDirectory);
+        }
+
+        private static void CopyMacerusDependencies(string destinationDependenciesDirectory)
+        {
+            // TODO: copy stuff specific to macerus implementation that is not unity
+            Debug.Log("No Macerus specific dependencies to copy yet :)");
+        }
+
+        private static void CopySharedLibraries(string destinationDependenciesDirectory)
+        {
+            var librariesDirectory = Path.Combine(
+                Application.dataPath,
+                @"..\..\..\..\libraries");
+            Debug.Log($"Libraries Directory: '{librariesDirectory}'");
+
             var dependencyEntries = new[]
             {
                 new DependencyEntry(
                     "Project XYZ",
-                    @"projextXyz2\ConsoleApplication1\bin\Debug",
+                    @"projextXyz\ConsoleApplication1\bin\Debug",
                     "*.dll"),
                 new DependencyEntry(
                     "Tiled.NET",
@@ -39,7 +51,7 @@ namespace Assets.Scripts.UnityEditor
             foreach (var dependencyEntry in dependencyEntries)
             {
                 ProcessDependencyEntry(
-                    projectsDirectory,
+                    librariesDirectory,
                     destinationDependenciesDirectory,
                     dependencyEntry);
             }
