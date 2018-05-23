@@ -25,8 +25,25 @@ namespace Assets.Scripts.UnityEditor
 
         private static void CopyMacerusDependencies(string destinationDependenciesDirectory)
         {
-            // TODO: copy stuff specific to macerus implementation that is not unity
-            Debug.Log("No Macerus specific dependencies to copy yet :)");
+            var sourceDependencyDirectory = Path.Combine(
+                Application.dataPath,
+                @"..\..\macerus-game\");
+
+            var dependencyEntries = new[]
+            {
+                new DependencyEntry(
+                    "Macerus",
+                    @"Macerus\bin\debug",
+                    "*.dll"),
+            };
+
+            foreach (var dependencyEntry in dependencyEntries)
+            {
+                ProcessDependencyEntry(
+                    sourceDependencyDirectory,
+                    destinationDependenciesDirectory,
+                    dependencyEntry);
+            }
         }
 
         private static void CopySharedLibraries(string destinationDependenciesDirectory)
