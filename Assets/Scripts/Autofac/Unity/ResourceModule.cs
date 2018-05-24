@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Unity.Resources.Sprites;
+﻿using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Sprites;
 using Autofac;
 
 namespace Assets.Scripts.Autofac.Unity
@@ -13,6 +14,10 @@ namespace Assets.Scripts.Autofac.Unity
                 //.SingleInstance();
             builder
                 .RegisterType<SpriteLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ResourcePrefabLoader>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

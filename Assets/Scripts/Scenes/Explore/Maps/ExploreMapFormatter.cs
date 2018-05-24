@@ -34,7 +34,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
                 foreach (var tile in mapLayer.Tiles)
                 {
-                    var tileResource = (ITileResourceComponent) tile.Components.First(x => x is ITileResourceComponent);
+                    var tileResource = (ITileResourceComponent)tile.Components.First(x => x is ITileResourceComponent);
                     var tileObject = _tileLoader.CreateTile(
                         tile.X,
                         tile.Y,
