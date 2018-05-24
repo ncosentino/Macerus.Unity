@@ -1,5 +1,6 @@
-﻿using Assets.Scripts.Unity;
 ﻿using Assets.Scripts.Behaviours.Threading;
+using Assets.Scripts.Unity;
+using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Threading;
 using Autofac;
 
@@ -11,6 +12,10 @@ namespace Assets.Scripts.Autofac.Unity
         {
             builder
                 .RegisterType<AssetPaths>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ObjectDestroyer>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
