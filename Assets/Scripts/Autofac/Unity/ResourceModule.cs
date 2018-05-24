@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Unity.Resources;
 using Assets.Scripts.Unity.Resources.Sprites;
 using Autofac;
+using ProjectXyz.Shared.Framework.Collections;
 
 namespace Assets.Scripts.Autofac.Unity
 {
@@ -9,7 +10,7 @@ namespace Assets.Scripts.Autofac.Unity
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .Register(x => new SpriteSheetCache(10))
+                .Register(x => new Cache<string, ISpriteSheet>(10))
                 .AsImplementedInterfaces();
                 //.SingleInstance();
             builder

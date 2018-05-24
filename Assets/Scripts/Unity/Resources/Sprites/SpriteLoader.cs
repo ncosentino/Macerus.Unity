@@ -1,13 +1,14 @@
 ﻿using System;
+using ProjectXyz.Framework.Interface.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Unity.Resources.Sprites
 {
     public sealed class SpriteLoader : ISpriteLoader
     {
-        private readonly ISpriteSheetCache _spriteSheetCache;
+        private readonly ICache<string, ISpriteSheet> _spriteSheetCache;
 
-        public SpriteLoader(ISpriteSheetCache spriteSheetCache)
+        public SpriteLoader(ICache<string, ISpriteSheet> spriteSheetCache)
         {
             _spriteSheetCache = spriteSheetCache;
         }
@@ -17,7 +18,7 @@ namespace Assets.Scripts.Unity.Resources.Sprites
             string spriteName)
         {
             ISpriteSheet spriteSheet;
-            if (!_spriteSheetCache.TryGet(
+            if (!_spriteSheetCache.TryGetValue(
                 spriteSheetResource,
                 out spriteSheet))
             {
