@@ -5,16 +5,19 @@ namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet
 {
     public sealed class MapResourceIdConverter : IMapResourceIdConverter
     {
-        private readonly IAssetPaths _assetPaths;
+        private readonly string _relativeMapsResourceRoot;
 
         public MapResourceIdConverter(IAssetPaths assetPaths)
         {
-            _assetPaths = assetPaths;
+            _relativeMapsResourceRoot = assetPaths
+                .MapsRoot
+                .Substring(assetPaths.ResourcesRoot.Length)
+                .TrimStart('\\', '/');
         }
 
         public string Convert(string mapResourceId)
         {
-            return Path.Combine(_assetPaths.MapsRoot, $"{mapResourceId}.tmx");
+            return Path.Combine(_relativeMapsResourceRoot, $"{mapResourceId}_tmx");
         }
     }
 }

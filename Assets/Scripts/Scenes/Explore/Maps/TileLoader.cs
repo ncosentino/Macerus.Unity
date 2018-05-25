@@ -7,14 +7,14 @@ namespace Assets.Scripts.Scenes.Explore.Maps
     public sealed class TileLoader : ITileLoader
     {
         private readonly ISpriteLoader _spriteLoader;
-        private readonly IResourcePrefabLoader _resourcePrefabLoader;
+        private readonly IPrefabCreator _prefabCreator;
 
         public TileLoader(
             ISpriteLoader spriteLoader,
-            IResourcePrefabLoader resourcePrefabLoader)
+            IPrefabCreator prefabCreator)
         {;
             _spriteLoader = spriteLoader;
-            _resourcePrefabLoader = resourcePrefabLoader;
+            _prefabCreator = prefabCreator;
         }
 
         public GameObject CreateTile(
@@ -24,7 +24,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             string relativeResourcePath,
             string spriteResourceName)
         {
-            var tileObject = _resourcePrefabLoader.Create<GameObject>("Mapping/Prefabs/Tile");
+            var tileObject = _prefabCreator.Create<GameObject>("Mapping/Prefabs/Tile");
             tileObject.name = $"Tile ({x}x{y})";
             tileObject.transform.position = new Vector3(
                 x,

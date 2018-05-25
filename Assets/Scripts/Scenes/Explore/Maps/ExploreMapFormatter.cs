@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Scenes.Explore.Maps.GameObjects;
-using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using Macerus.Api.Behaviors;
@@ -19,16 +18,16 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
-        private readonly IResourcePrefabLoader _resourcePrefabLoader;
+        private readonly IPrefabCreator _prefabCreator;
 
         public ExploreMapFormatter(
             ITileLoader tileLoader,
             IObjectDestroyer objectDestroyer,
-            IResourcePrefabLoader resourcePrefabLoader)
+            IPrefabCreator prefabCreator)
         {
             _tileLoader = tileLoader;
             _objectDestroyer = objectDestroyer;
-            _resourcePrefabLoader = resourcePrefabLoader;
+            _prefabCreator = prefabCreator;
         }
 
         public void FormatMap(
@@ -110,7 +109,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             {
                 // TODO: load the correct resource based on some behavior
                 var relativePrefabResourcePath = "Mapping/Prefabs/PlayerPlaceholder";
-                var unityGameObject = _resourcePrefabLoader.Create<GameObject>(relativePrefabResourcePath);
+                var unityGameObject = _prefabCreator.Create<GameObject>(relativePrefabResourcePath);
 
                 // set an ID on the game object
                 var gameObjectId = gameObject

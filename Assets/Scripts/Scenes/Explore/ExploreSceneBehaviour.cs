@@ -20,7 +20,7 @@ namespace Assets.Scripts.Scenes.Explore
     public sealed class ExploreSceneBehaviour : MonoBehaviour
     {
         private bool _runOnce;
-        private IResourcePrefabLoader _resourcePrefabLoader;
+        private IPrefabCreator _prefabCreator;
 
         private void Start()
         {
@@ -29,10 +29,10 @@ namespace Assets.Scripts.Scenes.Explore
             var gameEngine = dependencyContainer.Resolve<IGameEngine>();
             gameEngine.Start(CancellationToken.None);
 
-            _resourcePrefabLoader = dependencyContainer.Resolve<IResourcePrefabLoader>();
+            _prefabCreator = dependencyContainer.Resolve<IPrefabCreator>();
 
             var mapBehaviourStitcher = dependencyContainer.Resolve<IMapBehaviourStitcher>();
-            var mapObject = _resourcePrefabLoader.Create<GameObject>("Mapping/Prefabs/Map");
+            var mapObject = _prefabCreator.Create<GameObject>("Mapping/Prefabs/Map");
             mapObject.transform.parent = gameObject.transform;
             mapObject.name = "Map";
             mapBehaviourStitcher.Attach(mapObject);
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Scenes.Explore
             }
 
             Debug.Log("Found player on map...");
-            var followCamera = _resourcePrefabLoader.Create<GameObject>("Mapping/Prefabs/FollowCamera");
+            var followCamera = _prefabCreator.Create<GameObject>("Mapping/Prefabs/FollowCamera");
             followCamera.transform.parent = gameObject.transform;
             followCamera.name = "FollowCamera";
 

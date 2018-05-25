@@ -12,8 +12,13 @@ namespace Assets.Scripts.Autofac
         public IContainer CreateContainer()
         {
             Debug.Log($"Creating dependency container...");
-
+            
+#if UNITY_EDITOR
             var moduleDirectory = Path.Combine(Application.dataPath, "Dependencies");
+#else
+            var moduleDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin_Data\\Managed");
+#endif
+
             var moduleDiscoverer = new ModuleDiscoverer();
             moduleDiscoverer.AssemblyLoadFailed += (_, e) =>
             {

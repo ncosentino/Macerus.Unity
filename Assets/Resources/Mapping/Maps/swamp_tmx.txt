@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="15">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="2">
  <tileset firstgid="1" name="swamp" tilewidth="32" tileheight="32">
-  <!-- <image source="../Tilesets/Exterior/Swamp/swamp.png" trans="ff00ff" width="224" height="96"/> -->
   <image source="../Tilesets/Exterior/Swamp/swamp.png" trans="ff00ff" width="224" height="96"/>
   <terraintypes>
    <terrain name="Walkable" tile="-1"/>
@@ -20052,26 +20051,13 @@
   </object>
  </objectgroup>
  <objectgroup color="#a0a0a4" name="Spawns">
-  <object id="3" name="playerSpawnLocation" type="Prefabs/Spawners/PlayerSpawner" gid="15" x="1259" y="592"/>
-  <object id="6" name="enemySpawner" type="Prefabs/Spawners/CollisionSpawner" x="1231.5" y="843.5" width="90.6663" height="73.3337">
+  <object id="1" name="player" type="Actor" x="1231.5" y="843.5" width="90.6663" height="73.3337">
    <properties>
     <property name="CollisionSpawnerBehaviour_PrefabPath" value="Prefabs/Actors/Enemy"/>
-    <property name="CollisionSpawnerBehaviour_SpawnName" value="Enemy"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="10" name="enemySpawner" type="Prefabs/Spawners/CollisionSpawner" x="1360.67" y="538.833" width="90.6663" height="73.3337">
-   <properties>
-    <property name="CollisionSpawnerBehaviour_PrefabPath" value="Prefabs/Actors/Enemy"/>
-    <property name="CollisionSpawnerBehaviour_SpawnName" value="Enemy"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="12" name="testEncounter" type="Prefabs/Encounters/Encounter" x="1019" y="789" width="178.5" height="79.5"/>
-  <object id="13" name="testEncounter" type="Prefabs/Encounters/Encounter" x="1241.25" y="662.25" width="77" height="84.5"/>
-  <object id="14" name="testEncounter" type="Prefabs/Encounters/Encounter" x="1464.5" y="533.25" width="99" height="82"/>
  </objectgroup>
- <objectgroup color="#a0a0a4" name="Encounters">
-  <object id="8" name="testEncounter" type="Prefabs/Encounters/Encounter" x="1361.33" y="785.333" width="276" height="88"/>
+ <objectgroup color="#a0a0a4" name="EmptyGroupJustAsAnExample">
  </objectgroup>
 </map>

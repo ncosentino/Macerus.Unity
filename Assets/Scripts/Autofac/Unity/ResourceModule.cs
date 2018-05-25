@@ -18,7 +18,11 @@ namespace Assets.Scripts.Autofac.Unity
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<ResourcePrefabLoader>()
+                .RegisterType<ResourceLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<PrefabCreator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

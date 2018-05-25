@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Unity.Resources
 {
-    public interface IResourcePrefabLoader
+    public interface IPrefabCreator
     {
         TGameObject Create<TGameObject>(string relativePrefabPathWithinResources)
             where TGameObject : Object;
