@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Unity.GameObjects
@@ -36,6 +37,13 @@ namespace Assets.Scripts.Unity.GameObjects
             }
 
             return (TComponent)childComponent;
+        }
+
+        public static IEnumerable<GameObject> GetChildGameObjects(this GameObject gameObject)
+        {
+            return gameObject
+                .transform
+                .GetChildGameObjects();
         }
         #endregion
     }
