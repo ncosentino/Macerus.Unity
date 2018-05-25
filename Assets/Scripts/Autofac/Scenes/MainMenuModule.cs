@@ -1,9 +1,9 @@
-﻿using Assets.Scripts.Scenes.Explore.Input;
+﻿using Assets.Scripts.Scenes.MainMenu.Input;
 using Autofac;
 
 namespace Assets.Scripts.Autofac.Scenes
 {
-    public sealed class ExploreModule : Module
+    public sealed class MainMenuModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

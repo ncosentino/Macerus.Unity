@@ -15,6 +15,10 @@ namespace Assets.Scripts.Autofac.Unity
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<GameObjectManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<ObjectDestroyer>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

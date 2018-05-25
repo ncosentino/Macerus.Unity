@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
-using Assets.Scripts.Autofac;
+using Assets.Scripts.Behaviours;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
@@ -24,7 +24,7 @@ namespace Assets.Scripts.Scenes.Explore
 
         private void Start()
         {
-            var dependencyContainer = new MacerusContainerBuilder().CreateContainer();
+            var dependencyContainer = GameDependencyBehaviour.Container;
 
             var gameEngine = dependencyContainer.Resolve<IGameEngine>();
             gameEngine.Start(CancellationToken.None);

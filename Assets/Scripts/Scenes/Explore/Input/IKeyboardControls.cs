@@ -18,6 +18,8 @@ namespace Assets.Scripts.Scenes.Explore.Input
         KeyCode ToggleInventory { get; }
 
         KeyCode GuiClose { get; }
+
+        KeyCode DebugConsole { get; }
         #endregion
     }
 }
