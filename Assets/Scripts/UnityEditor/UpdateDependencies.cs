@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +10,13 @@ namespace Assets.Scripts.UnityEditor
 {
     public sealed class UpdateDependencies
     {
+        // NOTE: when this is all working, we won't want ANY example modules from ProjectXyz
+        private static readonly IReadOnlyCollection<string> EXCLUDE_MODULES = new[]
+        {
+            "Examples.Modules.GameObjects",
+            "Examples.Modules.Mapping",
+        };
+
         [MenuItem("Macerus Tools/Update Dependencies")]
         public static void BuildGame()
         {
@@ -44,7 +52,8 @@ namespace Assets.Scripts.UnityEditor
                 new DependencyEntry(
                     "Macerus",
                     @"Macerus\bin\debug",
-                    "*.dll"),
+                    new[] { "*.dll" },
+                    EXCLUDE_MODULES),
             };
 
             foreach (var dependencyEntry in dependencyEntries)
@@ -68,11 +77,13 @@ namespace Assets.Scripts.UnityEditor
                 new DependencyEntry(
                     "Project XYZ",
                     @"projectXyz\ConsoleApplication1\bin\Debug",
-                    "*.dll"),
+                    new[] { "*.dll" },
+                    EXCLUDE_MODULES),
                 new DependencyEntry(
                     "Tiled.NET",
                     @"Tiled.Net\Tiled.Net.Tmx.Xml\bin\Debug",
-                    "*.dll"),
+                    new[] { "*.dll" },
+                    new string[0]),
             };
 
             foreach (var dependencyEntry in dependencyEntries)
@@ -96,7 +107,9 @@ namespace Assets.Scripts.UnityEditor
 
             foreach (var searchPattern in dependencyEntry.SearchPatterns)
             {
-                foreach (var sourceDependencyFilePath in Directory.GetFiles(dependencyDirectory, searchPattern))
+                foreach (var sourceDependencyFilePath in Directory
+                    .GetFiles(dependencyDirectory, searchPattern)
+                    .Where(fileName => !dependencyEntry.ExcludePatterns.Any(exclude => Regex.IsMatch(fileName, exclude))))
                 {
                     var destinationFilePath = Path.Combine(
                         destinationDependenciesDirectory,
@@ -116,11 +129,13 @@ namespace Assets.Scripts.UnityEditor
             public DependencyEntry(
                 string name,
                 string relativePath,
-                params string[] searchPatterns)
+                IEnumerable<string> searchPatterns,
+                IEnumerable<string> excludePatterns)
             {
                 Name = name;
                 RelativePath = relativePath;
                 SearchPatterns = searchPatterns.ToArray();
+                ExcludePatterns = excludePatterns.ToArray();
             }
 
             public string Name { get; }
@@ -128,6 +143,8 @@ namespace Assets.Scripts.UnityEditor
             public string RelativePath { get; }
 
             public IReadOnlyCollection<string> SearchPatterns { get; }
+
+            public IReadOnlyCollection<string> ExcludePatterns { get; }
         }
     }
 }
