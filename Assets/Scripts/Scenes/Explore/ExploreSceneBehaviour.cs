@@ -9,11 +9,9 @@ using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using Autofac;
 using ProjectXyz.Game.Interface.Engine;
-using ProjectXyz.Game.Interface.GameObjects;
 using ProjectXyz.Game.Interface.Mapping;
 using ProjectXyz.Shared.Framework;
 using UnityEngine;
-using IGameObjectRepository = Macerus.Api.GameObjects.IGameObjectRepository;
 
 namespace Assets.Scripts.Scenes.Explore
 {
@@ -42,13 +40,6 @@ namespace Assets.Scripts.Scenes.Explore
 
             var guiInputStitcher = dependencyContainer.Resolve<IGuiInputStitcher>();
             guiInputStitcher.Attach(gameObject);
-
-            ////var gameObjectRepository = dependencyContainer.Resolve<IGameObjectRepository>();
-            ////var playerActor = gameObjectRepository.Load(
-            ////    new StringIdentifier("actor"),
-            ////    new StringIdentifier("player"));
-            ////var gameObjectManager = dependencyContainer.Resolve<IMutableGameObjectManager>();
-            ////gameObjectManager.MarkForAddition(playerActor);
         }
 
         private void Update()
