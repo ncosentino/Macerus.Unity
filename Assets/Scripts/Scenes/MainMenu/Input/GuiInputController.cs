@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Assets.Scripts.Unity;
-using Assets.Scripts.Unity.GameObjects;
-using UnityEngine;
+﻿using Assets.Scripts.Unity;
 
 namespace Assets.Scripts.Scenes.MainMenu.Input
 {

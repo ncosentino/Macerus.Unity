@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using Assets.Scripts.Scenes.Explore.Maps;
 using Assets.Scripts.Unity;
+using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet
+namespace Assets.Scripts.TiledNet
 {
     public sealed class MapResourceIdConverter : IMapResourceIdConverter
     {
@@ -17,6 +19,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet
 
         public string Convert(string mapResourceId)
         {
+            Debug.Log($"Map resource id {mapResourceId}");
             return Path.Combine(_relativeMapsResourceRoot, $"{mapResourceId}_tmx");
         }
     }

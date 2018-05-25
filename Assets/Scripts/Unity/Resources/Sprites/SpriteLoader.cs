@@ -25,7 +25,7 @@ namespace Assets.Scripts.Unity.Resources.Sprites
                 // TODO: use an IResourceLoader that has a LoadAll<> signature...
                 var matchingSprites = UnityEngine.Resources.LoadAll<Sprite>(spriteSheetResource);
                 spriteSheet = new SpriteSheet(matchingSprites);
-                _spriteSheetCache.Add(spriteSheetResource, spriteSheet);
+                _spriteSheetCache.AddOrUpdate(spriteSheetResource, spriteSheet);
             }
 
             Sprite sprite;

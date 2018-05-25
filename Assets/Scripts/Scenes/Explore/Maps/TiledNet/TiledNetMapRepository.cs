@@ -1,42 +1,41 @@
-﻿using System.IO;
-using Assets.Scripts.Unity.Resources;
+﻿using Assets.Scripts.TiledNet;
+using ProjectXyz.Api.Framework;
+using ProjectXyz.Framework.Interface.Collections;
 using ProjectXyz.Game.Interface.Mapping;
-using Tiled.Net.Maps;
-using Tiled.Net.Parsers;
-using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet
 {
     public sealed class TiledNetMapRepository : IMapRepository
     {
-        private readonly IResourceLoader _resourceLoader;
-        private readonly IMapParser _mapParser;
         private readonly ITiledNetToMapConverter _tiledNetToMapConverter;
-        private readonly IMapResourceIdConverter _mapResourceIdConverter;
+        private readonly ITiledMapLoader _tiledMapLoader;
+        private readonly ICache<IIdentifier, IMap> _mapCache;
 
         public TiledNetMapRepository(
-            IResourceLoader resourceLoader,
-            IMapParser mapParser,
             ITiledNetToMapConverter tiledNetToMapConverter,
-            IMapResourceIdConverter mapResourceIdConverter)
+            ITiledMapLoader tiledMapLoader,
+            ICache<IIdentifier, IMap> mapCache)
         {
-            _resourceLoader = resourceLoader;
-            _mapParser = mapParser;
             _tiledNetToMapConverter = tiledNetToMapConverter;
-            _mapResourceIdConverter = mapResourceIdConverter;
+            _tiledMapLoader = tiledMapLoader;
+            _mapCache = mapCache;
         }
 
-        public IMap LoadMap(string mapResourceId)
+        public IMap LoadMap(IIdentifier mapId)
         {
-            var mapResourcePath = _mapResourceIdConverter.Convert(mapResourceId);
-            
-            ITiledMap tiledMap;
-            using (var mapResourceStream = _resourceLoader.LoadStream(mapResourcePath))
+            IMap cached;
+            if (_mapCache.TryGetValue(mapId, out cached))
             {
-                tiledMap = _mapParser.ParseMap(mapResourceStream);
+                return cached;
             }
 
-            var map = _tiledNetToMapConverter.Convert(tiledMap);
+            var tiledMap = _tiledMapLoader.LoadMap(mapId);
+
+            var map = _tiledNetToMapConverter.Convert(
+                mapId,
+                tiledMap);
+            _mapCache.AddOrUpdate(mapId, map);
+
             return map;
         }
     }

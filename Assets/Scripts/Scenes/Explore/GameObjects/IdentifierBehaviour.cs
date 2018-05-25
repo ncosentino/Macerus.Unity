@@ -1,7 +1,7 @@
 ﻿using ProjectXyz.Api.Framework;
 using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Maps.GameObjects
+namespace Assets.Scripts.Scenes.Explore.GameObjects
 {
     public sealed class IdentifierBehaviour :
         MonoBehaviour,

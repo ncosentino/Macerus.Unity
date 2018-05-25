@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Assets.Scripts.Unity;
-using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
+﻿using Assets.Scripts.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

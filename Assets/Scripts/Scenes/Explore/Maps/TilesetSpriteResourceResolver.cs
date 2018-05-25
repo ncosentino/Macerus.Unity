@@ -1,18 +1,19 @@
-using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Unity;
+using ProjectXyz.Framework.Interface.Collections;
+using ProjectXyz.Shared.Framework.Collections;
 
 namespace Assets.Scripts.Scenes.Explore.Maps
 {
     public sealed class TilesetSpriteResourceResolver : ITilesetSpriteResourceResolver
     {
         private readonly IAssetPaths _assetPaths;
-        private readonly Dictionary<string, string> _cache;
+        private readonly ICache<string, string> _cache;
 
         public TilesetSpriteResourceResolver(IAssetPaths assetPaths)
         {
             _assetPaths = assetPaths;
-            _cache = new Dictionary<string, string>();
+            _cache = new Cache<string, string>(100);
         }
 
         public string ResolveResourcePath(string tilesetResourcePath)
@@ -27,7 +28,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             var fullResourcePath = Path.GetFullPath(Path.Combine(_assetPaths.MapsRoot, tilesetSourceImagePath));
             var relativeResourcePath = fullResourcePath.Substring(_assetPaths.ResourcesRoot.Length + 1);
 
-            _cache[tilesetResourcePath] = relativeResourcePath;
+            _cache.AddOrUpdate(tilesetResourcePath, relativeResourcePath);
             return relativeResourcePath;
         }
     }

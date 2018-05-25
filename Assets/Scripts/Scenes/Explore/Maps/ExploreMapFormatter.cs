@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Scenes.Explore.Maps.GameObjects;
+using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using Macerus.Api.Behaviors;

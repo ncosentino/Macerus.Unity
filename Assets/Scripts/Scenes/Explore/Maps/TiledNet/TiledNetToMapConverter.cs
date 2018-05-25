@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ProjectXyz.Api.Framework;
 using ProjectXyz.Game.Core.Mapping;
 using ProjectXyz.Game.Interface.Mapping;
 using Tiled.Net.Dto.Tilesets;
@@ -19,7 +20,9 @@ namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet
             _tilesetSpriteResourceResolver = tilesetSpriteResourceResolver;
         }
 
-        public IMap Convert(ITiledMap tiledMap)
+        public IMap Convert(
+            IIdentifier mapId,
+            ITiledMap tiledMap)
         {
             var flipY = tiledMap.RenderOrder.IndexOf("-down", StringComparison.OrdinalIgnoreCase) != -1
                 ? -1
@@ -43,7 +46,9 @@ namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet
                         mapLayerTiles);
                     return mapLayer;
                 });
-            var map = new Map(layers);
+            var map = new Map(
+                mapId,
+                layers);
             return map;
         }
 

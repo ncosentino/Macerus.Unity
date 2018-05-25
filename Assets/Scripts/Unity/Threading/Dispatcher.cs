@@ -1,5 +1,4 @@
 ﻿using System;
-using Assets.Scripts.Behaviours.Threading;
 
 namespace Assets.Scripts.Unity.Threading
 {

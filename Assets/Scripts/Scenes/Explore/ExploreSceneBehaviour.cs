@@ -2,18 +2,18 @@
 using System.Threading;
 using Assets.Scripts.Behaviours;
 using Assets.Scripts.Scenes.Explore.Camera;
+using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
-using Assets.Scripts.Scenes.Explore.Maps.GameObjects;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using Autofac;
-using Macerus.Api.GameObjects;
 using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Game.Interface.GameObjects;
 using ProjectXyz.Game.Interface.Mapping;
 using ProjectXyz.Shared.Framework;
 using UnityEngine;
+using IGameObjectRepository = Macerus.Api.GameObjects.IGameObjectRepository;
 
 namespace Assets.Scripts.Scenes.Explore
 {
@@ -38,17 +38,17 @@ namespace Assets.Scripts.Scenes.Explore
             mapBehaviourStitcher.Attach(mapObject);
 
             var mapManager = dependencyContainer.Resolve<IMapManager>();
-            mapManager.SwitchMap("swamp");
+            mapManager.SwitchMap(new StringIdentifier("swamp"));
 
             var guiInputStitcher = dependencyContainer.Resolve<IGuiInputStitcher>();
             guiInputStitcher.Attach(gameObject);
 
-            var gameObjectRepository = dependencyContainer.Resolve<IGameObjectRepository>();
-            var playerActor = gameObjectRepository.Load(
-                new StringIdentifier("actor"),
-                new StringIdentifier("player"));
-            var gameObjectManager = dependencyContainer.Resolve<IMutableGameObjectManager>();
-            gameObjectManager.MarkForAddition(playerActor);
+            ////var gameObjectRepository = dependencyContainer.Resolve<IGameObjectRepository>();
+            ////var playerActor = gameObjectRepository.Load(
+            ////    new StringIdentifier("actor"),
+            ////    new StringIdentifier("player"));
+            ////var gameObjectManager = dependencyContainer.Resolve<IMutableGameObjectManager>();
+            ////gameObjectManager.MarkForAddition(playerActor);
         }
 
         private void Update()
