@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Plugins.Features.GameObjects.Api;
+﻿using Assets.Scripts.Api.GameObjects;
 using ProjectXyz.Shared.Game.Behaviors;
 
-namespace Assets.Scripts.Plugins.Features.GameObjects.Shared
+namespace Assets.Scripts.Shared.GameObjects
 {
     public class HasPrefabResourceBehavior :
         BaseBehavior,

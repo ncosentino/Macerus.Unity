@@ -22,10 +22,10 @@ namespace Assets.Scripts.Scenes.Explore.Camera
         {
             Contract.RequiresNotNull(
                 GameObjectManager,
-                $"{nameof(GameObjectManager)} was not set.");
+                $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 CameraTargetting,
-                $"{nameof(CameraTargetting)} was not set.");
+                $"{nameof(CameraTargetting)} was not set on '{gameObject}.{this}'.");
 
             ResetTriggerTime();
         }

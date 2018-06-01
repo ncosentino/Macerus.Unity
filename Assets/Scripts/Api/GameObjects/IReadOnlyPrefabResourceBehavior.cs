@@ -1,6 +1,6 @@
 using ProjectXyz.Api.Behaviors;
 
-namespace Assets.Scripts.Plugins.Features.GameObjects.Api
+namespace Assets.Scripts.Api.GameObjects
 {
     public interface IReadOnlyPrefabResourceBehavior : IBehavior
     {

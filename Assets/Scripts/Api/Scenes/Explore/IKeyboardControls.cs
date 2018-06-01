@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Input
+namespace Assets.Scripts.Api.Scenes.Explore
 {
     public interface IKeyboardControls
     {

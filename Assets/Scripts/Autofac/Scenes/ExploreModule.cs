@@ -27,6 +27,22 @@ namespace Assets.Scripts.Autofac.Scenes
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<IdentityBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<MapObjectStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<WorldLocationStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<HasGameObjectBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<PrefabStitcherFacade>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

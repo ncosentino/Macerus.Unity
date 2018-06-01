@@ -1,4 +1,4 @@
-namespace Assets.Scripts.Plugins.Features.GameObjects.Api
+namespace Assets.Scripts.Api.GameObjects
 {
     public interface IPrefabResourceBehavior : IReadOnlyPrefabResourceBehavior
     {

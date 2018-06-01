@@ -5,11 +5,11 @@ namespace Assets.Scripts.Scenes.MainMenu.Input
     public sealed class GuiInputController : IGuiInputController
     {
         private readonly IDebugConsoleManager _debugConsoleManager;
-        private readonly Explore.Input.IKeyboardControls _keyboardControls;
+        private readonly Api.Scenes.Explore.IKeyboardControls _keyboardControls;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
-            Explore.Input.IKeyboardControls keyboardControls)
+            Api.Scenes.Explore.IKeyboardControls keyboardControls)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;

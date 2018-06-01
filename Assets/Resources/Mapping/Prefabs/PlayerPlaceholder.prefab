@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4248890530421434}
   - component: {fileID: 212131020898202716}
-  - component: {fileID: 114309658914678316}
   - component: {fileID: 114635532772079604}
   m_Layer: 0
   m_Name: PlayerPlaceholder
@@ -42,17 +41,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114309658914678316
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1146566377613008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f644863d781534c4e9cc945062a67cd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114635532772079604
 MonoBehaviour:
   m_ObjectHideFlags: 1

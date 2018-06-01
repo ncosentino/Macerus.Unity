@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Api.GameObjects;
+using Assets.Scripts.Plugins.Features.Actors.UnityBehaviours;
 using Autofac;
 
 namespace Assets.Scripts.Plugins.Features.Actors
@@ -14,6 +15,11 @@ namespace Assets.Scripts.Plugins.Features.Actors
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            // player
+            builder
+                .RegisterType<PlayerInputControlsBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
             builder
                 .RegisterType<PlayerPrefabStitcher>()
                 .AsImplementedInterfaces()

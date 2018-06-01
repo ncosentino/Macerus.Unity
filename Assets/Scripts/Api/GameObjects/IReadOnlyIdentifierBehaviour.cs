@@ -1,6 +1,6 @@
 ﻿using ProjectXyz.Api.Framework;
 
-namespace Assets.Scripts.Scenes.Explore.GameObjects
+namespace Assets.Scripts.Api.GameObjects
 {
     public interface IReadOnlyIdentifierBehaviour
     {

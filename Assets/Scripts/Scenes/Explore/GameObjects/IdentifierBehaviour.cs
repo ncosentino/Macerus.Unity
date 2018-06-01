@@ -1,4 +1,5 @@
-﻿using ProjectXyz.Api.Framework;
+﻿using Assets.Scripts.Api.GameObjects;
+using ProjectXyz.Api.Framework;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects
