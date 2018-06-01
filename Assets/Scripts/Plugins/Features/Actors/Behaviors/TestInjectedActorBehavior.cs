@@ -1,7 +1,7 @@
 ﻿using ProjectXyz.Api.Behaviors;
 using UnityEngine;
 
-namespace Assets.Scripts.Plugins.Features.Actors
+namespace Assets.Scripts.Plugins.Features.Actors.Behaviors
 {
     public class TestInjectedActorBehavior : IBehavior
     {

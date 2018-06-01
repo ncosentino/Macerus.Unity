@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using Assets.Scripts.Api.GameObjects;
+using Autofac;
 
 namespace Assets.Scripts.Plugins.Features.Actors
 {
@@ -12,6 +13,19 @@ namespace Assets.Scripts.Plugins.Features.Actors
                 .RegisterType<AdditionalActorBehaviorsProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder
+                .RegisterType<PlayerPrefabStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance()
+                .AsSelf()
+                .AutoActivate()
+                .OnActivated(x =>
+                {
+                    x.Context.Resolve<IPrefabStitcherRegistrar>().Register(
+                        @"Mapping/Prefabs/PlayerPlaceholder",
+                        x.Instance.Stitch);
+                });
         }
     }
 }

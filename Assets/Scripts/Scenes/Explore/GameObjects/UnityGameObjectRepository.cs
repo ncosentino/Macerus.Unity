@@ -1,4 +1,5 @@
 using System.Linq;
+using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.GameObjects.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
@@ -12,19 +13,29 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
     public sealed class UnityGameObjectRepository : IUnityGameObjectRepository
     {
         private readonly IPrefabCreator _prefabCreator;
+        private readonly IPrefabStitcherFacade _prefabStitcherFacade;
 
         public UnityGameObjectRepository(
-            IPrefabCreator prefabCreator)
+            IPrefabCreator prefabCreator,
+            IPrefabStitcherFacade prefabStitcherFacade)
         {
             _prefabCreator = prefabCreator;
+            _prefabStitcherFacade = prefabStitcherFacade;
         }
 
         public GameObject Create(IGameObject gameObject)
         {
+            // get the prefab id
             var prefabResourceBehavior = gameObject
                 .Behaviors.Get<IReadOnlyPrefabResourceBehavior>()
                 .Single();
-            var unityGameObject = _prefabCreator.Create<GameObject>(prefabResourceBehavior.PrefabResourceId);
+            var prefabResourceId = prefabResourceBehavior.PrefabResourceId;
+
+            // create the object
+            var unityGameObject = _prefabCreator.Create<GameObject>(prefabResourceId);
+            _prefabStitcherFacade.Stitch(
+                unityGameObject,
+                prefabResourceId);
 
             // set an ID on the game object
             var gameObjectId = gameObject

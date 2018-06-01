@@ -26,6 +26,10 @@ namespace Assets.Scripts.Autofac.Scenes
                 .RegisterType<UnityGameObjectRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<PrefabStitcherFacade>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             // maps
             builder
