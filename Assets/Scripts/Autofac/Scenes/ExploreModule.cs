@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Scenes.Explore.Input;
+﻿using Assets.Scripts.Scenes.Explore.GameObjects;
+using Assets.Scripts.Scenes.Explore.Input;
 using Autofac;
 
 namespace Assets.Scripts.Autofac.Scenes
@@ -17,6 +18,10 @@ namespace Assets.Scripts.Autofac.Scenes
                 .SingleInstance();
             builder
                 .RegisterType<GuiInputStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<UnityGameObjectRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

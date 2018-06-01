@@ -2,9 +2,7 @@
 using System.Linq;
 using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
 using Macerus.Api.Behaviors;
-using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Game.Interface.Mapping;
@@ -18,16 +16,16 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
-        private readonly IPrefabCreator _prefabCreator;
+        private readonly IUnityGameObjectRepository _unityGameObjectRepository;
 
         public ExploreMapFormatter(
             ITileLoader tileLoader,
             IObjectDestroyer objectDestroyer,
-            IPrefabCreator prefabCreator)
+            IUnityGameObjectRepository unityGameObjectRepository)
         {
             _tileLoader = tileLoader;
             _objectDestroyer = objectDestroyer;
-            _prefabCreator = prefabCreator;
+            _unityGameObjectRepository = unityGameObjectRepository;
         }
 
         public void FormatMap(
@@ -107,18 +105,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
             foreach (var gameObject in gameObjects)
             {
-                // TODO: load the correct resource based on some behavior
-                var relativePrefabResourcePath = "Mapping/Prefabs/PlayerPlaceholder";
-                var unityGameObject = _prefabCreator.Create<GameObject>(relativePrefabResourcePath);
-
-                // set an ID on the game object
-                var gameObjectId = gameObject
-                    .Behaviors
-                    .Get<IIdentifierBehavior>()
-                    .Single()
-                    .Id;
-                unityGameObject.GetRequiredComponent<IIdentifierBehaviour>().Id = gameObjectId;
-                unityGameObject.name = $"GameObject {gameObjectId}";
+                var unityGameObject = _unityGameObjectRepository.Create(gameObject);
 
                 // add the game object to the correct parent
                 unityGameObject.transform.parent = gameObjectLayerObject.transform;
