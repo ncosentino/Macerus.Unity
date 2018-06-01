@@ -2,6 +2,7 @@ using System.Linq;
 using Assets.Scripts.Plugins.Features.GameObjects.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
+using Macerus.Api.Behaviors;
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using UnityEngine;
@@ -33,6 +34,16 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
                 .Id;
             unityGameObject.GetRequiredComponent<IIdentifierBehaviour>().Id = gameObjectId;
             unityGameObject.name = $"GameObject {gameObjectId}";
+
+            // move the game object to the right spot
+            var worldLocation = gameObject
+                .Behaviors
+                .Get<IWorldLocationBehavior>()
+                .Single();
+            unityGameObject.transform.position = new Vector3(
+                (float)worldLocation.X,
+                (float)worldLocation.Y,
+                -1);
 
             return unityGameObject;
         }

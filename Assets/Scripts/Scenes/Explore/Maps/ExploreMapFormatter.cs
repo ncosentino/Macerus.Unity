@@ -109,16 +109,6 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
                 // add the game object to the correct parent
                 unityGameObject.transform.parent = gameObjectLayerObject.transform;
-
-                // move the game object to the right spot
-                var worldLocation = gameObject
-                    .Behaviors
-                    .Get<IWorldLocationBehavior>()
-                    .Single();
-                unityGameObject.transform.position = new Vector3(
-                    (float)worldLocation.X,
-                    (float)worldLocation.Y,
-                    -1);
             }
         }
 

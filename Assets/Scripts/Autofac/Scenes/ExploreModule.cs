@@ -1,5 +1,7 @@
-﻿using Assets.Scripts.Scenes.Explore.GameObjects;
+﻿using Assets.Scripts.Scenes.Explore.Camera;
+using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Scenes.Explore.Input;
+using Assets.Scripts.Scenes.Explore.Maps;
 using Autofac;
 
 namespace Assets.Scripts.Autofac.Scenes
@@ -22,6 +24,38 @@ namespace Assets.Scripts.Autofac.Scenes
                 .SingleInstance();
             builder
                 .RegisterType<UnityGameObjectRepository>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            // maps
+            builder
+                .RegisterType<MapFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<TileLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<TilesetSpriteResourceResolver>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<MapBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ExploreMapFormatter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            // camera
+            builder
+                .RegisterType<AutoTargetFollowCameraFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<CameraAutoTargetBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

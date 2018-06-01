@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Scenes.Explore.GameObjects.TiledNet;
-using Assets.Scripts.Scenes.Explore.Maps;
 using Assets.Scripts.Scenes.Explore.Maps.TiledNet;
 using Assets.Scripts.TiledNet;
 using Autofac;
@@ -15,22 +14,6 @@ namespace Assets.Scripts.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder
-                .RegisterType<TileLoader>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<TilesetSpriteResourceResolver>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<MapBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ExploreMapFormatter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
             builder
                 .RegisterType<MapResourceIdConverter>()
                 .AsImplementedInterfaces()
