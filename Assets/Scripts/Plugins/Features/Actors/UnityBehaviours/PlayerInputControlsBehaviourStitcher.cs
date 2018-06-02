@@ -20,10 +20,10 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         {
             var playerInputControlsBehaviour = gameObject.AddComponent<PlayerInputControlsBehaviour>();
             playerInputControlsBehaviour.KeyboardControls = _keyboardControls;
-            playerInputControlsBehaviour.WorldLocationBehavior = gameObject
+            playerInputControlsBehaviour.MovementBehavior = gameObject
                 .GetRequiredComponent<HasGameObjectBehaviour>()
                 .GameObject
-                .GetOnly<IWorldLocationBehavior>();
+                .GetOnly<IMovementBehavior>();
         }
     }
 }

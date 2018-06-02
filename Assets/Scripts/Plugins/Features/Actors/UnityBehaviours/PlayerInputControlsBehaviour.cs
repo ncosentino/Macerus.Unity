@@ -11,7 +11,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
     {
         public IKeyboardControls KeyboardControls { get; set; }
 
-        public IWorldLocationBehavior WorldLocationBehavior { get; set; }
+        public IMovementBehavior MovementBehavior { get; set; }
 
         private void Start()
         {
@@ -19,31 +19,62 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 KeyboardControls,
                 $"{nameof(KeyboardControls)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
-                WorldLocationBehavior,
-                $"{nameof(WorldLocationBehavior)} was not set on '{gameObject}.{this}'.");
+                MovementBehavior,
+                $"{nameof(MovementBehavior)} was not set on '{gameObject}.{this}'.");
         }
 
         private void Update()
         {
-            if (Input.GetKeyUp(KeyboardControls.MoveDown))
+            HandleMovementControls();
+        }
+
+        private void HandleMovementControls()
+        {
+            float throttleY;
+            if (Input.GetKey(KeyboardControls.MoveDown))
             {
-                Debug.Log("Move down.");
-                WorldLocationBehavior.Y -= 1;
+                throttleY = -1;
             }
-            else if (Input.GetKeyUp(KeyboardControls.MoveUp))
+            else if (Input.GetKey(KeyboardControls.MoveUp))
             {
-                Debug.Log("Move up.");
-                WorldLocationBehavior.Y += 1;
+                throttleY = 1;
             }
-            else if (Input.GetKeyUp(KeyboardControls.MoveLeft))
+            else
             {
-                Debug.Log("Move left.");
-                WorldLocationBehavior.X -= 1;
+                throttleY = 0;
             }
-            else if (Input.GetKeyUp(KeyboardControls.MoveRight))
+
+            float throttleX;
+            if (Input.GetKey(KeyboardControls.MoveLeft))
             {
-                Debug.Log("Move right.");
-                WorldLocationBehavior.X += 1;
+                throttleX = -1;
+            }
+            else if (Input.GetKey(KeyboardControls.MoveRight))
+            {
+                throttleX = 1;
+            }
+            else
+            {
+                throttleX = 0;
+            }
+
+            if (Mathf.Abs(throttleX) > float.Epsilon &&
+                Mathf.Abs(throttleY) > float.Epsilon)
+            {
+                throttleX /= 2;
+                throttleY /= 2;
+            }
+
+            if (Mathf.Abs(throttleX) > float.Epsilon)
+            {
+                MovementBehavior.ThrottleX += throttleX;
+                Debug.Log($"'{MovementBehavior}' XThrottle: {MovementBehavior.ThrottleX}");
+            }
+
+            if (Mathf.Abs(throttleY) > float.Epsilon)
+            {
+                MovementBehavior.ThrottleY += throttleY;
+                Debug.Log($"'{MovementBehavior}' YThrottle: {MovementBehavior.ThrottleY}");
             }
         }
     }
