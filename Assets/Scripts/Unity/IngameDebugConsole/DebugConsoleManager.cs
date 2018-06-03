@@ -4,22 +4,27 @@ using UnityEngine;
 
 namespace Assets.Scripts.Unity.IngameDebugConsole
 {
+    using ILogger = ProjectXyz.Api.Logging.ILogger;
+
     public sealed class DebugConsoleManager : IDebugConsoleManager
     {
         private readonly IGameObjectManager _gameObjectManager;
         private readonly IObjectDestroyer _objectDestroyer;
+        private readonly ILogger _logger;
 
         public DebugConsoleManager(
             IGameObjectManager gameObjectManager,
-            IObjectDestroyer objectDestroyer)
+            IObjectDestroyer objectDestroyer,
+            ILogger logger)
         {
             _gameObjectManager = gameObjectManager;
             _objectDestroyer = objectDestroyer;
+            _logger = logger;
         }
 
         public void Toggle()
         {
-            Debug.Log("Toggling debug console...");
+            _logger.Debug("Toggling debug console...");
             var allDebugConsoleObjects = _gameObjectManager
                 .FindAll(x => x.name == "DebugConsole")
                 .ToList();
@@ -47,7 +52,7 @@ namespace Assets.Scripts.Unity.IngameDebugConsole
 
             var singleInstance = allDebugConsoleObjects.Single();
             singleInstance.SetActive(!singleInstance.activeSelf);
-            Debug.Log("Toggled debug console.");
+            _logger.Debug("Toggled debug console.");
         }
     }
 }

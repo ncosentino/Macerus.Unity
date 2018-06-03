@@ -8,5 +8,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         new IKeyboardControls KeyboardControls { get; set; }
 
         new IMovementBehavior MovementBehavior { get; set; }
+
+        new ProjectXyz.Api.Logging.ILogger Logger { get; set; }
     }
 }

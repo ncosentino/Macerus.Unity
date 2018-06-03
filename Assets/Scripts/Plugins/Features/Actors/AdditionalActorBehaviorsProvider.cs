@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Plugins.Features.Actors.Behaviors;
 using Assets.Scripts.Shared.GameObjects;
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
@@ -11,7 +10,6 @@ namespace Assets.Scripts.Plugins.Features.Actors
     {
         public IEnumerable<IBehavior> GetBehaviors(IGameObject gameObject)
         {
-            yield return new TestInjectedActorBehavior();
             yield return new HasPrefabResourceBehavior()
             {
                 // TODO: pull this information from the back-end game object.

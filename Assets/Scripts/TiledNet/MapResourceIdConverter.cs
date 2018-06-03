@@ -5,12 +5,18 @@ using UnityEngine;
 
 namespace Assets.Scripts.TiledNet
 {
+    using ILogger = ProjectXyz.Api.Logging.ILogger;
+
     public sealed class MapResourceIdConverter : IMapResourceIdConverter
     {
         private readonly string _relativeMapsResourceRoot;
+        private readonly ILogger _logger;
 
-        public MapResourceIdConverter(IAssetPaths assetPaths)
+        public MapResourceIdConverter(
+            IAssetPaths assetPaths,
+            ILogger logger)
         {
+            _logger = logger;
             _relativeMapsResourceRoot = assetPaths
                 .MapsRoot
                 .Substring(assetPaths.ResourcesRoot.Length)
@@ -19,7 +25,7 @@ namespace Assets.Scripts.TiledNet
 
         public string Convert(string mapResourceId)
         {
-            Debug.Log($"Map resource id {mapResourceId}");
+            _logger.Debug($"Map resource id {mapResourceId}");
             return Path.Combine(_relativeMapsResourceRoot, $"{mapResourceId}_tmx");
         }
     }

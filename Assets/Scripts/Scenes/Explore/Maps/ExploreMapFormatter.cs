@@ -2,7 +2,6 @@
 using System.Linq;
 using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Unity.GameObjects;
-using Macerus.Api.Behaviors;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Game.Interface.Mapping;
@@ -10,6 +9,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Maps
 {
+    using ILogger = ProjectXyz.Api.Logging.ILogger;
+
     public sealed class ExploreMapFormatter : IExploreMapFormatter
     {
         private const string GAME_OBJECT_LAYER_NAME = "Game Objects";
@@ -17,22 +18,25 @@ namespace Assets.Scripts.Scenes.Explore.Maps
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
+        private readonly ILogger _logger;
 
         public ExploreMapFormatter(
             ITileLoader tileLoader,
             IObjectDestroyer objectDestroyer,
-            IUnityGameObjectRepository unityGameObjectRepository)
+            IUnityGameObjectRepository unityGameObjectRepository,
+            ILogger logger)
         {
             _tileLoader = tileLoader;
             _objectDestroyer = objectDestroyer;
             _unityGameObjectRepository = unityGameObjectRepository;
+            _logger = logger;
         }
 
         public void FormatMap(
             GameObject mapObject,
             IMap map)
         {
-            Debug.Log($"Formatting map object '{mapObject}' for '{map}'...");
+            _logger.Debug($"Formatting map object '{mapObject}' for '{map}'...");
 
             var parentMapObjectTransform = mapObject.transform;
 
@@ -66,7 +70,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             var gameObjectLayerObject = new GameObject(GAME_OBJECT_LAYER_NAME);
             gameObjectLayerObject.transform.parent = parentMapObjectTransform;
 
-            Debug.Log($"Formatted map object '{mapObject}' for '{map}'.");
+            _logger.Debug($"Formatted map object '{mapObject}' for '{map}'.");
         }
 
         public void RemoveGameObjects(

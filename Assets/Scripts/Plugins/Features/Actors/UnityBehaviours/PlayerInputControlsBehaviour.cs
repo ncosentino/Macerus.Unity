@@ -13,6 +13,8 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
 
         public IMovementBehavior MovementBehavior { get; set; }
 
+        public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
+
         private void Start()
         {
             Contract.RequiresNotNull(
@@ -21,6 +23,9 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             Contract.RequiresNotNull(
                 MovementBehavior,
                 $"{nameof(MovementBehavior)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                Logger,
+                $"{nameof(Logger)} was not set on '{gameObject}.{this}'.");
         }
 
         private void Update()
@@ -68,13 +73,13 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             if (Mathf.Abs(throttleX) > float.Epsilon)
             {
                 MovementBehavior.ThrottleX += throttleX;
-                Debug.Log($"'{MovementBehavior}' XThrottle: {MovementBehavior.ThrottleX}");
+                Logger.Debug($"'{MovementBehavior}' XThrottle: {MovementBehavior.ThrottleX}");
             }
 
             if (Mathf.Abs(throttleY) > float.Epsilon)
             {
                 MovementBehavior.ThrottleY += throttleY;
-                Debug.Log($"'{MovementBehavior}' YThrottle: {MovementBehavior.ThrottleY}");
+                Logger.Debug($"'{MovementBehavior}' YThrottle: {MovementBehavior.ThrottleY}");
             }
         }
     }
