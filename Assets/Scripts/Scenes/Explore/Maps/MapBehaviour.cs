@@ -54,6 +54,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             GameObjectsSynchronizedEventArgs e) =>
             Dispatcher.RunOnMainThread(() =>
             {
+                Debug.Log($"Synchronizing game objects for map '{gameObject}'...");
                 ExploreMapFormatter.RemoveGameObjects(
                     gameObject,
                     e.Removed
@@ -62,6 +63,7 @@ namespace Assets.Scripts.Scenes.Explore.Maps
                 ExploreMapFormatter.AddGameObjects(
                     gameObject,
                     e.Added);
+                Debug.Log($"Synchronized game objects for map '{gameObject}'.");
             });
 
         private void MapProvider_MapChanged(

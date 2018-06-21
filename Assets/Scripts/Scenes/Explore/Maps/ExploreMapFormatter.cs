@@ -109,10 +109,12 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
             foreach (var gameObject in gameObjects)
             {
+                _logger.Debug($"Transforming game object '{gameObject}'...");
                 var unityGameObject = _unityGameObjectRepository.Create(gameObject);
 
                 // add the game object to the correct parent
                 unityGameObject.transform.parent = gameObjectLayerObject.transform;
+                _logger.Debug($"Adding unity game object '{unityGameObject}' to '{gameObjectLayerObject}'...");
             }
         }
 
