@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Scenes.Explore.Camera;
+﻿using Assets.Scripts.Gui.Hud.Inventory;
+using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
@@ -76,6 +77,16 @@ namespace Assets.Scripts.Autofac.Scenes
                 .SingleInstance();
             builder
                 .RegisterType<CameraAutoTargetBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            // hud
+            builder
+                .RegisterType<ItemListFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ItemListBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }
