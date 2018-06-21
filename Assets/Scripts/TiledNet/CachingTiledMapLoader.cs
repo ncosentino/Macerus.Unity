@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Scenes.Explore.Maps;
 using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Framework.Interface.Collections;
+using ProjectXyz.Api.Framework.Collections;
 using Tiled.Net.Maps;
 using Tiled.Net.Parsers;
 

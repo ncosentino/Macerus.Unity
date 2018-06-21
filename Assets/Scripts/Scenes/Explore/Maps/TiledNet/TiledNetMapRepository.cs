@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.TiledNet;
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Framework.Interface.Collections;
+using ProjectXyz.Api.Framework.Collections;
 using ProjectXyz.Game.Interface.Mapping;
 
 namespace Assets.Scripts.Scenes.Explore.Maps.TiledNet

@@ -1,6 +1,6 @@
 using Assets.Scripts.Api.GameObjects;
-using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects

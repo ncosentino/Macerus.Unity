@@ -1,5 +1,5 @@
 ﻿using System;
-using ProjectXyz.Framework.Interface.Collections;
+using ProjectXyz.Api.Framework.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Unity.Resources.Sprites

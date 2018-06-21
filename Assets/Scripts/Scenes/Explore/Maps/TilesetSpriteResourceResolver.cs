@@ -1,6 +1,6 @@
 using System.IO;
 using Assets.Scripts.Unity;
-using ProjectXyz.Framework.Interface.Collections;
+using ProjectXyz.Api.Framework.Collections;
 using ProjectXyz.Shared.Framework.Collections;
 
 namespace Assets.Scripts.Scenes.Explore.Maps

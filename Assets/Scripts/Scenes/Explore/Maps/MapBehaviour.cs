@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Assets.Scripts.Unity.Threading;
-using ProjectXyz.Api.Behaviors;
-using ProjectXyz.Game.Interface.GameObjects;
+using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Maps

@@ -2,7 +2,6 @@
 using Assets.Scripts.TiledNet;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Game.Interface.GameObjects;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects.TiledNet

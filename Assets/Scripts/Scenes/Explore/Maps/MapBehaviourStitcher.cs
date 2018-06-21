@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Unity.Threading;
-using ProjectXyz.Game.Interface.GameObjects;
+using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Game.Interface.Mapping;
 using UnityEngine;
 
