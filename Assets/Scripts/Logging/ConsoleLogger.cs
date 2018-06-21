@@ -10,6 +10,10 @@ namespace Assets.Scripts.Logging
         public void Debug(string message, object data)
         {
             UnityEngine.Debug.LogFormat($"DEBUG: {message}", data);
+            if (data is Exception)
+            {
+                UnityEngine.Debug.LogException((Exception)data);
+            }
         }
 
         public void Info(string message) => Info(message, null);
@@ -17,6 +21,10 @@ namespace Assets.Scripts.Logging
         public void Info(string message, object data)
         {
             UnityEngine.Debug.LogFormat(message, data);
+            if (data is Exception)
+            {
+                UnityEngine.Debug.LogException((Exception)data);
+            }
         }
 
         public void Warn(string message) => Warn(message, null);
@@ -24,6 +32,10 @@ namespace Assets.Scripts.Logging
         public void Warn(string message, object data)
         {
             UnityEngine.Debug.LogWarningFormat(message, data);
+            if (data is Exception)
+            {
+                UnityEngine.Debug.LogException((Exception)data);
+            }
         }
 
         public void Error(string message) => Error(message, null);
@@ -31,6 +43,10 @@ namespace Assets.Scripts.Logging
         public void Error(string message, object data)
         {
             UnityEngine.Debug.LogErrorFormat(message, data);
+            if (data is Exception)
+            {
+                UnityEngine.Debug.LogException((Exception)data);
+            }
         }
     }
 }
