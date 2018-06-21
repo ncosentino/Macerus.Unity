@@ -1,6 +1,8 @@
 using System.Linq;
+using Assets.Scripts.Plugins.Features.Actors;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Wip;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
@@ -20,7 +22,8 @@ namespace Assets.Scripts.Gui.Hud.Inventory
 
         public GameObject Create(
             string itemListPrefabResource,
-            string itemListItemPrefabResource)
+            string itemListItemPrefabResource,
+            IItemContainer itemContainer)
         {
             var itemListGameObject = _prefabCreator.Create<GameObject>(itemListPrefabResource);
 
@@ -32,7 +35,8 @@ namespace Assets.Scripts.Gui.Hud.Inventory
             _itemListBehaviourStitcher.Attach(
                 itemListGameObject,
                 itemListContent,
-                itemListItemPrefabResource);
+                itemListItemPrefabResource,
+                itemContainer);
             return itemListGameObject;
         }
     }

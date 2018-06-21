@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Unity.Resources;
+﻿using Assets.Scripts.Plugins.Features.Actors;
+using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Wip;
 using ProjectXyz.Framework.Contracts;
 using UnityEngine;
 
@@ -14,7 +16,9 @@ namespace Assets.Scripts.Gui.Hud.Inventory
 
         public GameObject ListControlContent { get; set; }
 
-        private void Start ()
+        public IItemContainer ItemContainer { get; set; }
+
+        private void Start()
         {
             Contract.RequiresNotNull(
                 PrefabCreator,
@@ -26,12 +30,16 @@ namespace Assets.Scripts.Gui.Hud.Inventory
                 ListControlContent,
                 $"{nameof(ListControlContent)} was not set on '{gameObject}.{this}'.");
 
-            // FIXME: just to test
-            var itemEntry = PrefabCreator.Create<GameObject>(ItemListEntryPrefabResource);
-            itemEntry.transform.SetParent(ListControlContent.transform, false);
+            // FIXME: just to test... we want to bind to an event for changes
+            foreach (var item in ItemContainer)
+            {
+                // TODO: map back-end items to a nice UI item :)
+                var itemEntry = PrefabCreator.Create<GameObject>(ItemListEntryPrefabResource);
+                itemEntry.transform.SetParent(ListControlContent.transform, false);
+            }
         }
-	
-        private void Update ()
+
+        private void Update()
         {
         }
     }

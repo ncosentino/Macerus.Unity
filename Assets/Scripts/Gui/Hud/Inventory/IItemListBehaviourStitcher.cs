@@ -1,3 +1,5 @@
+using Assets.Scripts.Plugins.Features.Actors;
+using Assets.Scripts.Wip;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
@@ -7,6 +9,7 @@ namespace Assets.Scripts.Gui.Hud.Inventory
         IReadonlyItemListBehaviour Attach(
             GameObject listControl,
             GameObject listControlContent,
-            string itemListEntryPrefabResource);
+            string itemListEntryPrefabResource,
+            IItemContainer itemContainer);
     }
 }

@@ -21,6 +21,10 @@ namespace Assets.Scripts.Plugins.Features.Actors
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<HasGuiInventoryBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<PlayerPrefabStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance()

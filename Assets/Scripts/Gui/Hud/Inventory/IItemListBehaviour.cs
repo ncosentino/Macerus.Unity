@@ -1,4 +1,6 @@
+using Assets.Scripts.Plugins.Features.Actors;
 using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Wip;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
@@ -10,5 +12,7 @@ namespace Assets.Scripts.Gui.Hud.Inventory
         new string ItemListEntryPrefabResource { get; set; }
 
         new GameObject ListControlContent { get; set; }
+
+        new IItemContainer ItemContainer { get; set; }
     }
 }

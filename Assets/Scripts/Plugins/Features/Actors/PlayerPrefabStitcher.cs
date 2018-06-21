@@ -6,10 +6,14 @@ namespace Assets.Scripts.Plugins.Features.Actors
     public sealed class PlayerPrefabStitcher
     {
         private readonly IPlayerInputControlsBehaviourStitcher _playerInputControlsBehaviourStitcher;
+        private readonly IHasGuiInventoryBehaviourStitcher _hasGuiInventoryBehaviourStitcher;
 
-        public PlayerPrefabStitcher(IPlayerInputControlsBehaviourStitcher playerInputControlsBehaviourStitcher)
+        public PlayerPrefabStitcher(
+            IPlayerInputControlsBehaviourStitcher playerInputControlsBehaviourStitcher,
+            IHasGuiInventoryBehaviourStitcher hasGuiInventoryBehaviourStitcher)
         {
             _playerInputControlsBehaviourStitcher = playerInputControlsBehaviourStitcher;
+            _hasGuiInventoryBehaviourStitcher = hasGuiInventoryBehaviourStitcher;
         }
 
         public void Stitch(
@@ -17,6 +21,7 @@ namespace Assets.Scripts.Plugins.Features.Actors
             string prefabResourceId)
         {
             _playerInputControlsBehaviourStitcher.Attach(gameObject);
+            _hasGuiInventoryBehaviourStitcher.Attach(gameObject);
         }
     }
 }
