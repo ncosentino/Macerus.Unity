@@ -42,25 +42,13 @@ namespace Assets.Scripts.Plugins.Features.Actors
                 .AsImplementedInterfaces()
                 .SingleInstance()
                 .AsSelf()
-                .AutoActivate()
-                .OnActivated(x =>
-                {
-                    x.Context
-                    .Resolve<IGameObjectBehaviorInterceptorRegistrar>()
-                    .Register(x.Instance);
-                });
+                .AutoActivate();
             builder
                 .RegisterType<LightRadiusBehaviorInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance()
                 .AsSelf()
-                .AutoActivate()
-                .OnActivated(x =>
-                {
-                    x.Context
-                     .Resolve<IGameObjectBehaviorInterceptorRegistrar>()
-                     .Register(x.Instance);
-                });
+                .AutoActivate();
         }
     }
 }

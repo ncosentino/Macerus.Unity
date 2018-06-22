@@ -1,4 +1,7 @@
-﻿using Assets.Scripts.Gui.Hud.Inventory;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Api.GameObjects;
+using Assets.Scripts.Gui.Hud.Inventory;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Scenes.Explore.Input;
@@ -50,7 +53,17 @@ namespace Assets.Scripts.Autofac.Scenes
             builder
                 .RegisterType<GameObjectBehaviorInterceptorFacade>()
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance()
+                .OnActivated(x =>
+                {
+                    var interceptors = x.Context
+                     .Resolve<IEnumerable<IGameObjectBehaviorInterceptor>>()
+                     .Where(interceptor => interceptor != x.Instance);
+                    foreach (var interceptor in interceptors)
+                    {
+                        x.Instance.Register(interceptor);
+                    }
+                });
 
             // maps
             builder
