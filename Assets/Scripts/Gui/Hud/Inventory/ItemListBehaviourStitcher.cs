@@ -1,30 +1,28 @@
-﻿using Assets.Scripts.Plugins.Features.Actors;
-using Assets.Scripts.Unity.Resources;
-using Assets.Scripts.Wip;
+﻿using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
 {
     public sealed class ItemListBehaviourStitcher : IItemListBehaviourStitcher
     {
-        private readonly IPrefabCreator _prefabCreator;
+        private readonly IItemToListItemEntryConverter _itemToListItemEntryConverter;
 
-        public ItemListBehaviourStitcher(IPrefabCreator prefabCreator)
+        public ItemListBehaviourStitcher(IItemToListItemEntryConverter itemToListItemEntryConverter)
         {
-            _prefabCreator = prefabCreator;
+            _itemToListItemEntryConverter = itemToListItemEntryConverter;
         }
 
         public IReadonlyItemListBehaviour Attach(
             GameObject listControl,
             GameObject listControlContent,
             string itemListEntryPrefabResource,
-            IItemContainer itemContainer)
+            IItemContainerBehavior itemContainerBehavior)
         {
             var itemListBehaviour = listControl.AddComponent<ItemListBehaviour>();
             itemListBehaviour.ItemListEntryPrefabResource = itemListEntryPrefabResource;
-            itemListBehaviour.PrefabCreator = _prefabCreator;
+            itemListBehaviour.ItemToListItemEntryConverter = _itemToListItemEntryConverter;
             itemListBehaviour.ListControlContent = listControlContent;
-            itemListBehaviour.ItemContainer = itemContainer;
+            itemListBehaviour.ItemContainerBehavior = itemContainerBehavior;
 
             return itemListBehaviour;
         }

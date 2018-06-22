@@ -86,6 +86,10 @@ namespace Assets.Scripts.Autofac.Scenes
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<ItemToListItemEntryConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<ItemListBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

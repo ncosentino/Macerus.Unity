@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Assets.Scripts.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Wip;
 using ProjectXyz.Framework.Contracts;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
@@ -11,7 +11,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         MonoBehaviour,
         IHasGuiInventoryBehaviour
     {
-        public IItemContainer ItemContainer { get; set; }
+        public IItemContainerBehavior ItemContainerBehavior { get; set; }
 
         public IItemListFactory ItemListFactory { get; set; }
 
@@ -24,8 +24,8 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         private void Start()
         {
             Contract.RequiresNotNull(
-                ItemContainer,
-                $"{nameof(ItemContainer)} was not set on '{gameObject}.{this}'.");
+                ItemContainerBehavior,
+                $"{nameof(ItemContainerBehavior)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 ItemListFactory,
                 $"{nameof(ItemListFactory)} was not set on '{gameObject}.{this}'.");
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             _itemList = ItemListFactory.Create(
                 "Gui/Prefabs/Inventory/ItemList",
                 "Gui/Prefabs/Inventory/InventoryListItem",
-                ItemContainer);
+                ItemContainerBehavior);
             _itemList.transform.SetParent(inventoryBagUi.transform, false);
         }
 

@@ -1,10 +1,16 @@
+using System.Linq;
 using Assets.Scripts.Gui.Hud.Inventory;
+using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Wip;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Shared.Framework;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
 {
+    using IGameObjectManager = Unity.GameObjects.IGameObjectManager;
+
     public sealed class HasGuiInventoryBehaviourStitcher : IHasGuiInventoryBehaviourStitcher
     {
         private readonly IGameObjectManager _gameObjectManager;
@@ -28,7 +34,16 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             hasGuiInventoryBehaviour.ItemListFactory = _itemListFactory;
             hasGuiInventoryBehaviour.ObjectDestroyer = _objectDestroyer;
 
-            hasGuiInventoryBehaviour.ItemContainer = new ItemContainer(); // TODO: pull this info from some behavio(u)rs
+            // FIXME: this is obviously a hack... how do we control which container to find?
+            var targetContainerId = new StringIdentifier("Inventory");
+
+            var itemContainerBehavior = gameObject
+                .GetRequiredComponent<IHasGameObject>()
+                .GameObject
+                .Get<IItemContainerBehavior>()
+                .Single(x => targetContainerId.Equals(x.ContainerId));
+
+            hasGuiInventoryBehaviour.ItemContainerBehavior = itemContainerBehavior;
 
             return hasGuiInventoryBehaviour;
         }

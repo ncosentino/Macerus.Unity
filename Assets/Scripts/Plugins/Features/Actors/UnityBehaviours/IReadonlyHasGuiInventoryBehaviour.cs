@@ -1,12 +1,12 @@
 using Assets.Scripts.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Wip;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
 {
     public interface IReadonlyHasGuiInventoryBehaviour
     {
-        IItemContainer ItemContainer { get; }
+        IItemContainerBehavior ItemContainerBehavior { get; }
 
         IItemListFactory ItemListFactory { get; }
 

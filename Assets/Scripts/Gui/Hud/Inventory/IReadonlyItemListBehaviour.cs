@@ -1,18 +1,16 @@
-using Assets.Scripts.Plugins.Features.Actors;
-using Assets.Scripts.Unity.Resources;
-using Assets.Scripts.Wip;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
 {
     public interface IReadonlyItemListBehaviour
     {
-        IPrefabCreator PrefabCreator { get; }
+        IItemToListItemEntryConverter ItemToListItemEntryConverter { get; }
 
         string ItemListEntryPrefabResource { get; }
 
         GameObject ListControlContent { get; }
 
-        IItemContainer ItemContainer { get; }
+        IItemContainerBehavior ItemContainerBehavior { get; }
     }
 }

@@ -1,5 +1,4 @@
-using Assets.Scripts.Plugins.Features.Actors;
-using Assets.Scripts.Wip;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
@@ -10,6 +9,6 @@ namespace Assets.Scripts.Gui.Hud.Inventory
             GameObject listControl,
             GameObject listControlContent,
             string itemListEntryPrefabResource,
-            IItemContainer itemContainer);
+            IItemContainerBehavior itemContainerBehavior);
     }
 }
