@@ -1,4 +1,7 @@
-﻿using ProjectXyz.Framework.Contracts;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Unity.GameObjects;
+using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
@@ -8,6 +11,13 @@ namespace Assets.Scripts.Gui.Hud.Inventory
         MonoBehaviour,
         IItemListBehaviour
     {
+        private readonly Dictionary<IGameObject, GameObject> _listItems;
+
+        public ItemListBehaviour()
+        {
+            _listItems = new Dictionary<IGameObject, GameObject>();
+        }
+
         public IItemToListItemEntryConverter ItemToListItemEntryConverter { get; set; }
 
         public string ItemListEntryPrefabResource { get; set; }
@@ -15,6 +25,8 @@ namespace Assets.Scripts.Gui.Hud.Inventory
         public GameObject ListControlContent { get; set; }
 
         public IItemContainerBehavior ItemContainerBehavior { get; set; }
+
+        public IObjectDestroyer ObjectDestroyer { get; set; }
 
         private void Start()
         {
@@ -30,20 +42,48 @@ namespace Assets.Scripts.Gui.Hud.Inventory
             Contract.RequiresNotNull(
                 ItemContainerBehavior,
                 $"{nameof(ItemContainerBehavior)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                ObjectDestroyer,
+                $"{nameof(ObjectDestroyer)} was not set on '{gameObject}.{this}'.");
 
-            // TODO: make this observable so we can bind to an event
-            // TODO: REMEMBER TO UNHOOK IT IN THE OnDestroy() METHOD!!!!!!!!!!!!!!!
-            foreach (var item in ItemContainerBehavior.Items)
+            ItemContainerBehavior.ItemsChanged += ItemContainerBehavior_ItemsChanged;
+            AddItems(ItemContainerBehavior.Items);
+        }
+
+        private void OnDestroy()
+        {
+            if (ItemContainerBehavior != null)
             {
-                var itemEntry = ItemToListItemEntryConverter.Convert(
-                    item,
-                    ItemListEntryPrefabResource);
-                itemEntry.transform.SetParent(ListControlContent.transform, false);
+                ItemContainerBehavior.ItemsChanged -= ItemContainerBehavior_ItemsChanged;
             }
         }
 
-        private void Update()
+        private void AddItems(IEnumerable<IGameObject> items)
         {
+            foreach (var item in items)
+            {
+                var listItem = ItemToListItemEntryConverter.Convert(
+                    item,
+                    ItemListEntryPrefabResource);
+                listItem.transform.SetParent(ListControlContent.transform, false);
+                _listItems.Add(item, listItem);
+            }
+        }
+
+        private void RemoveItems(IEnumerable<IGameObject> items)
+        {
+            foreach (var item in items)
+            {
+                var listItem = _listItems[item];
+                _listItems.Remove(item);
+                ObjectDestroyer.Destroy(listItem);
+            }
+        }
+
+        private void ItemContainerBehavior_ItemsChanged(object sender, ItemsChangedEventArgs e)
+        {
+            AddItems(e.AddedItems);
+            RemoveItems(e.RemovedItems);
         }
     }
 }

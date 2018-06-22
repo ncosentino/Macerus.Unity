@@ -1,19 +1,23 @@
 ﻿using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Api.GameObjects;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui.Hud.Inventory
 {
     public sealed class ItemToListItemEntryConverter : IItemToListItemEntryConverter
     {
         private readonly IPrefabCreator _prefabCreator;
+        private readonly IHasGameObjectBehaviourStitcher _hasGameObjectBehaviourStitcher;
+        
 
-        public ItemToListItemEntryConverter(IPrefabCreator prefabCreator)
+        public ItemToListItemEntryConverter(
+            IPrefabCreator prefabCreator,
+            IHasGameObjectBehaviourStitcher hasGameObjectBehaviourStitcher)
         {
             _prefabCreator = prefabCreator;
+            _hasGameObjectBehaviourStitcher = hasGameObjectBehaviourStitcher;
         }
 
         public GameObject Convert(
@@ -21,7 +25,15 @@ namespace Assets.Scripts.Gui.Hud.Inventory
             string itemListEntryPrefabResource)
         {
             var itemEntry = _prefabCreator.Create<GameObject>(itemListEntryPrefabResource);
-            
+            _hasGameObjectBehaviourStitcher.Attach(
+                item,
+                itemEntry);
+
+            // TODO: set the name
+
+            // TODO: set the icon
+
+            // TODO: display colours differently
 
             return itemEntry;
         }
