@@ -1,5 +1,4 @@
 using System;
-using Assets.Scripts.Unity.Threading;
 using Macerus.Api.Behaviors;
 using ProjectXyz.Framework.Contracts;
 using UnityEngine;
@@ -12,16 +11,11 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
     {
         public IObservableWorldLocationBehavior ObservableWorldLocationBehavior { get; set; }
 
-        public IDispatcher Dispatcher { get; set; }
-
         private void Start()
         {
             Contract.RequiresNotNull(
                 ObservableWorldLocationBehavior,
                 $"{nameof(ObservableWorldLocationBehavior)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                Dispatcher,
-                $"{nameof(Dispatcher)} was not set on '{gameObject}.{this}'.");
             ObservableWorldLocationBehavior.WorldLocationChanged += ObservableWorldLocationBehavior_WorldLocationChanged;
             SyncLocation();
         }
@@ -44,6 +38,6 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
 
         private void ObservableWorldLocationBehavior_WorldLocationChanged(
             object sender,
-            EventArgs e) => Dispatcher.RunOnMainThread(SyncLocation);
+            EventArgs e) => SyncLocation();
     }
 }

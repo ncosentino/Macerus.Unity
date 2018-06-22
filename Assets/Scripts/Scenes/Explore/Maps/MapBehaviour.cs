@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Assets.Scripts.Unity.Threading;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Game.Interface.Mapping;
@@ -9,15 +8,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Maps
 {
-    public sealed class MapBehaviour : MonoBehaviour
+    public sealed class MapBehaviour :
+        MonoBehaviour,
+        IMapBehaviour
     {
         public IGameObjectManager GameObjectManager { get; set; }
 
         public IMapProvider MapProvider { get; set; }
 
         public IExploreMapFormatter ExploreMapFormatter { get; set; }
-
-        public IDispatcher Dispatcher { get; set; }
 
         private void Start()
         {
@@ -30,9 +29,6 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             Contract.RequiresNotNull(
                 ExploreMapFormatter,
                 $"{nameof(ExploreMapFormatter)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                Dispatcher,
-                $"{nameof(Dispatcher)} was not set on '{gameObject}.{this}'.");
 
             MapProvider.MapChanged += MapProvider_MapChanged;
             GameObjectManager.Synchronized += GameObjectManager_Synchronized;
@@ -58,28 +54,23 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
         private void GameObjectManager_Synchronized(
             object sender,
-            GameObjectsSynchronizedEventArgs e) =>
-            Dispatcher.RunOnMainThread(() =>
-            {
-                Debug.Log($"Synchronizing game objects for map '{gameObject}'...");
-                ExploreMapFormatter.RemoveGameObjects(
-                    gameObject,
-                    e.Removed
-                     .Select(x => x.Behaviors.Get<IIdentifierBehavior>().First())
-                     .Select(x => x.Id));
-                ExploreMapFormatter.AddGameObjects(
-                    gameObject,
-                    e.Added);
-                Debug.Log($"Synchronized game objects for map '{gameObject}'.");
-            });
+            GameObjectsSynchronizedEventArgs e)
+        {
+            Debug.Log($"Synchronizing game objects for map '{gameObject}'...");
+            ExploreMapFormatter.RemoveGameObjects(
+                gameObject,
+                e.Removed
+                 .Select(x => x.Behaviors.Get<IIdentifierBehavior>().First())
+                 .Select(x => x.Id));
+            ExploreMapFormatter.AddGameObjects(
+                gameObject,
+                e.Added);
+            Debug.Log($"Synchronized game objects for map '{gameObject}'.");
+        }
 
         private void MapProvider_MapChanged(
             object sender,
-            EventArgs e) =>
-            Dispatcher.RunOnMainThread(() =>
-            {
-                RecreateMap(MapProvider.ActiveMap);
-            });
+            EventArgs e) => RecreateMap(MapProvider.ActiveMap);
 
         private void RecreateMap(IMap map) => ExploreMapFormatter.FormatMap(gameObject, map);
     }

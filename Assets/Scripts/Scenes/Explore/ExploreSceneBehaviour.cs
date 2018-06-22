@@ -14,19 +14,13 @@ namespace Assets.Scripts.Scenes.Explore
 {
     public sealed class ExploreSceneBehaviour : MonoBehaviour
     {
-        private readonly CancellationTokenSource _gameEngineCancelTokenSource;
-        
-        public ExploreSceneBehaviour()
-        {
-            _gameEngineCancelTokenSource = new CancellationTokenSource();
-        }
+        private IGameEngine _gameEngine;
 
         private void Start()
         {
             var dependencyContainer = GameDependencyBehaviour.Container;
             
-            var gameEngine = dependencyContainer.Resolve<IAsyncGameEngine>();
-            gameEngine.RunAsync(_gameEngineCancelTokenSource.Token);
+            _gameEngine = dependencyContainer.Resolve<IGameEngine>();
 
             var mapFactory = dependencyContainer.Resolve<IMapFactory>();
             var mapObject = mapFactory.CreateMap();
@@ -43,9 +37,9 @@ namespace Assets.Scripts.Scenes.Explore
             followCamera.transform.parent = gameObject.transform;
         }
 
-        private void OnDestroy()
+        private void Update()
         {
-            _gameEngineCancelTokenSource?.Cancel(true);
+            _gameEngine.Update();
         }
     }
 }

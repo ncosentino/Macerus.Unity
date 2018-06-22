@@ -73,13 +73,11 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             if (Mathf.Abs(throttleX) > float.Epsilon)
             {
                 MovementBehavior.ThrottleX += throttleX;
-                Logger.Debug($"'{MovementBehavior}' XThrottle: {MovementBehavior.ThrottleX}");
             }
 
             if (Mathf.Abs(throttleY) > float.Epsilon)
             {
                 MovementBehavior.ThrottleY += throttleY;
-                Logger.Debug($"'{MovementBehavior}' YThrottle: {MovementBehavior.ThrottleY}");
             }
         }
     }
