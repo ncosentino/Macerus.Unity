@@ -26,6 +26,14 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
             SyncLocation();
         }
 
+        private void OnDestroy()
+        {
+            if (ObservableWorldLocationBehavior != null)
+            {
+                ObservableWorldLocationBehavior.WorldLocationChanged -= ObservableWorldLocationBehavior_WorldLocationChanged;
+            }
+        }
+
         private void SyncLocation()
         {
             gameObject.transform.position = new Vector3(

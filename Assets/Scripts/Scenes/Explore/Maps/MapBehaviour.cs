@@ -2,6 +2,7 @@
 using System.Linq;
 using Assets.Scripts.Unity.Threading;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Game.Interface.Mapping;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
@@ -20,25 +21,18 @@ namespace Assets.Scripts.Scenes.Explore.Maps
 
         private void Start()
         {
-            if (MapProvider == null)
-            {
-                throw new InvalidOperationException($"'{nameof(MapProvider)}' was not set.");
-            }
-
-            if (GameObjectManager == null)
-            {
-                throw new InvalidOperationException($"'{nameof(GameObjectManager)}' was not set.");
-            }
-
-            if (ExploreMapFormatter == null)
-            {
-                throw new InvalidOperationException($"'{nameof(ExploreMapFormatter)}' was not set.");
-            }
-
-            if (Dispatcher == null)
-            {
-                throw new InvalidOperationException($"'{nameof(Dispatcher)}' was not set.");
-            }
+            Contract.RequiresNotNull(
+                MapProvider,
+                $"{nameof(MapProvider)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                GameObjectManager,
+                $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                ExploreMapFormatter,
+                $"{nameof(ExploreMapFormatter)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                Dispatcher,
+                $"{nameof(Dispatcher)} was not set on '{gameObject}.{this}'.");
 
             MapProvider.MapChanged += MapProvider_MapChanged;
             GameObjectManager.Synchronized += GameObjectManager_Synchronized;
@@ -46,6 +40,19 @@ namespace Assets.Scripts.Scenes.Explore.Maps
             if (MapProvider.ActiveMap != null)
             {
                 RecreateMap(MapProvider.ActiveMap);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (MapProvider != null)
+            {
+                MapProvider.MapChanged -= MapProvider_MapChanged;
+            }
+
+            if (GameObjectManager != null)
+            {
+                GameObjectManager.Synchronized -= GameObjectManager_Synchronized;
             }
         }
 
