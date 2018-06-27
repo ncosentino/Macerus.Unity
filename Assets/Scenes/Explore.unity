@@ -145,7 +145,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: 90}
+  m_AnchoredPosition: {x: 0, y: 90}
   m_SizeDelta: {x: -169.7, y: -218.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &85755124
@@ -400,7 +400,7 @@ Prefab:
     - target: {fileID: 224638614996130104, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.34998703
+      value: -0.34999084
       objectReference: {fileID: 0}
     - target: {fileID: 224638614996130104, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
@@ -445,7 +445,7 @@ Prefab:
     - target: {fileID: 224638614996130104, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0.049999952
+      value: 0.049999237
       objectReference: {fileID: 0}
     - target: {fileID: 224638614996130104, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
@@ -688,7 +688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.399994, y: -111.5}
+  m_AnchoredPosition: {x: 2.4000244, y: -111.5}
   m_SizeDelta: {x: -32.4, y: -258.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1357944730
@@ -1115,7 +1115,7 @@ Prefab:
     - target: {fileID: 224697027177675024, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 12.280008
+      value: 12.280029
       objectReference: {fileID: 0}
     - target: {fileID: 224697027177675024, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
@@ -1125,7 +1125,7 @@ Prefab:
     - target: {fileID: 224697027177675024, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -7.2
+      value: -7.199997
       objectReference: {fileID: 0}
     - target: {fileID: 224697027177675024, guid: b6c6a59d3f3ab114dad6347ba66e1474,
         type: 2}

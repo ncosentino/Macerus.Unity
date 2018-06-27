@@ -1,4 +1,4 @@
-using Assets.Scripts.Gui.Hud.Inventory;
+using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;

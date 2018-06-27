@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Api.GameObjects;
-using Assets.Scripts.Gui.Hud.Inventory;
+using Assets.Scripts.Scenes.Explore;
+using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.GameObjects;
+using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
 using Autofac;
@@ -14,6 +15,10 @@ namespace Assets.Scripts.Autofac.Scenes
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder
+                .RegisterType<ExploreSceneStartupInterceptorFacade>()
+                .As<IExploreSceneStartupInterceptorFacade>() // force facade interface to avoid circular dependencies
+                .SingleInstance();
             builder
                 .RegisterType<GuiInputController>()
                 .AsImplementedInterfaces()

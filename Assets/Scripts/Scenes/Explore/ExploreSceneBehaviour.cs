@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Assets.Scripts.Behaviours;
+using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
@@ -32,9 +33,8 @@ namespace Assets.Scripts.Scenes.Explore
             var guiInputStitcher = dependencyContainer.Resolve<IGuiInputStitcher>();
             guiInputStitcher.Attach(gameObject);
 
-            var cameraFactory = dependencyContainer.Resolve<ICameraFactory>();
-            var followCamera = cameraFactory.CreateCamera();
-            followCamera.transform.parent = gameObject.transform;
+            var exploreSceneStartupInterceptor = dependencyContainer.Resolve<IExploreSceneStartupInterceptorFacade>();
+            exploreSceneStartupInterceptor.Intercept(gameObject);
         }
 
         private void Update()

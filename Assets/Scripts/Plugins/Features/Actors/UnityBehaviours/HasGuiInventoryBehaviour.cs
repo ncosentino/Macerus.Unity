@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Assets.Scripts.Gui.Hud.Inventory;
+using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -46,11 +46,6 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 "Gui/Prefabs/Inventory/InventoryListItem",
                 ItemContainerBehavior);
             _itemList.transform.SetParent(inventoryBagUi.transform, false);
-        }
-
-        private void Update()
-        {
-            
         }
 
         private void OnDestroy()

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Assets.Scripts.Api.Scenes.Explore;
 using Assets.Scripts.Gui;
+using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 using UnityEngine;
