@@ -1,15 +1,27 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEditor;
+using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Assets.Scripts.UnityEditor
 {
-    public sealed class UpdateDependencies
+    public sealed class DependencyUpdater
     {
+        private const string MSBUILD_EXE_PATH = "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe";
+
+        private static readonly IReadOnlyCollection<string> SOLUTION_FILE_PATHS_TO_BUILD = new[]
+        {
+            Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz.sln"),
+            Path.Combine(Application.dataPath, @"..\..\..\..\libraries\tiled.net\tiled.net.sln"),
+            Path.Combine(Application.dataPath, @"..\..\macerus-game\Macerus.sln"),
+        };
+
         // NOTE: when this is all working, we won't want ANY example modules from ProjectXyz
         private static readonly IReadOnlyCollection<string> EXCLUDE_MODULES = new[]
         {
@@ -17,13 +29,42 @@ namespace Assets.Scripts.UnityEditor
             "Examples.Modules.Mapping",
         };
 
-        [MenuItem("Macerus Tools/Update Dependencies")]
-        public static void BuildGame()
+        private readonly string _dataPath;
+
+        public DependencyUpdater()
         {
+            _dataPath = Application.dataPath;
+        }
+
+        public Task UpdateDependenciesAsync()
+        {
+            return Task.Run(() =>
+            {
+                Debug.Log("Asynchronous dependency update started...");
+                UpdateDependenciesInternal();
+                Debug.Log("Asynchronous dependency update complete.");
+            });
+        }
+
+        public void UpdateDependencies()
+        {
+            Debug.Log("Synchronous dependency update started...");
+            UpdateDependenciesInternal();
+            Debug.Log("Synchronous dependency update complete.");
+        }
+
+        private void UpdateDependenciesInternal()
+        {
+            Debug.Log($"Building prerequisites...");
+            foreach (var solutionFilePath in SOLUTION_FILE_PATHS_TO_BUILD)
+            {
+                BuildDependency(MSBUILD_EXE_PATH, solutionFilePath);
+            }
+
             Debug.Log($"Copying dependencies...");
 
             var destinationDependenciesDirectory = Path.Combine(
-                Application.dataPath,
+                _dataPath,
                 @"Dependencies");
             Debug.Log($"Destination Dependencies Directory: '{destinationDependenciesDirectory}'");
 
@@ -41,10 +82,37 @@ namespace Assets.Scripts.UnityEditor
             CopyMacerusDependencies(destinationDependenciesDirectory);
         }
 
-        private static void CopyMacerusDependencies(string destinationDependenciesDirectory)
+        private void BuildDependency(
+            string msbuildExePath,
+            string solutionFilePath)
+        {
+            solutionFilePath = new Uri(solutionFilePath).LocalPath;
+
+            Debug.Log($"Building '{solutionFilePath}' with '{msbuildExePath}'...");
+
+            var psi = new ProcessStartInfo(
+                msbuildExePath,
+                $"\"{solutionFilePath}\"")
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false,
+            };
+
+            var process = Process.Start(psi);
+            process.WaitForExit();
+            if (process.ExitCode != 0)
+            {
+                throw new InvalidOperationException(
+                    $"'{msbuildExePath}' exited with code {process.ExitCode} while building '{solutionFilePath}'.");
+            }
+
+            Debug.Log($"Built '{solutionFilePath}' with '{msbuildExePath}'.");
+        }
+
+        private void CopyMacerusDependencies(string destinationDependenciesDirectory)
         {
             var sourceDependencyDirectory = Path.Combine(
-                Application.dataPath,
+                _dataPath,
                 @"..\..\macerus-game\");
 
             var dependencyEntries = new[]
@@ -65,10 +133,10 @@ namespace Assets.Scripts.UnityEditor
             }
         }
 
-        private static void CopySharedLibraries(string destinationDependenciesDirectory)
+        private void CopySharedLibraries(string destinationDependenciesDirectory)
         {
             var librariesDirectory = Path.Combine(
-                Application.dataPath,
+                _dataPath,
                 @"..\..\..\..\libraries");
             Debug.Log($"Libraries Directory: '{librariesDirectory}'");
 
@@ -95,7 +163,7 @@ namespace Assets.Scripts.UnityEditor
             }
         }
 
-        private static void ProcessDependencyEntry(
+        private void ProcessDependencyEntry(
             string projectsDirectory,
             string destinationDependenciesDirectory,
             DependencyEntry dependencyEntry)
