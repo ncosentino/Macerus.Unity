@@ -54,7 +54,6 @@ namespace Assets.Scripts.Plugins.Features.DayNightCycle
 
             ResetTriggerTime();
 
-            Debug.Log($"% = {TimeOfDayManager.CyclePercent}");
             var newRange = MinRange + Math.Sin(Math.PI - TimeOfDayManager.CyclePercent * Math.PI) * (MaxRange - MinRange);
             LightSource.range = (float)newRange;
         }
