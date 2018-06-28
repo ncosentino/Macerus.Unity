@@ -1,6 +1,5 @@
 ﻿using System;
 using Assets.Scripts.Unity.GameObjects;
-using ProjectXyz.Plugins.Features.Weather;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Api
@@ -9,7 +8,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Api
 
     public interface IReadOnlyWeatherMonitorBehaviour
     {
-        IReadOnlyWeatherManager WeatherManager { get; }
+        IWeatherProvider WeatherProvider { get; }
 
         TimeSpan UpdateDelay { get; }
 

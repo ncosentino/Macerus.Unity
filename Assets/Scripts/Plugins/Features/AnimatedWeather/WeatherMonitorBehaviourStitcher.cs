@@ -1,7 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
 using Assets.Scripts.Unity.GameObjects;
-using ProjectXyz.Plugins.Features.Weather;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather
@@ -13,15 +12,15 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IAnimatedWeatherFactory _animatedWeatherFactory;
         private readonly ILogger _logger;
-        private readonly IReadOnlyWeatherManager _weatherManager;
+        private readonly IWeatherProvider _weatherProvider;
 
         public WeatherMonitorBehaviourStitcher(
-            IReadOnlyWeatherManager weatherManager,
+            IWeatherProvider weatherProvider,
             IObjectDestroyer objectDestroyer,
             IAnimatedWeatherFactory animatedWeatherFactory,
             ILogger logger)
         {
-            _weatherManager = weatherManager;
+            _weatherProvider = weatherProvider;
             _objectDestroyer = objectDestroyer;
             _animatedWeatherFactory = animatedWeatherFactory;
             _logger = logger;
@@ -31,7 +30,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         {
             var weatherMonitorBehaviour = weatherSystemGameObject.AddComponent<WeatherMonitorBehaviour>();
             weatherMonitorBehaviour.ObjectDestroyer = _objectDestroyer;
-            weatherMonitorBehaviour.WeatherManager = _weatherManager;
+            weatherMonitorBehaviour.WeatherProvider = _weatherProvider;
             weatherMonitorBehaviour.Logger = _logger;
             weatherMonitorBehaviour.AnimatedWeatherFactory = _animatedWeatherFactory;
 

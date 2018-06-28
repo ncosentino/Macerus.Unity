@@ -1,9 +1,7 @@
 ﻿using System;
 using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
 using Assets.Scripts.Unity.GameObjects;
-using ProjectXyz.Api.Framework;
 using ProjectXyz.Framework.Contracts;
-using ProjectXyz.Plugins.Features.Weather;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather
@@ -14,7 +12,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         MonoBehaviour,
         IWeatherMonitorBehaviour
     {
-        public IReadOnlyWeatherManager WeatherManager { get; set; }
+        public IWeatherProvider WeatherProvider { get; set; }
 
         public TimeSpan UpdateDelay { get; set; }
 
@@ -27,13 +25,13 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         public IAnimatedWeatherFactory AnimatedWeatherFactory { get; set; }
 
         private float _triggerTime;
-        private IIdentifier _currentWeatherId;
+        private IWeather _currentWeather;
 
         private void Start()
         {
             Contract.RequiresNotNull(
-                WeatherManager,
-                $"{nameof(WeatherManager)} was not set on '{gameObject}.{this}'.");
+                WeatherProvider,
+                $"{nameof(WeatherProvider)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 WeatherSystemGameObject,
                 $"{nameof(WeatherSystemGameObject)} was not set on '{gameObject}.{this}'.");
@@ -61,12 +59,14 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 
             ResetTriggerTime();
 
-            var nextWeatherId = WeatherManager.WeatherId;
-            if (!Equals(_currentWeatherId, nextWeatherId))
+            var nextWeather = WeatherProvider.GetWeather();
+            if (_currentWeather != nextWeather)
             {
-                Logger.Debug($"Switching weather from '{_currentWeatherId}' to '{nextWeatherId}'...");
+                Logger.Debug($"Switching weather from '{_currentWeather}' to '{nextWeather}'...");
 
+                //
                 // TODO: transition the weather smoothly instead of immediately
+                //
 
                 // remove existing weather
                 foreach (var child in WeatherSystemGameObject.GetChildGameObjects())
@@ -74,18 +74,14 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                     ObjectDestroyer.Destroy(child);
                 }
 
-                //
-                // TODO: do we need to map a weather id to a resource id?
-                //
-
                 // create the new weather and add it to our object
-                var animatedWeatherObject = AnimatedWeatherFactory.Create(nextWeatherId);
+                var animatedWeatherObject = AnimatedWeatherFactory.Create(nextWeather.WeatherResourceId);
                 animatedWeatherObject.transform.SetParent(
                     gameObject.transform,
                     false);
 
-                _currentWeatherId = nextWeatherId;
-                Logger.Debug($"Switched weather from '{_currentWeatherId}' to '{nextWeatherId}'.");
+                _currentWeather = nextWeather;
+                Logger.Debug($"Switched weather from '{_currentWeather}' to '{nextWeather}'.");
             }
         }
 
