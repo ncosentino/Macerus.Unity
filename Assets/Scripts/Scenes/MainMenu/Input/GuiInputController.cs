@@ -1,16 +1,15 @@
 ﻿using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
-using Assets.Scripts.Unity;
 
 namespace Assets.Scripts.Scenes.MainMenu.Input
 {
     public sealed class GuiInputController : IGuiInputController
     {
         private readonly IDebugConsoleManager _debugConsoleManager;
-        private readonly Api.Scenes.Explore.IKeyboardControls _keyboardControls;
+        private readonly IKeyboardControls _keyboardControls;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
-            Api.Scenes.Explore.IKeyboardControls keyboardControls)
+            IKeyboardControls keyboardControls)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;

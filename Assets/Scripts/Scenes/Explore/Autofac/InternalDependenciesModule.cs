@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Scenes.Explore;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.GameObjects;
@@ -9,9 +8,9 @@ using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
 using Autofac;
 
-namespace Assets.Scripts.Autofac.Scenes
+namespace Assets.Scripts.Scenes.Explore.Autofac
 {
-    public sealed class ExploreModule : Module
+    public sealed class InternalDependenciesModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -20,15 +19,15 @@ namespace Assets.Scripts.Autofac.Scenes
                 .As<IExploreSceneStartupInterceptorFacade>() // force facade interface to avoid circular dependencies
                 .SingleInstance();
             builder
-                .RegisterType<GuiInputController>()
+                .RegisterType<ExploreSceneLoadHook>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<KeyboardControls>()
+                .RegisterType<ExploreSetup>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<GuiInputStitcher>()
+                .RegisterType<GameEngineUpdateBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
@@ -70,7 +69,58 @@ namespace Assets.Scripts.Autofac.Scenes
                     }
                 });
 
-            // maps
+            RegisterMaps(builder);
+            RegisterCamera(builder);
+            RegisterHud(builder);
+            RegisterInput(builder);
+        }
+
+        private static void RegisterInput(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<GuiInputController>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<KeyboardControls>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<GuiInputStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+        }
+
+        private static void RegisterHud(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<ItemListFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ItemToListItemEntryConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ItemListBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+        }
+
+        private static void RegisterCamera(ContainerBuilder builder)
+        {
+            builder
+                .RegisterType<AutoTargetFollowCameraFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<CameraAutoTargetBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+        }
+
+        private static void RegisterMaps(ContainerBuilder builder)
+        {
             builder
                 .RegisterType<MapFactory>()
                 .AsImplementedInterfaces()
@@ -89,30 +139,6 @@ namespace Assets.Scripts.Autofac.Scenes
                 .SingleInstance();
             builder
                 .RegisterType<ExploreMapFormatter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            // camera
-            builder
-                .RegisterType<AutoTargetFollowCameraFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<CameraAutoTargetBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            // hud
-            builder
-                .RegisterType<ItemListFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ItemToListItemEntryConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ItemListBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

@@ -29,7 +29,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             hasFollowCameraBehaviour.ObjectDestroyer = _objectDestroyer;
 
             // FIXME: this is a filthy hack.
-            hasFollowCameraBehaviour.ExploreGameObject = _gameObjectManager.FindAll().First(x => x.HasRequiredComponent<ExploreSceneBehaviour>());
+            hasFollowCameraBehaviour.ExploreGameObject = _gameObjectManager.FindAll().First(x => x.HasRequiredComponent<IGameEngineUpdateBehaviour>());
             return hasFollowCameraBehaviour;
         }
     }
