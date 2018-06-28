@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224583701816754560}
   - component: {fileID: 222534186712657664}
   - component: {fileID: 114575790817188562}
-  - component: {fileID: 114113319058453762}
+  - component: {fileID: 114422753550084810}
   m_Layer: 5
   m_Name: AnimatedRain
   m_TagString: Untagged
@@ -29,7 +29,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114113319058453762
+--- !u!114 &114422753550084810
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -37,7 +37,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1506452667235910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe85a043085fb154c9c4d85434e3c3be, type: 3}
+  m_Script: {fileID: 11500000, guid: 351012215c1d0ba4e91f96ceecc32b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ScrollSpeed: 200
