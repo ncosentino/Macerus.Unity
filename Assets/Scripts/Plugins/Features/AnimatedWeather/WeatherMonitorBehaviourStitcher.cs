@@ -1,6 +1,5 @@
 ﻿using System;
 using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
-using Assets.Scripts.Unity.GameObjects;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather
@@ -9,19 +8,22 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 
     public sealed class WeatherMonitorBehaviourStitcher : IWeatherMonitorBehaviourStitcher
     {
-        private readonly IObjectDestroyer _objectDestroyer;
         private readonly IAnimatedWeatherFactory _animatedWeatherFactory;
         private readonly ILogger _logger;
         private readonly IWeatherProvider _weatherProvider;
+        private readonly IFadeAndKillBehaviourStitcher _fadeAndKillBehaviourStitcher;
+        private readonly IFadeInBehaviourStitcher _fadeInBehaviourStitcher;
 
         public WeatherMonitorBehaviourStitcher(
             IWeatherProvider weatherProvider,
-            IObjectDestroyer objectDestroyer,
+            IFadeAndKillBehaviourStitcher fadeAndKillBehaviourStitcher,
+            IFadeInBehaviourStitcher fadeInBehaviourStitcher,
             IAnimatedWeatherFactory animatedWeatherFactory,
             ILogger logger)
         {
             _weatherProvider = weatherProvider;
-            _objectDestroyer = objectDestroyer;
+            _fadeAndKillBehaviourStitcher = fadeAndKillBehaviourStitcher;
+            _fadeInBehaviourStitcher = fadeInBehaviourStitcher;
             _animatedWeatherFactory = animatedWeatherFactory;
             _logger = logger;
         }
@@ -29,7 +31,8 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         public IReadOnlyWeatherMonitorBehaviour Attach(GameObject weatherSystemGameObject)
         {
             var weatherMonitorBehaviour = weatherSystemGameObject.AddComponent<WeatherMonitorBehaviour>();
-            weatherMonitorBehaviour.ObjectDestroyer = _objectDestroyer;
+            weatherMonitorBehaviour.FadeInBehaviourStitcher = _fadeInBehaviourStitcher;
+            weatherMonitorBehaviour.FadeAndKillBehaviourStitcher = _fadeAndKillBehaviourStitcher;
             weatherMonitorBehaviour.WeatherProvider = _weatherProvider;
             weatherMonitorBehaviour.Logger = _logger;
             weatherMonitorBehaviour.AnimatedWeatherFactory = _animatedWeatherFactory;

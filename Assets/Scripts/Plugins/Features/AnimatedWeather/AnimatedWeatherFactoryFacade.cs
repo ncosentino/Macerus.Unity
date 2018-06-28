@@ -16,19 +16,16 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 
         public GameObject Create(IIdentifier weatherResourceId)
         {
-            GameObject weatherGameObject;
             Func<GameObject> createCallback;
-            if (_mappings.TryGetValue(
+            if (!_mappings.TryGetValue(
                 weatherResourceId,
                 out createCallback))
             {
-                weatherGameObject = createCallback.Invoke();
-            }
-            else
-            {
-                weatherGameObject = new GameObject();
+                throw new InvalidOperationException(
+                    $"There is no weather factory mapping for weather with id '{weatherResourceId}'.");
             }
 
+            var weatherGameObject = createCallback.Invoke();
             weatherGameObject.name = $"Weather: {weatherResourceId}";
             return weatherGameObject;
         }

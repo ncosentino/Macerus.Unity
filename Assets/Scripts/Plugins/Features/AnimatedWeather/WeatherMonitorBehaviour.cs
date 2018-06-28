@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
 using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Framework.Contracts;
@@ -18,7 +19,9 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 
         public GameObject WeatherSystemGameObject { get; set; }
 
-        public IObjectDestroyer ObjectDestroyer { get; set; }
+        public IFadeAndKillBehaviourStitcher FadeAndKillBehaviourStitcher { get; set; }
+
+        public IFadeInBehaviourStitcher FadeInBehaviourStitcher { get; set; }
 
         public ILogger Logger { get; set; }
 
@@ -36,8 +39,11 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 WeatherSystemGameObject,
                 $"{nameof(WeatherSystemGameObject)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
-                ObjectDestroyer,
-                $"{nameof(ObjectDestroyer)} was not set on '{gameObject}.{this}'.");
+                FadeAndKillBehaviourStitcher,
+                $"{nameof(FadeAndKillBehaviourStitcher)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                FadeInBehaviourStitcher,
+                $"{nameof(FadeInBehaviourStitcher)} was not set on '{gameObject}.{this}'.");
             Contract.Requires(
                 UpdateDelay >= TimeSpan.Zero,
                 $"{nameof(UpdateDelay)} was not set on '{gameObject}.{this}'.");
@@ -64,14 +70,18 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             {
                 Logger.Debug($"Switching weather from '{_currentWeather}' to '{nextWeather}'...");
 
-                //
-                // TODO: transition the weather smoothly instead of immediately
-                //
-
-                // remove existing weather
-                foreach (var child in WeatherSystemGameObject.GetChildGameObjects())
+                // transition all non-transitioning weather out
+                foreach (var child in WeatherSystemGameObject
+                    .GetChildGameObjects()
+                    .Where(x => 
+                        x.GetComponent<FadeAndKillBehaviour>() == null &&
+                        x.GetComponent<FadeInBehaviour>() == null))
                 {
-                    ObjectDestroyer.Destroy(child);
+                    FadeAndKillBehaviourStitcher.Attach(
+                        child,
+                        _currentWeather.TransitionOutDuration,
+                        _currentWeather.MaxOpacity,
+                        _currentWeather.MinOpacity);
                 }
 
                 // create the new weather and add it to our object
@@ -79,6 +89,11 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 animatedWeatherObject.transform.SetParent(
                     gameObject.transform,
                     false);
+                FadeInBehaviourStitcher.Attach(
+                    animatedWeatherObject,
+                    nextWeather.TransitionOutDuration,
+                    nextWeather.MinOpacity,
+                    nextWeather.MaxOpacity);
 
                 _currentWeather = nextWeather;
                 Logger.Debug($"Switched weather from '{_currentWeather}' to '{nextWeather}'.");

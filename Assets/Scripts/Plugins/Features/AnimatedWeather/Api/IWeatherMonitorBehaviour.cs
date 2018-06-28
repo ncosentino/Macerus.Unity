@@ -1,5 +1,4 @@
 ﻿using System;
-using Assets.Scripts.Unity.GameObjects;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Api
@@ -14,7 +13,9 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Api
 
         new GameObject WeatherSystemGameObject { get; set; }
 
-        new IObjectDestroyer ObjectDestroyer { get; set; }
+        new IFadeAndKillBehaviourStitcher FadeAndKillBehaviourStitcher { get; set; }
+
+        new IFadeInBehaviourStitcher FadeInBehaviourStitcher { get; set; }
 
         new ILogger Logger { get; set; }
 

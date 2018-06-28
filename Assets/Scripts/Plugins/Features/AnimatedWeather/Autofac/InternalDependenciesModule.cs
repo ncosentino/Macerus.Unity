@@ -28,6 +28,18 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<FadeInBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<FadeAndKillBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<Fader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<AnimatedWeatherFactoryFacade>()
                 .AsImplementedInterfaces()
                 .SingleInstance()

@@ -12,5 +12,9 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         new TimeSpan TransitionInDuration { get; set; }
 
         new TimeSpan TransitionOutDuration { get; set; }
+
+        new double MinOpacity { get; set; }
+
+        new double MaxOpacity { get; set; }
     }
 }
