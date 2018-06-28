@@ -1,12 +1,11 @@
 using System;
-using ProjectXyz.Plugins.Features.TimeOfDay;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.DayNightCycle.Api
 {
     public interface ITimeOfDayMonitorBehaviour : IReadOnlyTimeOfDayMonitorBehaviour
     {
-        new IReadOnlyTimeOfDayManager TimeOfDayManager { get; set; }
+        new ITimeOfDayProvider TimeOfDayProvider { get; set; }
 
         new TimeSpan UpdateDelay { get; set; }
 

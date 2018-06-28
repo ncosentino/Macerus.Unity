@@ -12,6 +12,10 @@ namespace Assets.Scripts.Plugins.Features.DayNightCycle.Autofac
                 .RegisterType<TimeOfDayMonitorBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<TimeOfDayProvider>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Plugins.Features.DayNightCycle.Api;
 using ProjectXyz.Framework.Contracts;
-using ProjectXyz.Plugins.Features.TimeOfDay;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.DayNightCycle
@@ -10,7 +9,7 @@ namespace Assets.Scripts.Plugins.Features.DayNightCycle
         MonoBehaviour,
         ITimeOfDayMonitorBehaviour
     {
-        public IReadOnlyTimeOfDayManager TimeOfDayManager { get; set; }
+        public ITimeOfDayProvider TimeOfDayProvider { get; set; }
 
         public TimeSpan UpdateDelay { get; set; }
 
@@ -25,8 +24,8 @@ namespace Assets.Scripts.Plugins.Features.DayNightCycle
         private void Start()
         {
             Contract.RequiresNotNull(
-                TimeOfDayManager,
-                $"{nameof(TimeOfDayManager)} was not set on '{gameObject}.{this}'.");
+                TimeOfDayProvider,
+                $"{nameof(TimeOfDayProvider)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 LightSource,
                 $"{nameof(LightSource)} was not set on '{gameObject}.{this}'.");
@@ -54,7 +53,7 @@ namespace Assets.Scripts.Plugins.Features.DayNightCycle
 
             ResetTriggerTime();
 
-            var newRange = MinRange + Math.Sin(Math.PI - TimeOfDayManager.CyclePercent * Math.PI) * (MaxRange - MinRange);
+            var newRange = MinRange + Math.Sin(Math.PI - TimeOfDayProvider.CyclePercent * Math.PI) * (MaxRange - MinRange);
             LightSource.range = (float)newRange;
         }
 

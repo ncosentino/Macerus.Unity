@@ -1,17 +1,16 @@
 ﻿using System;
 using Assets.Scripts.Plugins.Features.DayNightCycle.Api;
-using ProjectXyz.Plugins.Features.TimeOfDay;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.DayNightCycle
 {
     public sealed class TimeOfDayMonitorBehaviourStitcher : ITimeOfDayMonitorBehaviourStitcher
     {
-        private readonly IReadOnlyTimeOfDayManager _timeOfDayManager;
+        private readonly ITimeOfDayProvider _timeOfDayProvider;
 
-        public TimeOfDayMonitorBehaviourStitcher(IReadOnlyTimeOfDayManager timeOfDayManager)
+        public TimeOfDayMonitorBehaviourStitcher(ITimeOfDayProvider timeOfDayProvider)
         {
-            _timeOfDayManager = timeOfDayManager;
+            _timeOfDayProvider = timeOfDayProvider;
         }
 
         public IReadOnlyTimeOfDayMonitorBehaviour Attach(
@@ -19,7 +18,7 @@ namespace Assets.Scripts.Plugins.Features.DayNightCycle
             Light lightSource)
         {
             var timeOfDayMonitorBehaviour = timeeOfDayMonitorObject.AddComponent<TimeOfDayMonitorBehaviour>();
-            timeOfDayMonitorBehaviour.TimeOfDayManager = _timeOfDayManager;
+            timeOfDayMonitorBehaviour.TimeOfDayProvider = _timeOfDayProvider;
             
             timeOfDayMonitorBehaviour.MinRange = 100;
             timeOfDayMonitorBehaviour.MaxRange = 300;
