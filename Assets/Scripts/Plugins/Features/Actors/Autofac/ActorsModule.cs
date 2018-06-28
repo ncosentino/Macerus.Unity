@@ -1,10 +1,9 @@
 ﻿using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.Actors.Interceptors;
 using Assets.Scripts.Plugins.Features.Actors.UnityBehaviours;
-using Assets.Scripts.Scenes.Explore.GameObjects;
 using Autofac;
 
-namespace Assets.Scripts.Plugins.Features.Actors
+namespace Assets.Scripts.Plugins.Features.Actors.Autofac
 {
     public sealed class ActorsModule : Module
     {
