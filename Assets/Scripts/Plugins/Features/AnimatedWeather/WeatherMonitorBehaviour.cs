@@ -68,7 +68,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             var nextWeather = WeatherProvider.GetWeather();
             if (_currentWeather != nextWeather)
             {
-                Logger.Debug($"Switching weather from '{_currentWeather}' to '{nextWeather}'...");
+                Logger.Debug($"Switching weather from '{_currentWeather?.WeatherResourceId}' to '{nextWeather?.WeatherResourceId}'...");
 
                 // transition all non-transitioning weather out
                 foreach (var child in WeatherSystemGameObject
@@ -95,8 +95,8 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                     nextWeather.MinOpacity,
                     nextWeather.MaxOpacity);
 
+                Logger.Debug($"Switched weather from '{_currentWeather?.WeatherResourceId}' to '{nextWeather?.WeatherResourceId}'.");
                 _currentWeather = nextWeather;
-                Logger.Debug($"Switched weather from '{_currentWeather}' to '{nextWeather}'.");
             }
         }
 
