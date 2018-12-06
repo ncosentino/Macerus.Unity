@@ -102,6 +102,14 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<InventoryListItemColorMutator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<InventoryListItemNameMutator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<ItemListBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

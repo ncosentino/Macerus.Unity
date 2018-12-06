@@ -46,6 +46,13 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 "Gui/Prefabs/Inventory/InventoryListItem",
                 ItemContainerBehavior);
             _itemList.transform.SetParent(inventoryBagUi.transform, false);
+
+            // set margin
+            var transform = _itemList.GetComponent<RectTransform>();
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 5, transform.rect.width - 5);
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 5, transform.rect.width - 5);
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 5, transform.rect.height - 5);
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 5, transform.rect.height - 5);
         }
 
         private void OnDestroy()

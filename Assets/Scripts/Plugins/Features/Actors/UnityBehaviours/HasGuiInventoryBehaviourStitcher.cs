@@ -2,11 +2,13 @@ using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
+using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
 {
     public sealed class HasGuiInventoryBehaviourStitcher : IHasGuiInventoryBehaviourStitcher
     {
+        private readonly ILogger _logger;
         private readonly IGameObjectManager _gameObjectManager;
         private readonly IItemListFactory _itemListFactory;
         private readonly IObjectDestroyer _objectDestroyer;
@@ -14,11 +16,13 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         public HasGuiInventoryBehaviourStitcher(
             IGameObjectManager gameObjectManager,
             IItemListFactory itemListFactory,
-            IObjectDestroyer objectDestroyer)
+            IObjectDestroyer objectDestroyer,
+            ILogger logger)
         {
             _gameObjectManager = gameObjectManager;
             _itemListFactory = itemListFactory;
             _objectDestroyer = objectDestroyer;
+            _logger = logger;
         }
 
         public IReadonlyHasGuiInventoryBehaviour Attach(
@@ -30,6 +34,8 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             hasGuiInventoryBehaviour.ItemListFactory = _itemListFactory;
             hasGuiInventoryBehaviour.ObjectDestroyer = _objectDestroyer;
             hasGuiInventoryBehaviour.ItemContainerBehavior = itemContainerBehavior;
+
+            _logger.Debug($"'{this}' has attached '{hasGuiInventoryBehaviour}' to '{gameObject}'.");
             return hasGuiInventoryBehaviour;
         }
     }

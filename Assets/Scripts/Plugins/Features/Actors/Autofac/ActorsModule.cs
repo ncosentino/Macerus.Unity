@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.Actors.Interceptors;
 using Assets.Scripts.Plugins.Features.Actors.UnityBehaviours;
+using Assets.Scripts.Plugins.Features.Wip;
 using Autofac;
 
 namespace Assets.Scripts.Plugins.Features.Actors.Autofac
@@ -40,6 +41,12 @@ namespace Assets.Scripts.Plugins.Features.Actors.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<HasGuiInventoryBehaviorInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance()
+                .AsSelf()
+                .AutoActivate();
+            builder
+                .RegisterType<WipInventoryInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance()
                 .AsSelf()
