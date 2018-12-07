@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
@@ -7,21 +8,21 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
         //// TODO: can we please load these slots from a data source somewhere?
         public IEnumerable<IEquipmentSlotViewModel> GetViewModels()
         {
-            const string LOL_RESOURCE = @"Graphics/Gui/Inventory/empty hand slot";
+            const string WIP_PLACEHOLDER_RESOURCE = @"Graphics/Gui/Inventory/empty hand slot";
 
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 80,   92 + 64); // amulet
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 80,   92 + 32); // ring1
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 80,   92 + 0); // ring2
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 0,    92 + 80); // helm
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/TallEquipmentSlot", LOL_RESOURCE, 92 + 0,    76 + 0); // body
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/TallEquipmentSlot", LOL_RESOURCE, 92 + -32,  76 + 0); // cloak
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/TallEquipmentSlot", LOL_RESOURCE, 92 + -32,  76 + 64); // left hand
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/TallEquipmentSlot", LOL_RESOURCE, 92 + 32,   76 + 64); // right hand
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/TallEquipmentSlot", LOL_RESOURCE, 92 + -32,  76 + -64); // pants
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 32,   92 + 16); // shoulders
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 32,   92 + -16); // gloves
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 32,   92 + -48); // belt
-            yield return new EquipmentSlotViewModel("Gui/Prefabs/Inventory/EquipmentSlot",     LOL_RESOURCE, 92 + 32,   92 + -80); // boots
+            yield return new EquipmentSlotViewModel(new StringIdentifier("amulet"),     "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 80,   92 + 64);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("ring1"),      "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 80,   92 + 32);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("ring2"),      "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 80,   92 + 0);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("head"),       "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 0,    92 + 80);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("body"),       "Gui/Prefabs/Inventory/TallEquipmentSlot", WIP_PLACEHOLDER_RESOURCE, 92 + 0,    76 + 0);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("cloak"),      "Gui/Prefabs/Inventory/TallEquipmentSlot", WIP_PLACEHOLDER_RESOURCE, 92 + -32,  76 + 0);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("left hand"),  "Gui/Prefabs/Inventory/TallEquipmentSlot", WIP_PLACEHOLDER_RESOURCE, 92 + -32,  76 + 64);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("right hand"), "Gui/Prefabs/Inventory/TallEquipmentSlot", WIP_PLACEHOLDER_RESOURCE, 92 + 32,   76 + 64);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("legs"),       "Gui/Prefabs/Inventory/TallEquipmentSlot", WIP_PLACEHOLDER_RESOURCE, 92 + -32,  76 + -64);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("shoulders"),  "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 32,   92 + 16);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("gloves"),     "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 32,   92 + -16);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("belt"),       "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 32,   92 + -48);
+            yield return new EquipmentSlotViewModel(new StringIdentifier("boots"),      "Gui/Prefabs/Inventory/EquipmentSlot",     WIP_PLACEHOLDER_RESOURCE, 92 + 32,   92 + -80);
         }
     }
 }

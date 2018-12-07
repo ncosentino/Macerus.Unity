@@ -1,18 +1,24 @@
+using ProjectXyz.Api.Framework;
+
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
     public sealed class EquipmentSlotViewModel : IEquipmentSlotViewModel
     {
         public EquipmentSlotViewModel(
+            IIdentifier equipSlotId,
             string prefabResource,
             string emptyIconResource,
             int x,
             int y)
         {
+            EquipSlotId = equipSlotId;
             PrefabResource = prefabResource;
             EmptyIconResource = emptyIconResource;
             X = x;
             Y = y;
         }
+
+        public IIdentifier EquipSlotId { get; }
 
         public string PrefabResource { get; }
 

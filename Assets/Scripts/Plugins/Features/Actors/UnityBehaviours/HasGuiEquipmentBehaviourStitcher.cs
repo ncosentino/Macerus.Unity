@@ -34,6 +34,8 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             hasGuiEquipmentBehaviour.GameObjectManager = _gameObjectManager;
             hasGuiEquipmentBehaviour.EquipmentSlotsFactory = _equipmentSlotsFactory;
             hasGuiEquipmentBehaviour.ObjectDestroyer = _objectDestroyer;
+            hasGuiEquipmentBehaviour.HasEquipmentBehavior = hasEquipmentBehavior;
+            hasGuiEquipmentBehaviour.CanEquipBehavior = canEquipBehavior;
 
             //// TODO: actually pass in the behaviours here so we can do somethin' fance
 
