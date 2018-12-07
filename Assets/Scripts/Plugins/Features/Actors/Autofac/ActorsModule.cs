@@ -36,6 +36,16 @@ namespace Assets.Scripts.Plugins.Features.Actors.Autofac
                 });
 
             builder
+                .RegisterType<HasGuiEquipmentBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<HasGuiEquipmentBehaviorInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance()
+                .AsSelf()
+                .AutoActivate();
+            builder
                 .RegisterType<HasGuiInventoryBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

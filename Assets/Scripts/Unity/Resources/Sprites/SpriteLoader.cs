@@ -6,11 +6,31 @@ namespace Assets.Scripts.Unity.Resources.Sprites
 {
     public sealed class SpriteLoader : ISpriteLoader
     {
+        private readonly IResourceLoader _resourceLoader;
         private readonly ICache<string, ISpriteSheet> _spriteSheetCache;
 
-        public SpriteLoader(ICache<string, ISpriteSheet> spriteSheetCache)
+        public SpriteLoader(
+            IResourceLoader resourceLoader,
+            ICache<string, ISpriteSheet> spriteSheetCache)
         {
+            _resourceLoader = resourceLoader;
             _spriteSheetCache = spriteSheetCache;
+        }
+
+        public Sprite GetSpriteFromTexture2D(string texture2DResource)
+        {
+            var texture = _resourceLoader.Load<Texture2D>(texture2DResource);
+            var sprite = Sprite.Create(
+                texture,
+                new Rect(0, 0, texture.width, texture.height),
+                Vector2.zero);
+            return sprite;
+        }
+
+        public Sprite GetSprite(string spriteResource)
+        {
+            var matchingSprite = _resourceLoader.Load<Sprite>(spriteResource);
+            return matchingSprite;
         }
 
         public Sprite SpriteFromMultiSprite(
@@ -22,8 +42,7 @@ namespace Assets.Scripts.Unity.Resources.Sprites
                 spriteSheetResource,
                 out spriteSheet))
             {
-                // TODO: use an IResourceLoader that has a LoadAll<> signature...
-                var matchingSprites = UnityEngine.Resources.LoadAll<Sprite>(spriteSheetResource);
+                var matchingSprites = _resourceLoader.LoadAll<Sprite>(spriteSheetResource);
                 spriteSheet = new SpriteSheet(matchingSprites);
                 _spriteSheetCache.AddOrUpdate(spriteSheetResource, spriteSheet);
             }

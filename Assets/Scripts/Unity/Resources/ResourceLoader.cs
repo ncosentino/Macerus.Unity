@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Unity.Resources
@@ -26,6 +28,20 @@ namespace Assets.Scripts.Unity.Resources
             return new MemoryStream(bytes);
         }
 
+        public IReadOnlyCollection<TResource> LoadAll<TResource>(string relativeResourcePath)
+            where TResource : UnityEngine.Object
+        {
+            var resources = Resources.LoadAll<TResource>(relativeResourcePath);
+            if (resources == null || !resources.Any())
+            {
+                throw new InvalidOperationException(
+                    $"No resources with relative resource path " +
+                    $"'{relativeResourcePath}' could be loaded.");
+            }
+
+            return resources;
+        }
+
         public TResource Load<TResource>(string relativeResourcePath)
             where TResource : UnityEngine.Object
         {
@@ -42,7 +58,7 @@ namespace Assets.Scripts.Unity.Resources
             {
                 throw new InvalidOperationException(
                     $"Resource with relative resource path " +
-                    $"'{relativeResourcePath}' was of type '{casted.GetType()}' " +
+                    $"'{relativeResourcePath}' was of type '{uncasted.GetType()}' " +
                     $"and not of type '{typeof(TResource)}'.");
             }
 

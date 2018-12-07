@@ -3,6 +3,7 @@ using System.Linq;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.GameObjects;
+using Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment;
 using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
@@ -93,6 +94,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
 
         private static void RegisterHud(ContainerBuilder builder)
         {
+            builder
+                .RegisterType<EquipmentSlotsFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
             builder
                 .RegisterType<ItemListFactory>()
                 .AsImplementedInterfaces()
