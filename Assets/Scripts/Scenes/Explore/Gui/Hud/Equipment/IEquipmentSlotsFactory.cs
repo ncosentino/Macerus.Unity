@@ -1,11 +1,13 @@
 using System.Collections.Generic;
-using ProjectXyz.Api.Framework;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
     public interface IEquipmentSlotsFactory
     {
-        IEnumerable<GameObject> CreateEquipmentSlots(IEnumerable<IIdentifier> equipSlotIds);
+        IEnumerable<GameObject> CreateEquipmentSlots(
+            IHasEquipmentBehavior hasEquipmentBehavior,
+            ICanEquipBehavior canEquipBehavior);
     }
 }

@@ -53,7 +53,9 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 .FindAll(x => x.name == "Equipment")
                 .First();
 
-            var equipSlotObjects = EquipmentSlotsFactory.CreateEquipmentSlots(HasEquipmentBehavior.SupportedEquipSlotIds);
+            var equipSlotObjects = EquipmentSlotsFactory.CreateEquipmentSlots(
+                HasEquipmentBehavior,
+                CanEquipBehavior);
             foreach (var equipmentSlot in equipSlotObjects)
             {
                 equipmentSlot.transform.SetParent(

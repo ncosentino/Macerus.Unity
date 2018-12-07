@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using Assets.Scripts.Unity.Resources.Sprites;
-using ProjectXyz.Api.Framework;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 using UnityEngine.UI;
 using ILogger = ProjectXyz.Api.Logging.ILogger;
@@ -16,25 +15,30 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
         private readonly IPrefabCreator _prefabCreator;
         private readonly ISpriteLoader _spriteLoader;
         private readonly ILogger _logger;
+        private readonly IDropEquipmentSlotBehaviourStitcher _dropEquipmentSlotBehaviourStitcher;
 
         public EquipmentSlotsFactory(
             IPrefabCreator prefabCreator,
             ISpriteLoader spriteLoader,
+            IDropEquipmentSlotBehaviourStitcher dropEquipmentSlotBehaviourStitcher,
             ILogger logger)
         {
             _prefabCreator = prefabCreator;
             _spriteLoader = spriteLoader;
+            _dropEquipmentSlotBehaviourStitcher = dropEquipmentSlotBehaviourStitcher;
             _logger = logger;
         }
 
-        public IEnumerable<GameObject> CreateEquipmentSlots(IEnumerable<IIdentifier> equipSlotIds)
+        public IEnumerable<GameObject> CreateEquipmentSlots(
+            IHasEquipmentBehavior hasEquipmentBehavior,
+            ICanEquipBehavior canEquipBehavior)
         {
             var slotsViewModelProvider = new EquipmentSlotViewModelProvider();
             var viewModels = slotsViewModelProvider
                 .GetViewModels()
                 .ToDictionary(x => x.EquipSlotId, x => x);
 
-            foreach (var equipSlotId in equipSlotIds)
+            foreach (var equipSlotId in hasEquipmentBehavior.SupportedEquipSlotIds)
             {
                 IEquipmentSlotViewModel equipmentSlotViewModel;
                 if (!viewModels.TryGetValue(
@@ -47,11 +51,19 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 
                 var equipmentSlotGameObject = _prefabCreator.Create<GameObject>(equipmentSlotViewModel.PrefabResource);
                 equipmentSlotGameObject.name = $"Equipment Slot: {equipmentSlotViewModel.EquipSlotId}";
-
+                
                 var sprite = _spriteLoader.GetSpriteFromTexture2D(equipmentSlotViewModel.EmptyIconResource);
                 equipmentSlotGameObject
                     .GetRequiredComponentInChild<Image>("ActiveIcon")
                     .sprite = sprite;
+
+                if (canEquipBehavior != null)
+                {
+                    _dropEquipmentSlotBehaviourStitcher.Attach(
+                        equipmentSlotGameObject,
+                        equipmentSlotViewModel.EquipSlotId,
+                        canEquipBehavior);
+                }
 
                 // set margin
                 var transform = equipmentSlotGameObject.GetComponent<RectTransform>();

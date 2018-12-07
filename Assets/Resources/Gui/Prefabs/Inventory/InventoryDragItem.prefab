@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 222356677275785954}
   - component: {fileID: 114264788237090002}
   - component: {fileID: 114904578352928422}
+  - component: {fileID: 114616080566065704}
   m_Layer: 5
   m_Name: InventoryDragItem
   m_TagString: Untagged
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -86,7 +87,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -100,6 +101,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114616080566065704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1700483116960126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 042f7c503ca00fa4cb3348944b4ca207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114904578352928422
 MonoBehaviour:
   m_ObjectHideFlags: 1

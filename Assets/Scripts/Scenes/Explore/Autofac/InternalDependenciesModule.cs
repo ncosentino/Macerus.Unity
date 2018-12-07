@@ -95,6 +95,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
         private static void RegisterHud(ContainerBuilder builder)
         {
             builder
+                .RegisterType<DropEquipmentSlotBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<EquipmentSlotsFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
