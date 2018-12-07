@@ -27,10 +27,10 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             var canvas = _guiCanvasProvider.GetCanvas();
             var weatherSystem = _weatherSystemFactory.Create();
             _viewWelderFactory
-                .Create<ISimpleViewWelder>(
+                .Create<IStackViewWelder>(
                     canvas,
                     weatherSystem)
-                .Weld(new SimpleViewWeldingOptions()
+                .Weld(new StackViewWeldingOptions()
                 {
                     OrderFirst = true,
                 });

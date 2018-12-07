@@ -1,6 +1,6 @@
 ﻿namespace Assets.Scripts.Plugins.Features.UnityViewWelding.Api
 {
-    public interface ISimpleViewWeldingOptions : IReadOnlySimpleViewWeldingOptions
+    public interface IStackViewWeldingOptions : IReadOnlyStackViewWeldingOptions
     {
         new bool OrderFirst { get; set; }
 

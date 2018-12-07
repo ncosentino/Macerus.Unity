@@ -2,10 +2,10 @@
 
 namespace Assets.Scripts.Plugins.Features.UnityViewWelding.Api
 {
-    public interface ISimpleViewWelder : IViewWelder
+    public interface IStackViewWelder : IViewWelder
     {
         void Weld();
 
-        void Weld(ISimpleViewWeldingOptions simpleViewWeldingOptions);
+        void Weld(IStackViewWeldingOptions simpleViewWeldingOptions);
     }
 }

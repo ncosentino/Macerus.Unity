@@ -1,5 +1,6 @@
 using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
+using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
@@ -13,5 +14,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         new IObjectDestroyer ObjectDestroyer { get; set; }
 
         new IGameObjectManager GameObjectManager { get; set; }
+
+        new IViewWelderFactory ViewWelderFactory { get; set; }
     }
 }

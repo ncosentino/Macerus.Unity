@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Framework.Contracts;
+using ProjectXyz.Framework.ViewWelding.Api;
+using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
 
@@ -19,6 +22,8 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
 
         public IGameObjectManager GameObjectManager { get; set; }
 
+        public IViewWelderFactory ViewWelderFactory { get; set; }
+
         private GameObject _itemList;
 
         private void Start()
@@ -35,6 +40,9 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
             Contract.RequiresNotNull(
                 GameObjectManager,
                 $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                ViewWelderFactory,
+                $"{nameof(ViewWelderFactory)} was not set on '{gameObject}.{this}'.");
 
             // FIXME: find a better way to associate an item collection to the thing in the UI
             var inventoryBagUi = GameObjectManager
@@ -45,14 +53,10 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 "Gui/Prefabs/Inventory/ItemList",
                 "Gui/Prefabs/Inventory/InventoryListItem",
                 ItemContainerBehavior);
-            _itemList.transform.SetParent(inventoryBagUi.transform, false);
 
-            // set margin
-            var transform = _itemList.GetComponent<RectTransform>();
-            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 5, transform.rect.width - 5);
-            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 5, transform.rect.width - 5);
-            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 5, transform.rect.height - 5);
-            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 5, transform.rect.height - 5);
+            ViewWelderFactory
+                .Create<IInsetWelder>(inventoryBagUi, _itemList)
+                .Weld(new InsetWeldOptions(5));
         }
 
         private void OnDestroy()

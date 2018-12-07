@@ -1,32 +1,32 @@
 ﻿using Assets.Scripts.Plugins.Features.UnityViewWelding.Api;
 using UnityEngine;
 
-namespace Assets.Scripts.Plugins.Features.UnityViewWelding
+namespace Assets.Scripts.Plugins.Features.UnityViewWelding.Welders
 {
-    public sealed class SimpleTransformViewWelder : ISimpleViewWelder
+    public sealed class TransformStackViewWelder : IStackViewWelder
     {
         private readonly Transform _parent;
         private readonly Transform _child;
 
-        public SimpleTransformViewWelder(Transform parent, Transform child)
+        public TransformStackViewWelder(Transform parent, Transform child)
         {
             _parent = parent;
             _child = child;
         }
 
-        public void Weld() => Weld(new SimpleViewWeldingOptions());
+        public void Weld() => Weld(new StackViewWeldingOptions());
 
-        public void Weld(ISimpleViewWeldingOptions simpleViewWeldingOptions)
+        public void Weld(IStackViewWeldingOptions weldOptions)
         {
             _child.SetParent(
                 _parent,
                 false);
 
-            if (simpleViewWeldingOptions.OrderFirst)
+            if (weldOptions.OrderFirst)
             {
                 _child.SetAsFirstSibling();
             }
-            else if (simpleViewWeldingOptions.OrderLast)
+            else if (weldOptions.OrderLast)
             {
                 _child.SetAsLastSibling();
             }
