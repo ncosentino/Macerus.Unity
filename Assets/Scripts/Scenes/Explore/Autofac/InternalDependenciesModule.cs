@@ -118,6 +118,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .RegisterType<ItemListBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<DragInventoryListItemBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
 
         private static void RegisterCamera(ContainerBuilder builder)

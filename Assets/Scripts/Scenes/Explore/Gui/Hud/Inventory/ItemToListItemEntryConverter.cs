@@ -11,15 +11,18 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
     {
         private readonly IPrefabCreator _prefabCreator;
         private readonly IHasGameObjectBehaviourStitcher _hasGameObjectBehaviourStitcher;
+        private readonly IDragInventoryListItemBehaviourStitcher _dragInventoryListItemBehaviourStitcher;
         private readonly IReadOnlyCollection<IInventoryListItemMutator> _inventoryListItemMutators;
 
         public ItemToListItemEntryConverter(
             IPrefabCreator prefabCreator,
             IHasGameObjectBehaviourStitcher hasGameObjectBehaviourStitcher,
+            IDragInventoryListItemBehaviourStitcher dragInventoryListItemBehaviourStitcher,
             IEnumerable<IInventoryListItemMutator> inventoryListItemMutators)
         {
             _prefabCreator = prefabCreator;
             _hasGameObjectBehaviourStitcher = hasGameObjectBehaviourStitcher;
+            _dragInventoryListItemBehaviourStitcher = dragInventoryListItemBehaviourStitcher;
             _inventoryListItemMutators = inventoryListItemMutators.ToArray();
         }
 
@@ -28,9 +31,12 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             string itemListEntryPrefabResource)
         {
             var itemEntry = _prefabCreator.Create<GameObject>(itemListEntryPrefabResource);
+            itemEntry.name = $"Inventory Item: {item}";
+
             _hasGameObjectBehaviourStitcher.Attach(
                 item,
                 itemEntry);
+            _dragInventoryListItemBehaviourStitcher.Attach(itemEntry);
 
             foreach (var mutator in _inventoryListItemMutators)
             {

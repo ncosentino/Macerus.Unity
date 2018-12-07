@@ -46,6 +46,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                 }
 
                 var equipmentSlotGameObject = _prefabCreator.Create<GameObject>(equipmentSlotViewModel.PrefabResource);
+                equipmentSlotGameObject.name = $"Equipment Slot: {equipmentSlotViewModel.EquipSlotId}";
 
                 var sprite = _spriteLoader.GetSpriteFromTexture2D(equipmentSlotViewModel.EmptyIconResource);
                 equipmentSlotGameObject
