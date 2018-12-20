@@ -10,13 +10,6 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
-    public interface IReadOnlyDropEquipmentSlotBehaviour
-    {
-        ICanEquipBehavior CanEquipBehavior { get; }
-
-        IIdentifier TargetEquipSlotId { get; }
-    }
-
     public class DropEquipmentSlotBehaviour :
         MonoBehaviour,
         IDropEquipmentSlotBehaviour,
@@ -26,7 +19,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 
         public IIdentifier TargetEquipSlotId { get; set; }
 
-        public void OnStart()
+        public void Start()
         {
             Contract.RequiresNotNull(
                 CanEquipBehavior,
@@ -55,38 +48,15 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                 return;
             }
 
-            Debug.Log(canBeEquippedBehavior);
+            // TODO: need to remove from source if one exists... so do we do something like
+            // source.TryRemove + destination.TryEquip?
+            // is there a way to make that feel atomic?
+            // do we try to equip it before removing it instead?
+
             var equipResult = CanEquipBehavior.TryEquip(
                 TargetEquipSlotId,
                 canBeEquippedBehavior);
             Debug.Log($"Equipped: {equipResult}");
-        }
-    }
-
-    public interface IDropEquipmentSlotBehaviourStitcher
-    {
-        IReadOnlyDropEquipmentSlotBehaviour Attach(
-            GameObject equipSlotGameObject,
-            IIdentifier targetEquipSlotId,
-            ICanEquipBehavior canEquipBehavior);
-    }
-
-    public class DropEquipmentSlotBehaviourStitcher : IDropEquipmentSlotBehaviourStitcher
-    {
-        public IReadOnlyDropEquipmentSlotBehaviour Attach(
-            GameObject equipSlotGameObject,
-            IIdentifier targetEquipSlotId,
-            ICanEquipBehavior canEquipBehavior)
-        {
-            var dropEquipmentSlotBehaviour = equipSlotGameObject
-                .GetChildGameObjects()
-                .Single(x => x.name == "Background")
-                .AddComponent<DropEquipmentSlotBehaviour>();
-
-            dropEquipmentSlotBehaviour.TargetEquipSlotId = targetEquipSlotId;
-            dropEquipmentSlotBehaviour.CanEquipBehavior = canEquipBehavior;
-
-            return dropEquipmentSlotBehaviour;
         }
     }
 }

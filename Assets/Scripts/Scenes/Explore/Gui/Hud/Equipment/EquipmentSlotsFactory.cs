@@ -13,18 +13,18 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
     public sealed class EquipmentSlotsFactory : IEquipmentSlotsFactory
     {
         private readonly IPrefabCreator _prefabCreator;
-        private readonly ISpriteLoader _spriteLoader;
         private readonly ILogger _logger;
         private readonly IDropEquipmentSlotBehaviourStitcher _dropEquipmentSlotBehaviourStitcher;
+        private readonly IIconEquipmentSlotBehaviourStitcher _iconEquipmentSlotBehaviourStitcher;
 
         public EquipmentSlotsFactory(
             IPrefabCreator prefabCreator,
-            ISpriteLoader spriteLoader,
+            IIconEquipmentSlotBehaviourStitcher iconEquipmentSlotBehaviourStitcher,
             IDropEquipmentSlotBehaviourStitcher dropEquipmentSlotBehaviourStitcher,
             ILogger logger)
         {
             _prefabCreator = prefabCreator;
-            _spriteLoader = spriteLoader;
+            _iconEquipmentSlotBehaviourStitcher = iconEquipmentSlotBehaviourStitcher;
             _dropEquipmentSlotBehaviourStitcher = dropEquipmentSlotBehaviourStitcher;
             _logger = logger;
         }
@@ -51,11 +51,6 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 
                 var equipmentSlotGameObject = _prefabCreator.Create<GameObject>(equipmentSlotViewModel.PrefabResource);
                 equipmentSlotGameObject.name = $"Equipment Slot: {equipmentSlotViewModel.EquipSlotId}";
-                
-                var sprite = _spriteLoader.GetSpriteFromTexture2D(equipmentSlotViewModel.EmptyIconResource);
-                equipmentSlotGameObject
-                    .GetRequiredComponentInChild<Image>("ActiveIcon")
-                    .sprite = sprite;
 
                 if (canEquipBehavior != null)
                 {
@@ -63,6 +58,11 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                         equipmentSlotGameObject,
                         equipmentSlotViewModel.EquipSlotId,
                         canEquipBehavior);
+                    _iconEquipmentSlotBehaviourStitcher.Attach(
+                        equipmentSlotGameObject,
+                        equipmentSlotViewModel.EquipSlotId,
+                        canEquipBehavior,
+                        equipmentSlotViewModel.EmptyIconResource);
                 }
 
                 // set margin

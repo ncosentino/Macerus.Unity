@@ -95,6 +95,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
         private static void RegisterHud(ContainerBuilder builder)
         {
             builder
+                .RegisterType<IconEquipmentSlotBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<DropEquipmentSlotBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -116,6 +120,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<InventoryListItemNameMutator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<InventoryListItemIconMutator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

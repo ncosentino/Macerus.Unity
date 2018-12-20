@@ -24,7 +24,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 
         public string DragItemPrefabResource { get; set; }
 
-        public void OnStart()
+        public void Start()
         {
             Contract.RequiresNotNull(
                 InventoryGameObject,
@@ -60,7 +60,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                     sourceIcon.color.r,
                     sourceIcon.color.g,
                     sourceIcon.color.b,
-                    sourceIcon.color.a / 3f);
+                    sourceIcon.color.a * 2f / 3f);
                 _dragObject.transform.SetParent(_inventoryTransform);
             }
 
