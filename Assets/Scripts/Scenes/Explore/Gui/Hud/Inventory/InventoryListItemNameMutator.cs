@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
 using Macerus.Plugins.Features.GameObjects.Items.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
     public sealed class InventoryListItemNameMutator : IInventoryListItemMutator
     {
         public void Mutate(
-            GameObject inventoryListItemGameObject,
+            IInventoryListItemPrefab inventoryListItemPrefab,
             IGameObject item)
         {
             var hasInventoryDisplayName = item
@@ -21,8 +20,8 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 return;
             }
 
-            inventoryListItemGameObject
-                .GetRequiredComponentInChild<Text>("Name")
+            inventoryListItemPrefab
+                .Name
                 .text = hasInventoryDisplayName.DisplayName;
         }
     }

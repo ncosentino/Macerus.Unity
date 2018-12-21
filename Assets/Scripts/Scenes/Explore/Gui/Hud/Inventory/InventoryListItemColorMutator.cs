@@ -1,16 +1,14 @@
 ﻿using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
 using Macerus.Plugins.Features.GameObjects.Items.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
     public sealed class InventoryListItemColorMutator : IInventoryListItemMutator
     {
         public void Mutate(
-            GameObject inventoryListItemGameObject,
+            IInventoryListItemPrefab inventoryListItemPrefab,
             IGameObject item)
         {
             var hasInventoryDisplayColor = item
@@ -26,9 +24,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 hasInventoryDisplayColor.G / 255f,
                 hasInventoryDisplayColor.B / 255f,
                 hasInventoryDisplayColor.A / 255f);
-            inventoryListItemGameObject
-                .GetRequiredComponentInChild<Text>("Name")
-                .color = color;
+            inventoryListItemPrefab.Name.color = color;
         }
     }
 }

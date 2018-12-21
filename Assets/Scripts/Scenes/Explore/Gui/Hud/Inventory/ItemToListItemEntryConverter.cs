@@ -26,17 +26,17 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             _inventoryListItemMutators = inventoryListItemMutators.ToArray();
         }
 
-        public GameObject Convert(
+        public IInventoryListItemPrefab Convert(
             IGameObject item,
             string itemListEntryPrefabResource)
         {
-            var itemEntry = _prefabCreator.Create<GameObject>(itemListEntryPrefabResource);
-            itemEntry.name = $"Inventory Item: {item}";
+            var itemEntry = _prefabCreator.CreatePrefab<IInventoryListItemPrefab>(itemListEntryPrefabResource);
+            itemEntry.GameObject.name = $"Inventory Item: {item}";
 
             _hasGameObjectBehaviourStitcher.Attach(
                 item,
-                itemEntry);
-            _dragInventoryListItemBehaviourStitcher.Attach(itemEntry);
+                itemEntry.GameObject);
+            _dragInventoryListItemBehaviourStitcher.Attach(itemEntry.GameObject);
 
             foreach (var mutator in _inventoryListItemMutators)
             {
@@ -44,8 +44,6 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                     itemEntry,
                     item);
             }
-
-            //// TODO: set the icon via a mutator;
 
             return itemEntry;
         }

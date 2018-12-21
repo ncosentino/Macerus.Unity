@@ -1,11 +1,10 @@
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
     public interface IItemListFactory
     {
-        GameObject Create(
+        IItemListPrefab Create(
             string itemListPrefabResource,
             string itemListItemPrefabResource,
             IItemContainerBehavior itemContainerBehavior);

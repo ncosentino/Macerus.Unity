@@ -11,11 +11,11 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
         MonoBehaviour,
         IItemListBehaviour
     {
-        private readonly Dictionary<IGameObject, GameObject> _listItems;
+        private readonly Dictionary<IGameObject, IInventoryListItemPrefab> _listItems;
 
         public ItemListBehaviour()
         {
-            _listItems = new Dictionary<IGameObject, GameObject>();
+            _listItems = new Dictionary<IGameObject, IInventoryListItemPrefab>();
         }
 
         public IItemToListItemEntryConverter ItemToListItemEntryConverter { get; set; }
@@ -65,10 +65,15 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 var listItem = ItemToListItemEntryConverter.Convert(
                     item,
                     ItemListEntryPrefabResource);
-                listItem.transform.SetParent(ListControlContent.transform, false);
+                listItem
+                    .GameObject
+                    .transform
+                    .SetParent(ListControlContent.transform, false);
 
                 // TODO: technically... this should be stitched :shrug:
-                var sourceItemContainerBehaviour = listItem.AddComponent<SourceItemContainerBehaviour>();
+                var sourceItemContainerBehaviour = listItem
+                    .GameObject
+                    .AddComponent<SourceItemContainerBehaviour>();
                 sourceItemContainerBehaviour.SourceItemContainer = ItemContainerBehavior;
 
                 _listItems.Add(item, listItem);
@@ -81,7 +86,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             {
                 var listItem = _listItems[item];
                 _listItems.Remove(item);
-                ObjectDestroyer.Destroy(listItem);
+                ObjectDestroyer.Destroy(listItem.GameObject);
             }
         }
 

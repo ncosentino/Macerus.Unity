@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
@@ -18,15 +17,14 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
         }
 
         public IReadonlyItemListBehaviour Attach(
-            GameObject listControl,
-            GameObject listControlContent,
+            IItemListPrefab listControl,
             string itemListEntryPrefabResource,
             IItemContainerBehavior itemContainerBehavior)
         {
-            var itemListBehaviour = listControl.AddComponent<ItemListBehaviour>();
+            var itemListBehaviour = listControl.GameObject.AddComponent<ItemListBehaviour>();
             itemListBehaviour.ItemListEntryPrefabResource = itemListEntryPrefabResource;
             itemListBehaviour.ItemToListItemEntryConverter = _itemToListItemEntryConverter;
-            itemListBehaviour.ListControlContent = listControlContent;
+            itemListBehaviour.ListControlContent = listControl.Content;
             itemListBehaviour.ItemContainerBehavior = itemContainerBehavior;
             itemListBehaviour.ObjectDestroyer = _objectDestroyer;
 

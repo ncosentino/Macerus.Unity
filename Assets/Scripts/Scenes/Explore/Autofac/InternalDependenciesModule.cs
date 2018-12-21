@@ -7,6 +7,7 @@ using Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment;
 using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
+using Assets.Scripts.Unity.Resources;
 using Autofac;
 
 namespace Assets.Scripts.Scenes.Explore.Autofac
@@ -138,6 +139,14 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .RegisterType<DragInventoryListItemBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder
+                .RegisterBuildCallback(c =>
+                {
+                    var registrar = c.Resolve<IPrefabCreatorRegistrar>();
+                    registrar.Register<IInventoryListItemPrefab>(obj => new InventoryListItemPrefab(obj));
+                    registrar.Register<IItemListPrefab>(obj => new ItemListPrefab(obj));
+                });
         }
 
         private static void RegisterCamera(ContainerBuilder builder)

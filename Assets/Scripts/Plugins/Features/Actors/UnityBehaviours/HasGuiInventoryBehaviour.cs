@@ -24,7 +24,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
 
         public IViewWelderFactory ViewWelderFactory { get; set; }
 
-        private GameObject _itemList;
+        private IItemListPrefab _itemList;
 
         private void Start()
         {
@@ -55,13 +55,13 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 ItemContainerBehavior);
 
             ViewWelderFactory
-                .Create<IInsetWelder>(inventoryBagUi, _itemList)
+                .Create<IInsetWelder>(inventoryBagUi, _itemList.GameObject)
                 .Weld(new InsetWeldOptions(5));
         }
 
         private void OnDestroy()
         {
-            ObjectDestroyer.Destroy(_itemList);
+            ObjectDestroyer.Destroy(_itemList.GameObject);
         }
     }
 }

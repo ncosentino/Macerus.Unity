@@ -1,8 +1,5 @@
-using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
@@ -19,21 +16,15 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             _itemListBehaviourStitcher = itemListBehaviourStitcher;
         }
 
-        public GameObject Create(
+        public IItemListPrefab Create(
             string itemListPrefabResource,
             string itemListItemPrefabResource,
             IItemContainerBehavior itemContainerBehavior)
         {
-            var itemListGameObject = _prefabCreator.Create<GameObject>(itemListPrefabResource);
-
-            // TODO: intelligently look up content control via... behavior or something?
-            var itemListContent = itemListGameObject
-                .GetChildGameObjects()
-                .Single(x => x.name == "ItemListContent");
+            var itemListGameObject = _prefabCreator.CreatePrefab<IItemListPrefab>(itemListPrefabResource);
 
             _itemListBehaviourStitcher.Attach(
                 itemListGameObject,
-                itemListContent,
                 itemListItemPrefabResource,
                 itemContainerBehavior);
             return itemListGameObject;
