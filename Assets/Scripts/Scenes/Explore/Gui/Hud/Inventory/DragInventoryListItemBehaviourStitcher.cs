@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Linq;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
     public sealed class DragInventoryListItemBehaviourStitcher : IDragInventoryListItemBehaviourStitcher
     {
-        private readonly IPrefabCreator _prefabCreator;
+        private readonly IDragItemFactory _dragItemFactory;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly Lazy<GameObject> _lazyInventoryUiGameObject;
 
         public DragInventoryListItemBehaviourStitcher(
-            IPrefabCreator prefabCreator,
+            IDragItemFactory dragItemFactory,
             IObjectDestroyer objectDestroyer,
             IGameObjectManager gameObjectManager)
         {
-            _prefabCreator = prefabCreator;
+            _dragItemFactory = dragItemFactory;
             _objectDestroyer = objectDestroyer;
             _lazyInventoryUiGameObject = new Lazy<GameObject>(() =>
             {
@@ -27,13 +26,14 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             });
         }
 
+        private GameObject InventoryUiGameObject => _lazyInventoryUiGameObject.Value;
+
         public IReadOnlyDragInventoryListItemBehaviour Attach(GameObject inventoryListItemGameObject)
         {
             var dragInventoryListItemBehaviour = inventoryListItemGameObject.AddComponent<DragInventoryListItemBehaviour>();
-            dragInventoryListItemBehaviour.PrefabCreator = _prefabCreator;
+            dragInventoryListItemBehaviour.DragItemFactory = _dragItemFactory;
             dragInventoryListItemBehaviour.ObjectDestroyer = _objectDestroyer;
-            dragInventoryListItemBehaviour.InventoryGameObject = _lazyInventoryUiGameObject.Value;
-            dragInventoryListItemBehaviour.DragItemPrefabResource = "Gui/Prefabs/Inventory/InventoryDragItem";
+            dragInventoryListItemBehaviour.InventoryGameObject = InventoryUiGameObject;
 
             return dragInventoryListItemBehaviour;
         }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Assets.Scripts.Scenes.Explore.GameObjects;
-using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;
@@ -48,10 +48,32 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                 return;
             }
 
-            // TODO: need to remove from source if one exists... so do we do something like
-            // source.TryRemove + destination.TryEquip?
-            // is there a way to make that feel atomic?
-            // do we try to equip it before removing it instead?
+            // if there's an source item collection we:
+            // - check to see if we can even equip this thing
+            // - if we can, we remove the item from the source
+            // - then we equip the item
+            // FIXME: this logic does *NOT* handle the situation where we
+            // cannot equip something once it's removed from the source:
+            // i.e. diablo 2 style "stats while in inventory" enchanment types
+            var sourceItemContainerBehaviour = eventData
+                .pointerDrag
+                .GetComponent<ISourceItemContainerBehaviour>();
+            if (sourceItemContainerBehaviour != null)
+            {
+                if (!CanEquipBehavior.CanEquip(
+                    TargetEquipSlotId,
+                    canBeEquippedBehavior))
+                {
+                    return;
+                }
+
+                if (!sourceItemContainerBehaviour
+                    .SourceItemContainer
+                    .TryRemoveItem((IGameObject)canBeEquippedBehavior.Owner)) // FIXME: barf at this casting?
+                {
+                    return;
+                }
+            }
 
             var equipResult = CanEquipBehavior.TryEquip(
                 TargetEquipSlotId,

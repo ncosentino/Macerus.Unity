@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
@@ -8,10 +7,8 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
     {
         GameObject InventoryGameObject { get; }
 
-        IPrefabCreator PrefabCreator { get; }
+        IDragItemFactory DragItemFactory { get; }
 
         IObjectDestroyer ObjectDestroyer { get; }
-
-        string DragItemPrefabResource { get; }
     }
 }

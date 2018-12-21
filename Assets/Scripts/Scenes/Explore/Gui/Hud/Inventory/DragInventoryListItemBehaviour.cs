@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Framework.Contracts;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,11 +17,9 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 
         public GameObject InventoryGameObject { get; set; }
 
-        public IPrefabCreator PrefabCreator { get; set; }
+        public IDragItemFactory DragItemFactory { get; set; }
 
         public IObjectDestroyer ObjectDestroyer { get; set; }
-
-        public string DragItemPrefabResource { get; set; }
 
         public void Start()
         {
@@ -30,14 +27,16 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 InventoryGameObject,
                 $"{nameof(InventoryGameObject)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
-                PrefabCreator,
-                $"{nameof(PrefabCreator)} was not set on '{gameObject}.{this}'.");
+                DragItemFactory,
+                $"{nameof(DragItemFactory)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 ObjectDestroyer,
                 $"{nameof(ObjectDestroyer)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNullOrEmpty(
-                DragItemPrefabResource,
-                $"{nameof(DragItemPrefabResource)} was not set on '{gameObject}.{this}'.");
+        }
+
+        public void OnDestroy()
+        {
+            ObjectDestroyer.Destroy(_dragObject);
         }
         
         public void OnDrag(PointerEventData eventData)
@@ -49,18 +48,13 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 
             if (_dragObject == null)
             {
-                _dragObject = PrefabCreator.Create<GameObject>(DragItemPrefabResource);
-                _dragObject.name = $"Drag Item";
-
                 var sourceIcon = gameObject.GetRequiredComponentInChild<Image>("Icon");
-                var sprite = sourceIcon.sprite;
-                var targetIcon = _dragObject.GetRequiredComponentInChild<Image>("Icon");
-                targetIcon.sprite = sprite;
-                targetIcon.color = new Color(
-                    sourceIcon.color.r,
-                    sourceIcon.color.g,
-                    sourceIcon.color.b,
-                    sourceIcon.color.a * 2f / 3f);
+                var itemListBehaviour = InventoryGameObject
+                    .GetComponentInChildren<IReadonlyItemListBehaviour>()
+                    .ItemContainerBehavior;
+                _dragObject = DragItemFactory.Create(
+                    sourceIcon,
+                    itemListBehaviour);
                 _dragObject.transform.SetParent(_inventoryTransform);
             }
 
@@ -70,6 +64,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            Debug.Log("ON END DRAG");
             ObjectDestroyer.Destroy(_dragObject);
             _dragObject = null;
         }

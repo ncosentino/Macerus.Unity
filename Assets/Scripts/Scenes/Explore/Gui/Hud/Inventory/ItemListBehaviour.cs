@@ -66,6 +66,11 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                     item,
                     ItemListEntryPrefabResource);
                 listItem.transform.SetParent(ListControlContent.transform, false);
+
+                // TODO: technically... this should be stitched :shrug:
+                var sourceItemContainerBehaviour = listItem.AddComponent<SourceItemContainerBehaviour>();
+                sourceItemContainerBehaviour.SourceItemContainer = ItemContainerBehavior;
+
                 _listItems.Add(item, listItem);
             }
         }
