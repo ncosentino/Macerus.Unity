@@ -10,5 +10,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
         IDragItemFactory DragItemFactory { get; }
 
         IObjectDestroyer ObjectDestroyer { get; }
+
+        IInventoryListItemPrefab InventoryListItem { get; }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using Assets.Scripts.Scenes.Explore.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Api.GameObjects;
-using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
@@ -36,7 +35,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             _hasGameObjectBehaviourStitcher.Attach(
                 item,
                 itemEntry.GameObject);
-            _dragInventoryListItemBehaviourStitcher.Attach(itemEntry.GameObject);
+            _dragInventoryListItemBehaviourStitcher.Attach(itemEntry);
 
             foreach (var mutator in _inventoryListItemMutators)
             {

@@ -4,6 +4,6 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 {
     public interface IDragInventoryListItemBehaviourStitcher
     {
-        IReadOnlyDragInventoryListItemBehaviour Attach(GameObject inventoryListItemGameObject);
+        IReadOnlyDragInventoryListItemBehaviour Attach(IInventoryListItemPrefab inventoryListItemGameObject);
     }
 }

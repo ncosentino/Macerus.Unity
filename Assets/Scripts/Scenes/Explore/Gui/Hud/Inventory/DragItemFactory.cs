@@ -1,6 +1,4 @@
-﻿using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+﻿using Assets.Scripts.Unity.Resources;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,17 +16,14 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
             _prefabCreator = prefabCreator;
         }
 
-        public GameObject Create(
-            Image sourceIcon,
-            IItemContainerBehavior sourceContainerBehavior)
+        public IDragItemPrefab Create(Image sourceIcon)
         {
-            var dragObject = _prefabCreator.Create<GameObject>(DRAG_ITEM_PREFAB_RESOURCE);
-            dragObject.name = $"Drag Item";
+            var dragObject = _prefabCreator.CreatePrefab<IDragItemPrefab>(DRAG_ITEM_PREFAB_RESOURCE);
+            dragObject.GameObject.name = $"Drag Item";
 
             var sprite = sourceIcon.sprite;
-            var targetIcon = dragObject.GetRequiredComponentInChild<Image>("Icon");
-            targetIcon.sprite = sprite;
-            targetIcon.color = new Color(
+            dragObject.Icon.sprite = sprite;
+            dragObject.Icon.color = new Color(
                 sourceIcon.color.r,
                 sourceIcon.color.g,
                 sourceIcon.color.b,

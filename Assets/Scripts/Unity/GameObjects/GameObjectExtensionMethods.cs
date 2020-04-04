@@ -65,6 +65,14 @@ namespace Assets.Scripts.Unity.GameObjects
                 .transform
                 .GetChildGameObjects();
         }
+
+        public static void RemoveComponents<TComponent>(this GameObject gameObject)
+        {
+            foreach (var component in gameObject.GetComponents<TComponent>())
+            {
+                UnityEngine.Object.Destroy(component as UnityEngine.Object);
+            }
+        }
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -65,15 +66,10 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 var listItem = ItemToListItemEntryConverter.Convert(
                     item,
                     ItemListEntryPrefabResource);
-                listItem
-                    .GameObject
-                    .transform
-                    .SetParent(ListControlContent.transform, false);
+                listItem.SetParent(ListControlContent.transform);
 
                 // TODO: technically... this should be stitched :shrug:
-                var sourceItemContainerBehaviour = listItem
-                    .GameObject
-                    .AddComponent<SourceItemContainerBehaviour>();
+                var sourceItemContainerBehaviour = listItem.AddComponent<SourceItemContainerBehaviour>();
                 sourceItemContainerBehaviour.SourceItemContainer = ItemContainerBehavior;
 
                 _listItems.Add(item, listItem);

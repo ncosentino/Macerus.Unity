@@ -1,10 +1,6 @@
-using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources.Sprites;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using UnityEngine;
-using UnityEngine.UI;
 using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
@@ -23,15 +19,16 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
         }
 
         public IReadOnlyIconEquipmentSlotBehaviour Attach(
-            GameObject equipSlotGameObject,
+            IEquipSlotPrefab equipSlotGameObject,
             IIdentifier targetEquipSlotId,
             ICanEquipBehavior canEquipBehavior,
             string emptyIconResource)
         {
-            var iconEquipmentSlotBehaviour = equipSlotGameObject.AddComponent<IconEquipmentSlotBehaviour>();
+            var iconEquipmentSlotBehaviour = equipSlotGameObject
+                .GameObject
+                .AddComponent<IconEquipmentSlotBehaviour>();
 
-            var icon = equipSlotGameObject.GetRequiredComponentInChild<Image>("ActiveIcon");
-            iconEquipmentSlotBehaviour.EquipmentIcon = icon;
+            iconEquipmentSlotBehaviour.EquipmentIcon = equipSlotGameObject.ActiveIcon;
             iconEquipmentSlotBehaviour.TargetEquipSlotId = targetEquipSlotId;
             iconEquipmentSlotBehaviour.CanEquipBehavior = canEquipBehavior;
             iconEquipmentSlotBehaviour.EmptyIconResource = emptyIconResource;

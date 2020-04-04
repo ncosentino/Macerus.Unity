@@ -1,13 +1,15 @@
-﻿using Assets.Scripts.Unity.GameObjects;
+﻿using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
+using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Framework.Contracts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
+namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
-    public class DragInventoryListItemBehaviour :
+    public class DragEquipmentItemBehaviour :
         MonoBehaviour,
-        IDragInventoryListItemBehaviour,
+        IDragEquipmentItemBehaviour,
         IDragHandler,
         IEndDragHandler
     {
@@ -19,7 +21,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 
         public IObjectDestroyer ObjectDestroyer { get; set; }
 
-        public IInventoryListItemPrefab InventoryListItem { get; set; }
+        public IEquipSlotPrefab EquipSlot { get; set; }
 
         public void Start()
         {
@@ -27,14 +29,14 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 InventoryGameObject,
                 $"{nameof(InventoryGameObject)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
+                EquipSlot,
+                $"{nameof(EquipSlot)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
                 DragItemFactory,
                 $"{nameof(DragItemFactory)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 ObjectDestroyer,
                 $"{nameof(ObjectDestroyer)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                InventoryListItem,
-                $"{nameof(InventoryListItem)} was not set on '{gameObject}.{this}'.");
         }
 
         public void OnDestroy()
@@ -46,11 +48,8 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
         {
             if (_dragObject == null)
             {
-                _dragObject = DragItemFactory.Create(InventoryListItem.Icon);
-                _dragObject
-                    .GameObject
-                    .transform
-                    .SetParent(InventoryGameObject.transform);
+                _dragObject = DragItemFactory.Create(EquipSlot.ActiveIcon);
+                _dragObject.SetParent(InventoryGameObject.transform);
             }
 
             // TODO: inject an interface backed by unity Input.mousePosition for this

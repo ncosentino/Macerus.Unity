@@ -12,11 +12,11 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         MonoBehaviour,
         IHasGuiEquipmentBehaviour
     {
-        private readonly List<GameObject> _equipmentSlots;
+        private readonly List<IEquipSlotPrefab> _equipmentSlots;
 
         public HasGuiEquipmentBehaviour()
         {
-            _equipmentSlots = new List<GameObject>();
+            _equipmentSlots = new List<IEquipSlotPrefab>();
         }
 
         public IEquipmentSlotsFactory EquipmentSlotsFactory { get; set; }
@@ -58,9 +58,12 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
                 CanEquipBehavior);
             foreach (var equipmentSlot in equipSlotObjects)
             {
-                equipmentSlot.transform.SetParent(
-                    inventoryEquipmentUi.transform,
-                    false);
+                equipmentSlot
+                    .GameObject
+                    .transform
+                    .SetParent(
+                        inventoryEquipmentUi.transform,
+                        false);
                 _equipmentSlots.Add(equipmentSlot);
             }
         }
@@ -69,7 +72,7 @@ namespace Assets.Scripts.Plugins.Features.Actors.UnityBehaviours
         {
             foreach (var equipmentSlot in _equipmentSlots)
             {
-                ObjectDestroyer.Destroy(equipmentSlot);
+                ObjectDestroyer.Destroy(equipmentSlot.GameObject);
             }
             
             _equipmentSlots.Clear();

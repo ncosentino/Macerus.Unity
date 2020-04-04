@@ -1,22 +1,17 @@
-using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
     public class DropEquipmentSlotBehaviourStitcher : IDropEquipmentSlotBehaviourStitcher
     {
         public IReadOnlyDropEquipmentSlotBehaviour Attach(
-            GameObject equipSlotGameObject,
+            IEquipSlotPrefab equipSlotGameObject,
             IIdentifier targetEquipSlotId,
             ICanEquipBehavior canEquipBehavior)
         {
-            var dropEquipmentSlotBehaviour = equipSlotGameObject
-                .GetChildGameObjects()
-                .Single(x => x.name == "Background")
-                .AddComponent<DropEquipmentSlotBehaviour>();
+            var dropEquipmentSlotBehaviour = equipSlotGameObject.AddComponent<DropEquipmentSlotBehaviour>();
 
             dropEquipmentSlotBehaviour.TargetEquipSlotId = targetEquipSlotId;
             dropEquipmentSlotBehaviour.CanEquipBehavior = canEquipBehavior;

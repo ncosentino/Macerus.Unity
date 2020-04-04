@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Linq;
+using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Resources;
 using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
+namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
 {
-    public sealed class DragInventoryListItemBehaviourStitcher : IDragInventoryListItemBehaviourStitcher
+    public sealed class DragEquipmentItemBehaviourStitcher : IDragEquipmentItemBehaviourStitcher
     {
         private readonly IDragItemFactory _dragItemFactory;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly Lazy<GameObject> _lazyInventoryUiGameObject;
 
-        public DragInventoryListItemBehaviourStitcher(
+        public DragEquipmentItemBehaviourStitcher(
             IDragItemFactory dragItemFactory,
             IObjectDestroyer objectDestroyer,
             IGameObjectManager gameObjectManager)
@@ -28,15 +30,13 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
 
         private GameObject InventoryUiGameObject => _lazyInventoryUiGameObject.Value;
 
-        public IReadOnlyDragInventoryListItemBehaviour Attach(IInventoryListItemPrefab inventoryListItemGameObject)
+        public IReadOnlyDragEquipmentItemBehaviour Attach(IEquipSlotPrefab equipSlot)
         {
-            var dragInventoryListItemBehaviour = inventoryListItemGameObject
-                .GameObject
-                .AddComponent<DragInventoryListItemBehaviour>();
+            var dragInventoryListItemBehaviour = equipSlot.AddComponent<DragEquipmentItemBehaviour>();
             dragInventoryListItemBehaviour.DragItemFactory = _dragItemFactory;
             dragInventoryListItemBehaviour.ObjectDestroyer = _objectDestroyer;
             dragInventoryListItemBehaviour.InventoryGameObject = InventoryUiGameObject;
-            dragInventoryListItemBehaviour.InventoryListItem = inventoryListItemGameObject;
+            dragInventoryListItemBehaviour.EquipSlot = equipSlot;
 
             return dragInventoryListItemBehaviour;
         }

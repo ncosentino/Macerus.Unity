@@ -104,6 +104,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<DragEquipmentItemBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<EquipmentSlotsFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -128,6 +132,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<InventoryListItemEquippableMutator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<ItemListBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -146,6 +154,8 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                     var registrar = c.Resolve<IPrefabCreatorRegistrar>();
                     registrar.Register<IInventoryListItemPrefab>(obj => new InventoryListItemPrefab(obj));
                     registrar.Register<IItemListPrefab>(obj => new ItemListPrefab(obj));
+                    registrar.Register<IDragItemPrefab>(obj => new DragItemPrefab(obj));
+                    registrar.Register<IEquipSlotPrefab>(obj => new EquipSlotPrefab(obj));
                 });
         }
 

@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
-using Assets.Scripts.Unity.Resources.Sprites;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using UnityEngine;
-using UnityEngine.UI;
 using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
@@ -15,21 +12,24 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
         private readonly IPrefabCreator _prefabCreator;
         private readonly ILogger _logger;
         private readonly IDropEquipmentSlotBehaviourStitcher _dropEquipmentSlotBehaviourStitcher;
+        private readonly IDragEquipmentItemBehaviourStitcher _dragEquipmentItemBehaviourStitcher;
         private readonly IIconEquipmentSlotBehaviourStitcher _iconEquipmentSlotBehaviourStitcher;
 
         public EquipmentSlotsFactory(
             IPrefabCreator prefabCreator,
             IIconEquipmentSlotBehaviourStitcher iconEquipmentSlotBehaviourStitcher,
+            IDragEquipmentItemBehaviourStitcher dragEquipmentItemBehaviourStitcher,
             IDropEquipmentSlotBehaviourStitcher dropEquipmentSlotBehaviourStitcher,
             ILogger logger)
         {
             _prefabCreator = prefabCreator;
             _iconEquipmentSlotBehaviourStitcher = iconEquipmentSlotBehaviourStitcher;
+            _dragEquipmentItemBehaviourStitcher = dragEquipmentItemBehaviourStitcher;
             _dropEquipmentSlotBehaviourStitcher = dropEquipmentSlotBehaviourStitcher;
             _logger = logger;
         }
 
-        public IEnumerable<GameObject> CreateEquipmentSlots(
+        public IEnumerable<IEquipSlotPrefab> CreateEquipmentSlots(
             IHasEquipmentBehavior hasEquipmentBehavior,
             ICanEquipBehavior canEquipBehavior)
         {
@@ -49,28 +49,31 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                     continue;
                 }
 
-                var equipmentSlotGameObject = _prefabCreator.Create<GameObject>(equipmentSlotViewModel.PrefabResource);
-                equipmentSlotGameObject.name = $"Equipment Slot: {equipmentSlotViewModel.EquipSlotId}";
+                var equipmentSlotPrefab = _prefabCreator.CreatePrefab<IEquipSlotPrefab>(equipmentSlotViewModel.PrefabResource);
+                equipmentSlotPrefab.GameObject.name = $"Equipment Slot: {equipmentSlotViewModel.EquipSlotId}";
 
                 if (canEquipBehavior != null)
                 {
                     _dropEquipmentSlotBehaviourStitcher.Attach(
-                        equipmentSlotGameObject,
+                        equipmentSlotPrefab,
                         equipmentSlotViewModel.EquipSlotId,
                         canEquipBehavior);
+                    _dragEquipmentItemBehaviourStitcher.Attach(equipmentSlotPrefab);
                     _iconEquipmentSlotBehaviourStitcher.Attach(
-                        equipmentSlotGameObject,
+                        equipmentSlotPrefab,
                         equipmentSlotViewModel.EquipSlotId,
                         canEquipBehavior,
                         equipmentSlotViewModel.EmptyIconResource);
                 }
 
                 // set margin
-                var transform = equipmentSlotGameObject.GetComponent<RectTransform>();
+                var transform = equipmentSlotPrefab
+                    .GameObject
+                    .GetComponent<RectTransform>();
                 transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, equipmentSlotViewModel.X, transform.rect.width);
                 transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, equipmentSlotViewModel.Y, transform.rect.height);
 
-                yield return equipmentSlotGameObject;
+                yield return equipmentSlotPrefab;
             }
         }
     }
