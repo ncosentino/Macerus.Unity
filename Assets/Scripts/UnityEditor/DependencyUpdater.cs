@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,27 +14,30 @@ namespace Assets.Scripts.UnityEditor
 {
     public sealed class DependencyUpdater
     {
-        private const string MSBUILD_EXE_PATH = "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe";
+        private const string MSBUILD_EXE_PATH = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe";
 
-        private static readonly IReadOnlyCollection<string> SOLUTION_FILE_PATHS_TO_BUILD = new[]
+        private static readonly IReadOnlyCollection<string> BUILD_TARGETS = new[]
         {
-            Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz.sln"),
-            Path.Combine(Application.dataPath, @"..\..\..\..\libraries\tiled.net\tiled.net.sln"),
-            Path.Combine(Application.dataPath, @"..\..\macerus-game\Macerus.sln"),
-        };
-
-        // NOTE: when this is all working, we won't want ANY example modules from ProjectXyz
-        private static readonly IReadOnlyCollection<string> EXCLUDE_MODULES = new[]
-        {
-            "Examples.Modules.GameObjects",
-            "Examples.Modules.Mapping",
+            //"\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz\projectxyz.csproj")).LocalPath + "\"",
+            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz.sln")).LocalPath + "\"",
+            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\tiled.net\tiled.net.sln")).LocalPath + "\"",
+            //"\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\macerus-game\macerus\Macerus.csproj")).LocalPath + "\"",
+            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\macerus-game\macerus.sln")).LocalPath + "\"",
         };
 
         private readonly string _dataPath;
+        private readonly string _librariesPath;
+        private readonly string _localNugetRepoPath;
 
         public DependencyUpdater()
         {
             _dataPath = Application.dataPath;
+            _librariesPath = Path.Combine(
+                _dataPath,
+                @"..\..\..\..\libraries");
+            _localNugetRepoPath = Path.Combine(
+                _dataPath,
+                @"..\..\..\..\nuget-repo");
         }
 
         public Task UpdateDependenciesAsync()
@@ -56,43 +60,40 @@ namespace Assets.Scripts.UnityEditor
         private void UpdateDependenciesInternal()
         {
             Debug.Log($"Building prerequisites...");
-            foreach (var solutionFilePath in SOLUTION_FILE_PATHS_TO_BUILD)
+            foreach (var buildTarget in BUILD_TARGETS)
             {
-                BuildDependency(MSBUILD_EXE_PATH, solutionFilePath);
+                BuildDependency(MSBUILD_EXE_PATH, buildTarget);
             }
 
             Debug.Log($"Copying dependencies...");
 
-            var destinationDependenciesDirectory = Path.Combine(
+            var destinationPluginsDirectory = Path.Combine(
                 _dataPath,
-                @"Dependencies");
-            Debug.Log($"Destination Dependencies Directory: '{destinationDependenciesDirectory}'");
+                @"Plugins");
+            Debug.Log($"Destination Plugins Directory: '{destinationPluginsDirectory}'");
 
-            if (Directory.Exists(destinationDependenciesDirectory))
+            if (Directory.Exists(destinationPluginsDirectory))
             {
-                Debug.Log($"Deleting '{destinationDependenciesDirectory}'...");
-                Directory.Delete(destinationDependenciesDirectory, true);
+                Debug.Log($"Deleting '{destinationPluginsDirectory}'...");
+                Directory.Delete(destinationPluginsDirectory, true);
 
-                Debug.Log($"Recreating '{destinationDependenciesDirectory}'...");
-                Directory.CreateDirectory(destinationDependenciesDirectory);
-                Debug.Log($"Recreated '{destinationDependenciesDirectory}'.");
+                Debug.Log($"Recreating '{destinationPluginsDirectory}'...");
+                Directory.CreateDirectory(destinationPluginsDirectory);
+                Debug.Log($"Recreated '{destinationPluginsDirectory}'.");
             }
 
-            CopySharedLibraries(destinationDependenciesDirectory);
-            CopyMacerusDependencies(destinationDependenciesDirectory);
+            ProcessDependencies(destinationPluginsDirectory);
         }
 
         private void BuildDependency(
             string msbuildExePath,
-            string solutionFilePath)
+            string buildTarget)
         {
-            solutionFilePath = new Uri(solutionFilePath).LocalPath;
-
-            Debug.Log($"Building '{solutionFilePath}' with '{msbuildExePath}'...");
+            Debug.Log($"Executing build '{buildTarget}' with '{msbuildExePath}'...");
 
             var psi = new ProcessStartInfo(
                 msbuildExePath,
-                $"\"{solutionFilePath}\"")
+                buildTarget)
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -103,74 +104,128 @@ namespace Assets.Scripts.UnityEditor
             if (process.ExitCode != 0)
             {
                 throw new InvalidOperationException(
-                    $"'{msbuildExePath}' exited with code {process.ExitCode} while building '{solutionFilePath}'.");
+                    $"'{msbuildExePath}' exited with code {process.ExitCode} while building '{buildTarget}'.");
             }
 
-            Debug.Log($"Built '{solutionFilePath}' with '{msbuildExePath}'.");
+            Debug.Log($"Finished build '{buildTarget}' with '{msbuildExePath}'.");
         }
 
-        private void CopyMacerusDependencies(string destinationDependenciesDirectory)
+        private void ProcessDependencies(string destinationPluginsDirectory)
         {
-            var sourceDependencyDirectory = Path.Combine(
-                _dataPath,
-                @"..\..\macerus-game\");
-
-            var dependencyEntries = new[]
+            var dependencyEntries = new IDependencyEntry[]
             {
-                new DependencyEntry(
-                    "Macerus",
-                    @"Macerus\bin\debug",
-                    new[] { "*.dll" },
-                    EXCLUDE_MODULES),
-            };
-
-            foreach (var dependencyEntry in dependencyEntries)
-            {
-                ProcessDependencyEntry(
-                    sourceDependencyDirectory,
-                    destinationDependenciesDirectory,
-                    dependencyEntry);
-            }
-        }
-
-        private void CopySharedLibraries(string destinationDependenciesDirectory)
-        {
-            var librariesDirectory = Path.Combine(
-                _dataPath,
-                @"..\..\..\..\libraries");
-            Debug.Log($"Libraries Directory: '{librariesDirectory}'");
-
-            var dependencyEntries = new[]
-            {
-                new DependencyEntry(
-                    "Project XYZ",
-                    @"projectXyz\ConsoleApplication1\bin\Debug",
-                    new[] { "*.dll" },
-                    EXCLUDE_MODULES),
-                new DependencyEntry(
+                new DependencyDirectoryEntry(
                     "Tiled.NET",
-                    @"Tiled.Net\Tiled.Net.Tmx.Xml\bin\Debug",
+                    Path.Combine(
+                        _librariesPath,
+                        @"Tiled.Net\Tiled.Net.Tmx.Xml\bin\Debug"),
                     new[] { "*.dll" },
+                    new string[0]),
+                new NugetDependencyEntry(
+                    "Project XYZ",
+                    _localNugetRepoPath,
+                    new[] { "ProjectXyz.*.*.*.nupkg" },
+                    new string[0]),
+                new NugetDependencyEntry(
+                    "Macerus",
+                    _localNugetRepoPath,
+                    new[] { "Macerus.*.*.*.nupkg" },
                     new string[0]),
             };
 
             foreach (var dependencyEntry in dependencyEntries)
             {
                 ProcessDependencyEntry(
-                    librariesDirectory,
-                    destinationDependenciesDirectory,
+                    destinationPluginsDirectory,
                     dependencyEntry);
             }
         }
 
         private void ProcessDependencyEntry(
-            string projectsDirectory,
-            string destinationDependenciesDirectory,
-            DependencyEntry dependencyEntry)
+            string destinationPluginsDirectory,
+            IDependencyEntry dependencyEntry)
         {
-            var dependencyDirectory = Path.Combine(
-                projectsDirectory,
-                dependencyEntry.RelativePath);
+            if (dependencyEntry is DependencyDirectoryEntry)
+            {
+                ProcessDirectoryDependencyEntry(
+                    destinationPluginsDirectory,
+                    (DependencyDirectoryEntry)dependencyEntry);
+            }
+            else if (dependencyEntry is NugetDependencyEntry)
+            {
+                ProcessNugetDependencyEntry(
+                    destinationPluginsDirectory,
+                    (NugetDependencyEntry)dependencyEntry);
+            }
+            else
+            {
+                throw new NotSupportedException(
+                    $"Dependency type '{dependencyEntry.GetType()}' is not supported.");
+            }
+        }
+
+        private void ProcessNugetDependencyEntry(
+            string destinationPluginsDirectory,
+            NugetDependencyEntry dependencyEntry)
+        {
+            Debug.Log($"{dependencyEntry.Name} Nuget Package");
+
+            var matchingNugetFilePaths = dependencyEntry
+                .SearchPatterns
+                .SelectMany(pattern => Directory.GetFiles(
+                    dependencyEntry.NugetRepoPath,
+                    pattern))
+                .ToArray();
+
+            if (!matchingNugetFilePaths.Any())
+            {
+                throw new NotSupportedException(
+                    $"No matching nuget packages for '{dependencyEntry.Name}' " +
+                    $"located in nuget repository '{dependencyEntry.NugetRepoPath}'.");
+            }
+
+            Debug.Log($"Found {matchingNugetFilePaths.Length} matching files...");
+            foreach (var matchingFile in matchingNugetFilePaths)
+            {
+                Debug.Log($"\t{matchingFile}");
+            }
+
+            var nugetFilePath = matchingNugetFilePaths.First();
+            Debug.Log($"Using '{nugetFilePath}' for '{dependencyEntry.Name}'.");
+
+            using (var zipFile = ZipFile.OpenRead(nugetFilePath))
+            {
+                foreach (var entry in zipFile.Entries.Where(x => x.FullName.Contains("lib/net46/")))
+                {
+                    if (dependencyEntry
+                        .ExcludePatterns
+                        ?.Any(x => x.Equals(entry.Name, StringComparison.OrdinalIgnoreCase)) == true)
+                    {
+                        Debug.Log($"Skipping '{entry.Name}' because it matches an exclude pattern.");
+                        continue;
+                    }
+
+                    var destinationFileName = Path.Combine(
+                        destinationPluginsDirectory,
+                        entry.Name);
+                    Debug.Log($"Extracting '{entry.Name}' to '{destinationFileName}'...");
+                    entry.ExtractToFile(destinationFileName, true);
+                }
+            }
+        }
+
+        private void ProcessDirectoryDependencyEntry(
+            string destinationPluginsDirectory,
+            DependencyDirectoryEntry dependencyEntry)
+        {
+            if (!Directory.Exists(dependencyEntry.FullPath))
+            {
+                throw new NotSupportedException(
+                    $"Dependency '{dependencyEntry.Name}' could not be found " +
+                    $"at '{dependencyEntry.FullPath}'.");
+            }
+
+            var dependencyDirectory = dependencyEntry.FullPath;
             Debug.Log($"{dependencyEntry.Name} Directory: '{dependencyDirectory}'");
 
             foreach (var searchPattern in dependencyEntry.SearchPatterns)
@@ -180,7 +235,7 @@ namespace Assets.Scripts.UnityEditor
                     .Where(fileName => !dependencyEntry.ExcludePatterns.Any(exclude => Regex.IsMatch(fileName, exclude))))
                 {
                     var destinationFilePath = Path.Combine(
-                        destinationDependenciesDirectory,
+                        destinationPluginsDirectory,
                         Path.GetFileName(sourceDependencyFilePath));
 
                     Debug.Log($"Copying '{sourceDependencyFilePath}' to '{destinationFilePath}'...");
@@ -192,23 +247,50 @@ namespace Assets.Scripts.UnityEditor
             }
         }
 
-        private sealed class DependencyEntry
+        private interface IDependencyEntry
         {
-            public DependencyEntry(
+        }
+
+        private sealed class DependencyDirectoryEntry : IDependencyEntry
+        {
+            public DependencyDirectoryEntry(
                 string name,
-                string relativePath,
+                string fullPath,
                 IEnumerable<string> searchPatterns,
                 IEnumerable<string> excludePatterns)
             {
                 Name = name;
-                RelativePath = relativePath;
+                FullPath = fullPath;
                 SearchPatterns = searchPatterns.ToArray();
                 ExcludePatterns = excludePatterns.ToArray();
             }
 
             public string Name { get; }
 
-            public string RelativePath { get; }
+            public string FullPath { get; }
+
+            public IReadOnlyCollection<string> SearchPatterns { get; }
+
+            public IReadOnlyCollection<string> ExcludePatterns { get; }
+        }
+
+        private sealed class NugetDependencyEntry : IDependencyEntry
+        {
+            public NugetDependencyEntry(
+                string name,
+                string nugetRepoPath,
+                IEnumerable<string> searchPatterns,
+                IEnumerable<string> excludePatterns)
+            {
+                Name = name;
+                NugetRepoPath = nugetRepoPath;
+                SearchPatterns = searchPatterns.ToArray();
+                ExcludePatterns = excludePatterns.ToArray();
+            }
+
+            public string Name { get; }
+
+            public string NugetRepoPath { get; }
 
             public IReadOnlyCollection<string> SearchPatterns { get; }
 

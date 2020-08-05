@@ -49,12 +49,12 @@ namespace Assets.Scripts.Plugins.Features.Wip
                     {
                         new GeneratorAttribute(
                             new StringIdentifier("affix-type"),
-                            new StringGeneratorAttributeValue("normal"),
-                            false),
-                        new GeneratorAttribute(
-                            new StringIdentifier("affix-type"),
                             new StringGeneratorAttributeValue("magic"),
-                            false),
+                            true),
+                        new GeneratorAttribute(
+                            new StringIdentifier("item-level"),
+                            new DoubleGeneratorAttributeValue(5),
+                            true),
                     }))
                     .ToArray();
 

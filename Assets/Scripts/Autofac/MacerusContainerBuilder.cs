@@ -14,7 +14,7 @@ namespace Assets.Scripts.Autofac
             Debug.Log($"Creating dependency container...");
             
 #if UNITY_EDITOR
-            var moduleDirectory = Path.Combine(Application.dataPath, "Dependencies");
+            var moduleDirectory = Path.Combine(Application.dataPath, "Plugins");
 #else
             var moduleDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin_Data\\Managed");
 #endif

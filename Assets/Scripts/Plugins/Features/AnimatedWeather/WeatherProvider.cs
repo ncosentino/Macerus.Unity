@@ -1,6 +1,6 @@
 ﻿using System;
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Plugins.Features.Weather;
+using ProjectXyz.Plugins.Features.Weather.Api;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather

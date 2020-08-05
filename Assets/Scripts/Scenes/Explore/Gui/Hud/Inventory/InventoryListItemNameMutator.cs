@@ -14,7 +14,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
         {
             var hasInventoryDisplayName = item
                 .Get<IHasInventoryDisplayName>()
-                .SingleOrDefault();
+                .LastOrDefault();
             if (hasInventoryDisplayName == null)
             {
                 return;

@@ -1,4 +1,4 @@
-﻿using ProjectXyz.Plugins.Features.TimeOfDay;
+﻿using ProjectXyz.Plugins.Features.TimeOfDay.Api;
 
 namespace Assets.Scripts.Plugins.Features.DayNightCycle
 {
