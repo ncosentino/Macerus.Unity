@@ -34,23 +34,23 @@ namespace Assets.Scripts.Plugins.Features.Actors.Interceptors
                 new IEnchantment[0]);
             var lightRadiusRadius = _statCalculationService.GetStatValue(
                 gameObject,
-                new StringIdentifier("Light Radius Radius"),
+                new IntIdentifier(5), //Light Radius Radius
                 context);
             var lightRadiusIntensity = _statCalculationService.GetStatValue(
                 gameObject,
-                new StringIdentifier("Light Radius Intensity"),
+                new IntIdentifier(6), //Light Radius Intensity
                 context);
             var lightRadiusRed = _statCalculationService.GetStatValue(
                 gameObject,
-                new StringIdentifier("Light Radius Red"),
+                new IntIdentifier(7), // Light Radius Red
                 context);
             var lightRadiusGreen = _statCalculationService.GetStatValue(
                 gameObject,
-                new StringIdentifier("Light Radius Green"),
+                new IntIdentifier(8), // Light Radius Green
                 context);
             var lightRadiusBlue = _statCalculationService.GetStatValue(
                 gameObject,
-                new StringIdentifier("Light Radius Blue"),
+                new IntIdentifier(9), // Light Radius Blue
                 context);
 
             var lightRadiusObject = _prefabCreator.Create<GameObject>("Mapping/Prefabs/LightRadius");
