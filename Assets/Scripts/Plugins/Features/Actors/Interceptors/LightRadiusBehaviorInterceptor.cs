@@ -20,16 +20,16 @@ namespace Assets.Scripts.Plugins.Features.Actors.Interceptors
     {
         private readonly IPrefabCreator _prefabCreator;
         private readonly IStatCalculationService _statCalculationService;
-        private readonly IReadOnlyCollection<IStatDefinitionToTermMappingRepository> _statDefinitionToTermMappingRepositories;
+        private readonly IReadOnlyStatDefinitionToTermMappingRepositoryFacade _statDefinitionToTermMappingRepository;
 
         public LightRadiusBehaviorInterceptor(
             IPrefabCreator prefabCreator,
             IStatCalculationService statCalculationService,
-            IEnumerable<IStatDefinitionToTermMappingRepository> statDefinitionToTermMappingRepositories)
+            IReadOnlyStatDefinitionToTermMappingRepositoryFacade statDefinitionToTermMappingRepository)
         {
             _prefabCreator = prefabCreator;
             _statCalculationService = statCalculationService;
-            _statDefinitionToTermMappingRepositories = statDefinitionToTermMappingRepositories.ToArray();
+            _statDefinitionToTermMappingRepository = statDefinitionToTermMappingRepository;
         }
 
         public void Intercept(
@@ -41,37 +41,32 @@ namespace Assets.Scripts.Plugins.Features.Actors.Interceptors
                 new IEnchantment[0]);
             var lightRadiusRadius = _statCalculationService.GetStatValue(
                 gameObject,
-                _statDefinitionToTermMappingRepositories
-                    .Select(x => x.GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_RADIUS"))
-                    .Single()
+                _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_RADIUS")
                     .StatDefinitionId,
                 context);
             var lightRadiusIntensity = _statCalculationService.GetStatValue(
                 gameObject,
-                _statDefinitionToTermMappingRepositories
-                    .Select(x => x.GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_INTENSITY"))
-                    .Single()
+                 _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_INTENSITY")
                     .StatDefinitionId,
                 context);
             var lightRadiusRed = _statCalculationService.GetStatValue(
                 gameObject,
-                _statDefinitionToTermMappingRepositories
-                    .Select(x => x.GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_RED"))
-                    .Single()
+                _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_RED")
                     .StatDefinitionId,
                 context);
             var lightRadiusGreen = _statCalculationService.GetStatValue(
                 gameObject,
-                _statDefinitionToTermMappingRepositories
-                    .Select(x => x.GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_GREEN"))
-                    .Single()
+                _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_GREEN")
                     .StatDefinitionId,
                 context);
             var lightRadiusBlue = _statCalculationService.GetStatValue(
                 gameObject,
-                _statDefinitionToTermMappingRepositories
-                    .Select(x => x.GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_BLUE"))
-                    .Single()
+                _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_BLUE")
                     .StatDefinitionId,
                 context);
 
