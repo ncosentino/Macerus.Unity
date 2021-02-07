@@ -11,9 +11,12 @@ namespace Assets.Scripts.Scenes.Explore
         public ExploreSceneLoadHook(IExploreSetup exploreSetup)
         {
             _exploreSetup = exploreSetup;
-
-            TrySwitchScene(SceneManager.GetActiveScene());
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        }
+
+        public void SwitchScene()
+        {
+            TrySwitchScene(SceneManager.GetActiveScene());
         }
 
         public void Dispose()
