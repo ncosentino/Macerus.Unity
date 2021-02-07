@@ -39,6 +39,11 @@ namespace Assets.Scripts.Autofac
                 .Concat(moduleDiscoverer
                     .Discover(moduleDirectory, "*.dll"))
                 .ToArray();
+            foreach (var module in modules)
+            {
+                Debug.Log($"\tLoading module '{module}'.");
+            }
+
             Debug.Log($"Modules loaded.");
 
             var dependencyContainerBuilder = new DependencyContainerBuilder();

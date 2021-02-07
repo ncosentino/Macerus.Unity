@@ -18,10 +18,8 @@ namespace Assets.Scripts.UnityEditor
 
         private static readonly IReadOnlyCollection<string> BUILD_TARGETS = new[]
         {
-            //"\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz\projectxyz.csproj")).LocalPath + "\"",
             "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz.sln")).LocalPath + "\"",
             "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\tiled.net\tiled.net.sln")).LocalPath + "\"",
-            //"\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\macerus-game\macerus\Macerus.csproj")).LocalPath + "\"",
             "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\macerus-game\macerus.sln")).LocalPath + "\"",
         };
 
@@ -40,29 +38,32 @@ namespace Assets.Scripts.UnityEditor
                 @"..\..\..\..\nuget-repo");
         }
 
-        public Task UpdateDependenciesAsync()
+        public Task UpdateDependenciesAsync(bool buildDependencies)
         {
             return Task.Run(() =>
             {
                 Debug.Log("Asynchronous dependency update started...");
-                UpdateDependenciesInternal();
+                UpdateDependenciesInternal(buildDependencies);
                 Debug.Log("Asynchronous dependency update complete.");
             });
         }
 
-        public void UpdateDependencies()
+        public void UpdateDependencies(bool buildDependencies)
         {
             Debug.Log("Synchronous dependency update started...");
-            UpdateDependenciesInternal();
+            UpdateDependenciesInternal(buildDependencies);
             Debug.Log("Synchronous dependency update complete.");
         }
 
-        private void UpdateDependenciesInternal()
+        private void UpdateDependenciesInternal(bool buildDependencies)
         {
-            Debug.Log($"Building prerequisites...");
-            foreach (var buildTarget in BUILD_TARGETS)
+            if (buildDependencies)
             {
-                BuildDependency(MSBUILD_EXE_PATH, buildTarget);
+                Debug.Log($"Building prerequisites...");
+                foreach (var buildTarget in BUILD_TARGETS)
+                {
+                    BuildDependency(MSBUILD_EXE_PATH, buildTarget);
+                }
             }
 
             Debug.Log($"Copying dependencies...");
@@ -72,17 +73,60 @@ namespace Assets.Scripts.UnityEditor
                 @"Plugins");
             Debug.Log($"Destination Plugins Directory: '{destinationPluginsDirectory}'");
 
-            if (Directory.Exists(destinationPluginsDirectory))
+            var backupDestinationPluginsDirectory = Path.Combine(_dataPath, @"PluginsBackup");
+            if (Directory.Exists(backupDestinationPluginsDirectory))
             {
-                Debug.Log($"Deleting '{destinationPluginsDirectory}'...");
-                Directory.Delete(destinationPluginsDirectory, true);
-
-                Debug.Log($"Recreating '{destinationPluginsDirectory}'...");
-                Directory.CreateDirectory(destinationPluginsDirectory);
-                Debug.Log($"Recreated '{destinationPluginsDirectory}'.");
+                Debug.Log($"Deleting '{backupDestinationPluginsDirectory}'...");
+                Directory.Delete(backupDestinationPluginsDirectory, true);
+                Debug.Log($"Deleted '{backupDestinationPluginsDirectory}'.");
             }
 
-            ProcessDependencies(destinationPluginsDirectory);
+            if (Directory.Exists(destinationPluginsDirectory))
+            {
+                Debug.Log($"Backing up '{destinationPluginsDirectory}' to {backupDestinationPluginsDirectory}...");
+                Directory.Move(destinationPluginsDirectory, backupDestinationPluginsDirectory);
+                Debug.Log($"Backed up '{destinationPluginsDirectory}' to {backupDestinationPluginsDirectory}.");
+            }
+
+            if (!Directory.Exists(destinationPluginsDirectory))
+            {
+                Debug.Log($"Creating '{destinationPluginsDirectory}'...");
+                Directory.CreateDirectory(destinationPluginsDirectory);
+                Debug.Log($"Created '{destinationPluginsDirectory}'.");
+            }
+
+            try
+            {
+                ProcessDependencies(destinationPluginsDirectory);
+            }
+            catch
+            {
+                if (backupDestinationPluginsDirectory != null &&
+                    Directory.Exists(backupDestinationPluginsDirectory))
+                {
+                    Debug.Log($"Attempting restoration of backup '{backupDestinationPluginsDirectory}' due to failure...");
+
+                    if (Directory.Exists(destinationPluginsDirectory))
+                    {
+                        Debug.Log($"Deleting '{destinationPluginsDirectory}'...");
+                        Directory.Delete(destinationPluginsDirectory, true);
+                        Debug.Log($"Deleted '{destinationPluginsDirectory}'.");
+                    }
+
+                    Directory.Move(backupDestinationPluginsDirectory, destinationPluginsDirectory);
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (Directory.Exists(backupDestinationPluginsDirectory))
+                {
+                    Debug.Log($"Deleting '{backupDestinationPluginsDirectory}'...");
+                    Directory.Delete(backupDestinationPluginsDirectory, true);
+                    Debug.Log($"Deleted '{backupDestinationPluginsDirectory}'.");
+                }
+            }
         }
 
         private void BuildDependency(
@@ -114,6 +158,21 @@ namespace Assets.Scripts.UnityEditor
         {
             var dependencyEntries = new IDependencyEntry[]
             {
+                new NugetDependencyEntry(
+                    "NexusLabs.Framework",
+                    @"C:\dev\nexus\libraries\NexusLabs.Framework\NexusLabs.Framework\bin\Debug",
+                    new[] { "NexusLabs.Framework.*.*.*.nupkg" },
+                    new string[0]),
+                new NugetDependencyEntry(
+                    "NexusLabs.Contracts",
+                    @"C:\dev\nexus\libraries\NexusLabs.Framework\NexusLabs.Contracts\bin\Debug",
+                    new[] { "NexusLabs.Contracts.*.*.*.nupkg" },
+                    new string[0]),
+                new NugetDependencyEntry(
+                    "NexusLabs.Collections.Generic",
+                    @"C:\dev\nexus\libraries\NexusLabs.Framework\NexusLabs.Collections.Generic\bin\Debug",
+                    new[] { "NexusLabs.Collections.Generic.*.*.*.nupkg" },
+                    new string[0]),
                 new DependencyDirectoryEntry(
                     "Tiled.NET",
                     Path.Combine(
@@ -124,12 +183,12 @@ namespace Assets.Scripts.UnityEditor
                 new NugetDependencyEntry(
                     "Project XYZ",
                     _localNugetRepoPath,
-                    new[] { "ProjectXyz.*.*.*.nupkg" },
+                    new[] { "ProjectXyz.*.*.*.*.nupkg" },
                     new string[0]),
                 new NugetDependencyEntry(
                     "Macerus",
                     _localNugetRepoPath,
-                    new[] { "Macerus.*.*.*.nupkg" },
+                    new[] { "Macerus.*.*.*.*.nupkg" },
                     new string[0]),
             };
 
@@ -175,6 +234,7 @@ namespace Assets.Scripts.UnityEditor
                 .SelectMany(pattern => Directory.GetFiles(
                     dependencyEntry.NugetRepoPath,
                     pattern))
+                .OrderByDescending(x => new FileInfo(x).LastWriteTimeUtc)
                 .ToArray();
 
             if (!matchingNugetFilePaths.Any())
