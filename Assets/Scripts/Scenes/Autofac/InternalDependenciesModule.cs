@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+
 using Assets.Scripts.Scenes.Api;
-using Assets.Scripts.Scenes.Explore;
+
 using Autofac;
+
 using ProjectXyz.Api.Logging;
 
 namespace Assets.Scripts.Scenes.Autofac
@@ -19,6 +21,7 @@ namespace Assets.Scripts.Scenes.Autofac
                     foreach (var sceneLoadHook in x.Resolve<IEnumerable<IDiscoverableSceneLoadHook>>())
                     {
                         logger.Debug($"Created scene load hook '{sceneLoadHook}'.");
+                        sceneLoadHook.SwitchScene();
                     }
                 });
         }

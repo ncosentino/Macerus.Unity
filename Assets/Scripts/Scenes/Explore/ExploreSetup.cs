@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-using Assets.Scripts.Scenes.Api;
+﻿using System.Linq;
+
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Scenes.Explore.Maps;
 using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Game.Interface.Mapping;
 using ProjectXyz.Shared.Framework;
-using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Scenes.Explore
 {
