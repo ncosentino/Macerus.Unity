@@ -7,13 +7,16 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
     {
         private readonly IPrefabCreator _prefabCreator;
         private readonly IItemListBehaviourStitcher _itemListBehaviourStitcher;
+        private readonly IDropInventoryBehaviourStitcher _dropInventoryBehaviourStitcher;
 
         public ItemListFactory(
             IPrefabCreator prefabCreator,
-            IItemListBehaviourStitcher itemListBehaviourStitcher)
+            IItemListBehaviourStitcher itemListBehaviourStitcher,
+            IDropInventoryBehaviourStitcher dropInventoryBehaviourStitcher)
         {
             _prefabCreator = prefabCreator;
             _itemListBehaviourStitcher = itemListBehaviourStitcher;
+            _dropInventoryBehaviourStitcher = dropInventoryBehaviourStitcher;
         }
 
         public IItemListPrefab Create(
@@ -27,6 +30,10 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory
                 itemListGameObject,
                 itemListItemPrefabResource,
                 itemContainerBehavior);
+            _dropInventoryBehaviourStitcher.Attach(
+                itemListGameObject,
+                itemContainerBehavior);
+
             return itemListGameObject;
         }
     }

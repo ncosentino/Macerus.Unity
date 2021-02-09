@@ -100,6 +100,16 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                 return;
             }
 
+            var item = eventData
+                .pointerDrag
+                .GetComponent<IReadOnlyHasGameObject>()
+                ?.GameObject;
+            Contract.RequiresNotNull(
+                item,
+                $"'{equippableItemBehaviour}' does not have " +
+                $"'{nameof(IReadOnlyHasGameObject)}' as a sibling component " +
+                $"with a game object set.");
+
             var canBeEquippedBehavior = equippableItemBehaviour.CanBeEquippedBehavior;
             Contract.RequiresNotNull(
                 canBeEquippedBehavior,
@@ -128,7 +138,7 @@ namespace Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment
                 gameObject.RemoveComponents<IHasGameObject>();
                 gameObject
                     .AddComponent<HasGameObjectBehaviour>()
-                    .GameObject = (IGameObject)canBeEquippedBehavior.Owner; // FIXME: barf at this casting?
+                    .GameObject = item;
             }
 
             Debug.Log($"Equipped: {equipResult}");

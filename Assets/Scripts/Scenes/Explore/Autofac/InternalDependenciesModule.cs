@@ -144,6 +144,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<DropInventoryBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<DragInventoryListItemBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
