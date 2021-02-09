@@ -4,6 +4,8 @@ using Assets.Scripts.Plugins.Features.Animations.Api;
 using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Resources.Sprites;
 
+using Macerus.Api.Behaviors;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Framework.Contracts;
 
@@ -18,10 +20,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
     {
         private int _currentFrameIndex;
         private float _secondsElapsedOnFrame;
+        private IIdentifier _lastAnimationId;
 
         public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
 
-        public IIdentifier CurrentAnimationId { get; set; }
+        public IAnimationBehavior AnimationBehavior { get; set; }
 
         public ITimeProvider TimeProvider { get; set; }
 
@@ -31,8 +34,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         public ISpriteLoader SpriteLoader { get; set; }
 
+        IReadOnlyAnimationBehavior IReadOnlySpriteAnimationBehaviour.AnimationBehavior => AnimationBehavior;
+
         private void Start()
         {
+            Contract.RequiresNotNull(
+                AnimationBehavior,
+                $"{nameof(AnimationBehavior)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 SpriteRenderer,
                 $"{nameof(SpriteRenderer)} was not set on '{gameObject}.{this}'.");
@@ -57,18 +65,31 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         private void AnimationLoop()
         {
-            if (CurrentAnimationId == null)
+            var currentAnimationId = AnimationBehavior.CurrentAnimationId;
+            if (currentAnimationId == null)
             {
                 SpriteRenderer.sprite = null;
+                _currentFrameIndex = 0;
+                _lastAnimationId = null;
+                _secondsElapsedOnFrame = 0;
                 return;
             }
 
+            bool forceRefreshSprite = false;
+            if (currentAnimationId != _lastAnimationId)
+            {
+                _currentFrameIndex = 0;
+                _secondsElapsedOnFrame = 0;
+                _lastAnimationId = currentAnimationId;
+                forceRefreshSprite = true;
+            }
+
             if (!SpriteAnimationProvider.TryGetAnimationById(
-                CurrentAnimationId,
+                currentAnimationId,
                 out var currentAnimation))
             {
                 throw new InvalidOperationException(
-                    $"The current animation ID '{CurrentAnimationId}' was not " +
+                    $"The current animation ID '{currentAnimationId}' was not " +
                     $"found for '{gameObject}.{this}'.");
             }
 
@@ -78,7 +99,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 throw new InvalidOperationException(
                     $"The current frame {_currentFrameIndex} was out " +
                     $"of range on '{gameObject}.{this}' animation " +
-                    $"'{CurrentAnimationId}'.");
+                    $"'{currentAnimationId}'.");
             }
 
             _secondsElapsedOnFrame += TimeProvider.SecondsSinceLastFrame;
@@ -106,7 +127,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                         }
                         else
                         {
-                            CurrentAnimationId = null;
+                            AnimationBehavior.CurrentAnimationId = null;
                             return;
                         }
                     }
@@ -117,7 +138,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 break;
             }
 
-            if (_currentFrameIndex == lastFrameIndex)
+            if (_currentFrameIndex == lastFrameIndex &&
+                !forceRefreshSprite)
             {
                 return;
             }

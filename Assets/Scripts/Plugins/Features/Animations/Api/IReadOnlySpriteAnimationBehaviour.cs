@@ -1,10 +1,9 @@
-﻿
-using ProjectXyz.Api.Framework;
+﻿using Macerus.Api.Behaviors;
 
 namespace Assets.Scripts.Plugins.Features.Animations.Api
 {
     public interface IReadOnlySpriteAnimationBehaviour
     {
-        IIdentifier CurrentAnimationId { get; }
+        IReadOnlyAnimationBehavior AnimationBehavior { get; }
     }
 }

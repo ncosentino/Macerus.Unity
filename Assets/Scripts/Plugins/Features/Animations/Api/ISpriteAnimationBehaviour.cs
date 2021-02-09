@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Resources.Sprites;
 
-using ProjectXyz.Api.Framework;
+using Macerus.Api.Behaviors;
 
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace Assets.Scripts.Plugins.Features.Animations.Api
 {
     public interface ISpriteAnimationBehaviour : IReadOnlySpriteAnimationBehaviour
     {
-        new IIdentifier CurrentAnimationId { get; set; }
+        new IAnimationBehavior AnimationBehavior { get; set; }
 
         ISpriteAnimationProvider SpriteAnimationProvider { get; set; }
 

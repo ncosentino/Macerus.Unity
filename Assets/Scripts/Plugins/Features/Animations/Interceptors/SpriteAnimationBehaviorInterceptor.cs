@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 
-using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
 using Assets.Scripts.Scenes.Explore.GameObjects;
+
+using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.GameObjects;
 
@@ -23,16 +24,15 @@ namespace Assets.Scripts.Plugins.Features.Animations.Interceptors
             IGameObject gameObject,
             GameObject unityGameObject)
         {
-            // FIXME: look for a solid backend component that indicates animation
-            var hasAnimationSupport = gameObject
-                .Get<IPrefabResourceBehavior>()
-                .Any(x => x.PrefabResourceId == "Mapping/Prefabs/PlayerPlaceholder");
-            if (!hasAnimationSupport)
+            var animationBehavior = gameObject.GetOnly<IAnimationBehavior>();
+            if (animationBehavior == null)
             {
                 return;
             }
 
-            _spriteAnimationBehaviourStitcher.Attach(unityGameObject);
+            _spriteAnimationBehaviourStitcher.Attach(
+                unityGameObject,
+                animationBehavior);
         }
     }
 }

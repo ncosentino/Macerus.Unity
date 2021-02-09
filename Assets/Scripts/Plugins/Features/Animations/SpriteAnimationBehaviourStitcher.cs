@@ -4,6 +4,8 @@ using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources.Sprites;
 
+using Macerus.Api.Behaviors;
+
 using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
@@ -29,18 +31,17 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             _logger = logger;
         }
 
-        public IReadOnlySpriteAnimationBehaviour Attach(GameObject objectToAnimate)
+        public IReadOnlySpriteAnimationBehaviour Attach(
+            GameObject objectToAnimate,
+            IAnimationBehavior animationBehavior)
         {
             var spriteAnimationBehaviour = objectToAnimate.AddComponent<SpriteAnimationBehaviour>();
             spriteAnimationBehaviour.Logger = _logger;
-            spriteAnimationBehaviour.CurrentAnimationId = null;
             spriteAnimationBehaviour.TimeProvider = _timeProvider;
             spriteAnimationBehaviour.SpriteRenderer = objectToAnimate.GetRequiredComponent<SpriteRenderer>();
             spriteAnimationBehaviour.SpriteLoader = _spriteLoader;
             spriteAnimationBehaviour.SpriteAnimationProvider = _spriteAnimationProvider;
-
-            // FIXME: just for testing
-            spriteAnimationBehaviour.CurrentAnimationId = new StringIdentifier("player_walk_back");
+            spriteAnimationBehaviour.AnimationBehavior = animationBehavior;
 
             return spriteAnimationBehaviour;
         }
