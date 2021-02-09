@@ -1,5 +1,8 @@
 using Assets.Scripts.Unity.Resources;
 using Assets.Scripts.Unity.Resources.Sprites;
+
+using ProjectXyz.Shared.Framework;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Maps
@@ -32,9 +35,12 @@ namespace Assets.Scripts.Scenes.Explore.Maps
                 z);
 
             var renderer = tileObject.GetComponent<SpriteRenderer>();
-            renderer.sprite = _spriteLoader.SpriteFromMultiSprite(
-                relativeResourcePath,
-                spriteResourceName);
+
+            // FIXME: resource path/name to ID conversion
+            var sprite = _spriteLoader.SpriteFromMultiSprite(
+                new StringIdentifier(relativeResourcePath),
+                new StringIdentifier(spriteResourceName));
+            renderer.sprite = sprite;
 
             return tileObject;
         }

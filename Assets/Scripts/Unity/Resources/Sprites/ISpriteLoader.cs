@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using ProjectXyz.Api.Framework;
+
+using UnityEngine;
 
 namespace Assets.Scripts.Unity.Resources.Sprites
 {
@@ -7,9 +9,9 @@ namespace Assets.Scripts.Unity.Resources.Sprites
         Sprite GetSpriteFromTexture2D(string texture2DResource);
 
         Sprite SpriteFromMultiSprite(
-            string spriteSheetResource,
-            string spriteName);
+            IIdentifier spriteSheetResourceId,
+            IIdentifier spriteResourceId);
 
-        Sprite GetSprite(string spriteResource);
+        Sprite GetSprite(IIdentifier spriteResourceId);
     }
 }

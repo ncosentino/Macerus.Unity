@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using ProjectXyz.Api.Framework;
+
+using UnityEngine;
 
 namespace Assets.Scripts.Unity.Resources.Sprites
 {
     public interface ISpriteSheet
     {
         bool TryGet(
-            string key,
+            IIdentifier spriteResourceId,
             out Sprite sprite);
     }
 }

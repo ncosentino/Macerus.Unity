@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Collections;
 using UnityEngine;
 
@@ -11,7 +14,7 @@ namespace Assets.Scripts.Unity.Resources.Sprites
 
         public SpriteLoader(
             IResourceLoader resourceLoader,
-            ICache<string, ISpriteSheet> spriteSheetCache)
+            ICache<string, ISpriteSheet> spriteSheetCache) // FIXME: we want to cache by IIdentifier
         {
             _resourceLoader = resourceLoader;
             _spriteSheetCache = spriteSheetCache;
@@ -27,30 +30,48 @@ namespace Assets.Scripts.Unity.Resources.Sprites
             return sprite;
         }
 
-        public Sprite GetSprite(string spriteResource)
+        public Sprite GetSprite(IIdentifier spriteResourceId)
         {
-            var matchingSprite = _resourceLoader.Load<Sprite>(spriteResource);
+            // FIXME: ID / string conversion
+            var spriteResourceStr = spriteResourceId.ToString();
+            var matchingSprite = _resourceLoader.Load<Sprite>(spriteResourceStr);
             return matchingSprite;
         }
 
         public Sprite SpriteFromMultiSprite(
-            string spriteSheetResource,
-            string spriteName)
+            IIdentifier spriteSheetResourceId,
+            IIdentifier spriteResourceId)
         {
+            // FIXME: we want to cache by IIdentifier
+            var spriteSheetResourceStr = spriteSheetResourceId.ToString();
+
             ISpriteSheet spriteSheet;
             if (!_spriteSheetCache.TryGetValue(
-                spriteSheetResource,
+                spriteSheetResourceStr,
                 out spriteSheet))
             {
-                var matchingSprites = _resourceLoader.LoadAll<Sprite>(spriteSheetResource);
+                IReadOnlyCollection<Sprite> matchingSprites;
+                try
+                {
+                    matchingSprites = _resourceLoader.LoadAll<Sprite>(spriteSheetResourceStr);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        $"No sprite sheet found with ID '{spriteSheetResourceId}'.",
+                        ex);
+                }
+
                 spriteSheet = new SpriteSheet(matchingSprites);
-                _spriteSheetCache.AddOrUpdate(spriteSheetResource, spriteSheet);
+                _spriteSheetCache.AddOrUpdate(spriteSheetResourceStr, spriteSheet);
             }
 
             Sprite sprite;
-            if (!spriteSheet.TryGet(spriteName, out sprite))
+            if (!spriteSheet.TryGet(spriteResourceId, out sprite))
             {
-                throw new InvalidOperationException($"No sprite named '{spriteName}' in sprite sheet '{spriteSheetResource}'.");
+                throw new InvalidOperationException(
+                    $"No sprite with ID '{spriteResourceId}' in sprite sheet " +
+                    $"'{spriteSheetResourceId}'.");
             }
 
             return sprite;

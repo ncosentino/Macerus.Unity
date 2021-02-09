@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts.Unity.Resources;
 using Assets.Scripts.Unity.Resources.Sprites;
 using Autofac;
+
+using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Framework.Collections;
 
 namespace Assets.Scripts.Autofac.Unity
@@ -12,7 +14,12 @@ namespace Assets.Scripts.Autofac.Unity
             builder
                 .Register(x => new Cache<string, ISpriteSheet>(10))
                 .AsImplementedInterfaces();
-                //.SingleInstance();
+            //.SingleInstance();
+            // FIXME: we want to cache by IIdentifier
+            //builder
+            //    .Register(x => new Cache<IIdentifier, ISpriteSheet>(10))
+            //    .AsImplementedInterfaces();
+            //.SingleInstance();
             builder
                 .RegisterType<SpriteLoader>()
                 .AsImplementedInterfaces()
