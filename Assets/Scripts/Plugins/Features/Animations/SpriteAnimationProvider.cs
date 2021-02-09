@@ -23,6 +23,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                     {
                         new SpriteAnimationFrame(
                             new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_1"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
                             new StringIdentifier("player_0"),
                             false,
                             false,
@@ -42,12 +49,152 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                             false,
                             0.2f,
                             Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_stand_back")] = new SpriteAnimation(
+                    new[]
+                    {
                         new SpriteAnimationFrame(
                             new StringIdentifier("graphics/actors/player"),
                             new StringIdentifier("player_1"),
                             false,
                             false,
+                            60f,
+                            Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_walk_forward")] = new SpriteAnimation(
+                    new[]
+                    {
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_4"),
+                            false,
+                            false,
                             0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_3"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_4"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_5"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_stand_forward")] = new SpriteAnimation(
+                    new[]
+                    {
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_4"),
+                            false,
+                            false,
+                            60f,
+                            Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_walk_left")] = new SpriteAnimation(
+                    new[]
+                    {
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_7"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_6"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_7"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_8"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_stand_left")] = new SpriteAnimation(
+                    new[]
+                    {
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_7"),
+                            false,
+                            false,
+                            60f,
+                            Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_walk_right")] = new SpriteAnimation(
+                    new[]
+                    {
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_10"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_9"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_10"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_11"),
+                            false,
+                            false,
+                            0.2f,
+                            Color.white),
+                    },
+                    true),
+                [new StringIdentifier("player_stand_right")] = new SpriteAnimation(
+                    new[]
+                    {
+                        new SpriteAnimationFrame(
+                            new StringIdentifier("graphics/actors/player"),
+                            new StringIdentifier("player_4"),
+                            false,
+                            false,
+                            60f,
                             Color.white),
                     },
                     true),
