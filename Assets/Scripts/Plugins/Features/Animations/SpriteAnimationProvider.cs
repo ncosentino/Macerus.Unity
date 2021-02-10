@@ -191,7 +191,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                     {
                         new SpriteAnimationFrame(
                             new StringIdentifier("graphics/actors/player"),
-                            new StringIdentifier("player_4"),
+                            new StringIdentifier("player_10"),
                             false,
                             false,
                             60f,

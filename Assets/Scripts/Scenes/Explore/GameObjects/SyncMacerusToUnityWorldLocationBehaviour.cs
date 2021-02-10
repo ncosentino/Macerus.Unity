@@ -1,13 +1,20 @@
-using System;
+﻿using System;
+
 using Macerus.Api.Behaviors;
+
 using ProjectXyz.Framework.Contracts;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects
 {
-    public sealed class UpdateWorldLocationBehaviour :
+    /// <summary>
+    /// Responsible for synchronizing backend controlled world location
+    /// to the front-end Unity.
+    /// </summary>
+    public sealed class SyncMacerusToUnityWorldLocationBehaviour :
         MonoBehaviour,
-        IUpdateWorldLocatiobBehaviour
+        ISyncMacerusToUnityWorldLocationBehaviour
     {
         public IObservableWorldLocationBehavior ObservableWorldLocationBehavior { get; set; }
 
@@ -16,19 +23,21 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
             Contract.RequiresNotNull(
                 ObservableWorldLocationBehavior,
                 $"{nameof(ObservableWorldLocationBehavior)} was not set on '{gameObject}.{this}'.");
-            ObservableWorldLocationBehavior.WorldLocationChanged += ObservableWorldLocationBehavior_WorldLocationChanged;
-            SyncLocation();
+            ObservableWorldLocationBehavior.WorldLocationChanged += WorldLocationBehavior_WorldLocationChanged;
+
+            // sync macerus (source of truth) to unity
+            SyncMacerusToUnityWorldLocation();
         }
 
         private void OnDestroy()
         {
             if (ObservableWorldLocationBehavior != null)
             {
-                ObservableWorldLocationBehavior.WorldLocationChanged -= ObservableWorldLocationBehavior_WorldLocationChanged;
+                ObservableWorldLocationBehavior.WorldLocationChanged -= WorldLocationBehavior_WorldLocationChanged;
             }
         }
 
-        private void SyncLocation()
+        private void SyncMacerusToUnityWorldLocation()
         {
             gameObject.transform.position = new Vector3(
                 (float)ObservableWorldLocationBehavior.X,
@@ -36,8 +45,8 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
                 -1);
         }
 
-        private void ObservableWorldLocationBehavior_WorldLocationChanged(
+        private void WorldLocationBehavior_WorldLocationChanged(
             object sender,
-            EventArgs e) => SyncLocation();
+            EventArgs e) => SyncMacerusToUnityWorldLocation();
     }
 }

@@ -45,7 +45,11 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<WorldLocationStitcher>()
+                .RegisterType<SyncMacerusToUnityVelocityBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<SyncUnityToMacerusWorldLocationBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

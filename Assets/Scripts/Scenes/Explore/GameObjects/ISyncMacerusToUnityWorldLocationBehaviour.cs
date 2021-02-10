@@ -1,8 +1,8 @@
-using Macerus.Api.Behaviors;
+﻿using Macerus.Api.Behaviors;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects
 {
-    public interface IUpdateWorldLocatiobBehaviour : IReadOnlyUpdateWorldLocatiobBehaviour
+    public interface ISyncMacerusToUnityWorldLocationBehaviour : IReadOnlySyncMacerusToUnityWorldLocationBehaviour
     {
         new IObservableWorldLocationBehavior ObservableWorldLocationBehavior { get; set; }
     }

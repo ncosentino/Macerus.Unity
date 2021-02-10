@@ -1,11 +1,12 @@
-using ProjectXyz.Api.GameObjects;
+﻿using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects
 {
-    public interface IWorldLocationStitcher
+    public interface ISyncMacerusToUnityVelocityBehaviourStitcher
     {
-        IUpdateWorldLocatiobBehaviour Stitch(
+        ISyncMacerusToUnityVelocityBehaviour Stitch(
             IGameObject gameObject,
             GameObject unityGameObject);
     }

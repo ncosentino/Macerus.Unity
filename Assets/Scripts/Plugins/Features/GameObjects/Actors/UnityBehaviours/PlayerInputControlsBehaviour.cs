@@ -63,22 +63,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 throttleX = 0;
             }
 
-            if (Mathf.Abs(throttleX) > float.Epsilon &&
-                Mathf.Abs(throttleY) > float.Epsilon)
-            {
-                throttleX /= 2;
-                throttleY /= 2;
-            }
-
-            if (Mathf.Abs(throttleX) > float.Epsilon)
-            {
-                MovementBehavior.ThrottleX += throttleX;
-            }
-
-            if (Mathf.Abs(throttleY) > float.Epsilon)
-            {
-                MovementBehavior.ThrottleY += throttleY;
-            }
+            MovementBehavior.ThrottleX = throttleX;
+            MovementBehavior.ThrottleY = throttleY;
         }
     }
 }

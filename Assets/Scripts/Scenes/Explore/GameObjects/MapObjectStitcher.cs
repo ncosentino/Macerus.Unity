@@ -8,20 +8,23 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
     {
         private readonly IPrefabStitcherFacade _prefabStitcherFacade;
         private readonly IIdentityBehaviourStitcher _identityBehaviourStitcher;
-        private readonly IWorldLocationStitcher _worldLocationStitcher;
+        private readonly ISyncMacerusToUnityVelocityBehaviourStitcher _syncMacerusToUnityVelocityBehaviourStitcher;
+        private readonly ISyncUnityToMacerusWorldLocationBehaviourStitcher _syncUnityToMacerusWorldLocationBehaviourStitcher;
         private readonly IHasGameObjectBehaviourStitcher _hasGameObjectBehaviourStitcher;
         private readonly IGameObjectBehaviorInterceptorFacade _gameObjectBehaviorInterceptorFacade;
 
         public MapObjectStitcher(
             IPrefabStitcherFacade prefabStitcherFacade,
             IIdentityBehaviourStitcher identityBehaviourStitcher,
-            IWorldLocationStitcher worldLocationStitcher,
+            ISyncMacerusToUnityVelocityBehaviourStitcher syncMacerusToUnityVelocityBehaviourStitcher,
+            ISyncUnityToMacerusWorldLocationBehaviourStitcher syncUnityToMacerusWorldLocationBehaviourStitcher,
             IHasGameObjectBehaviourStitcher hasGameObjectBehaviourStitcher,
             IGameObjectBehaviorInterceptorFacade gameObjectBehaviorInterceptorFacade)
         {
             _prefabStitcherFacade = prefabStitcherFacade;
             _identityBehaviourStitcher = identityBehaviourStitcher;
-            _worldLocationStitcher = worldLocationStitcher;
+            _syncMacerusToUnityVelocityBehaviourStitcher = syncMacerusToUnityVelocityBehaviourStitcher;
+            _syncUnityToMacerusWorldLocationBehaviourStitcher = syncUnityToMacerusWorldLocationBehaviourStitcher;
             _hasGameObjectBehaviourStitcher = hasGameObjectBehaviourStitcher;
             _gameObjectBehaviorInterceptorFacade = gameObjectBehaviorInterceptorFacade;
         }
@@ -51,8 +54,13 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
                 gameObject,
                 unityGameObject);
 
-            // move the game object to the right spot
-            _worldLocationStitcher.Stitch(
+            // synchronize velocity between unity and the backend
+            _syncMacerusToUnityVelocityBehaviourStitcher.Stitch(
+                gameObject,
+                unityGameObject);
+
+            // synchronize world location between unity and the backend
+            _syncUnityToMacerusWorldLocationBehaviourStitcher.Stitch(
                 gameObject,
                 unityGameObject);
         }
