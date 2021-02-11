@@ -25,6 +25,13 @@ namespace Assets.Scripts.Behaviours
 
         private void Start()
         {
+#if DEBUG
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                Debug.Log("****DEBUGGER IS NOT ATTACHED****");
+            }
+#endif
+
             Debug.Log("Creating autofac container...");
             var containerBuilder = new MacerusContainerBuilder();
             _container = containerBuilder.CreateContainer();
