@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+
 using Assets.Scripts.TiledNet;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
@@ -30,16 +32,38 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects.TiledNet
         {
             var tiledMap = _tiledMapLoader.LoadMap(mapId);
 
+            double worldScalingFactor;
+            if (tiledMap.Properties.TryGetValue("WorldScalingFactor", out var rawWorldScalingFactor))
+            {
+                worldScalingFactor = Convert.ToDouble(
+                    rawWorldScalingFactor,
+                    CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                worldScalingFactor = 1;
+                _logger.Warn(
+                    $"No world scaling factor set for map '{mapId}'. Using the " +
+                    $"default of {worldScalingFactor}.");
+            }
+
+            var worldScalingFactorX = worldScalingFactor * tiledMap.TileWidth;
+            var worldScalingFactorY = worldScalingFactor * tiledMap.TileHeight;
+            _logger.Debug(
+                $"Using world scaling factor {worldScalingFactor} " +
+                $"(x={worldScalingFactorX}, y={worldScalingFactorY}) for map " +
+                $"'{mapId}'.");
+
             foreach (var tiledMapObjectLayer in tiledMap.ObjectLayers)
             {
                 foreach (var tiledMapObject in tiledMapObjectLayer.Objects)
                 {
                     var properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
                     {
-                        ["X"] = tiledMapObject.X,
-                        ["Y"] = tiledMapObject.Y,
-                        ["Width"] = tiledMapObject.Width,
-                        ["Height"] = tiledMapObject.Height,
+                        ["X"] = tiledMapObject.X / worldScalingFactorX,
+                        ["Y"] = tiledMapObject.Y / worldScalingFactorY,
+                        ["Width"] = tiledMapObject.Width / worldScalingFactorX,
+                        ["Height"] = tiledMapObject.Height / worldScalingFactorY,
                         ["$TiledId"] = tiledMapObject.Id,
                         ["$TiledType"] = tiledMapObject.Type,
                     };

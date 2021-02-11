@@ -6,6 +6,6 @@ namespace Assets.Scripts.Scenes.Explore.Maps
     {
         string Key { get; }
 
-        string Value { get; }
+        object Value { get; }
     }
 }
