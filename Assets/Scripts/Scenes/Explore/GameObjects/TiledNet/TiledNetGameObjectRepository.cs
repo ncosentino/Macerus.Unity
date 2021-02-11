@@ -6,7 +6,7 @@ using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects.TiledNet
 {
-    using IMacerusObjectRepository = Macerus.Api.GameObjects.IGameObjectRepository;
+    using IMacerusObjectRepository = Macerus.Api.GameObjects.IGameObjectRepositoryFacade;
 
     public sealed class TiledNetGameObjectRepository : IGameObjectRepository
     {
