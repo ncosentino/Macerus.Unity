@@ -42,9 +42,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             builder
                 .RegisterType<HasGuiEquipmentBehaviorInterceptor>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .AsSelf()
-                .AutoActivate();
+                .SingleInstance();
             builder
                 .RegisterType<HasGuiInventoryBehaviourStitcher>()
                 .AsImplementedInterfaces()
@@ -52,22 +50,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             builder
                 .RegisterType<HasGuiInventoryBehaviorInterceptor>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .AsSelf()
-                .AutoActivate();
+                .SingleInstance();
             builder
                 .RegisterType<WipInventoryInterceptor>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .AsSelf()
-                .AutoActivate();
+                .SingleInstance();
             builder
                 .RegisterType<LightRadiusBehaviorInterceptor>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .AsSelf()
-                .AutoActivate();
-
+                .SingleInstance();
             builder
                 .RegisterType<HasFollowCameraBehaviourStitcher>()
                 .AsImplementedInterfaces()
@@ -75,9 +66,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             builder
                 .RegisterType<HasFollowCameraBehaviorInterceptor>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .AsSelf()
-                .AutoActivate();
+                .SingleInstance();
         }
     }
 }
