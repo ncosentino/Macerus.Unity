@@ -20037,7 +20037,7 @@
   </data>
  </layer>
  <objectgroup color="#a0a0a4" name="Objects">
-  <object id="1" name="tiled specific name" type="tiled specific type" x="1231.5" y="843.5" width="90.6663" height="73.3337">
+  <object id="1" name="tiled specific name" type="tiled specific type" x="40" y="-24" width="1" height="1">
    <properties>
     <property name="$typeId" value="actor"/>
     <property name="$templateId" value="player"/>
@@ -20046,7 +20046,31 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="2" name="tiled specific name" type="tiled specific type" x="1200" y="880" width="200" height="10">
+  <object id="2" name="tiled specific name" type="tiled specific type" x="40" y="-28.75" width="6" height="1">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
+  </object>
+  <object id="3" name="tiled specific name" type="tiled specific type" x="46.75" y="-27.7" width="9" height="1">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
+  </object>
+  <object id="4" name="tiled specific name" type="tiled specific type" x="33.25" y="-27.7" width="9" height="1">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
+  </object>
+  <object id="5" name="tiled specific name" type="tiled specific type" x="28.25" y="-26" width="1" height="4">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
+  </object>
+  <object id="6" name="tiled specific name" type="tiled specific type" x="51.75" y="-26" width="1" height="4">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
+  </object>
+  <object id="7" name="tiled specific name" type="tiled specific type" x="33.25" y="-24.25" width="9" height="1">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
+  </object>
+  <object id="8" name="tiled specific name" type="tiled specific type" x="46.75" y="-24.25" width="9" height="1">
     <property name="$typeId" value="static"/>
     <property name="$templateId" value="wall"/>
   </object>
