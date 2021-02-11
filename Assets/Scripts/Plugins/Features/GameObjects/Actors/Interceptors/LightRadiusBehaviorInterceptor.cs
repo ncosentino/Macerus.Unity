@@ -9,6 +9,7 @@ using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Stats;
 using ProjectXyz.Plugins.Enchantments.Stats;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Shared.Framework;
 
@@ -36,6 +37,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
             IGameObject gameObject, 
             GameObject unityGameObject)
         {
+            if (!gameObject.Has<IHasStatsBehavior>())
+            {
+                return;
+            }
+
             var context = new StatCalculationContext(
                 new IComponent[0],
                 new IEnchantment[0]);
