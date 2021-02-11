@@ -24,7 +24,9 @@ namespace Assets.Scripts.Plugins.Features.Animations.Interceptors
             IGameObject gameObject,
             GameObject unityGameObject)
         {
-            var animationBehavior = gameObject.GetOnly<IAnimationBehavior>();
+            var animationBehavior = gameObject
+                .Get<IAnimationBehavior>()
+                .SingleOrDefault();
             if (animationBehavior == null)
             {
                 return;
