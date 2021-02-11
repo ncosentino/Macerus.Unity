@@ -20037,11 +20037,18 @@
   </data>
  </layer>
  <objectgroup color="#a0a0a4" name="Objects">
-  <object id="1" name="player" type="actor" x="1231.5" y="843.5" width="90.6663" height="73.3337">
+  <object id="1" name="tiled specific name" type="tiled specific type" x="1231.5" y="843.5" width="90.6663" height="73.3337">
    <properties>
-    <!-- <property name="id" value="player"/> -->
+    <property name="$typeId" value="actor"/>
+    <property name="$templateId" value="player"/>
+    <!-- <property name="$uniqueId" value="player"/> -->
+    <property name="PlayerName" value="player"/>
    </properties>
    <ellipse/>
+  </object>
+  <object id="2" name="tiled specific name" type="tiled specific type" x="1200" y="880" width="200" height="10">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="wall"/>
   </object>
  </objectgroup>
  <objectgroup color="#a0a0a4" name="EmptyGroupJustAsAnExample">
