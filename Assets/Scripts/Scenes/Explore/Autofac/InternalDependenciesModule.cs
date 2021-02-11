@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.GameObjects;
@@ -50,6 +52,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<SyncUnityToMacerusWorldLocationBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<MovementBehaviorInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

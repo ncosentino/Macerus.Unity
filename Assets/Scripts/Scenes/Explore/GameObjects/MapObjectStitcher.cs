@@ -8,7 +8,6 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
     {
         private readonly IPrefabStitcherFacade _prefabStitcherFacade;
         private readonly IIdentityBehaviourStitcher _identityBehaviourStitcher;
-        private readonly ISyncMacerusToUnityVelocityBehaviourStitcher _syncMacerusToUnityVelocityBehaviourStitcher;
         private readonly ISyncUnityToMacerusWorldLocationBehaviourStitcher _syncUnityToMacerusWorldLocationBehaviourStitcher;
         private readonly IHasGameObjectBehaviourStitcher _hasGameObjectBehaviourStitcher;
         private readonly IGameObjectBehaviorInterceptorFacade _gameObjectBehaviorInterceptorFacade;
@@ -16,14 +15,12 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
         public MapObjectStitcher(
             IPrefabStitcherFacade prefabStitcherFacade,
             IIdentityBehaviourStitcher identityBehaviourStitcher,
-            ISyncMacerusToUnityVelocityBehaviourStitcher syncMacerusToUnityVelocityBehaviourStitcher,
             ISyncUnityToMacerusWorldLocationBehaviourStitcher syncUnityToMacerusWorldLocationBehaviourStitcher,
             IHasGameObjectBehaviourStitcher hasGameObjectBehaviourStitcher,
             IGameObjectBehaviorInterceptorFacade gameObjectBehaviorInterceptorFacade)
         {
             _prefabStitcherFacade = prefabStitcherFacade;
             _identityBehaviourStitcher = identityBehaviourStitcher;
-            _syncMacerusToUnityVelocityBehaviourStitcher = syncMacerusToUnityVelocityBehaviourStitcher;
             _syncUnityToMacerusWorldLocationBehaviourStitcher = syncUnityToMacerusWorldLocationBehaviourStitcher;
             _hasGameObjectBehaviourStitcher = hasGameObjectBehaviourStitcher;
             _gameObjectBehaviorInterceptorFacade = gameObjectBehaviorInterceptorFacade;
@@ -51,11 +48,6 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
 
             // handle behaviors of the game object (i.e. Backend->Unity)
             _gameObjectBehaviorInterceptorFacade.Intercept(
-                gameObject,
-                unityGameObject);
-
-            // synchronize velocity between unity and the backend
-            _syncMacerusToUnityVelocityBehaviourStitcher.Stitch(
                 gameObject,
                 unityGameObject);
 
