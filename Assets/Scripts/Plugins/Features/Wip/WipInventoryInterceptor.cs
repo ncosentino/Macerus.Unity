@@ -11,7 +11,7 @@ using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Plugins.Features.Wip
 {
-    public sealed class WipInventoryInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class WipInventoryInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly IItemGeneratorFacade _itemGeneratorFacade;
         private readonly ILogger _logger;

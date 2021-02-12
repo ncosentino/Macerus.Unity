@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Animations.Interceptors
 {
-    public sealed class SpriteAnimationBehaviorInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class SpriteAnimationBehaviorInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly ISpriteAnimationBehaviourStitcher _spriteAnimationBehaviourStitcher;
 

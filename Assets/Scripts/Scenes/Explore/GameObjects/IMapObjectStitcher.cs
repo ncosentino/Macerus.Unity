@@ -1,3 +1,4 @@
+using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using UnityEngine;
 
@@ -8,6 +9,6 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
         void Stitch(
             IGameObject gameObject,
             GameObject unityGameObject,
-            string prefabResourceId);
+            IIdentifier prefabResourceId);
     }
 }

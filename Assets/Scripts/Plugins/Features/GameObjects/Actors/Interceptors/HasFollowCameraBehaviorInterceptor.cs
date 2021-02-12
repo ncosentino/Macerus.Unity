@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 {
-    public sealed class HasFollowCameraBehaviorInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class HasFollowCameraBehaviorInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly IHasFollowCameraBehaviourStitcher _hasFollowCameraBehaviourStitcher;
 
@@ -24,7 +24,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
             // back -end to know about follow cameras? maybe in an abstract sense?
             var hasSomethingThatTellsUsItsThePlayer = gameObject
                 .Get<IPrefabResourceBehavior>()
-                .SingleOrDefault(x => x.PrefabResourceId == "Mapping/Prefabs/PlayerPlaceholder");
+                .SingleOrDefault(x => x
+                .PrefabResourceId
+                .ToString()
+                .Equals("Mapping/Prefabs/PlayerPlaceholder", System.StringComparison.OrdinalIgnoreCase));
             if (hasSomethingThatTellsUsItsThePlayer == null)
             {
                 return;

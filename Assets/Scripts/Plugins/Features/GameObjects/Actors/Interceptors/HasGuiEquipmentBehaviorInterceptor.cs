@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 {
-    public sealed class HasGuiEquipmentBehaviorInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class HasGuiEquipmentBehaviorInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly IHasGuiEquipmentBehaviourStitcher _hasGuiEquipmentBehaviourStitcher;
 

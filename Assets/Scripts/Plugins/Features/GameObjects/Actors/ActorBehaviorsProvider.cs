@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+
 using Assets.Scripts.Shared.GameObjects;
+
 using ProjectXyz.Api.Behaviors;
-using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
+using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
 {
@@ -15,7 +17,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
                 // TODO: pull this information from the back-end game object.
                 // translate as necessary (i.e. if it's an ID we need to lookup
                 // and translate to a path, so be it)
-                PrefabResourceId = "Mapping/Prefabs/PlayerPlaceholder",
+                PrefabResourceId = new StringIdentifier("Mapping/Prefabs/PlayerPlaceholder"),
             };
         }
     }

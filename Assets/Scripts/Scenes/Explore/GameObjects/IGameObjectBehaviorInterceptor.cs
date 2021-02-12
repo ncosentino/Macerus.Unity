@@ -1,4 +1,5 @@
 using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects

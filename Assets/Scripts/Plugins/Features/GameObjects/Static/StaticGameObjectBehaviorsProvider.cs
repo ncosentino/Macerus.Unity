@@ -6,6 +6,7 @@ using Macerus.Plugins.Features.GameObjects.Static.Api;
 
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Static
 {
@@ -21,7 +22,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static
                 .TemplateId;
             yield return new HasPrefabResourceBehavior()
             {
-                PrefabResourceId = $"Mapping/Prefabs/{typeId}/{templateId}",
+                PrefabResourceId = new StringIdentifier($"Mapping/Prefabs/{typeId}/{templateId}"),
             };
         }
     }

@@ -1,4 +1,6 @@
 using Assets.Scripts.Api.GameObjects;
+
+using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using UnityEngine;
 
@@ -29,7 +31,7 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
         public void Stitch(
             IGameObject gameObject,
             GameObject unityGameObject,
-            string prefabResourceId)
+            IIdentifier prefabResourceId)
         {
             // every map object needs a reference to the underlying game object
             _hasGameObjectBehaviourStitcher.Attach(

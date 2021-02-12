@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 {
-    public sealed class HasGuiInventoryBehaviorInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class HasGuiInventoryBehaviorInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly IHasGuiInventoryBehaviourStitcher _hasGuiInventoryBehaviourStitcher;
 

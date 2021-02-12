@@ -1,4 +1,6 @@
 ﻿using Assets.Scripts.Api.GameObjects;
+
+using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Game.Behaviors;
 
 namespace Assets.Scripts.Shared.GameObjects
@@ -7,6 +9,6 @@ namespace Assets.Scripts.Shared.GameObjects
         BaseBehavior,
         IPrefabResourceBehavior
     {
-        public string PrefabResourceId { get; set; }
+        public IIdentifier PrefabResourceId { get; set; }
     }
 }

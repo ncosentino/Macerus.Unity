@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 {
-    public sealed class MovementBehaviorInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class MovementBehaviorInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly ISyncMacerusToUnityVelocityBehaviourStitcher _syncMacerusToUnityVelocityBehaviourStitcher;
 

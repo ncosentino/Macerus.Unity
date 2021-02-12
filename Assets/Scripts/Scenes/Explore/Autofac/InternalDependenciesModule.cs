@@ -69,17 +69,7 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
             builder
                 .RegisterType<GameObjectBehaviorInterceptorFacade>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .OnActivated(x =>
-                {
-                    var interceptors = x.Context
-                     .Resolve<IEnumerable<IGameObjectBehaviorInterceptor>>()
-                     .Where(interceptor => interceptor != x.Instance);
-                    foreach (var interceptor in interceptors)
-                    {
-                        x.Instance.Register(interceptor);
-                    }
-                });
+                .SingleInstance();
 
             RegisterMaps(builder);
             RegisterCamera(builder);

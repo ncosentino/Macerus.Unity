@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 {
-    public sealed class LightRadiusBehaviorInterceptor : IGameObjectBehaviorInterceptor
+    public sealed class LightRadiusBehaviorInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly IPrefabCreator _prefabCreator;
         private readonly IStatCalculationService _statCalculationService;

@@ -8,9 +8,9 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
     {
         private readonly List<IGameObjectBehaviorInterceptor> _interceptors;
 
-        public GameObjectBehaviorInterceptorFacade()
+        public GameObjectBehaviorInterceptorFacade(IEnumerable<IDiscoverableGameObjectBehaviorInterceptor> interceptors)
         {
-            _interceptors = new List<IGameObjectBehaviorInterceptor>();
+            _interceptors = new List<IGameObjectBehaviorInterceptor>(interceptors);
         }
 
         public void Intercept(

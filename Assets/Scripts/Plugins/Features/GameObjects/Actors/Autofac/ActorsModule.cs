@@ -4,6 +4,8 @@ using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
 using Assets.Scripts.Plugins.Features.Wip;
 using Autofac;
 
+using ProjectXyz.Shared.Framework;
+
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
 {
     public sealed class ActorsModule : Module
@@ -25,15 +27,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             builder
                 .RegisterType<PlayerPrefabStitcher>()
                 .AsImplementedInterfaces()
-                .SingleInstance()
-                .AsSelf()
-                .AutoActivate()
-                .OnActivated(x =>
-                {
-                    x.Context.Resolve<IPrefabStitcherRegistrar>().Register(
-                        @"Mapping/Prefabs/PlayerPlaceholder",
-                        x.Instance.Stitch);
-                });
+                .SingleInstance();
 
             builder
                 .RegisterType<HasGuiEquipmentBehaviourStitcher>()

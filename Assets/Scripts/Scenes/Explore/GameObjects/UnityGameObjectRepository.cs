@@ -1,6 +1,8 @@
 using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Unity.Resources;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Shared.Framework;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.GameObjects
@@ -24,9 +26,12 @@ namespace Assets.Scripts.Scenes.Explore.GameObjects
             var prefabResourceId = gameObject
                 .GetOnly<IReadOnlyPrefabResourceBehavior>()
                 .PrefabResourceId;
+            
+            // FIXME: this is a hack. we probably could use some resource ID to path mapping here
+            var relativePrefabPathWithinResources = prefabResourceId.ToString();
 
             // create the object
-            var unityGameObject = _prefabCreator.Create<GameObject>(prefabResourceId);
+            var unityGameObject = _prefabCreator.Create<GameObject>(relativePrefabPathWithinResources);
             _mapObjectStitcher.Stitch(
                 gameObject,
                 unityGameObject,
