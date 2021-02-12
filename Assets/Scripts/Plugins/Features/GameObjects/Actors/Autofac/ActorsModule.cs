@@ -13,7 +13,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             base.Load(builder);
 
             builder
-                .RegisterType<AdditionalActorBehaviorsProvider>()
+                .RegisterType<ActorBehaviorsProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

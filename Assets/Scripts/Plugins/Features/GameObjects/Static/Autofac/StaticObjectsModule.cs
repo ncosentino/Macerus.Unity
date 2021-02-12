@@ -9,7 +9,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Autofac
             base.Load(builder);
 
             builder
-                .RegisterType<StaticGameObjectRepository>()
+                .RegisterType<StaticGameObjectBehaviorsProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }
