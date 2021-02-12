@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Unity.GameObjects;
+﻿using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
+using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Inventory

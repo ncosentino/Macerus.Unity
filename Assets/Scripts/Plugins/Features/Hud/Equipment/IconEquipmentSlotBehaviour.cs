@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Linq;
+
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.Resources.Sprites;
+
 using Macerus.Plugins.Features.GameObjects.Items.Behaviors;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Events;
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 using UnityEngine.UI;
 

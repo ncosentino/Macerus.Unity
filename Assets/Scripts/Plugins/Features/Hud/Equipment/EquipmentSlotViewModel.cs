@@ -1,3 +1,5 @@
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
+
 using ProjectXyz.Api.Framework;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Equipment

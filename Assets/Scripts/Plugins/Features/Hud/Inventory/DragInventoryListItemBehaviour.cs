@@ -1,5 +1,8 @@
-﻿using Assets.Scripts.Unity.GameObjects;
+﻿using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
+using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Framework.Contracts;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -53,7 +56,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                     .SetParent(InventoryGameObject.transform);
             }
 
-            // TODO: inject an interface backed by unity Input.mousePosition for this
+            // FIXME: inject an interface backed by unity Input.mousePosition for this
             _dragObject
                 .GameObject
                 .transform

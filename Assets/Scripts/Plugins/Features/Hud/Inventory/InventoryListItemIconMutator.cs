@@ -1,6 +1,10 @@
 ﻿using System.Linq;
+
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.Resources.Sprites;
+
 using Macerus.Plugins.Features.GameObjects.Items.Behaviors;
+
 using ProjectXyz.Api.GameObjects;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Inventory

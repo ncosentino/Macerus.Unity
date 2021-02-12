@@ -1,4 +1,6 @@
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.Resources;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 

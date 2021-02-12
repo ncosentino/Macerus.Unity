@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;

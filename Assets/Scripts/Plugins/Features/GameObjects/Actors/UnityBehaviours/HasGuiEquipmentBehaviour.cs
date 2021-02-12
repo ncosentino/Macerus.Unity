@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Scripts.Plugins.Features.Hud.Equipment;
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Framework.Contracts;

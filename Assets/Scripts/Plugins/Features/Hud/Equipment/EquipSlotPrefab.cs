@@ -1,5 +1,8 @@
 ﻿using System;
+
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.GameObjects;
+
 using UnityEngine;
 using UnityEngine.UI;
 

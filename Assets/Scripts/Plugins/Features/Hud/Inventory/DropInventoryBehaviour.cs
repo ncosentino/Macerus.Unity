@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
-using Assets.Scripts.Plugins.Features.Hud.Equipment;
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -11,7 +12,8 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
 {
     public class DropInventoryBehaviour :
         MonoBehaviour,
-        IDropHandler, IDropInventoryBehaviour
+        IDropHandler,
+        IDropInventoryBehaviour
     {
         public IItemContainerBehavior ItemContainerBehavior { get; set; }
 

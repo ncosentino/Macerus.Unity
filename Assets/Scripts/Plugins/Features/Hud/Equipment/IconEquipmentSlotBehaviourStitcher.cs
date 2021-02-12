@@ -1,6 +1,9 @@
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.Resources.Sprites;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Equipment

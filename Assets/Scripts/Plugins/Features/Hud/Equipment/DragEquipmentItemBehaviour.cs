@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Plugins.Features.Hud.Inventory;
+﻿using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
 

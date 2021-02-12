@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Common;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Api.Framework;

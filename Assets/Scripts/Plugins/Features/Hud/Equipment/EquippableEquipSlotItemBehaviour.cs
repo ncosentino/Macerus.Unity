@@ -1,20 +1,12 @@
-﻿using Assets.Scripts.Unity.Resources;
+﻿using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 {
-    public sealed class EquippableEquipSlotItemBehaviourStitcher
-    {
-        public IReadOnlyEquippableEquipSlotItemBehaviour Attach(IEquipSlotPrefab equipSlot)
-        {
-            var equippableEquipSlotItemBehaviour = equipSlot.AddComponent<EquippableEquipSlotItemBehaviour>();
-            // TODO: stitch the things
-            return equippableEquipSlotItemBehaviour;
-        }
-    }
-
     public sealed class EquippableEquipSlotItemBehaviour :
         MonoBehaviour,
         IEquippableEquipSlotItemBehaviour

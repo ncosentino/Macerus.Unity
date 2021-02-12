@@ -1,4 +1,4 @@
-using Assets.Scripts.Plugins.Features.Hud.Inventory;
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Framework.ViewWelding.Api;

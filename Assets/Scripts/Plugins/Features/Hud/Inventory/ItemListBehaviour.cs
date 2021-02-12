@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
+
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Inventory

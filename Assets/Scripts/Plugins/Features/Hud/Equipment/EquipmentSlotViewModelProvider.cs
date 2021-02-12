@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
+
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Equipment
