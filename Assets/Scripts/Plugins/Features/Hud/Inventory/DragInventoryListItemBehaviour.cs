@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Resources;
 
 using ProjectXyz.Framework.Contracts;
 
@@ -50,10 +51,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             if (_dragObject == null)
             {
                 _dragObject = DragItemFactory.Create(InventoryListItem.Icon);
-                _dragObject
-                    .GameObject
-                    .transform
-                    .SetParent(InventoryGameObject.transform);
+                _dragObject.SetParent(InventoryGameObject.transform);
             }
 
             // FIXME: inject an interface backed by unity Input.mousePosition for this
