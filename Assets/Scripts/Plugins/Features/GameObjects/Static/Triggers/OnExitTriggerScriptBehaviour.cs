@@ -5,7 +5,7 @@ using ProjectXyz.Api.Framework;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Plugins.Features.GameObjects.Static
+namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
 {
     public sealed class OnExitTriggerScriptBehaviour :
         MonoBehaviour,

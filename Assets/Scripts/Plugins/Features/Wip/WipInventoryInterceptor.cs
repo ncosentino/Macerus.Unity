@@ -1,12 +1,16 @@
 ﻿using System.Linq;
-using Assets.Scripts.Scenes.Explore.GameObjects;
+
+using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Items.Api.Generation;
 using ProjectXyz.Shared.Framework;
 using ProjectXyz.Shared.Game.GameObjects.Generation;
 using ProjectXyz.Shared.Game.GameObjects.Generation.Attributes;
+
 using UnityEngine;
+
 using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Plugins.Features.Wip

@@ -1,8 +1,11 @@
-using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
+using Assets.Scripts.Plugins.Features.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
+
 using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours

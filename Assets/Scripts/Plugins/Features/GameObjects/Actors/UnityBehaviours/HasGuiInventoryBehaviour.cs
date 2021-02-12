@@ -1,11 +1,13 @@
-﻿using System;
-using System.Linq;
-using Assets.Scripts.Scenes.Explore.Gui.Hud.Inventory;
+﻿using System.Linq;
+
+using Assets.Scripts.Plugins.Features.Hud.Inventory;
 using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours

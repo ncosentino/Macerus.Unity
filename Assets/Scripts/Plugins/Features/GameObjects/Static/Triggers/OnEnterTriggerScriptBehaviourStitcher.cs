@@ -4,7 +4,7 @@ using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Plugins.Features.GameObjects.Static
+namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
 {
     public sealed class OnEnterTriggerScriptBehaviourStitcher : IOnEnterTriggerScriptBehaviourStitcher
     {

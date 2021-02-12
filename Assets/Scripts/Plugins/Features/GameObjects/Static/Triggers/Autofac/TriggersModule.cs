@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Autofac
+namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers.Autofac
 {
     public sealed class TriggersModule : Module
     {

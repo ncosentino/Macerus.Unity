@@ -1,8 +1,11 @@
 ﻿using Assets.Scripts.Api.Scenes.Explore;
-using Assets.Scripts.Scenes.Explore.GameObjects;
+using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Unity.GameObjects;
+
 using Macerus.Api.Behaviors;
+
 using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
@@ -28,7 +31,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             playerInputControlsBehaviour.Logger = _logger;
             playerInputControlsBehaviour.KeyboardControls = _keyboardControls;
             playerInputControlsBehaviour.MovementBehavior = gameObject
-                .GetRequiredComponent<HasGameObjectBehaviour>()
+                .GetRequiredComponent<IReadOnlyHasGameObject>()
                 .GameObject
                 .GetOnly<IMovementBehavior>();
         }

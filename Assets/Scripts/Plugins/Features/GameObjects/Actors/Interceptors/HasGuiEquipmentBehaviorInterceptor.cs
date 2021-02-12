@@ -1,8 +1,11 @@
 ﻿using System.Linq;
+
 using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
-using Assets.Scripts.Scenes.Explore.GameObjects;
+using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors

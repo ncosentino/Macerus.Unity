@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 
+using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Input;
-using Assets.Scripts.Scenes.Explore.Maps;
 using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Game.Interface.Mapping;

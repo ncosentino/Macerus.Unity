@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment;
+
+using Assets.Scripts.Plugins.Features.Hud.Equipment;
 using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Framework.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours

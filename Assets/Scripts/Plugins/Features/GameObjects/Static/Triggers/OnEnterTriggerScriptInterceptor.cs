@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-using Assets.Scripts.Scenes.Explore.GameObjects;
+using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using Macerus.Plugins.Features.GameObjects.Static.Api;
 
@@ -11,7 +11,7 @@ using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Plugins.Features.GameObjects.Static
+namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
 {
     public sealed class OnEnterTriggerScriptInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {

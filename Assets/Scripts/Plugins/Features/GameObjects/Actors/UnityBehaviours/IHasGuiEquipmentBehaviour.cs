@@ -1,5 +1,6 @@
-﻿using Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment;
+﻿using Assets.Scripts.Plugins.Features.Hud.Equipment;
 using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours

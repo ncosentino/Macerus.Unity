@@ -1,7 +1,10 @@
-using Assets.Scripts.Scenes.Explore.Gui.Hud.Equipment;
+using Assets.Scripts.Plugins.Features.Hud.Equipment;
 using Assets.Scripts.Unity.GameObjects;
+
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
+
 using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours

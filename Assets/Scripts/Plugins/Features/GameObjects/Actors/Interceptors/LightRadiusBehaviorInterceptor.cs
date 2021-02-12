@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Assets.Scripts.Scenes.Explore.GameObjects;
+﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Unity.Resources;
 
 using ProjectXyz.Api.Enchantments;
