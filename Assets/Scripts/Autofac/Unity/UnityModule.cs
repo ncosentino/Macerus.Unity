@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts.Behaviours.Threading;
 using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Threading;
+
 using Autofac;
 
 namespace Assets.Scripts.Autofac.Unity
@@ -28,6 +30,10 @@ namespace Assets.Scripts.Autofac.Unity
                 .SingleInstance();
             builder
                 .Register(x => new Dispatcher(() => DispatcherBehaviour.Instance))
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<MouseInput>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }
