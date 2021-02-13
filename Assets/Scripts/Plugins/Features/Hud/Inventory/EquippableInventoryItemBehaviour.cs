@@ -1,6 +1,7 @@
-﻿using System;
-
+﻿
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
+
+using NexusLabs.Contracts;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
@@ -16,7 +17,17 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
     {
         public ICanBeEquippedBehavior CanBeEquippedBehavior { get; set; }
 
-        public Func<IItemContainerBehavior> SourceItemContainerCallback { get; set; }
+        public IReadOnlyInventoryItemBehaviour InventoryItemBehaviour { get; set; }
+
+        public void Start()
+        {
+            Contract.RequiresNotNull(
+                CanBeEquippedBehavior,
+                $"{nameof(CanBeEquippedBehavior)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                InventoryItemBehaviour,
+                $"{nameof(InventoryItemBehaviour)} was not set on '{gameObject}.{this}'.");
+        }
 
         public bool CanPrepareForEquipping(
             ICanEquipBehavior canEquipBehavior,
@@ -29,7 +40,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             // FIXME: this logic does *NOT* handle the situation where we
             // cannot equip something once it's removed from the source:
             // i.e. diablo 2 style "stats while in inventory" enchanment types
-            if (!SourceItemContainerCallback().TryRemoveItem((IGameObject)CanBeEquippedBehavior.Owner)) // FIXME: barf at this casting?
+            if (!InventoryItemBehaviour.TryRemoveFromSourceContainer())
             {
                 return false;
             }

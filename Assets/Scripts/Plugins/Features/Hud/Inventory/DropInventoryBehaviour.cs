@@ -64,6 +64,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                     out var canBeEquippedBehavior))
             {
                 Debug.Log($"Cannot unequip '{item}' to add to '{ItemContainerBehavior}'.");
+                return;
             }
 
             if (!ItemContainerBehavior.TryAddItem(item))

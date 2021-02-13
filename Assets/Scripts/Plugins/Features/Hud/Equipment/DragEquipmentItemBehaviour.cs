@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
+﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources;
@@ -65,8 +66,55 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
         public void OnEndDrag(PointerEventData eventData)
         {
             Debug.Log("ON END DRAG");
+
+            var droppedOnCanvas = eventData
+                .pointerCurrentRaycast
+                .gameObject == null;
+            if (droppedOnCanvas)
+            {
+                TryUnequipAndDropItem(eventData);
+            }
+
             ObjectDestroyer.Destroy(_dragObject.GameObject);
             _dragObject = null;
+        }
+
+        private bool TryUnequipAndDropItem(PointerEventData eventData)
+        {
+            var dropEquipmentSlotBehaviour = eventData
+                .pointerDrag
+                .GetComponent<IDropEquipmentSlotBehaviour>();
+            Contract.RequiresNotNull(
+                dropEquipmentSlotBehaviour,
+                $"'{eventData.pointerDrag}' does not have " +
+                $"'{nameof(IReadOnlyHasGameObject)}' as a component");
+
+            var item = eventData
+                .pointerDrag
+                .GetComponent<IReadOnlyHasGameObject>()
+                ?.GameObject;
+            Contract.RequiresNotNull(
+                item,
+                $"'{dropEquipmentSlotBehaviour}' does not have " +
+                $"'{nameof(IReadOnlyHasGameObject)}' as a sibling component " +
+                $"with a game object set.");
+
+            // FIXME: check if we can drop the item here
+
+            if (!dropEquipmentSlotBehaviour
+                .CanEquipBehavior
+                .TryUnequip(
+                    dropEquipmentSlotBehaviour.TargetEquipSlotId,
+                    out var canBeEquippedBehavior))
+            {
+                Debug.Log($"Cannot unequip '{item}' to drop.");
+                return false;
+            }
+
+            // FIXME: actually put the item on the ground?
+
+            Debug.Log($"Unequipped '{item}' and DESTROYED it.");
+            return true;
         }
     }
 }

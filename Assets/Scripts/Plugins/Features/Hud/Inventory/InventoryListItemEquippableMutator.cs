@@ -15,6 +15,18 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             IInventoryListItemPrefab inventoryListItem,
             IGameObject item)
         {
+            var inventoryItemBehaviour = inventoryListItem
+                .AddComponent<InventoryItemBehaviour>();
+            inventoryItemBehaviour.InventoryItem = item;
+            inventoryItemBehaviour.SourceItemContainerCallback = () =>
+            {
+                var sourceItemContainer = inventoryListItem
+                    .GameObject
+                    .GetRequiredComponent<ISourceItemContainerBehaviour>()
+                    .SourceItemContainer;
+                return sourceItemContainer;
+            };
+
             var canBeEquippedBehavior = item
                 .Get<ICanBeEquippedBehavior>()
                 .SingleOrDefault();
@@ -23,16 +35,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                 return;
             }
 
-            var equippableInventoryItemBehaviour =
-                inventoryListItem.AddComponent<EquippableInventoryItemBehaviour>();
-            equippableInventoryItemBehaviour.SourceItemContainerCallback = () =>
-            {
-                var sourceItemContainer = inventoryListItem
-                    .GameObject
-                    .GetRequiredComponent<ISourceItemContainerBehaviour>()
-                    .SourceItemContainer;
-                return sourceItemContainer;
-            };
+            var equippableInventoryItemBehaviour = inventoryListItem
+                .AddComponent<EquippableInventoryItemBehaviour>();
+            equippableInventoryItemBehaviour.InventoryItemBehaviour = inventoryItemBehaviour;
             equippableInventoryItemBehaviour.CanBeEquippedBehavior = canBeEquippedBehavior;
         }
     }
