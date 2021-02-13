@@ -9,6 +9,6 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
 
         new IMapProvider MapProvider { get; set; }
 
-        new IExploreMapFormatter ExploreMapFormatter { get; set; }
+        new IMapFormatter ExploreMapFormatter { get; set; }
     }
 }

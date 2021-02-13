@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 

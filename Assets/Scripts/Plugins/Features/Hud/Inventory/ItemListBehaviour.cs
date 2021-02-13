@@ -2,7 +2,7 @@
 
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;

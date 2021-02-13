@@ -1,3 +1,4 @@
+using Assets.Scripts.Plugins.Features.Hud.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 
@@ -14,5 +15,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment.Api
         IObjectDestroyer ObjectDestroyer { get; }
 
         IEquipSlotPrefab EquipSlot { get; }
+
+        IDropItemHandler DropItemHandler { get; }
     }
 }

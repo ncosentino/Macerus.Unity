@@ -27,7 +27,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<ExploreMapFormatter>()
+                .RegisterType<MapFormatter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

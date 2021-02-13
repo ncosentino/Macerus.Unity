@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+
+using NexusLabs.Contracts;
+
 using UnityEngine;
 
-namespace Assets.Scripts.Unity.Resources
+namespace Assets.Scripts.Unity.Resources.Prefabs
 {
     using Object = UnityEngine.Object;
 
@@ -28,10 +31,24 @@ namespace Assets.Scripts.Unity.Resources
         }
 
         public void Register<TPrefab>(PrefabFactoryDelegate factory)
-            where TPrefab : IPrefab
+            where TPrefab : IPrefab => Register(
+                typeof(TPrefab),
+                factory);
+
+        public void Register(Type type, PrefabFactoryDelegate factory)
         {
-            // explicit add so we explode if one exists
-            _mapping.Add(typeof(TPrefab), factory);
+            Contract.Requires(
+                typeof(IPrefab).IsAssignableFrom(type),
+                $"'{type}' must inherit from '{typeof(IPrefab)}'.");
+
+            if (_mapping.ContainsKey(type))
+            {
+                throw new InvalidOperationException(
+                    $"Cannot register for type '{type}' because it has already " +
+                    $"been registered.");
+            }
+
+            _mapping[type] = factory;
         }
 
         public TPrefab CreatePrefab<TPrefab>(string relativePrefabPathWithinResources)

@@ -1,5 +1,5 @@
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 

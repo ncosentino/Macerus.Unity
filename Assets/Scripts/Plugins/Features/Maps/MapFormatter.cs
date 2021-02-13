@@ -16,7 +16,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 {
     using ILogger = ProjectXyz.Api.Logging.ILogger;
 
-    public sealed class ExploreMapFormatter : IExploreMapFormatter
+    public sealed class MapFormatter : IMapFormatter
     {
         private const string GAME_OBJECT_LAYER_NAME = "Game Objects";
 
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
         private readonly ILogger _logger;
 
-        public ExploreMapFormatter(
+        public MapFormatter(
             ITileLoader tileLoader,
             IObjectDestroyer objectDestroyer,
             IUnityGameObjectRepository unityGameObjectRepository,

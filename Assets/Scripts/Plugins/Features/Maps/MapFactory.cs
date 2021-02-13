@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Plugins.Features.Maps.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using UnityEngine;
 

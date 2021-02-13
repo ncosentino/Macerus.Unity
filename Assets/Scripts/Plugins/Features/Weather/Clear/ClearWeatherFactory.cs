@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Framework;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Weather.Clear

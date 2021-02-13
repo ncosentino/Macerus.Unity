@@ -1,6 +1,8 @@
-﻿using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
+﻿using Assets.Scripts.Plugins.Features.Hud.Api;
+using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Input;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Framework.Contracts;
 
@@ -25,6 +27,10 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
 
         public IInventoryListItemPrefab InventoryListItem { get; set; }
 
+        public IDropItemHandler DropItemHandler { get; set; }
+
+        public IMouseInput MouseInput { get; set; }
+
         public void Start()
         {
             Contract.RequiresNotNull(
@@ -39,6 +45,12 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             Contract.RequiresNotNull(
                 InventoryListItem,
                 $"{nameof(InventoryListItem)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                DropItemHandler,
+                $"{nameof(DropItemHandler)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                MouseInput,
+                $"{nameof(MouseInput)} was not set on '{gameObject}.{this}'.");
         }
 
         public void OnDestroy()
@@ -54,17 +66,14 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                 _dragObject.SetParent(InventoryGameObject.transform);
             }
 
-            // FIXME: inject an interface backed by unity Input.mousePosition for this
             _dragObject
                 .GameObject
                 .transform
-                .position = UnityEngine.Input.mousePosition;
+                .position = MouseInput.Position;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("ON END DRAG");
-
             var droppedOnCanvas = eventData
                 .pointerCurrentRaycast
                 .gameObject == null;
@@ -82,17 +91,25 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             var inventoryItemBehaviour = eventData
                 .pointerDrag
                 .GetComponent<IInventoryItemBehaviour>();
-            if (!inventoryItemBehaviour.TryRemoveFromSourceContainer())
-            {
-                Debug.Log(
-                    $"Could not remove '{inventoryItemBehaviour.InventoryItem}' " +
-                    $"from its container.");
-                return false;
-            }
+            Contract.RequiresNotNull(
+                inventoryItemBehaviour,
+                $"'{eventData.pointerDrag}' does not have " +
+                $"'{nameof(inventoryItemBehaviour)}' as a component");
 
-            // FIXME: actually drop the item
-            Debug.Log($"{inventoryItemBehaviour.InventoryItem} was DESTROYED.");
-            return true;
+            return DropItemHandler.TryDropItem(
+                inventoryItemBehaviour.InventoryItem,
+                () =>
+                {
+                    if (!inventoryItemBehaviour.TryRemoveFromSourceContainer())
+                    {
+                        Debug.Log(
+                            $"Could not remove '{inventoryItemBehaviour.InventoryItem}' " +
+                            $"from its container.");
+                        return false;
+                    }
+
+                    return true;
+                });
         }
     }
 }

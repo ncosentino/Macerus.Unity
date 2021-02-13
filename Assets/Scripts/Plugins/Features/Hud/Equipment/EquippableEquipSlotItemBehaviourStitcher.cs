@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 {

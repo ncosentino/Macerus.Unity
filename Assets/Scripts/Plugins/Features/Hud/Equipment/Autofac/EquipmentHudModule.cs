@@ -1,12 +1,12 @@
 ﻿using Assets.Scripts.Plugins.Features.Hud.Equipment;
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using Autofac;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Autofac
 {
-    public sealed class EquipmentHudeModule : Module
+    public sealed class EquipmentHudModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

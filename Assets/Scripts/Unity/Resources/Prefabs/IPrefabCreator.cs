@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Unity.Resources
+namespace Assets.Scripts.Unity.Resources.Prefabs
 {
     public interface IPrefabCreator
     {
@@ -8,14 +8,6 @@ namespace Assets.Scripts.Unity.Resources
             where TGameObject : Object;
 
         TPrefab CreatePrefab<TPrefab>(string relativePrefabPathWithinResources)
-            where TPrefab : IPrefab;
-    }
-
-    public delegate IPrefab PrefabFactoryDelegate(GameObject gameObject);
-
-    public interface IPrefabCreatorRegistrar
-    {
-        void Register<TPrefab>(PrefabFactoryDelegate factory)
             where TPrefab : IPrefab;
     }
 }

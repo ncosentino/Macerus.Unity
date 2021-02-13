@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 using Assets.Scripts.Unity.Resources.Sprites;
+
 using Autofac;
 
 using ProjectXyz.Api.Framework;

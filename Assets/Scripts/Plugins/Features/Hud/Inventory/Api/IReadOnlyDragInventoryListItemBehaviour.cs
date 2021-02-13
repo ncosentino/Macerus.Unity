@@ -1,4 +1,7 @@
-﻿using Assets.Scripts.Unity.GameObjects;
+﻿using Assets.Scripts.Plugins.Features.Hud.Api;
+using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Input;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Inventory.Api
@@ -12,5 +15,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory.Api
         IObjectDestroyer ObjectDestroyer { get; }
 
         IInventoryListItemPrefab InventoryListItem { get; }
+
+        IDropItemHandler DropItemHandler { get; }
+
+        IMouseInput MouseInput { get; }
     }
 }

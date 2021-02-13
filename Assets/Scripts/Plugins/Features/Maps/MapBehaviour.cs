@@ -20,7 +20,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         public IMapProvider MapProvider { get; set; }
 
-        public IExploreMapFormatter ExploreMapFormatter { get; set; }
+        public IMapFormatter ExploreMapFormatter { get; set; }
 
         private void Start()
         {

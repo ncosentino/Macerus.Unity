@@ -1,8 +1,9 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Plugins.Features.Hud.Api;
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Framework.Contracts;
 
@@ -27,6 +28,8 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
         public IEquipSlotPrefab EquipSlot { get; set; }
 
+        public IDropItemHandler DropItemHandler { get; set; }
+
         public void Start()
         {
             Contract.RequiresNotNull(
@@ -41,6 +44,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
             Contract.RequiresNotNull(
                 ObjectDestroyer,
                 $"{nameof(ObjectDestroyer)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                DropItemHandler,
+                $"{nameof(DropItemHandler)} was not set on '{gameObject}.{this}'.");
         }
 
         public void OnDestroy()
@@ -65,8 +71,6 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("ON END DRAG");
-
             var droppedOnCanvas = eventData
                 .pointerCurrentRaycast
                 .gameObject == null;
@@ -99,22 +103,22 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
                 $"'{nameof(IReadOnlyHasGameObject)}' as a sibling component " +
                 $"with a game object set.");
 
-            // FIXME: check if we can drop the item here
+            return DropItemHandler.TryDropItem(
+                item,
+                () =>
+                {
+                    if (!dropEquipmentSlotBehaviour
+                        .CanEquipBehavior
+                        .TryUnequip(
+                            dropEquipmentSlotBehaviour.TargetEquipSlotId,
+                            out var canBeEquippedBehavior))
+                    {
+                        Debug.Log($"Cannot unequip '{item}' to drop.");
+                        return false;
+                    }
 
-            if (!dropEquipmentSlotBehaviour
-                .CanEquipBehavior
-                .TryUnequip(
-                    dropEquipmentSlotBehaviour.TargetEquipSlotId,
-                    out var canBeEquippedBehavior))
-            {
-                Debug.Log($"Cannot unequip '{item}' to drop.");
-                return false;
-            }
-
-            // FIXME: actually put the item on the ground?
-
-            Debug.Log($"Unequipped '{item}' and DESTROYED it.");
-            return true;
+                    return true;
+                });
         }
     }
 }

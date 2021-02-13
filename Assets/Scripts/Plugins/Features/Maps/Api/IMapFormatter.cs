@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
-    public interface IExploreMapFormatter
+    public interface IMapFormatter
     {
         void FormatMap(
             GameObject mapObject,

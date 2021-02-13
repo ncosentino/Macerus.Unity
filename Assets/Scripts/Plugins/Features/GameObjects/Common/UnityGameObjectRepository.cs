@@ -1,6 +1,6 @@
 using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Api.GameObjects;
 

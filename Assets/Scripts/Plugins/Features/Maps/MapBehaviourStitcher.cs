@@ -12,14 +12,14 @@ namespace Assets.Scripts.Plugins.Features.Maps
     public sealed class MapBehaviourStitcher : IMapBehaviourStitcher
     {
         private readonly IMapProvider _mapProvider;
-        private readonly IExploreMapFormatter _exploreMapFormatter;
+        private readonly IMapFormatter _exploreMapFormatter;
         private readonly IGameObjectManager _gameObjectManager;
         private readonly ILogger _logger;
 
         public MapBehaviourStitcher(
             IMapProvider mapProvider,
             IGameObjectManager gameObjectManager,
-            IExploreMapFormatter exploreMapFormatter,
+            IMapFormatter exploreMapFormatter,
             ILogger logger)
         {
             _mapProvider = mapProvider;

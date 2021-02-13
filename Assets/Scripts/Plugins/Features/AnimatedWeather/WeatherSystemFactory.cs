@@ -1,4 +1,5 @@
-using Assets.Scripts.Unity.Resources;
+using Assets.Scripts.Unity.Resources.Prefabs;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather

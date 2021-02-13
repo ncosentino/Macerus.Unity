@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Unity.Resources
+namespace Assets.Scripts.Unity.Resources.Prefabs
 {
-    public interface IPrefab
-    {
-        GameObject GameObject { get; }
-    }
-
     public static class IPrefabExtensionMethods
     {
         public static TComponent AddComponent<TComponent>(this IPrefab prefab)
