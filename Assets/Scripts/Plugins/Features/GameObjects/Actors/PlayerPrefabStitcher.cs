@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
+using Assets.Scripts.Scenes.Explore.Camera;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Framework;
@@ -24,6 +25,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
             IIdentifier prefabResourceId)
         {
             _playerInputControlsBehaviourStitcher.Attach(gameObject);
+            gameObject.AddComponent<CameraTargetBehaviour>();
+            gameObject.AddComponent<PlayerInteractionDetectionBehavior>();
         }
     }
 }

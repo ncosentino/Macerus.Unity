@@ -17,11 +17,18 @@ namespace Assets.Scripts // shortened namespace for ease of ue
     {
         public static bool IsPlayerControlled(this GameObject unityGameObject)
         {
-            var playerControlled = unityGameObject
+            var playerControlled = unityGameObject.Has<IPlayerControlledBehavior>();
+            return playerControlled;
+        }
+
+        public static bool Has<T>(this GameObject unityGameObject)
+            where T : IBehavior
+        {
+            var result = unityGameObject
                 .GetComponent<IHasGameObject>()
                 ?.GameObject
-                ?.Has<IPlayerControlledBehavior>() == true;
-            return playerControlled;
+                .Has<T>() == true;
+            return result;
         }
 
         public static IEnumerable<T> Get<T>(this GameObject unityGameObject)
