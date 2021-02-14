@@ -51,14 +51,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
                 (float)WorldLocationBehavior.Y,
                 -1);
             
-            // FIXME: this is a total hack but...
-            var boxCollider = gameObject.GetComponent<BoxCollider2D>();
-            if (boxCollider != null)
-            {
-                boxCollider.size = new Vector2(
-                    (float)WorldLocationBehavior.Width,
-                    (float)WorldLocationBehavior.Height);
-            }
+            gameObject.transform.localScale = new Vector2(
+                (float)WorldLocationBehavior.Width,
+                (float)WorldLocationBehavior.Height);
         }
 
         private void SyncUnityToMacerusWorldLocation()
