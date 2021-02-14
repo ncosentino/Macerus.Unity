@@ -4,6 +4,10 @@ using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Resources.Prefabs;
 
+using Macerus.Api.Behaviors;
+using Macerus.Game.GameObjects;
+
+using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;
 
 using UnityEngine;
@@ -31,6 +35,8 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
 
         public IMouseInput MouseInput { get; set; }
 
+        public IGameObjectManager GameObjectManager { get; set; }
+
         public void Start()
         {
             Contract.RequiresNotNull(
@@ -51,6 +57,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             Contract.RequiresNotNull(
                 MouseInput,
                 $"{nameof(MouseInput)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                GameObjectManager,
+                $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
         }
 
         public void OnDestroy()
@@ -96,7 +105,13 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                 $"'{eventData.pointerDrag}' does not have " +
                 $"'{nameof(inventoryItemBehaviour)}' as a component");
 
+            var playerLocation = GameObjectManager
+                .GetPlayer()
+                .GetOnly<IReadOnlyWorldLocationBehavior>();
+
             return DropItemHandler.TryDropItem(
+                playerLocation.X,
+                playerLocation.Y,
                 inventoryItemBehaviour.InventoryItem,
                 () =>
                 {

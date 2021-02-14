@@ -14,7 +14,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         new IObjectDestroyer ObjectDestroyer { get; set; }
 
-        new IGameObjectManager GameObjectManager { get; set; }
+        new IUnityGameObjectManager GameObjectManager { get; set; }
 
         new IViewWelderFactory ViewWelderFactory { get; set; }
     }

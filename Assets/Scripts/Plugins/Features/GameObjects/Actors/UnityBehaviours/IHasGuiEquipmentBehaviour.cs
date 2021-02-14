@@ -9,7 +9,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
     {
         new IEquipmentSlotsFactory EquipmentSlotsFactory { get; set; }
 
-        new IGameObjectManager GameObjectManager { get; set; }
+        new IUnityGameObjectManager GameObjectManager { get; set; }
 
         new IObjectDestroyer ObjectDestroyer { get; set; }
 

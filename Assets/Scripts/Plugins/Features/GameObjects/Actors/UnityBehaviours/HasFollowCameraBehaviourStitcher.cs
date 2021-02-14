@@ -8,12 +8,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 {
     public sealed class HasFollowCameraBehaviourStitcher : IHasFollowCameraBehaviourStitcher
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly ICameraFactory _cameraFactory;
         private readonly IObjectDestroyer _objectDestroyer;
 
         public HasFollowCameraBehaviourStitcher(
-            IGameObjectManager gameObjectManager,
+            IUnityGameObjectManager gameObjectManager,
             ICameraFactory cameraFactory,
             IObjectDestroyer objectDestroyer)
         {

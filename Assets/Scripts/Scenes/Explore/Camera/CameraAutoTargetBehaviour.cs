@@ -12,7 +12,7 @@ namespace Assets.Scripts.Scenes.Explore.Camera
     {
         private float _triggerTime;
 
-        public IGameObjectManager GameObjectManager { get; set; }
+        public IUnityGameObjectManager GameObjectManager { get; set; }
 
         public ICameraTargetting CameraTargetting { get; set; }
 

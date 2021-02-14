@@ -7,9 +7,9 @@ namespace Assets.Scripts.Scenes.Explore.Gui
 {
     public sealed class GuiCanvasProvider : IGuiCanvasProvider
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
 
-        public GuiCanvasProvider(IGameObjectManager gameObjectManager)
+        public GuiCanvasProvider(IUnityGameObjectManager gameObjectManager)
         {
             _gameObjectManager = gameObjectManager;
         }

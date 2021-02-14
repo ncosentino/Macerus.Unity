@@ -8,12 +8,12 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
 
     public sealed class DebugConsoleManager : IDebugConsoleManager
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly ILogger _logger;
 
         public DebugConsoleManager(
-            IGameObjectManager gameObjectManager,
+            IUnityGameObjectManager gameObjectManager,
             IObjectDestroyer objectDestroyer,
             ILogger logger)
         {

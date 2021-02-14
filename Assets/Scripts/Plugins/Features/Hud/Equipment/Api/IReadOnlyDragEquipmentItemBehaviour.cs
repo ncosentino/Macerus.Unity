@@ -1,6 +1,9 @@
 using Assets.Scripts.Plugins.Features.Hud.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Input;
+
+using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;
 
@@ -17,5 +20,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment.Api
         IEquipSlotPrefab EquipSlot { get; }
 
         IDropItemHandler DropItemHandler { get; }
+
+        IGameObjectManager GameObjectManager { get; }
+
+        IMouseInput MouseInput { get; }
     }
 }

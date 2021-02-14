@@ -4,7 +4,7 @@ namespace Assets.Scripts.Scenes.Explore.Camera
 {
     public interface IReadOnlyCameraAutoTargetBehaviour
     {
-        IGameObjectManager GameObjectManager { get;  }
+        IUnityGameObjectManager GameObjectManager { get;  }
 
         ICameraTargetting CameraTargetting { get;  }
     }

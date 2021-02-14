@@ -22,6 +22,8 @@ namespace Assets.Scripts.Plugins.Features.Hud
         }
 
         public bool TryDropItem(
+            double worldX,
+            double worldY,
             IGameObject item,
             Func<bool> tryRemoveItemCallback)
         {
@@ -32,10 +34,9 @@ namespace Assets.Scripts.Plugins.Features.Hud
                 return false;
             }
 
-            // FIXME: get the placement!
             var loot = _lootDropFactory.CreateLoot(
-                39,
-                -16,
+                worldX,
+                worldY,
                 item);
             _gameObjectManager.MarkForAddition(loot);
 

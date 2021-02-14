@@ -6,9 +6,9 @@ namespace Assets.Scripts.Scenes.Explore.Camera
 {
     public sealed class CameraAutoTargetBehaviourStitcher : ICameraAutoTargetBehaviourStitcher
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
 
-        public CameraAutoTargetBehaviourStitcher(IGameObjectManager gameObjectManager)
+        public CameraAutoTargetBehaviourStitcher(IUnityGameObjectManager gameObjectManager)
         {
             _gameObjectManager = gameObjectManager;
         }

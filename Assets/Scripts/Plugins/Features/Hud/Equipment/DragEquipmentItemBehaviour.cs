@@ -3,8 +3,13 @@ using Assets.Scripts.Plugins.Features.Hud.Api;
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Resources.Prefabs;
 
+using Macerus.Api.Behaviors;
+using Macerus.Game.GameObjects;
+
+using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.Contracts;
 
 using UnityEngine;
@@ -30,6 +35,10 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
         public IDropItemHandler DropItemHandler { get; set; }
 
+        public IGameObjectManager GameObjectManager { get; set; }
+
+        public IMouseInput MouseInput { get; set; }
+
         public void Start()
         {
             Contract.RequiresNotNull(
@@ -47,6 +56,12 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
             Contract.RequiresNotNull(
                 DropItemHandler,
                 $"{nameof(DropItemHandler)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                GameObjectManager,
+                $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                MouseInput,
+                $"{nameof(MouseInput)} was not set on '{gameObject}.{this}'.");
         }
 
         public void OnDestroy()
@@ -62,11 +77,10 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
                 _dragObject.SetParent(InventoryGameObject.transform);
             }
 
-            // TODO: inject an interface backed by unity Input.mousePosition for this
             _dragObject
                 .GameObject
                 .transform
-                .position = UnityEngine.Input.mousePosition;
+                .position = MouseInput.Position;
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -103,7 +117,13 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
                 $"'{nameof(IReadOnlyHasGameObject)}' as a sibling component " +
                 $"with a game object set.");
 
+            var playerLocation = GameObjectManager
+                .GetPlayer()
+                .GetOnly<IReadOnlyWorldLocationBehavior>();
+
             return DropItemHandler.TryDropItem(
+                playerLocation.X,
+                playerLocation.Y,
                 item,
                 () =>
                 {

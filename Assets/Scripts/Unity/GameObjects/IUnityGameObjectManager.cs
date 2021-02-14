@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Unity.GameObjects
 {
-    public interface IGameObjectManager
+    public interface IUnityGameObjectManager
     {
         IEnumerable<GameObject> FindAll();
 

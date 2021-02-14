@@ -12,12 +12,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
     public sealed class HasGuiEquipmentBehaviourStitcher : IHasGuiEquipmentBehaviourStitcher
     {
         private readonly ILogger _logger;
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly IEquipmentSlotsFactory _equipmentSlotsFactory;
         private readonly IObjectDestroyer _objectDestroyer;
 
         public HasGuiEquipmentBehaviourStitcher(
-            IGameObjectManager gameObjectManager,
+            IUnityGameObjectManager gameObjectManager,
             IEquipmentSlotsFactory equipmentSlotsFactory,
             IObjectDestroyer objectDestroyer,
             ILogger logger)

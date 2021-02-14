@@ -13,13 +13,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
     public sealed class HasGuiInventoryBehaviourStitcher : IHasGuiInventoryBehaviourStitcher
     {
         private readonly ILogger _logger;
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly IItemListFactory _itemListFactory;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IViewWelderFactory _viewWelderFactory;
 
         public HasGuiInventoryBehaviourStitcher(
-            IGameObjectManager gameObjectManager,
+            IUnityGameObjectManager gameObjectManager,
             IItemListFactory itemListFactory,
             IObjectDestroyer objectDestroyer,
             IViewWelderFactory viewWelderFactory,

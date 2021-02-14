@@ -15,12 +15,12 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IKeyboardControls _keyboardControls;
         private readonly ILogger _logger;
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
             IKeyboardControls keyboardControls,
-            IGameObjectManager gameObjectManager,
+            IUnityGameObjectManager gameObjectManager,
             ILogger logger)
         {
             _debugConsoleManager = debugConsoleManager;

@@ -12,7 +12,7 @@ namespace Assets.Scripts.Scenes.Explore
 {
     public sealed class ExploreSetup : IExploreSetup
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly IMapFactory _mapFactory;
         private readonly IGuiInputStitcher _guiInputStitcher;
         private readonly IExploreSceneStartupInterceptorFacade _exploreSceneStartupInterceptorFacade;
@@ -20,7 +20,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IMapManager _mapManager;
 
         public ExploreSetup(
-            IGameObjectManager gameObjectManager,
+            IUnityGameObjectManager gameObjectManager,
             IMapFactory mapFactory,
             IGuiInputStitcher guiInputStitcher,
             IExploreSceneStartupInterceptorFacade exploreSceneStartupInterceptorFacade,

@@ -7,11 +7,11 @@ namespace Assets.Scripts.Unity.GameObjects
 {
     using Object = UnityEngine.Object;
 
-    public sealed class GameObjectManager : IGameObjectManager
+    public sealed class UnityGameObjectManager : IUnityGameObjectManager
     {
         private readonly IObjectDestroyer _objectDestroyer;
 
-        public GameObjectManager(IObjectDestroyer objectDestroyer)
+        public UnityGameObjectManager(IObjectDestroyer objectDestroyer)
         {
             _objectDestroyer = objectDestroyer;
         }

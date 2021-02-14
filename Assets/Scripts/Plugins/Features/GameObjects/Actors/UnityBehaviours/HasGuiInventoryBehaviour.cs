@@ -22,7 +22,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         public IObjectDestroyer ObjectDestroyer { get; set; }
 
-        public IGameObjectManager GameObjectManager { get; set; }
+        public IUnityGameObjectManager GameObjectManager { get; set; }
 
         public IViewWelderFactory ViewWelderFactory { get; set; }
 

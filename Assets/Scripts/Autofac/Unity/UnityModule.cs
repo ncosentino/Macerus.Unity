@@ -21,7 +21,7 @@ namespace Assets.Scripts.Autofac.Unity
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<GameObjectManager>()
+                .RegisterType<UnityGameObjectManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

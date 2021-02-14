@@ -14,7 +14,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         IObjectDestroyer ObjectDestroyer { get; }
 
-        IGameObjectManager GameObjectManager { get; }
+        IUnityGameObjectManager GameObjectManager { get; }
 
         IViewWelderFactory ViewWelderFactory { get; }
     }

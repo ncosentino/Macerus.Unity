@@ -2,6 +2,8 @@
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 
+using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Inventory.Api
@@ -19,5 +21,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory.Api
         IDropItemHandler DropItemHandler { get; }
 
         IMouseInput MouseInput { get; }
+
+        IGameObjectManager GameObjectManager { get; }
     }
 }
