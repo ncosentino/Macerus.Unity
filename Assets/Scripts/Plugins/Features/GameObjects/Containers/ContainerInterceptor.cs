@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using Macerus.Api.Behaviors;
 using Macerus.Game.GameObjects;
+using Macerus.Plugins.Features.GameObjects.Containers.Api;
+
+using NexusLabs.Contracts;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
@@ -43,6 +47,20 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Containers
             {
                 return;
             }
+
+            var containerProperties = gameObject
+                .GetOnly<IReadOnlyContainerPropertiesBehavior>()
+                ?.Properties;
+            Contract.RequiresNotNull(
+                containerProperties,
+                $"'{gameObject}' is expected to have behavior " +
+                $"'{typeof(IReadOnlyContainerPropertiesBehavior)}' with non-" +
+                $"null property collection.");
+
+            var containerPrefab = new ContainerPrefab(unityGameObject);
+            containerPrefab.Collision.enabled = containerProperties
+                .TryGetValue("Collisions", out var collisions) &&
+                Convert.ToBoolean(collisions);
 
             var containerInteractionBehaviour = unityGameObject
                 .AddComponent<ContainerInteractionBehaviour>();
