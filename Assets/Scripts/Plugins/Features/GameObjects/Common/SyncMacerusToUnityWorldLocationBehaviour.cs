@@ -44,7 +44,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             gameObject.transform.position = new Vector3(
                 (float)ObservableWorldLocationBehavior.X,
                 (float)ObservableWorldLocationBehavior.Y,
-                -1);
+                gameObject.transform.position.z);
+
+            gameObject.transform.localScale = new Vector3(
+                (float)ObservableWorldLocationBehavior.Width,
+                (float)ObservableWorldLocationBehavior.Height,
+                gameObject.transform.localScale.z);
         }
 
         private void WorldLocationBehavior_WorldLocationChanged(

@@ -49,11 +49,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             gameObject.transform.position = new Vector3(
                 (float)WorldLocationBehavior.X,
                 (float)WorldLocationBehavior.Y,
-                -1);
+                gameObject.transform.position.z);
             
-            gameObject.transform.localScale = new Vector2(
+            gameObject.transform.localScale = new Vector3(
                 (float)WorldLocationBehavior.Width,
-                (float)WorldLocationBehavior.Height);
+                (float)WorldLocationBehavior.Height,
+                gameObject.transform.localScale.z);
         }
 
         private void SyncUnityToMacerusWorldLocation()
