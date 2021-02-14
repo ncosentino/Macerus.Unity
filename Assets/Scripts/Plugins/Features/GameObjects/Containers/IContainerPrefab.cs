@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Containers
 {
-    public interface ILootPrefab : IPrefab
+    public interface IContainerPrefab : IPrefab
     {
         SpriteRenderer SpriteRenderer { get; }
 

@@ -13,12 +13,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Containers.Autofac
                 .RegisterType<ContainersBehaviorsProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<ContainerInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder
                 .RegisterBuildCallback(c =>
                 {
                     var registrar = c.Resolve<IPrefabCreatorRegistrar>();
-                    registrar.Register<ILootPrefab>(obj => new LootPrefab(obj));
+                    registrar.Register<IContainerPrefab>(obj => new ContainerPrefab(obj));
                 });
         }
     }

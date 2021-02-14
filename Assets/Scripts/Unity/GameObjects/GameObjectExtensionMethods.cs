@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Unity.GameObjects
 {
     public static class GameObjectExtensionMethods
     {
-        #region Methods
         public static TComponent GetRequiredComponent<TComponent>(this GameObject gameObject)
         {
             var childComponent = (object)gameObject.GetComponent(typeof(TComponent));
@@ -73,6 +73,5 @@ namespace Assets.Scripts.Unity.GameObjects
                 UnityEngine.Object.Destroy(component as UnityEngine.Object);
             }
         }
-        #endregion
     }
 }

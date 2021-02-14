@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Containers
 {
-    public sealed class LootPrefab : ILootPrefab
+    public sealed class ContainerPrefab : IContainerPrefab
     {
         private readonly Lazy<SpriteRenderer> _spriteRenderer;
         private readonly Lazy<Collider2D> _collision;
         private readonly Lazy<Collider2D> _trigger;
 
-        public LootPrefab(GameObject gameObject)
+        public ContainerPrefab(GameObject gameObject)
         {
             GameObject = gameObject;
             _spriteRenderer = new Lazy<SpriteRenderer>(() => gameObject
