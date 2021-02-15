@@ -37,6 +37,7 @@ namespace Assets.Scripts.Plugins.Features.Hud
             var loot = _lootDropFactory.CreateLoot(
                 worldX,
                 worldY,
+                false, // need to explicitly interact
                 item);
             _gameObjectManager.MarkForAddition(loot);
 

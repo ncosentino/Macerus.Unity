@@ -12,10 +12,6 @@ namespace Assets.Scripts.Autofac.Scenes
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<KeyboardControls>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<GuiInputStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

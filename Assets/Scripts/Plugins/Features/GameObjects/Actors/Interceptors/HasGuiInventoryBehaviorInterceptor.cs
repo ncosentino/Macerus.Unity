@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
+using Assets.Scripts.Plugins.Features.GameObjects.Actors.Player;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using ProjectXyz.Api.GameObjects;

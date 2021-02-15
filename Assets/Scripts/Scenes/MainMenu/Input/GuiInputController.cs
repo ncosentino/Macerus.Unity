@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
+﻿using Assets.Scripts.Input.Api;
+using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 
 namespace Assets.Scripts.Scenes.MainMenu.Input
 {

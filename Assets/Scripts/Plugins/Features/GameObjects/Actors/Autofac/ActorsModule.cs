@@ -1,10 +1,8 @@
-﻿using Assets.Scripts.Api.GameObjects;
-using Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors;
-using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
+﻿using Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors;
+using Assets.Scripts.Plugins.Features.GameObjects.Actors.Player;
 using Assets.Scripts.Plugins.Features.Wip;
-using Autofac;
 
-using ProjectXyz.Shared.Framework;
+using Autofac;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
 {
@@ -18,10 +16,26 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .RegisterType<ActorBehaviorsProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<LightRadiusBehaviorInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<HasFollowCameraBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<HasFollowCameraBehaviorInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             // player
             builder
-                .RegisterType<PlayerInputControlsBehaviourStitcher>()
+                .RegisterType<PlayerInteractionControlsBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<PlayerMovementControlsBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
@@ -47,18 +61,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<WipInventoryInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<LightRadiusBehaviorInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<HasFollowCameraBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<HasFollowCameraBehaviorInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

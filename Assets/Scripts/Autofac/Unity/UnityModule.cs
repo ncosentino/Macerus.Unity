@@ -36,6 +36,10 @@ namespace Assets.Scripts.Autofac.Unity
                 .RegisterType<MouseInput>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<KeyboardInput>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
