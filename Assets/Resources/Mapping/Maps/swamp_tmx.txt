@@ -20090,6 +20090,7 @@
     <property name="$typeId" value="container"/>
     <property name="$templateId" value="chest"/>
     <property name="GenerateItems" value="True"/><!--FIXME: how do we pick a specific drop?-->
+    <property name="Collisions" value="True"/>
   </object>
  </objectgroup>
  <objectgroup color="#a0a0a4" name="EmptyGroupJustAsAnExample">
