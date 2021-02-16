@@ -2,7 +2,7 @@
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;

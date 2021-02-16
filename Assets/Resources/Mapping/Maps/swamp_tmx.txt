@@ -20089,7 +20089,8 @@
   <object id="10" name="tiled specific name" type="tiled specific type" x="1280" y="-712" width="32" height="32">
     <property name="$typeId" value="container"/>
     <property name="$templateId" value="chest"/>
-    <property name="GenerateItems" value="True"/><!--FIXME: how do we pick a specific drop?-->
+    <property name="TransferItemsOnActivate" value="True"/>
+    <property name="DropTableId" value="any_magic_1-10_lvl10"/>
     <property name="Collisions" value="True"/>
   </object>
  </objectgroup>

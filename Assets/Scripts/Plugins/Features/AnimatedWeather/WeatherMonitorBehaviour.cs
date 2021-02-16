@@ -2,7 +2,9 @@
 using System.Linq;
 using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
 using Assets.Scripts.Unity.GameObjects;
-using ProjectXyz.Framework.Contracts;
+
+using NexusLabs.Contracts;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather

@@ -4,7 +4,7 @@ using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;

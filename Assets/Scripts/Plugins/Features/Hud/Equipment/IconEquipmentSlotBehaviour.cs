@@ -8,7 +8,7 @@ using Macerus.Plugins.Features.GameObjects.Items.Behaviors;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Events;
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;

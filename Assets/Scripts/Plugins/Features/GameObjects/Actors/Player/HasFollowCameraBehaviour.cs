@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Unity.GameObjects;
 
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 
 using UnityEngine;
 

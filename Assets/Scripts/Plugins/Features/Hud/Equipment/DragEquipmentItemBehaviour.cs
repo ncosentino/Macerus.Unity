@@ -10,7 +10,7 @@ using Macerus.Api.Behaviors;
 using Macerus.Game.GameObjects;
 
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 
 using UnityEngine;
 using UnityEngine.EventSystems;

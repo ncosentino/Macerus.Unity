@@ -1,6 +1,9 @@
 ﻿using System;
+
 using Assets.Scripts.Plugins.Features.DayNightCycle.Api;
-using ProjectXyz.Framework.Contracts;
+
+using NexusLabs.Contracts;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.DayNightCycle

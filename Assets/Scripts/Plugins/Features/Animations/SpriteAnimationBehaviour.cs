@@ -6,8 +6,9 @@ using Assets.Scripts.Unity.Resources.Sprites;
 
 using Macerus.Api.Behaviors;
 
+using NexusLabs.Contracts;
+
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Framework.Contracts;
 
 using UnityEngine;
 

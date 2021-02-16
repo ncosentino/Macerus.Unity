@@ -5,7 +5,7 @@ using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources.Prefabs;
 
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;

@@ -59,10 +59,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .RegisterType<HasGuiInventoryBehaviorInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            builder
-                .RegisterType<WipInventoryInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
     }
 }

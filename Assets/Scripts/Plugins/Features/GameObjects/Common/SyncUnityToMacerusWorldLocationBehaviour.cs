@@ -4,7 +4,7 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using Macerus.Api.Behaviors;
 
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 
 using UnityEngine;
 

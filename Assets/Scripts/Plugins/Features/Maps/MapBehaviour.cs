@@ -4,7 +4,7 @@ using System.Linq;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 using ProjectXyz.Game.Interface.Mapping;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 

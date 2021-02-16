@@ -1,4 +1,4 @@
-﻿using ProjectXyz.Framework.Contracts;
+﻿using NexusLabs.Contracts;
 using ProjectXyz.Game.Interface.Engine;
 using UnityEngine;
 

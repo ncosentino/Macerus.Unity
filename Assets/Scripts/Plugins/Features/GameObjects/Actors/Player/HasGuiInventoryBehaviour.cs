@@ -3,7 +3,8 @@
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
+
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;

@@ -1,7 +1,7 @@
 ﻿
 using Macerus.Api.Behaviors;
 
-using ProjectXyz.Framework.Contracts;
+using NexusLabs.Contracts;
 
 using UnityEngine;
 

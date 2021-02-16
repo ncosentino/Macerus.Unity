@@ -1,6 +1,8 @@
 ﻿using System;
 using Assets.Scripts.Unity.GameObjects;
-using ProjectXyz.Framework.Contracts;
+
+using NexusLabs.Contracts;
+
 using UnityEngine;
 using UnityEngine.UI;
 
