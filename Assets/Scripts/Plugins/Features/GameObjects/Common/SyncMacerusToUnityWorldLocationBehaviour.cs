@@ -20,15 +20,22 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
     {
         public IObservableWorldLocationBehavior ObservableWorldLocationBehavior { get; set; }
 
+        public IMacerusToUnityWorldLocationSynchronizer MacerusToUnityWorldLocationSynchronizer { get; set; }
+
         private void Start()
         {
+            Contract.RequiresNotNull(
+                MacerusToUnityWorldLocationSynchronizer,
+                $"{nameof(MacerusToUnityWorldLocationSynchronizer)} was not set on '{gameObject}.{this}'.");
             Contract.RequiresNotNull(
                 ObservableWorldLocationBehavior,
                 $"{nameof(ObservableWorldLocationBehavior)} was not set on '{gameObject}.{this}'.");
             ObservableWorldLocationBehavior.WorldLocationChanged += WorldLocationBehavior_WorldLocationChanged;
 
             // sync macerus (source of truth) to unity
-            SyncMacerusToUnityWorldLocation();
+            MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
+                gameObject,
+                ObservableWorldLocationBehavior);
         }
 
         private void OnDestroy()
@@ -39,21 +46,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             }
         }
 
-        private void SyncMacerusToUnityWorldLocation()
-        {
-            gameObject.transform.position = new Vector3(
-                (float)ObservableWorldLocationBehavior.X,
-                (float)ObservableWorldLocationBehavior.Y,
-                gameObject.transform.position.z);
-
-            gameObject.transform.localScale = new Vector3(
-                (float)ObservableWorldLocationBehavior.Width,
-                (float)ObservableWorldLocationBehavior.Height,
-                gameObject.transform.localScale.z);
-        }
-
         private void WorldLocationBehavior_WorldLocationChanged(
             object sender,
-            EventArgs e) => SyncMacerusToUnityWorldLocation();
+            EventArgs e) => MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
+                gameObject,
+                ObservableWorldLocationBehavior);
     }
 }

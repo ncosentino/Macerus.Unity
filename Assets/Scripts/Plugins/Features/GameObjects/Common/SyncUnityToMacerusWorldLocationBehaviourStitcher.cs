@@ -10,6 +10,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 {
     public sealed class SyncUnityToMacerusWorldLocationBehaviourStitcher : ISyncUnityToMacerusWorldLocationBehaviourStitcher
     {
+        private readonly IMacerusToUnityWorldLocationSynchronizer _macerusToUnityWorldLocationSynchronizer;
+
+        public SyncUnityToMacerusWorldLocationBehaviourStitcher(IMacerusToUnityWorldLocationSynchronizer macerusToUnityWorldLocationSynchronizer)
+        {
+            _macerusToUnityWorldLocationSynchronizer = macerusToUnityWorldLocationSynchronizer;
+        }
+
         public ISyncUnityToMacerusWorldLocationBehaviour Stitch(
             IGameObject gameObject,
             GameObject unityGameObject)
@@ -17,6 +24,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             var worldLocationBehavior = gameObject.GetOnly<IWorldLocationBehavior>();
 
             var syncUnityToMacerusWorldLocationBehaviour = unityGameObject.AddComponent<SyncUnityToMacerusWorldLocationBehaviour>();
+            syncUnityToMacerusWorldLocationBehaviour.MacerusToUnityWorldLocationSynchronizer = _macerusToUnityWorldLocationSynchronizer;
             syncUnityToMacerusWorldLocationBehaviour.WorldLocationBehavior = worldLocationBehavior;
 
             return syncUnityToMacerusWorldLocationBehaviour;

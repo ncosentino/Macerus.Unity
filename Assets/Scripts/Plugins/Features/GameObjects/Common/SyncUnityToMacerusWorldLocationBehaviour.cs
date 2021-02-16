@@ -20,41 +20,26 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
     {
         public IWorldLocationBehavior WorldLocationBehavior { get; set; }
 
+        public IMacerusToUnityWorldLocationSynchronizer MacerusToUnityWorldLocationSynchronizer { get; set; }
+
         private void Start()
         {
             Contract.RequiresNotNull(
-                WorldLocationBehavior,
+                MacerusToUnityWorldLocationSynchronizer,
+                $"{nameof(MacerusToUnityWorldLocationSynchronizer)} was not set on '{gameObject}.{this}'.");
+            Contract.RequiresNotNull(
+                MacerusToUnityWorldLocationSynchronizer,
                 $"{nameof(WorldLocationBehavior)} was not set on '{gameObject}.{this}'.");
-            WorldLocationBehavior.WorldLocationChanged += WorldLocationBehavior_WorldLocationChanged;
 
             // sync macerus (source of truth) to unity
-            SyncMacerusToUnityWorldLocation();
+            MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
+                gameObject,
+                WorldLocationBehavior);
         }
 
         private void Update()
         {
             SyncUnityToMacerusWorldLocation();
-        }
-
-        private void OnDestroy()
-        {
-            if (WorldLocationBehavior != null)
-            {
-                WorldLocationBehavior.WorldLocationChanged -= WorldLocationBehavior_WorldLocationChanged;
-            }
-        }
-
-        private void SyncMacerusToUnityWorldLocation()
-        {
-            gameObject.transform.position = new Vector3(
-                (float)WorldLocationBehavior.X,
-                (float)WorldLocationBehavior.Y,
-                gameObject.transform.position.z);
-            
-            gameObject.transform.localScale = new Vector3(
-                (float)WorldLocationBehavior.Width,
-                (float)WorldLocationBehavior.Height,
-                gameObject.transform.localScale.z);
         }
 
         private void SyncUnityToMacerusWorldLocation()
@@ -63,9 +48,5 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
                 gameObject.transform.position.x,
                 gameObject.transform.position.y);
         }
-
-        private void WorldLocationBehavior_WorldLocationChanged(
-            object sender,
-            EventArgs e) => SyncMacerusToUnityWorldLocation();
     }
 }
