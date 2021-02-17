@@ -36,7 +36,6 @@ sysinfo.txt
 *.unitypackage
 
 # Macerus Specific
-/Assets/Dependencies/*
 /Assets/Plugins/*
 /bin/
 /Logs/*
