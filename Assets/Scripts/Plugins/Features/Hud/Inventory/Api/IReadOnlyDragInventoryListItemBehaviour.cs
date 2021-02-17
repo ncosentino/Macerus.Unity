@@ -3,6 +3,7 @@ using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.GameObjects.Items.SocketPatterns.Api;
 
 using UnityEngine;
 
@@ -23,5 +24,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory.Api
         IMouseInput MouseInput { get; }
 
         IGameObjectManager GameObjectManager { get; }
+
+        ISocketPatternHandlerFacade SocketPatternHandler { get; }
+
+        ISocketableInfoFactory SocketableInfoFactory { get; }
     }
 }

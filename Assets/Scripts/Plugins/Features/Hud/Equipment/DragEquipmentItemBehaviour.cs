@@ -85,38 +85,32 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            var droppedOnCanvas = eventData
-                .pointerCurrentRaycast
-                .gameObject == null;
-            if (droppedOnCanvas)
+            try
             {
-                TryUnequipAndDropItem(eventData);
+                var droppedOnCanvas = eventData
+                    .pointerCurrentRaycast
+                    .gameObject == null;
+                if (droppedOnCanvas)
+                {
+                    TryUnequipAndDropItem(eventData);
+                }
             }
-
-            ObjectDestroyer.Destroy(_dragObject.GameObject);
-            _dragObject = null;
+            finally
+            {
+                ObjectDestroyer.Destroy(_dragObject.GameObject);
+                _dragObject = null;
+            }
         }
 
         private bool TryUnequipAndDropItem(PointerEventData eventData)
         {
             var dropEquipmentSlotBehaviour = eventData
                 .pointerDrag
-                .GetComponent<IDropEquipmentSlotBehaviour>();
-            Contract.RequiresNotNull(
-                dropEquipmentSlotBehaviour,
-                $"'{eventData.pointerDrag}' does not have " +
-                $"'{nameof(IReadOnlyHasGameObject)}' as a component");
-
+                .GetRequiredComponent<IDropEquipmentSlotBehaviour>();
             var item = eventData
                 .pointerDrag
-                .GetComponent<IReadOnlyHasGameObject>()
+                .GetRequiredComponent<IReadOnlyHasGameObject>()
                 ?.GameObject;
-            Contract.RequiresNotNull(
-                item,
-                $"'{dropEquipmentSlotBehaviour}' does not have " +
-                $"'{nameof(IReadOnlyHasGameObject)}' as a sibling component " +
-                $"with a game object set.");
-
             var playerLocation = GameObjectManager
                 .GetPlayer()
                 .GetOnly<IReadOnlyWorldLocationBehavior>();

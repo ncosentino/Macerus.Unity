@@ -20090,7 +20090,7 @@
     <property name="$typeId" value="container"/>
     <property name="$templateId" value="chest"/>
     <property name="TransferItemsOnActivate" value="True"/>
-    <property name="DropTableId" value="any_magic_1-10_lvl10"/>
+    <property name="DropTableId" value="any_normal_magic_10x_lvl10"/>
     <property name="Collisions" value="True"/>
   </object>
  </objectgroup>

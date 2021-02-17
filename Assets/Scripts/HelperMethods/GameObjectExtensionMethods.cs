@@ -36,9 +36,27 @@ namespace Assets.Scripts // shortened namespace for ease of ue
         {
             var results = unityGameObject
                 .GetComponent<IHasGameObject>()
-                .GameObject
-                .Get<T>();
+                ?.GameObject
+                ?.Get<T>() ?? Enumerable.Empty<T>();
             return results;
+        }
+
+        public static IEnumerable<T> GetInThisOrUpHierarchy<T>(this GameObject unityGameObject)
+            where T : IBehavior
+        {
+            var currentUnityGameObject = unityGameObject;
+            while (currentUnityGameObject != null)
+            {
+                var gameObject = currentUnityGameObject
+                    .GetComponent<IHasGameObject>()
+                    ?.GameObject;
+                foreach (var result in gameObject?.Get<T>() ?? Enumerable.Empty<T>())
+                {
+                    yield return result;
+                }
+
+                currentUnityGameObject = currentUnityGameObject.transform.parent?.gameObject;
+            }
         }
 
         public static T GetOnly<T>(this GameObject unityGameObject)
@@ -48,6 +66,15 @@ namespace Assets.Scripts // shortened namespace for ease of ue
                 .GetComponent<IHasGameObject>()
                 .GameObject;
             var result = gameObject.GetOnly<T>();
+            return result;
+        }
+
+        public static T FirstOrDefault<T>(this GameObject unityGameObject)
+            where T : IBehavior
+        {
+            var result = unityGameObject
+                .Get<T>()
+                .FirstOrDefault();
             return result;
         }
     }
