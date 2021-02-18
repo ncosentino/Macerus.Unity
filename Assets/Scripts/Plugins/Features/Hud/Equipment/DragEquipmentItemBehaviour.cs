@@ -1,15 +1,11 @@
-﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
-using Assets.Scripts.Plugins.Features.Hud.Api;
+﻿using System;
+
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Resources.Prefabs;
 
-using Macerus.Api.Behaviors;
-using Macerus.Game.GameObjects;
-
-using ProjectXyz.Api.GameObjects;
 using NexusLabs.Contracts;
 
 using UnityEngine;
@@ -33,35 +29,17 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
         public IEquipSlotPrefab EquipSlot { get; set; }
 
-        public IDropItemHandler DropItemHandler { get; set; }
-
-        public IGameObjectManager GameObjectManager { get; set; }
-
         public IMouseInput MouseInput { get; set; }
+
+        public event EventHandler<DroppedEventArgs> Dropped;
 
         public void Start()
         {
-            Contract.RequiresNotNull(
-                InventoryGameObject,
-                $"{nameof(InventoryGameObject)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                EquipSlot,
-                $"{nameof(EquipSlot)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                DragItemFactory,
-                $"{nameof(DragItemFactory)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                ObjectDestroyer,
-                $"{nameof(ObjectDestroyer)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                DropItemHandler,
-                $"{nameof(DropItemHandler)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                GameObjectManager,
-                $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                MouseInput,
-                $"{nameof(MouseInput)} was not set on '{gameObject}.{this}'.");
+            this.RequiresNotNull(MouseInput, nameof(MouseInput));
+            this.RequiresNotNull(ObjectDestroyer, nameof(ObjectDestroyer));
+            this.RequiresNotNull(DragItemFactory, nameof(DragItemFactory));
+            this.RequiresNotNull(EquipSlot, nameof(EquipSlot));
+            this.RequiresNotNull(InventoryGameObject, nameof(InventoryGameObject));
         }
 
         public void OnDestroy()
@@ -87,52 +65,17 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
         {
             try
             {
-                var droppedOnCanvas = eventData
-                    .pointerCurrentRaycast
-                    .gameObject == null;
-                if (droppedOnCanvas)
-                {
-                    TryUnequipAndDropItem(eventData);
-                }
+                Dropped?.Invoke(
+                    this,
+                    new DroppedEventArgs(
+                        eventData.pointerDrag,
+                        eventData.pointerCurrentRaycast.gameObject));
             }
             finally
             {
                 ObjectDestroyer.Destroy(_dragObject.GameObject);
                 _dragObject = null;
             }
-        }
-
-        private bool TryUnequipAndDropItem(PointerEventData eventData)
-        {
-            var dropEquipmentSlotBehaviour = eventData
-                .pointerDrag
-                .GetRequiredComponent<IDropEquipmentSlotBehaviour>();
-            var item = eventData
-                .pointerDrag
-                .GetRequiredComponent<IReadOnlyHasGameObject>()
-                ?.GameObject;
-            var playerLocation = GameObjectManager
-                .GetPlayer()
-                .GetOnly<IReadOnlyWorldLocationBehavior>();
-
-            return DropItemHandler.TryDropItem(
-                playerLocation.X,
-                playerLocation.Y,
-                item,
-                () =>
-                {
-                    if (!dropEquipmentSlotBehaviour
-                        .CanEquipBehavior
-                        .TryUnequip(
-                            dropEquipmentSlotBehaviour.TargetEquipSlotId,
-                            out var canBeEquippedBehavior))
-                    {
-                        Debug.Log($"Cannot unequip '{item}' to drop.");
-                        return false;
-                    }
-
-                    return true;
-                });
         }
     }
 }

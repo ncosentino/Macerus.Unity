@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Linq;
 
-using Assets.Scripts.Plugins.Features.Hud.Api;
 using Assets.Scripts.Plugins.Features.Hud.Equipment.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Resources.Prefabs;
-
-using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;
 
@@ -18,46 +15,42 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
     {
         private readonly IDragItemFactory _dragItemFactory;
         private readonly IObjectDestroyer _objectDestroyer;
-        private readonly IGameObjectManager _gameObjectManager;
-        private readonly IDropItemHandler _dropItemHandler;
         private readonly IMouseInput _mouseInput;
+        private readonly IEquipmentItemDropUiFlow _equipmentItemDropUiFlow;
         private readonly Lazy<GameObject> _lazyInventoryUiGameObject;
 
         public DragEquipmentItemBehaviourStitcher(
             IDragItemFactory dragItemFactory,
             IObjectDestroyer objectDestroyer,
             IUnityGameObjectManager unityGameObjectManager,
-            IGameObjectManager gameObjectManager,
-            IDropItemHandler dropItemHandler,
-            IMouseInput mouseInput)
+            IMouseInput mouseInput,
+            IEquipmentItemDropUiFlow equipmentItemDropUiFlow)
         {
             _dragItemFactory = dragItemFactory;
             _objectDestroyer = objectDestroyer;
-            _gameObjectManager = gameObjectManager;
             _lazyInventoryUiGameObject = new Lazy<GameObject>(() =>
             {
                 return unityGameObjectManager
                     .FindAll(x => x.name == "Inventory")
                     .First();
             });
-            _dropItemHandler = dropItemHandler;
             _mouseInput = mouseInput;
+            _equipmentItemDropUiFlow = equipmentItemDropUiFlow;
         }
 
         private GameObject InventoryUiGameObject => _lazyInventoryUiGameObject.Value;
 
         public IReadOnlyDragEquipmentItemBehaviour Attach(IEquipSlotPrefab equipSlot)
         {
-            var dragInventoryListItemBehaviour = equipSlot.AddComponent<DragEquipmentItemBehaviour>();
-            dragInventoryListItemBehaviour.DragItemFactory = _dragItemFactory;
-            dragInventoryListItemBehaviour.ObjectDestroyer = _objectDestroyer;
-            dragInventoryListItemBehaviour.DropItemHandler = _dropItemHandler;
-            dragInventoryListItemBehaviour.GameObjectManager = _gameObjectManager; ;
-            dragInventoryListItemBehaviour.MouseInput = _mouseInput;
-            dragInventoryListItemBehaviour.InventoryGameObject = InventoryUiGameObject;
-            dragInventoryListItemBehaviour.EquipSlot = equipSlot;
+            var dragEquipmentItemBehaviour = equipSlot.AddComponent<DragEquipmentItemBehaviour>();
+            dragEquipmentItemBehaviour.DragItemFactory = _dragItemFactory;
+            dragEquipmentItemBehaviour.ObjectDestroyer = _objectDestroyer;
+            dragEquipmentItemBehaviour.MouseInput = _mouseInput;
+            dragEquipmentItemBehaviour.InventoryGameObject = InventoryUiGameObject;
+            dragEquipmentItemBehaviour.EquipSlot = equipSlot;
+            dragEquipmentItemBehaviour.Dropped += (_, e) => _equipmentItemDropUiFlow.Execute(e);
 
-            return dragInventoryListItemBehaviour;
+            return dragEquipmentItemBehaviour;
         }
     }
 }

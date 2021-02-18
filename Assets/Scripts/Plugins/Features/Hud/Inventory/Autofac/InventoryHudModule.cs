@@ -49,6 +49,10 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory.Autofac
                 .RegisterType<DragInventoryListItemBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<InventoryItemDropUiFlow>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder
                 .RegisterBuildCallback(c =>

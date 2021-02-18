@@ -26,6 +26,10 @@ namespace Assets.Scripts.Plugins.Features.Hud.Autofac
                 .RegisterType<EquipmentSlotsFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<EquipmentItemDropUiFlow>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder
                 .RegisterBuildCallback(c =>

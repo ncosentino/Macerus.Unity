@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors;
 using Assets.Scripts.Plugins.Features.GameObjects.Actors.Player;
-using Assets.Scripts.Plugins.Features.Wip;
 
 using Autofac;
 
@@ -18,6 +17,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<LightRadiusBehaviorInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<LightRadiusStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
