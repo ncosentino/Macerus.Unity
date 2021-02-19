@@ -75,11 +75,9 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                 return false;
             }
 
-            var canBeSocketedBehavior = droppedOnto
-                .gameObject
-                ?.GetInThisOrUpHierarchy<ICanBeSocketedBehavior>()
-                .FirstOrDefault();
-            if (canBeSocketedBehavior == null)
+            if (!destinationInventoryItemBehaviour
+                .InventoryItem
+                .TryGetFirst<ICanBeSocketedBehavior>(out var canBeSocketedBehavior))
             {
                 return false;
             }
@@ -117,9 +115,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                     canBeSocketedBehavior),
                 out var newSocketPatternItem))
             {
-                if (!destinationInventoryItemBehaviour
-                    .SourceItemContainerCallback()
-                    .TryRemoveItem((IGameObject)canBeSocketedBehavior.Owner))
+                if (!destinationInventoryItemBehaviour.TryRemoveFromSourceContainer())
                 {
                     throw new InvalidOperationException(
                         $"A socket pattern item was created, but the source " +
