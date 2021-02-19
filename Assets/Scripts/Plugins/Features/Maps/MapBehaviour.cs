@@ -9,6 +9,7 @@ using ProjectXyz.Game.Interface.Mapping;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;
+using ProjectXyz.Api.Behaviors;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {

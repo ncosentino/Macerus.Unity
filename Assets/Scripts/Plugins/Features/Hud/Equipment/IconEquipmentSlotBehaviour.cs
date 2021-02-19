@@ -13,6 +13,7 @@ using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;
 using UnityEngine.UI;
+using ProjectXyz.Api.Behaviors;
 
 namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 {
