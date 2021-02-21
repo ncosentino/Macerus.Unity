@@ -2,6 +2,7 @@
 
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
+using Assets.Scripts.Scenes.Explore.Console;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Unity.GameObjects;
 
@@ -41,6 +42,7 @@ namespace Assets.Scripts.Scenes.Explore
                 .FindAll(x => x.name == "Game")
                 .Single();
             _gameEngineUpdateBehaviourStitcher.Attach(rootGameObject);
+            rootGameObject.AddComponent<ConsoleCommandsBehaviour>();
 
             var mapObject = _mapFactory.CreateMap();
             mapObject.transform.parent = rootGameObject.transform;

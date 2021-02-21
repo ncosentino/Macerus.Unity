@@ -34,6 +34,17 @@ namespace Assets.Scripts.Scenes.Explore.Input
 
         public void Update(float deltaTime)
         {
+            if (UnityEngine.Input.GetKeyUp(_keyboardControls.DebugConsole))
+            {
+                _debugConsoleManager.Toggle();
+                return;
+            }
+
+            if (_debugConsoleManager.GetConsoleWindowVisible())
+            {
+                return;
+            }
+
             if (UnityEngine.Input.GetKeyUp(_keyboardControls.GuiClose))
             {
                 _logger.Debug("Opening main menu...");
@@ -48,10 +59,6 @@ namespace Assets.Scripts.Scenes.Explore.Input
                     .First();
                 inventoryUi.ToggleEnabled();
                 _logger.Debug("Toggled inventory.");
-            }
-            else if (UnityEngine.Input.GetKeyUp(_keyboardControls.DebugConsole))
-            {
-                _debugConsoleManager.Toggle();
             }
         }
     }

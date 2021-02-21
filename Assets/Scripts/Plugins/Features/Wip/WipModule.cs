@@ -10,10 +10,6 @@ namespace Assets.Scripts.Plugins.Features.Wip
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder
-                .RegisterType<TestInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
     }
 }

@@ -2,6 +2,8 @@
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 
+using UnityEngine;
+
 namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
 {
     using ILogger = ProjectXyz.Api.Logging.ILogger;
@@ -22,9 +24,31 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
             _logger = logger;
         }
 
+        public bool GetConsoleWindowVisible()
+        {
+            var consoleWindow = GetSingleInstanceOfConsole();
+            if (!consoleWindow.activeSelf)
+            {
+                return false;
+            }
+
+            return consoleWindow
+                .GetChildGameObjects()
+                .First(x => x.name == "DebugLogWindow")
+                .GetComponent<CanvasGroup>()
+                .interactable;
+        }
+
         public void Toggle()
         {
             _logger.Debug("Toggling debug console...");
+            var singleInstance = GetSingleInstanceOfConsole();
+            singleInstance.SetActive(!singleInstance.activeSelf);
+            _logger.Debug("Toggled debug console.");
+        }
+
+        private GameObject GetSingleInstanceOfConsole()
+        {
             var allDebugConsoleObjects = _gameObjectManager
                 .FindAll(x => x.name == "DebugConsole")
                 .ToList();
@@ -51,8 +75,7 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
             }
 
             var singleInstance = allDebugConsoleObjects.Single();
-            singleInstance.SetActive(!singleInstance.activeSelf);
-            _logger.Debug("Toggled debug console.");
+            return singleInstance;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Input.Api;
+using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 
 using Macerus.Api.Behaviors;
@@ -13,6 +14,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         MonoBehaviour,
         IPlayerMovementControlsBehaviour
     {
+        public IDebugConsoleManager DebugConsoleManager { get; set; }
+
         public IKeyboardControls KeyboardControls { get; set; }
 
         public IKeyboardInput KeyboardInput { get; set; }
@@ -23,18 +26,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void Start()
         {
-            Contract.RequiresNotNull(
-                KeyboardControls,
-                $"{nameof(KeyboardControls)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                KeyboardInput,
-                $"{nameof(KeyboardInput)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                MovementBehavior,
-                $"{nameof(MovementBehavior)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                Logger,
-                $"{nameof(Logger)} was not set on '{gameObject}.{this}'.");
+            UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
+            UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
+            UnityContracts.RequiresNotNull(this, MovementBehavior, nameof(MovementBehavior));
+            UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
+            UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
         }
 
         private void Update()
@@ -44,6 +40,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void HandleMovementControls()
         {
+            if (DebugConsoleManager.GetConsoleWindowVisible())
+            {
+                return;
+            }
+
             float throttleY;
             if (KeyboardInput.GetKey(KeyboardControls.MoveDown))
             {

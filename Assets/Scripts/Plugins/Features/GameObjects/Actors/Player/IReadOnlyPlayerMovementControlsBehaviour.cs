@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Input.Api;
+using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 
 using Macerus.Api.Behaviors;
 
@@ -11,5 +12,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         IMovementBehavior MovementBehavior { get; }
 
         ProjectXyz.Api.Logging.ILogger Logger { get; }
+
+        IDebugConsoleManager DebugConsoleManager { get; }
     }
 }

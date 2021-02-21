@@ -2,6 +2,8 @@
 {
     public interface IDebugConsoleManager
     {
+        bool GetConsoleWindowVisible();
+
         void Toggle();
     }
 }
