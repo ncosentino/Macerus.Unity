@@ -15,8 +15,14 @@ using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Behaviors.Filtering.Attributes;
+using ProjectXyz.Api.Enchantments;
+using ProjectXyz.Api.Framework;
+using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Api.Stats;
+using ProjectXyz.Plugins.Enchantments.Stats;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
+using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Shared.Behaviors.Filtering.Attributes;
 using ProjectXyz.Shared.Framework;
 
@@ -30,6 +36,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IGameObjectManager _gameObjectManager;
         private ISkillRepository _skillRepository;
         private IFilterContextFactory _filterContextFactory;
+        private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
+        private IStatCalculationService _statCalculationService;
 
         private void Start()
         {
@@ -44,10 +52,15 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _gameObjectManager = container.Resolve<IGameObjectManager>();
             _skillRepository = container.Resolve<ISkillRepository>();
             _filterContextFactory = container.Resolve<IFilterContextFactory>();
+            _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
+            _statCalculationService = container.Resolve<IStatCalculationService>();
 
             AddCommand(
                 nameof(PlayerAddSkill),
                 "Adds a skill with the specified ID to the player.");
+            AddCommand(
+                nameof(PlayerGetStat),
+                "Gets a stat value with the specified ID (or term) from the player.");
         }
 
         private void AddCommand(string name, string description)
@@ -57,6 +70,39 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 description,
                 name,
                 this);
+        }
+
+        private void PlayerGetStat(string rawStatDefinitionId)
+        {
+            var player = _gameObjectManager
+                .GameObjects
+                .Single(x => x.Has<IPlayerControlledBehavior>());
+
+            IIdentifier statDefinitionId;
+            if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
+            {
+                statDefinitionId = new IntIdentifier(intStatDefinitionId);
+            }
+            else
+            {
+                statDefinitionId = _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm(rawStatDefinitionId)
+                    ?.StatDefinitionId;
+                if (statDefinitionId == null)
+                {
+                    _logger.Warn($"Could not find a stat definition by term '{rawStatDefinitionId}'.");
+                    return;
+                }
+            }
+
+            var context = new StatCalculationContext(
+                new IComponent[] { },
+                new IEnchantment[] { });
+            var value = _statCalculationService.GetStatValue(
+                player,
+                statDefinitionId,
+                context);
+            _logger.Info($"{value}");
         }
 
         private void PlayerAddSkill(string skillId)
