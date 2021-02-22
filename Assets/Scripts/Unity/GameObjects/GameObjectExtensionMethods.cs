@@ -59,11 +59,41 @@ namespace Assets.Scripts.Unity.GameObjects
             return matchingComponent;
         }
 
-        public static IEnumerable<GameObject> GetChildGameObjects(this GameObject gameObject)
+        public static IEnumerable<GameObject> GetChildGameObjects(
+            this GameObject gameObject) => GetChildGameObjects(
+                gameObject,
+                true);
+
+        public static IEnumerable<GameObject> GetChildGameObjects(
+            this GameObject gameObject,
+            bool immediateChildrenOnly)
         {
-            return gameObject
-                .transform
-                .GetChildGameObjects();
+            if (immediateChildrenOnly)
+            {
+                foreach (var child in gameObject
+                    .transform
+                    .GetChildGameObjects())
+                {
+                    yield return child;
+                }
+
+                yield break;
+            }
+
+            var queue = new Queue<GameObject>();
+            queue.Enqueue(gameObject);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                foreach (var child in current
+                    .transform
+                    .GetChildGameObjects())
+                {
+                    yield return child;
+                    queue.Enqueue(child);
+                }
+            }
         }
 
         public static void RemoveComponents<TComponent>(this GameObject gameObject)

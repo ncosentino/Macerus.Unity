@@ -10,6 +10,10 @@ namespace Assets.Scripts.Plugins.Features.Hud.Autofac
                 .RegisterType<DropItemHandler>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<HudStartupInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

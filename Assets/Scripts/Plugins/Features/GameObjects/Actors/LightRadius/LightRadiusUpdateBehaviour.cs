@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Unity;
 
+using NexusLabs.Contracts;
+
 using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
@@ -26,6 +28,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
         public IStatCalculationService StatCalculationService { get; set; }
 
         public IReadOnlyStatDefinitionToTermMappingRepositoryFacade StatDefinitionToTermMappingRepository { get; set; }
+
+        private void Start()
+        {
+            UnityContracts.RequiresNotNull(this, TimeProvider, nameof(TimeProvider));
+            UnityContracts.RequiresNotNull(this, GameObject, nameof(GameObject));
+            UnityContracts.RequiresNotNull(this, LightRadiusPrefab, nameof(LightRadiusPrefab));
+            UnityContracts.RequiresNotNull(this, StatCalculationService, nameof(StatCalculationService));
+            UnityContracts.RequiresNotNull(this, StatDefinitionToTermMappingRepository, nameof(StatDefinitionToTermMappingRepository));
+        }
 
         private void FixedUpdate()
         {
