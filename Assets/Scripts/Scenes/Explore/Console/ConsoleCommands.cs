@@ -21,6 +21,7 @@ using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Stats;
 using ProjectXyz.Plugins.Enchantments.Stats;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Shared.Behaviors.Filtering.Attributes;
@@ -61,6 +62,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
             AddCommand(
                 nameof(PlayerGetStat),
                 "Gets a stat value with the specified ID (or term) from the player.");
+            AddCommand(
+                nameof(PlayerSetBaseStat),
+                "Sets a base stat value with the specified ID (or term) and valu on the player.");
         }
 
         private void AddCommand(string name, string description)
@@ -103,6 +107,34 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 statDefinitionId,
                 context);
             _logger.Info($"{value}");
+        }
+
+        private void PlayerSetBaseStat(string rawStatDefinitionId, double value)
+        {
+            var player = _gameObjectManager
+                .GameObjects
+                .Single(x => x.Has<IPlayerControlledBehavior>());
+
+            IIdentifier statDefinitionId;
+            if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
+            {
+                statDefinitionId = new IntIdentifier(intStatDefinitionId);
+            }
+            else
+            {
+                statDefinitionId = _statDefinitionToTermMappingRepository
+                    .GetStatDefinitionToTermMappingByTerm(rawStatDefinitionId)
+                    ?.StatDefinitionId;
+                if (statDefinitionId == null)
+                {
+                    _logger.Warn($"Could not find a stat definition by term '{rawStatDefinitionId}'.");
+                    return;
+                }
+            }
+
+            player
+                .GetOnly<IHasMutableStatsBehavior>()
+                .MutateStats(stats => stats[statDefinitionId] = value);
         }
 
         private void PlayerAddSkill(string skillId)
