@@ -2,6 +2,7 @@
 
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 
 using NexusLabs.Contracts;
@@ -14,6 +15,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         MonoBehaviour,
         IPlayerInteractionControlsBehaviour
     {
+        public IDebugConsoleManager DebugConsoleManager { get; set; }
+
         public IKeyboardControls KeyboardControls { get; set; }
 
         public IKeyboardInput KeyboardInput { get; set; }
@@ -24,18 +27,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void Start()
         {
-            Contract.RequiresNotNull(
-                KeyboardControls,
-                $"{nameof(KeyboardControls)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                KeyboardInput,
-                $"{nameof(KeyboardInput)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                PlayerInteractionDetectionBehavior,
-                $"{nameof(PlayerInteractionDetectionBehavior)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                Logger,
-                $"{nameof(Logger)} was not set on '{gameObject}.{this}'.");
+            UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
+            UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
+            UnityContracts.RequiresNotNull(this, PlayerInteractionDetectionBehavior, nameof(PlayerInteractionDetectionBehavior));
+            UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
+            UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
         }
 
         private void Update()
@@ -45,6 +41,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void HandleInteractionControls()
         {
+            if (DebugConsoleManager.GetConsoleWindowVisible())
+            {
+                return;
+            }
+
             if (KeyboardInput.GetKeyUp(KeyboardControls.Interact))
             {
                 var interactable = PlayerInteractionDetectionBehavior

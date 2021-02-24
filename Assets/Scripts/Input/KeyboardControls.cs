@@ -6,7 +6,15 @@ namespace Assets.Scripts.Input
 {
     public sealed class KeyboardControls : IKeyboardControls
     {
-        #region Properties
+        /// <inheritdoc />
+        public KeyCode QuickSlot1 { get; } = KeyCode.Alpha1;
+
+        /// <inheritdoc />
+        public KeyCode QuickSlot2 { get; } = KeyCode.Alpha2;
+
+        /// <inheritdoc />
+        public KeyCode QuickSlot3 { get; } = KeyCode.Alpha3;
+
         /// <inheritdoc />
         public KeyCode MoveLeft { get; } = KeyCode.A;
 
@@ -30,7 +38,5 @@ namespace Assets.Scripts.Input
 
         /// <inheritdoc />
         public KeyCode DebugConsole { get; } = KeyCode.BackQuote;
-
-        #endregion
     }
 }

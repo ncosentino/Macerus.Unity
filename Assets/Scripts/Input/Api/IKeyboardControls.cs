@@ -5,6 +5,12 @@ namespace Assets.Scripts.Input.Api
     public interface IKeyboardControls
     {
         #region Properties
+        KeyCode QuickSlot1 { get; }
+
+        KeyCode QuickSlot2 { get; }
+
+        KeyCode QuickSlot3 { get; }
+
         KeyCode MoveLeft { get; }
 
         KeyCode MoveRight { get; }

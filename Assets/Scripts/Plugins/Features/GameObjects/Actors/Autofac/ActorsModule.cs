@@ -34,6 +34,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
 
             // player
             builder
+                .RegisterType<PlayerQuickSlotControlsBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<PlayerInteractionControlsBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
