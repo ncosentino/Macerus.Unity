@@ -52,7 +52,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
                 return;
             }
 
-            secondsSinceLastUpdate = 0;
+            _lastUpdate = TimeProvider.SecondsSinceStartOfGame;
 
             var player = GameObjectManager
                 .GameObjects

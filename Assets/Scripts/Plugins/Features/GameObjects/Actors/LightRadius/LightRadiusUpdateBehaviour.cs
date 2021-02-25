@@ -46,6 +46,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
                 return;
             }
 
+            _lastUpdate = TimeProvider.SecondsSinceStartOfGame;
+
             var context = new StatCalculationContext(
                 new IComponent[0],
                 new IEnchantment[0]);
@@ -86,8 +88,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
                 (float)lightRadiusBlue);
             LightRadiusPrefab.Light.range = (float)lightRadiusRadius;
             LightRadiusPrefab.Light.intensity = (float)lightRadiusIntensity;
-
-            _lastUpdate = TimeProvider.SecondsSinceStartOfGame;
         }
     }
 }
