@@ -10,7 +10,10 @@ using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Behaviors.Filtering.Attributes;
 using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Enchantments.Calculations;
+using ProjectXyz.Api.Enchantments.Stats;
+using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Api.Logging;
 using ProjectXyz.Api.Stats;
 using ProjectXyz.Plugins.Features.Behaviors.Filtering.Default.Attributes;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
@@ -18,6 +21,7 @@ using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Enchantments.Default.Calculations;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
+using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.Wip
@@ -87,10 +91,79 @@ namespace Assets.Scripts.Plugins.Features.Wip
     public sealed class WipSkills
     {
         private readonly ISkillDefinitionRepositoryFacade _skillDefinitionRepositoryFacade;
+        private readonly IStatCalculationService _statCalculationService;
+        private readonly IStatCalculationContextFactory _statCalculationContextFactory;
+        private readonly ILogger _logger;
 
-        public WipSkills(ISkillDefinitionRepositoryFacade skillDefinitionRepositoryFacade)
+        public WipSkills(
+            ISkillDefinitionRepositoryFacade skillDefinitionRepositoryFacade,
+            IStatCalculationService statCalculationService,
+            IStatCalculationContextFactory statCalculationContextFactory,
+            ILogger logger)
         {
             _skillDefinitionRepositoryFacade = skillDefinitionRepositoryFacade;
+            _statCalculationService = statCalculationService;
+            _statCalculationContextFactory = statCalculationContextFactory;
+            _logger = logger;
+        }
+
+        public bool CanUseSkill(
+            IGameObject actor,
+            IGameObject skill)
+        {
+            if (skill.TryGetFirst<ISkillResourceUsageBehavior>(out var skillResourceUsageBehavior) &&
+                skillResourceUsageBehavior.StaticStatRequirements.Any())
+            {
+                var statCalculationContext = _statCalculationContextFactory.Create(
+                    new IComponent[] { },
+                    new IEnchantment[] { });
+
+                foreach (var requiredResourceKvp in skillResourceUsageBehavior.StaticStatRequirements)
+                {
+                    var requiredStatDefinitionId = requiredResourceKvp.Key;
+                    var requiredStatValue = requiredResourceKvp.Value;
+
+                    var actualStatValue = _statCalculationService.GetStatValue(
+                        actor,
+                        requiredStatDefinitionId,
+                        statCalculationContext);
+
+                    if (actualStatValue < requiredStatValue)
+                    {
+                        _logger.Debug(
+                            $"'{actor}' did not meet required stat ID " +
+                            $"'{requiredStatDefinitionId}' value of " +
+                            $"{requiredStatValue}. Had value of " +
+                            $"{actualStatValue}.");
+                        return false;
+                    }
+                }                
+            }
+
+            return true;
+        }
+
+        public void UseRequiredResources(
+            IGameObject actor,
+            IGameObject skill)
+        {
+            if (!skill.TryGetFirst<ISkillResourceUsageBehavior>(out var skillResourceUsageBehavior) ||
+                !skillResourceUsageBehavior.StaticStatRequirements.Any())
+            {
+                return;
+            }
+
+            var actorMutableStats = actor.GetOnly<IHasMutableStatsBehavior>();
+            actorMutableStats.MutateStats(stats =>
+            {
+                foreach (var requiredResourceKvp in skillResourceUsageBehavior.StaticStatRequirements)
+                {
+                    var requiredStatDefinitionId = requiredResourceKvp.Key;
+                    var requiredStatValue = requiredResourceKvp.Value;
+
+                    stats[requiredStatDefinitionId] -= requiredStatValue;
+                }
+            });
         }
 
         public void ApplySkillEffectsToTarget(

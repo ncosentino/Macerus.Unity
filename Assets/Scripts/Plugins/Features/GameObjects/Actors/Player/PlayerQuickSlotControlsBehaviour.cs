@@ -72,9 +72,18 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     return;
                 }
 
+                if (!WipSkills.CanUseSkill(
+                    player,
+                    firstUsableSkill))
+                {
+                    return;
+                }
+
                 // FIXME: move this logic into the backend into some class?
-                // FIXME: check resource requirements and such?
                 // FIXME: check the targeting?
+                WipSkills.UseRequiredResources(
+                    player,
+                    firstUsableSkill);
                 WipSkills.ApplySkillEffectsToTarget(
                     firstUsableSkill,
                     player);
