@@ -86,18 +86,11 @@ namespace Assets.Scripts.Plugins.Features.Wip
 
     public sealed class WipSkills
     {
-        private readonly ICalculationPriorityFactory _calculationPriorityFactory;
-        private readonly IEnchantmentFactory _enchantmentFactory;
-        private readonly IStatDefinitionToTermConverter _statDefinitionToTermConverter;
+        private readonly ISkillDefinitionRepositoryFacade _skillDefinitionRepositoryFacade;
 
-        public WipSkills(
-            ICalculationPriorityFactory calculationPriorityFactory,
-            IEnchantmentFactory enchantmentFactory,
-            IStatDefinitionToTermConverter statDefinitionToTermConverter)
+        public WipSkills(ISkillDefinitionRepositoryFacade skillDefinitionRepositoryFacade)
         {
-            _calculationPriorityFactory = calculationPriorityFactory;
-            _enchantmentFactory = enchantmentFactory;
-            _statDefinitionToTermConverter = statDefinitionToTermConverter;
+            _skillDefinitionRepositoryFacade = skillDefinitionRepositoryFacade;
         }
 
         public void ApplySkillEffectsToTarget(
@@ -105,40 +98,12 @@ namespace Assets.Scripts.Plugins.Features.Wip
             IGameObject target)
         {
             var targetEnchantmentsBehavior = target.GetOnly<IHasEnchantmentsBehavior>();
-
-            var skillStatEnchantments = skill
-                .GetOnly<IHasStatsBehavior>()
-                .BaseStats
-                .Select(statKvp =>
-                {
-                    var statDefinitionid = statKvp.Key;
-                    var statValue = statKvp.Value;
-                    var statTerm = _statDefinitionToTermConverter[statDefinitionid];
-                    var skillStatEnchantment = _enchantmentFactory.Create(
-                        new IBehavior[]
-                        {
-                            new EnchantmentTargetBehavior(new StringIdentifier("self")),
-                            new HasStatDefinitionIdBehavior()
-                            {
-                                StatDefinitionId = statDefinitionid,
-                            },
-                            new EnchantmentExpressionBehavior(
-                                _calculationPriorityFactory.Create<int>(-1),
-                                $"{statTerm} + {statValue}")
-                        });
-                    return skillStatEnchantment;
-                })
-                .ToArray();
-            // FIXME: skill enchantments need to be re-created every time we 
-            // want to use them if we want to add them to another collection. 
-            // this is because if they expire, they'll be removed from their
-            // original source skill
-            var applicableSkillEnchantments = skill
-                .GetOnly<IHasReadOnlyEnchantmentsBehavior>()
-                .Enchantments
-                .Concat(skillStatEnchantments)
-                .ToArray();
-            targetEnchantmentsBehavior.AddEnchantments(applicableSkillEnchantments);
+            var skillDefinitionId = skill
+                .GetOnly<ITemplateIdentifierBehavior>()
+                .TemplateId;
+            var statefulEnchantments = _skillDefinitionRepositoryFacade
+                .GetSkillDefinitionStatefulEnchantments(skillDefinitionId);
+            targetEnchantmentsBehavior.AddEnchantments(statefulEnchantments);
         }
     }
 }
