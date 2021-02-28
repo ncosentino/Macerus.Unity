@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
-    public interface IMapFactory
+    public interface IMapPrefabFactory
     {
         GameObject CreateMap();
     }

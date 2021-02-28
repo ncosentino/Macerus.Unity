@@ -3,13 +3,18 @@ using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Maps.Api;
 
-using ProjectXyz.Api.GameObjects;
 using NexusLabs.Contracts;
-using ProjectXyz.Game.Interface.Mapping;
+
+using ProjectXyz.Api.Behaviors;
+using ProjectXyz.Api.Behaviors.Filtering;
+using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.Behaviors.Filtering.Default.Attributes;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.Weather.Api;
+using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
-using ProjectXyz.Api.Behaviors;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
@@ -23,24 +28,26 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         public IMapFormatter ExploreMapFormatter { get; set; }
 
+        public IWeatherManager WeatherManager { get; set; }
+
+        public IWeatherTableRepositoryFacade WeatherTableRepositoryFacade { get; set; }
+
+        public IFilterContextFactory FilterContextFactory { get; set; }
+
         private void Start()
         {
-            Contract.RequiresNotNull(
-                MapProvider,
-                $"{nameof(MapProvider)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                GameObjectManager,
-                $"{nameof(GameObjectManager)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                ExploreMapFormatter,
-                $"{nameof(ExploreMapFormatter)} was not set on '{gameObject}.{this}'.");
+            UnityContracts.RequiresNotNull(this, MapProvider, nameof(MapProvider));
+            UnityContracts.RequiresNotNull(this, GameObjectManager, nameof(GameObjectManager));
+            UnityContracts.RequiresNotNull(this, ExploreMapFormatter, nameof(ExploreMapFormatter));
+            UnityContracts.RequiresNotNull(this, WeatherManager, nameof(WeatherManager));
+            UnityContracts.RequiresNotNull(this, WeatherTableRepositoryFacade, nameof(WeatherTableRepositoryFacade));
 
             MapProvider.MapChanged += MapProvider_MapChanged;
             GameObjectManager.Synchronized += GameObjectManager_Synchronized;
 
             if (MapProvider.ActiveMap != null)
             {
-                RecreateMap(MapProvider.ActiveMap);
+                SwitchMap(MapProvider.ActiveMap);
             }
         }
 
@@ -75,8 +82,31 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         private void MapProvider_MapChanged(
             object sender,
-            EventArgs e) => RecreateMap(MapProvider.ActiveMap);
+            EventArgs e) => SwitchMap(MapProvider.ActiveMap);
 
-        private void RecreateMap(IMap map) => ExploreMapFormatter.FormatMap(gameObject, map);
+        private void SwitchMap(IMap map)
+        {
+            ExploreMapFormatter.FormatMap(gameObject, map);
+
+            var weatherTableId = map
+                .Get<IMapWeatherTableBehavior>()
+                .SingleOrDefault()
+                ?.WeatherTableId;
+            if (weatherTableId == null)
+            {
+                WeatherManager.WeatherTable = null;
+            }
+            else
+            {
+                var filterContext = FilterContextFactory.CreateFilterContextForSingle(
+                    new FilterAttribute(
+                        new StringIdentifier("id"),
+                        new IdentifierFilterAttributeValue(weatherTableId),
+                        true));
+                WeatherManager.WeatherTable = WeatherTableRepositoryFacade
+                    .GetWeatherTables(filterContext)
+                    ?.FirstOrDefault();
+            }
+        }
     }
 }

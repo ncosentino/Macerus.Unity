@@ -1,6 +1,6 @@
 ﻿using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Collections;
-using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
 {

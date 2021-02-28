@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Maps.Api;
 
+using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Game.Core.Mapping;
-using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.Mapping.Default;
+using ProjectXyz.Shared.Framework;
 
 using Tiled.Net.Dto.Tilesets;
 using Tiled.Net.Maps;
@@ -18,10 +21,14 @@ namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
     public sealed class TiledNetToMapConverter : ITiledNetToMapConverter
     {
         private readonly ITilesetSpriteResourceResolver _tilesetSpriteResourceResolver;
+        private readonly IMapFactory _mapFactory;
 
-        public TiledNetToMapConverter(ITilesetSpriteResourceResolver tilesetSpriteResourceResolver)
+        public TiledNetToMapConverter(
+            ITilesetSpriteResourceResolver tilesetSpriteResourceResolver,
+            IMapFactory mapFactory)
         {
             _tilesetSpriteResourceResolver = tilesetSpriteResourceResolver;
+            _mapFactory = mapFactory;
         }
 
         public IMap Convert(
@@ -35,6 +42,17 @@ namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
                 ? -1
                 : 1;
             var tilesetCache = new TilesetCache(tiledMap.Tilesets);
+
+            var behaviors = new List<IBehavior>();
+            if (tiledMap.Properties.TryGetValue(
+                "WeatherTableId",
+                out var rawWeatherTableId))
+            {
+                var weatherTableId = new StringIdentifier(System.Convert.ToString(
+                    rawWeatherTableId,
+                    CultureInfo.InvariantCulture));
+                behaviors.Add(new MapWeatherTableBehavior(weatherTableId));
+            }
 
             var layers = tiledMap
                 .Layers
@@ -50,9 +68,10 @@ namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
                         mapLayerTiles);
                     return mapLayer;
                 });
-            var map = new Map(
+            var map = _mapFactory.Create(
                 mapId,
-                layers);
+                layers,
+                behaviors);
             return map;
         }
 

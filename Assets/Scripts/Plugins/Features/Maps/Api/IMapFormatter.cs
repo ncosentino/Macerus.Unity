@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api

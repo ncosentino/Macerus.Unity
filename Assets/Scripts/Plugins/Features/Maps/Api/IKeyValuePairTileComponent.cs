@@ -1,4 +1,4 @@
-﻿using ProjectXyz.Game.Interface.Mapping;
+﻿using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {

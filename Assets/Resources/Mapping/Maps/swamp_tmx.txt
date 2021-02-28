@@ -3,6 +3,7 @@
  <properties>
   <!--Usually we want 1 here so that Tiled looks right and Unity gets these all tile-aligned.-->
   <property name="WorldScalingFactor" value="1"/>
+  <property name="WeatherTableId" value="sample weather"/>
   <!--0.03125 = 1/32 which makes game object coordinates in tiles... but this map wont look right in Tiled program-->
   <!--<property name="WorldScalingFactor" value="0.03125"/>-->
  </properties>

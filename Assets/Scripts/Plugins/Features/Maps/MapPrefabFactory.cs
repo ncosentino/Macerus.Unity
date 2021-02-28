@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
-    public sealed class MapFactory : IMapFactory
+    public sealed class MapPrefabFactory : IMapPrefabFactory
     {
         private readonly IPrefabCreator _prefabCreator;
         private readonly IMapBehaviourStitcher _mapBehaviourStitcher;
 
-        public MapFactory(
+        public MapPrefabFactory(
             IPrefabCreator prefabCreator,
             IMapBehaviourStitcher mapBehaviourStitcher)
         {

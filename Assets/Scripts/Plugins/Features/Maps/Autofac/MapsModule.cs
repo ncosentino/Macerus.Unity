@@ -1,7 +1,7 @@
 ﻿using Autofac;
 
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework.Collections;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Autofac
@@ -11,7 +11,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<MapFactory>()
+                .RegisterType<MapPrefabFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

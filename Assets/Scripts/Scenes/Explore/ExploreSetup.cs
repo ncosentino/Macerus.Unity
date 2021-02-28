@@ -6,7 +6,7 @@ using Assets.Scripts.Scenes.Explore.Console;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Unity.GameObjects;
 
-using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Scenes.Explore
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Scenes.Explore
     public sealed class ExploreSetup : IExploreSetup
     {
         private readonly IUnityGameObjectManager _gameObjectManager;
-        private readonly IMapFactory _mapFactory;
+        private readonly IMapPrefabFactory _mapPrefabFactory;
         private readonly IGuiInputStitcher _guiInputStitcher;
         private readonly IExploreSceneStartupInterceptorFacade _exploreSceneStartupInterceptorFacade;
         private readonly IGameEngineUpdateBehaviourStitcher _gameEngineUpdateBehaviourStitcher;
@@ -22,14 +22,14 @@ namespace Assets.Scripts.Scenes.Explore
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
-            IMapFactory mapFactory,
+            IMapPrefabFactory mapPrefabFactory,
             IGuiInputStitcher guiInputStitcher,
             IExploreSceneStartupInterceptorFacade exploreSceneStartupInterceptorFacade,
             IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
             IMapManager mapManager)
         {
             _gameObjectManager = gameObjectManager;
-            _mapFactory = mapFactory;
+            _mapPrefabFactory = mapPrefabFactory;
             _guiInputStitcher = guiInputStitcher;
             _exploreSceneStartupInterceptorFacade = exploreSceneStartupInterceptorFacade;
             _gameEngineUpdateBehaviourStitcher = gameEngineUpdateBehaviourStitcher;
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Scenes.Explore
             _gameEngineUpdateBehaviourStitcher.Attach(rootGameObject);
             rootGameObject.AddComponent<ConsoleCommandsBehaviour>();
 
-            var mapObject = _mapFactory.CreateMap();
+            var mapObject = _mapPrefabFactory.CreateMap();
             mapObject.transform.parent = rootGameObject.transform;
 
             _guiInputStitcher.Attach(rootGameObject);

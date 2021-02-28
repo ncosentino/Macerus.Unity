@@ -8,7 +8,7 @@ using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Game.Interface.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
