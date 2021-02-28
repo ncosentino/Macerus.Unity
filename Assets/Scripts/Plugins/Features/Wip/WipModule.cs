@@ -10,6 +10,7 @@ using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Behaviors.Filtering.Attributes;
 using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Enchantments.Calculations;
+using ProjectXyz.Api.Enchantments.Generation;
 using ProjectXyz.Api.Enchantments.Stats;
 using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
@@ -90,6 +91,9 @@ namespace Assets.Scripts.Plugins.Features.Wip
 
     public sealed class WipSkills
     {
+        private readonly IFilterContextFactory _filterContextFactory;
+        private readonly IEnchantmentLoader _enchantmentLoader;
+        private readonly ISkillIdentifiers _skillIdentifiers;
         private readonly ISkillDefinitionRepositoryFacade _skillDefinitionRepositoryFacade;
         private readonly IStatCalculationService _statCalculationService;
         private readonly IStatCalculationContextFactory _statCalculationContextFactory;
@@ -99,12 +103,18 @@ namespace Assets.Scripts.Plugins.Features.Wip
             ISkillDefinitionRepositoryFacade skillDefinitionRepositoryFacade,
             IStatCalculationService statCalculationService,
             IStatCalculationContextFactory statCalculationContextFactory,
-            ILogger logger)
+            ILogger logger,
+            IEnchantmentLoader enchantmentLoader,
+            IFilterContextFactory filterContextFactory,
+            ISkillIdentifiers skillIdentifiers)
         {
             _skillDefinitionRepositoryFacade = skillDefinitionRepositoryFacade;
             _statCalculationService = statCalculationService;
             _statCalculationContextFactory = statCalculationContextFactory;
             _logger = logger;
+            _enchantmentLoader = enchantmentLoader;
+            _filterContextFactory = filterContextFactory;
+            _skillIdentifiers = skillIdentifiers;
         }
 
         public bool CanUseSkill(
@@ -174,8 +184,14 @@ namespace Assets.Scripts.Plugins.Features.Wip
             var skillDefinitionId = skill
                 .GetOnly<ITemplateIdentifierBehavior>()
                 .TemplateId;
-            var statefulEnchantments = _skillDefinitionRepositoryFacade
-                .GetSkillDefinitionStatefulEnchantments(skillDefinitionId);
+            var skillDefinition = _skillDefinitionRepositoryFacade
+                .GetSkillDefinitions(_filterContextFactory.CreateFilterContextForSingle(new FilterAttribute(
+                    _skillIdentifiers.SkillDefinitionIdentifier,
+                    new IdentifierFilterAttributeValue(skillDefinitionId),
+                    true)))
+                .Single();
+            var statefulEnchantments = _enchantmentLoader
+                .LoadForEnchantmenDefinitionIds(skillDefinition.StatefulEnchantmentDefinitions);
             targetEnchantmentsBehavior.AddEnchantments(statefulEnchantments);
         }
     }
