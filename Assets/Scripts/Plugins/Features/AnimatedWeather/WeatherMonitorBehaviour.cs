@@ -30,7 +30,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
         public IAnimatedWeatherFactory AnimatedWeatherFactory { get; set; }
 
         private float _triggerTime;
-        private IWeather _currentWeather;
+        private IAnimatedWeather _currentWeather;
 
         private void Start()
         {

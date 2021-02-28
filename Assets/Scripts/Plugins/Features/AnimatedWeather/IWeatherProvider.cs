@@ -2,6 +2,6 @@
 {
     public interface IWeatherProvider
     {
-        IWeather GetWeather();
+        IAnimatedWeather GetWeather();
     }
 }

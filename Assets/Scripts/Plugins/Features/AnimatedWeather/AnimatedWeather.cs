@@ -3,7 +3,7 @@ using ProjectXyz.Api.Framework;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 {
-    public sealed class Weather : IWeather
+    public sealed class AnimatedWeather : IAnimatedWeather
     {
         public IIdentifier WeatherResourceId { get; set; }
 
