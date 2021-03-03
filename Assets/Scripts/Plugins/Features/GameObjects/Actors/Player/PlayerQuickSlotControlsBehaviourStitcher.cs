@@ -1,7 +1,8 @@
 ﻿using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
-using Assets.Scripts.Plugins.Features.Wip;
 using Assets.Scripts.Unity.Input;
+
+using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
 using UnityEngine;
 
@@ -15,30 +16,31 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IKeyboardControls _keyboardControls;
         private readonly IKeyboardInput _keyboardInput;
         private readonly ILogger _logger;
-        private readonly WipSkills _wipSkills;
+        private readonly ISkillUsage _skillUsage;
 
         public PlayerQuickSlotControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
             IKeyboardInput keyboardInput,
             ILogger logger,
-            WipSkills wipSkills,
+            ISkillUsage skillUsage,
             IDebugConsoleManager debugConsoleManager)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
             _logger = logger;
-            _wipSkills = wipSkills;
+            _skillUsage = skillUsage;
             _debugConsoleManager = debugConsoleManager;
         }
 
-        public void Attach(GameObject gameObject)
+        public IReadOnlyPlayerQuickSlotControlsBehaviour Attach(GameObject gameObject)
         {
             var playerQuickSlotControlsBehaviour = gameObject.AddComponent<PlayerQuickSlotControlsBehaviour>();
             playerQuickSlotControlsBehaviour.Logger = _logger;
             playerQuickSlotControlsBehaviour.KeyboardControls = _keyboardControls;
             playerQuickSlotControlsBehaviour.KeyboardInput = _keyboardInput;
             playerQuickSlotControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
-            playerQuickSlotControlsBehaviour.WipSkills = _wipSkills;
+            playerQuickSlotControlsBehaviour.SkillUsage = _skillUsage;
+            return playerQuickSlotControlsBehaviour;
         }
     }
 }

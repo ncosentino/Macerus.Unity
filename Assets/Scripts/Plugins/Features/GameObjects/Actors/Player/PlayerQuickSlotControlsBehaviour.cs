@@ -3,10 +3,9 @@
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
-using Assets.Scripts.Plugins.Features.Wip;
 using Assets.Scripts.Unity.Input;
 
-using Macerus.Plugins.Features.GameObjects.Skills;
+using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
 using NexusLabs.Contracts;
 
@@ -18,8 +17,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
+
     public sealed class PlayerQuickSlotControlsBehaviour :
-        MonoBehaviour
+        MonoBehaviour,
+        IPlayerQuickSlotControlsBehaviour
     {
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 
@@ -29,7 +30,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
 
-        public WipSkills WipSkills { get; set; }
+        public ISkillUsage SkillUsage { get; set; }
 
         private void Start()
         {
@@ -72,7 +73,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     return;
                 }
 
-                if (!WipSkills.CanUseSkill(
+                if (!SkillUsage.CanUseSkill(
                     player,
                     firstUsableSkill))
                 {
@@ -81,10 +82,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
                 // FIXME: move this logic into the backend into some class?
                 // FIXME: check the targeting?
-                WipSkills.UseRequiredResources(
+                SkillUsage.UseRequiredResources(
                     player,
                     firstUsableSkill);
-                WipSkills.ApplySkillEffectsToTarget(
+                SkillUsage.ApplySkillEffectsToTarget(
                     firstUsableSkill,
                     player);
             }
@@ -99,5 +100,5 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         }
     }
 
-    
+
 }

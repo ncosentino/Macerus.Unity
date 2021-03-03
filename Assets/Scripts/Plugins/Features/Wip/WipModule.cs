@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.Behaviors.Filtering;
@@ -32,9 +33,6 @@ namespace Assets.Scripts.Plugins.Features.Wip
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<WipSkills>()
-                .SingleInstance();
-            builder
                 .RegisterType<PlayerTestingBehaviorsInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -45,16 +43,16 @@ namespace Assets.Scripts.Plugins.Features.Wip
     {
         private readonly IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
         private readonly IFilterContextFactory _filterContextFactory;
-        private readonly ISkillRepository _skillRepository;
+        private readonly ISkillAmenity _skillAmenity;
 
         public PlayerTestingBehaviorsInterceptor(
             IReadOnlyStatDefinitionToTermMappingRepository statDefinitionToTermMappingRepository,
             IFilterContextFactory filterContextFactory,
-            ISkillRepository skillRepository)
+            ISkillAmenity skillAmenity)
         {
             _statDefinitionToTermMappingRepository = statDefinitionToTermMappingRepository;
             _filterContextFactory = filterContextFactory;
-            _skillRepository = skillRepository;
+            _skillAmenity = skillAmenity;
         }
 
         public void Intercept(IReadOnlyCollection<IBehavior> behaviors)
@@ -76,123 +74,8 @@ namespace Assets.Scripts.Plugins.Features.Wip
             var skillsBehavior = behaviors.GetOnly<IHasSkillsBehavior>();
             skillsBehavior.Add(new[]
             {
-                _skillRepository
-                    .GetSkills(_filterContextFactory.CreateFilterContextForSingle(new IFilterAttribute[]
-                    {
-                        new FilterAttribute(
-                            new StringIdentifier("id"),
-                            new IdentifierFilterAttributeValue(new StringIdentifier("heal-self")),
-                            true),
-                    }))
-                    .FirstOrDefault(),
-        });
-        }
-    }
-
-    public sealed class WipSkills
-    {
-        private readonly IFilterContextFactory _filterContextFactory;
-        private readonly IEnchantmentLoader _enchantmentLoader;
-        private readonly ISkillIdentifiers _skillIdentifiers;
-        private readonly ISkillDefinitionRepositoryFacade _skillDefinitionRepositoryFacade;
-        private readonly IStatCalculationService _statCalculationService;
-        private readonly IStatCalculationContextFactory _statCalculationContextFactory;
-        private readonly ILogger _logger;
-
-        public WipSkills(
-            ISkillDefinitionRepositoryFacade skillDefinitionRepositoryFacade,
-            IStatCalculationService statCalculationService,
-            IStatCalculationContextFactory statCalculationContextFactory,
-            ILogger logger,
-            IEnchantmentLoader enchantmentLoader,
-            IFilterContextFactory filterContextFactory,
-            ISkillIdentifiers skillIdentifiers)
-        {
-            _skillDefinitionRepositoryFacade = skillDefinitionRepositoryFacade;
-            _statCalculationService = statCalculationService;
-            _statCalculationContextFactory = statCalculationContextFactory;
-            _logger = logger;
-            _enchantmentLoader = enchantmentLoader;
-            _filterContextFactory = filterContextFactory;
-            _skillIdentifiers = skillIdentifiers;
-        }
-
-        public bool CanUseSkill(
-            IGameObject actor,
-            IGameObject skill)
-        {
-            if (skill.TryGetFirst<ISkillResourceUsageBehavior>(out var skillResourceUsageBehavior) &&
-                skillResourceUsageBehavior.StaticStatRequirements.Any())
-            {
-                var statCalculationContext = _statCalculationContextFactory.Create(
-                    new IComponent[] { },
-                    new IEnchantment[] { });
-
-                foreach (var requiredResourceKvp in skillResourceUsageBehavior.StaticStatRequirements)
-                {
-                    var requiredStatDefinitionId = requiredResourceKvp.Key;
-                    var requiredStatValue = requiredResourceKvp.Value;
-
-                    var actualStatValue = _statCalculationService.GetStatValue(
-                        actor,
-                        requiredStatDefinitionId,
-                        statCalculationContext);
-
-                    if (actualStatValue < requiredStatValue)
-                    {
-                        _logger.Debug(
-                            $"'{actor}' did not meet required stat ID " +
-                            $"'{requiredStatDefinitionId}' value of " +
-                            $"{requiredStatValue}. Had value of " +
-                            $"{actualStatValue}.");
-                        return false;
-                    }
-                }                
-            }
-
-            return true;
-        }
-
-        public void UseRequiredResources(
-            IGameObject actor,
-            IGameObject skill)
-        {
-            if (!skill.TryGetFirst<ISkillResourceUsageBehavior>(out var skillResourceUsageBehavior) ||
-                !skillResourceUsageBehavior.StaticStatRequirements.Any())
-            {
-                return;
-            }
-
-            var actorMutableStats = actor.GetOnly<IHasMutableStatsBehavior>();
-            actorMutableStats.MutateStats(stats =>
-            {
-                foreach (var requiredResourceKvp in skillResourceUsageBehavior.StaticStatRequirements)
-                {
-                    var requiredStatDefinitionId = requiredResourceKvp.Key;
-                    var requiredStatValue = requiredResourceKvp.Value;
-
-                    stats[requiredStatDefinitionId] -= requiredStatValue;
-                }
+                _skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
             });
-        }
-
-        public void ApplySkillEffectsToTarget(
-            IGameObject skill,
-            IGameObject target)
-        {
-            var targetEnchantmentsBehavior = target.GetOnly<IHasEnchantmentsBehavior>();
-            var skillDefinitionId = skill
-                .GetOnly<ITemplateIdentifierBehavior>()
-                .TemplateId;
-            var skillDefinition = _skillDefinitionRepositoryFacade
-                .GetSkillDefinitions(_filterContextFactory.CreateFilterContextForSingle(new FilterAttribute(
-                    _skillIdentifiers.SkillDefinitionIdentifier,
-                    new IdentifierFilterAttributeValue(skillDefinitionId),
-                    true)))
-                .Single();
-            var statefulEnchantments = _enchantmentLoader
-                .LoadForEnchantmenDefinitionIds(skillDefinition.StatefulEnchantmentDefinitions);
-            targetEnchantmentsBehavior.AddEnchantments(statefulEnchantments);
         }
     }
 }
