@@ -9,15 +9,14 @@ using IngameDebugConsole;
 
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Skills;
+using Macerus.Plugins.Features.Weather;
 
-using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Stats;
 using ProjectXyz.Plugins.Enchantments.Stats;
-using ProjectXyz.Plugins.Features.Behaviors.Filtering.Default.Attributes;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
@@ -33,10 +32,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private ProjectXyz.Api.Logging.ILogger _logger;
         private IGameObjectManager _gameObjectManager;
         private ISkillAmenity _skillAmenity;
-        private IFilterContextFactory _filterContextFactory;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
         private IStatCalculationService _statCalculationService;
-        private IWeatherTableRepositoryFacade _weatherTableRepositoryFacade;
+        private IWeatherAmenity _weatherAmenity;
         private IWeatherManager _weatherManager;
 
 
@@ -52,10 +50,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
             _gameObjectManager = container.Resolve<IGameObjectManager>();
             _skillAmenity = container.Resolve<ISkillAmenity>();
-            _filterContextFactory = container.Resolve<IFilterContextFactory>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
             _statCalculationService = container.Resolve<IStatCalculationService>();
-            _weatherTableRepositoryFacade = container.Resolve<IWeatherTableRepositoryFacade>();
+            _weatherAmenity = container.Resolve<IWeatherAmenity>();
             _weatherManager = container.Resolve<IWeatherManager>();
 
             AddCommand(
@@ -84,14 +81,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private void WeatherSetTable(string rawWeatherTableId)
         {
             var weatherTableId = new StringIdentifier(rawWeatherTableId);
-            var filterContext = _filterContextFactory.CreateFilterContextForSingle(
-                new FilterAttribute(
-                    new StringIdentifier("id"),
-                    new IdentifierFilterAttributeValue(weatherTableId),
-                    true));
-            var weatherTable = _weatherTableRepositoryFacade
-                .GetWeatherTables(filterContext)
-                .SingleOrDefault();
+            var weatherTable = _weatherAmenity.GetWeatherTableById(weatherTableId);
             if (weatherTable == null)
             {
                 _logger.Warn(
