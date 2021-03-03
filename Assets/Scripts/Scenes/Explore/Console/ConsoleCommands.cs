@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 using Assets.Scripts;
 using Assets.Scripts.Behaviours;
@@ -12,9 +8,9 @@ using Autofac;
 using IngameDebugConsole;
 
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.GameObjects.Skills;
 
 using ProjectXyz.Api.Behaviors.Filtering;
-using ProjectXyz.Api.Behaviors.Filtering.Attributes;
 using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Entities;
@@ -36,7 +32,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
     {
         private ProjectXyz.Api.Logging.ILogger _logger;
         private IGameObjectManager _gameObjectManager;
-        private ISkillRepository _skillRepository;
+        private ISkillAmenity _skillAmenity;
         private IFilterContextFactory _filterContextFactory;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
         private IStatCalculationService _statCalculationService;
@@ -55,7 +51,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
             _gameObjectManager = container.Resolve<IGameObjectManager>();
-            _skillRepository = container.Resolve<ISkillRepository>();
+            _skillAmenity = container.Resolve<ISkillAmenity>();
             _filterContextFactory = container.Resolve<IFilterContextFactory>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
             _statCalculationService = container.Resolve<IStatCalculationService>();
@@ -173,15 +169,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>());
 
-            var skill = _skillRepository
-                .GetSkills(_filterContextFactory.CreateFilterContextForSingle(new IFilterAttribute[]
-                {
-                    new FilterAttribute(
-                        new StringIdentifier("id"),
-                        new IdentifierFilterAttributeValue(new StringIdentifier(skillId)),
-                        true),
-                }))
-                .FirstOrDefault();
+            var skill = _skillAmenity.GetSkillById(new StringIdentifier(skillId));
             if (skill == null)
             {
                 _logger.Warn($"Could not find a skill with ID '{skillId}'.");
