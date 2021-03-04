@@ -11,6 +11,8 @@ namespace Assets.Scripts.Plugins.Features.Animations.Api
     {
         new IAnimationBehavior AnimationBehavior { get; set; }
 
+        new IDynamicAnimationBehavior DynamicAnimationBehavior { get; set; }
+
         ISpriteAnimationProvider SpriteAnimationProvider { get; set; }
 
         ProjectXyz.Api.Logging.ILogger Logger { get; set; }

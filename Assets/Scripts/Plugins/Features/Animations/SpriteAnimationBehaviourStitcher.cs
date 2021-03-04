@@ -42,6 +42,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             spriteAnimationBehaviour.SpriteLoader = _spriteLoader;
             spriteAnimationBehaviour.SpriteAnimationProvider = _spriteAnimationProvider;
             spriteAnimationBehaviour.AnimationBehavior = animationBehavior;
+            spriteAnimationBehaviour.DynamicAnimationBehavior = animationBehavior as IDynamicAnimationBehavior;
 
             return spriteAnimationBehaviour;
         }

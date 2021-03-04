@@ -27,6 +27,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         public IAnimationBehavior AnimationBehavior { get; set; }
 
+        public IDynamicAnimationBehavior DynamicAnimationBehavior { get; set; }
+
         public ITimeProvider TimeProvider { get; set; }
 
         public ISpriteAnimationProvider SpriteAnimationProvider { get; set; }
@@ -36,6 +38,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
         public ISpriteLoader SpriteLoader { get; set; }
 
         IReadOnlyAnimationBehavior IReadOnlySpriteAnimationBehaviour.AnimationBehavior => AnimationBehavior;
+
+        IReadOnlyDynamicAnimationBehavior IReadOnlySpriteAnimationBehaviour.DynamicAnimationBehavior => DynamicAnimationBehavior;
 
         private void Start()
         {
@@ -107,6 +111,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             ISpriteAnimationFrame currentFrame;
             var lastFrameIndex = _currentFrameIndex;
 
+            var animationSpeedMultiplier = DynamicAnimationBehavior?.AnimationSpeedMultiplier ?? 1;
+
             while (true)
             {
                 currentFrame = currentAnimation.Frames[_currentFrameIndex];
@@ -115,10 +121,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                     break;
                 }
 
-                if (_secondsElapsedOnFrame >= currentFrame.DurationInSeconds.Value)
+                var durationInSeconds = (float)(currentFrame.DurationInSeconds.Value / animationSpeedMultiplier);
+                if (_secondsElapsedOnFrame >= durationInSeconds)
                 {
                     _currentFrameIndex++;
-                    _secondsElapsedOnFrame -= currentFrame.DurationInSeconds.Value;
+                    _secondsElapsedOnFrame -= durationInSeconds;
 
                     if (_currentFrameIndex == currentAnimation.Frames.Count)
                     {
@@ -152,7 +159,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             SpriteRenderer.sprite = sprite;
             SpriteRenderer.flipX = currentFrame.FlipHorizontal;
             SpriteRenderer.flipY = currentFrame.FlipVertical;
-            SpriteRenderer.color = currentFrame.Color;
+
+            var red = (float)(DynamicAnimationBehavior?.RedMultiplier ?? 1);
+            var green = (float)(DynamicAnimationBehavior?.GreenMultiplier ?? 1);
+            var blue = (float)(DynamicAnimationBehavior?.BlueMultiplier ?? 1);
+            var alpha = (float)(DynamicAnimationBehavior?.AlphaMultiplier ?? 1);
+            SpriteRenderer.color = new Color(
+                currentFrame.Color.r * red,
+                currentFrame.Color.g * green,
+                currentFrame.Color.b * blue,
+                currentFrame.Color.a * alpha);
         }
     }
 }
