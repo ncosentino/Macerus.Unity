@@ -70,10 +70,10 @@ namespace Assets.Scripts.UnityEditor
 
             var destinationPluginsDirectory = Path.Combine(
                 _dataPath,
-                @"Plugins");
+                @"MacerusPlugins");
             Debug.Log($"Destination Plugins Directory: '{destinationPluginsDirectory}'");
 
-            var backupDestinationPluginsDirectory = Path.Combine(_dataPath, @"PluginsBackup");
+            var backupDestinationPluginsDirectory = Path.Combine(_dataPath, @"MacerusPluginsBackup");
             if (Directory.Exists(backupDestinationPluginsDirectory))
             {
                 Debug.Log($"Deleting '{backupDestinationPluginsDirectory}'...");
