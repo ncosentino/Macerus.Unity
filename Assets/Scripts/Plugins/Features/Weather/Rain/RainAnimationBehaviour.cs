@@ -5,8 +5,8 @@ namespace Assets.Scripts.Plugins.Features.AnimatedRain
 {
     public sealed class RainAnimationBehaviour : MonoBehaviour
     {
-        public float ScrollSpeed;
-        public float VerticalTileSize;
+        public float ScrollSpeed = 150;
+        public float VerticalTileSize = 1024;
 
         private Vector3 _startPosition;
 
