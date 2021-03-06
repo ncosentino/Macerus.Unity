@@ -1,4 +1,8 @@
-﻿using Assets.Scripts.Autofac;
+﻿using System.Collections.Generic;
+
+using Assets.Scripts.Autofac;
+using Assets.Scripts.Scenes.Api;
+
 using Autofac;
 using UnityEngine;
 
@@ -36,6 +40,13 @@ namespace Assets.Scripts.Behaviours
             var containerBuilder = new MacerusContainerBuilder();
             _container = containerBuilder.CreateContainer();
             Debug.Log("Created autofac container.");
+
+            var logger = _container.Resolve<ProjectXyz.Api.Logging.ILogger>();
+            foreach (var sceneLoadHook in _container.Resolve<IEnumerable<IDiscoverableSceneLoadHook>>())
+            {
+                logger.Debug($"Created scene load hook '{sceneLoadHook}'.");
+                sceneLoadHook.SwitchScene();
+            }
         }
     }
 }
