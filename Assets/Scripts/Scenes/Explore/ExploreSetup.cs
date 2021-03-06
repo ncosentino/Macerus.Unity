@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Assets.Scripts.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Console;
@@ -8,6 +9,8 @@ using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
+
+using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore
 {
@@ -42,7 +45,14 @@ namespace Assets.Scripts.Scenes.Explore
                 .FindAll(x => x.name == "Game")
                 .Single();
             _gameEngineUpdateBehaviourStitcher.Attach(rootGameObject);
-            rootGameObject.AddComponent<ConsoleCommandsBehaviour>();
+            
+            var consoleObject = new GameObject()
+            {
+                name = "ConsoleCommands",
+            };
+            consoleObject.AddComponent<GlobalConsoleCommandsBehaviour>();
+            consoleObject.AddComponent<ConsoleCommandsBehaviour>();
+            consoleObject.transform.parent = rootGameObject.transform;
 
             var mapObject = _mapPrefabFactory.CreateMap();
             mapObject.transform.parent = rootGameObject.transform;

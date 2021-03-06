@@ -1,7 +1,8 @@
-﻿using Assets.Scripts.Plugins.Features.UnityViewWelding;
-using Assets.Scripts.Plugins.Features.UnityViewWelding.Api;
+﻿using Assets.Scripts.Gui.UnityViewWelding.Api;
 using Assets.Scripts.Scenes.Explore.Gui.Api;
+
 using ProjectXyz.Framework.ViewWelding.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather
