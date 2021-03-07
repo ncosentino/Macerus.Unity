@@ -20,6 +20,7 @@ namespace Assets.Scripts.Console
         private IGameObjectManager _gameObjectManager;
         private IGuiPrefabCreator _guiPrefabCreator;
         private IViewWelderFactory _viewWelderFactory;
+        private IMainMenuView _mainMenuView;
 
         private void Start()
         {
@@ -34,6 +35,7 @@ namespace Assets.Scripts.Console
             _gameObjectManager = container.Resolve<IGameObjectManager>();
             _guiPrefabCreator = container.Resolve<IGuiPrefabCreator>();
             _viewWelderFactory = container.Resolve<IViewWelderFactory>();
+            _mainMenuView = container.Resolve<IMainMenuView>();
 
             AddCommand(
                 nameof(AddTestGui),
@@ -53,7 +55,7 @@ namespace Assets.Scripts.Console
         {
             var gui = _guiPrefabCreator.Create();
             _viewWelderFactory
-                .Create<ISimpleWelder>(gui, new MainMenuView())
+                .Create<ISimpleWelder>(gui, _mainMenuView)
                 .Weld();
         }
     }

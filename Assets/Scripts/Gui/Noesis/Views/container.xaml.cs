@@ -12,7 +12,7 @@ using System.Windows.Controls;
 
 namespace Assets.Scripts.Gui.Noesis.Views
 {
-    public partial class Container : Viewbox
+    public partial class Container : ContentControl
     {
         public Container()
         {

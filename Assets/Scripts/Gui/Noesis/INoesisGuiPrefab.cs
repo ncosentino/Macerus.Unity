@@ -4,6 +4,6 @@ namespace Assets.Scripts.Gui.Noesis
 {
     public interface INoesisGuiPrefab : IGuiPrefab
     {
-        Viewbox ViewBox { get; }
+        ContentControl ContainerControl { get; }
     }
 }

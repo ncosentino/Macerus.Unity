@@ -1,6 +1,4 @@
-﻿using Assets.Scripts.Gui.Noesis;
-
-using ProjectXyz.Framework.ViewWelding.Api;
+﻿using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
 namespace Assets.Scripts.Gui.Noesis.ViewWelding
@@ -24,7 +22,7 @@ namespace Assets.Scripts.Gui.Noesis.ViewWelding
         public void Weld()
         {
             _viewWelderFactory
-                .Create<ISimpleWelder>(_parent.ViewBox, _child)
+                .Create<ISimpleWelder>(_parent.ContainerControl, _child)
                 .Weld();
         }
     }

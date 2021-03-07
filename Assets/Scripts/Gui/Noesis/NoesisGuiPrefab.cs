@@ -10,14 +10,14 @@ namespace Assets.Scripts.Gui.Noesis
 {
     public sealed class NoesisGuiPrefab : INoesisGuiPrefab
     {
-        private readonly Lazy<Viewbox> _lazyViewbox;
+        private readonly Lazy<ContentControl> _lazyContainerControl;
 
         public NoesisGuiPrefab(GameObject gameObject)
         {
             GameObject = gameObject;
-            _lazyViewbox = new Lazy<Viewbox>(() =>
+            _lazyContainerControl = new Lazy<ContentControl>(() =>
             {
-                var viewBox = (Viewbox)GameObject
+                var viewBox = (ContentControl)GameObject
                     .GetRequiredComponent<NoesisView>()
                     .Content;
                 return viewBox;
@@ -26,6 +26,6 @@ namespace Assets.Scripts.Gui.Noesis
 
         public GameObject GameObject { get; }
 
-        public Viewbox ViewBox => _lazyViewbox.Value;
+        public ContentControl ContainerControl => _lazyContainerControl.Value;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Scenes.MainMenu.Input;
+﻿using Assets.Scripts.Scenes.MainMenu.Gui.Views;
+using Assets.Scripts.Scenes.MainMenu.Input;
 
 using Autofac;
 
@@ -22,6 +23,15 @@ namespace Assets.Scripts.Scenes.MainMenu.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<MainMenuSetup>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<MainMenuView>()
+                .AsImplementedInterfaces()
+                .SingleInstance()
+                .UsingConstructor(typeof(IMainMenuViewModel));
+            builder
+                .RegisterType<MainMenuViewModel>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

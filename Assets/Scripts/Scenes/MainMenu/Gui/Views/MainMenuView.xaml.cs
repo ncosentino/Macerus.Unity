@@ -7,13 +7,23 @@ using Noesis;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 #endif
 
 
 namespace Assets.Scripts.Scenes.MainMenu.Gui.Views
 {
-    public partial class MainMenuView : UserControl
+    public partial class MainMenuView :
+        UserControl,
+        IMainMenuView
     {
+        public MainMenuView(IMainMenuViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
+        }
+
         public MainMenuView()
         {
             InitializeComponent();
@@ -22,7 +32,7 @@ namespace Assets.Scripts.Scenes.MainMenu.Gui.Views
 #if NOESIS
         private void InitializeComponent()
         {
-            GUI.LoadComponent(this, XamlResolve.ExpectedXamlPath(GetType()));
+            Noesis.GUI.LoadComponent(this, XamlResolve.ExpectedXamlPath(GetType()));
         }
 #endif
     }
