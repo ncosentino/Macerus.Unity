@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Behaviours;
 using Assets.Scripts.Gui;
+using Assets.Scripts.Scenes.MainMenu.Gui.Views;
 
 using Autofac;
 
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Console
         {
             var gui = _guiPrefabCreator.Create();
             _viewWelderFactory
-                .Create<ISimpleWelder>(gui, new Noesis.Button() { Content = "Hello world" })
+                .Create<ISimpleWelder>(gui, new MainMenuView())
                 .Weld();
         }
     }

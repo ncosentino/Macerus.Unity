@@ -10,11 +10,11 @@ using System.Windows.Controls;
 #endif
 
 
-namespace Assets.Scripts.Gui.Noesis.Views
+namespace Assets.Scripts.Scenes.MainMenu.Gui.Views
 {
-    public partial class Container : Viewbox
+    public partial class MainMenuView : UserControl
     {
-        public Container()
+        public MainMenuView()
         {
             InitializeComponent();
         }
