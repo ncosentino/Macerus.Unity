@@ -26,6 +26,8 @@ namespace Assets.Scripts.Input.Api
         KeyCode GuiClose { get; }
 
         KeyCode DebugConsole { get; }
+
+        KeyCode Summon { get; }
         #endregion
     }
 }

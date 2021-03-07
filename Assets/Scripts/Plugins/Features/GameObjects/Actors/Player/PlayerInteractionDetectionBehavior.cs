@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using Macerus.Api.Behaviors;
-
+using ProjectXyz.Api.Behaviors;
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
@@ -49,6 +49,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
             _interactables.Add(collidedObject);
 
+            CheckForNoise(collidedObject);
+
             NewInteractable?.Invoke(
                 this,
                 EventArgs.Empty);
@@ -63,6 +65,23 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             }
 
             _interactables.Remove(collidedObject);
+        }
+
+        private void CheckForNoise(GameObject collidedWith)
+        {
+            var makesNoise = collidedWith.Get<IMakeNoiseBehaviour>().FirstOrDefault();
+            if (makesNoise == null)
+            {
+                return;
+            }
+
+            var soundPlayer = collidedWith.GetComponentInParent<ICanPlaySound>();
+            if (soundPlayer == null)
+            {
+                return;
+            }
+
+            soundPlayer.PlaySound(makesNoise.GetNoise());
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-
 using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis.Views.Resources;
+using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Console;
@@ -11,7 +11,6 @@ using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
-
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore
@@ -25,6 +24,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IGameEngineUpdateBehaviourStitcher _gameEngineUpdateBehaviourStitcher;
         private readonly IMapManager _mapManager;
         private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
+        private readonly ISoundPlayingBehaviourStitcher _soundPlayingBehaviourStitcher;
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
@@ -33,7 +33,8 @@ namespace Assets.Scripts.Scenes.Explore
             IExploreSceneStartupInterceptorFacade exploreSceneStartupInterceptorFacade,
             IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
             IMapManager mapManager,
-            IGuiBehaviourStitcher guiBehaviourStitcher)
+            IGuiBehaviourStitcher guiBehaviourStitcher,
+            ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher)
         {
             _gameObjectManager = gameObjectManager;
             _mapPrefabFactory = mapPrefabFactory;
@@ -42,6 +43,7 @@ namespace Assets.Scripts.Scenes.Explore
             _gameEngineUpdateBehaviourStitcher = gameEngineUpdateBehaviourStitcher;
             _mapManager = mapManager;
             _guiBehaviorStitcher = guiBehaviourStitcher;
+            _soundPlayingBehaviourStitcher = soundPlayingBehaviourStitcher;
         }
 
         public void Setup()
@@ -50,6 +52,8 @@ namespace Assets.Scripts.Scenes.Explore
                 .FindAll(x => x.name == "Game")
                 .Single();
             _gameEngineUpdateBehaviourStitcher.Attach(rootGameObject);
+            _soundPlayingBehaviourStitcher.Attach(rootGameObject);
+
             var container = new Container(); // FIXME: replace with the actual GUI we want to use here
             _guiBehaviorStitcher.Stitch(
                 rootGameObject,
@@ -63,6 +67,8 @@ namespace Assets.Scripts.Scenes.Explore
             consoleObject.AddComponent<GlobalConsoleCommandsBehaviour>();
             consoleObject.AddComponent<ConsoleCommandsBehaviour>();
             consoleObject.transform.parent = rootGameObject.transform;
+
+            rootGameObject.AddComponent<ConsoleCommandsBehaviour>();
 
             var mapObject = _mapPrefabFactory.CreateMap();
             mapObject.transform.parent = rootGameObject.transform;

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
