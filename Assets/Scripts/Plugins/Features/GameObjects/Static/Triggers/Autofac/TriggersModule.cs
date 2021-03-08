@@ -24,6 +24,14 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers.Autofac
                 .RegisterType<OnExitTriggerScriptInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<EncounterTriggerBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<EncounterTriggerInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

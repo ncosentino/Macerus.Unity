@@ -20094,6 +20094,14 @@
     <property name="DropTableId" value="any_normal_magic_10x_lvl10"/>
     <property name="Collisions" value="True"/>
   </object>
+  <object id="11" name="tiled specific name" type="tiled specific type" x="1280" y="-800" width="128" height="128">
+    <property name="$typeId" value="static"/>
+    <property name="$templateId" value="rectangulartrigger"/>
+    <property name="EncounterId" value="Skeleton"/>
+    <property name="EncounterChance" value="0.5"/>
+    <property name="EncounterInterval" value="5000"/>
+    <property name="MustBeMoving" value="true"/>
+  </object>
  </objectgroup>
  <objectgroup color="#a0a0a4" name="EmptyGroupJustAsAnExample">
  </objectgroup>
