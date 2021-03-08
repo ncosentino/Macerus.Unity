@@ -73,6 +73,14 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
                     _objectDestroyer.Destroy(gameObject);
                 }
             }
+            else
+            {
+                foreach (var gameObject in disabledInstances.Skip(1))
+                {
+                    allDebugConsoleObjects.Remove(gameObject);
+                    _objectDestroyer.Destroy(gameObject);
+                }
+            }
 
             var singleInstance = allDebugConsoleObjects.Single();
             return singleInstance;
