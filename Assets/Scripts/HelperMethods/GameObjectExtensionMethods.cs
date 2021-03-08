@@ -27,7 +27,7 @@ namespace Assets.Scripts // shortened namespace for ease of ue
             var result = unityGameObject
                 .GetComponent<IHasGameObject>()
                 ?.GameObject
-                .Has<T>() == true;
+                ?.Has<T>() == true;
             return result;
         }
 
