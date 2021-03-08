@@ -6,6 +6,8 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using Macerus.Api.Behaviors;
 
+using NexusLabs.Contracts;
+
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
 
@@ -62,8 +64,16 @@ namespace Assets.Scripts // shortened namespace for ease of ue
         public static T GetOnly<T>(this GameObject unityGameObject)
             where T : IBehavior
         {
-            var gameObject = unityGameObject
-                .GetComponent<IHasGameObject>()
+            var hasGameObjectBehaviours = unityGameObject
+                .GetComponents<IHasGameObject>()
+                .ToArray();
+            Contract.Requires(
+                hasGameObjectBehaviours.Length == 1,
+                $"Expecting '{unityGameObject}' to have one " +
+                $"'{typeof(IHasGameObject)}' behaviour but there were " +
+                $"{hasGameObjectBehaviours.Length}.");
+            var gameObject = hasGameObjectBehaviours
+                .Single()
                 .GameObject;
             var result = gameObject.GetOnly<T>();
             return result;
