@@ -1,4 +1,4 @@
-﻿using ProjectXyz.Api.Framework;
+﻿using Macerus.Plugins.Features.Encounters.GamObjects.Static.Triggers;
 
 using UnityEngine;
 
@@ -8,9 +8,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
     {
         void Stitch(
             GameObject unityGameObject,
-            IIdentifier encounterId,
-            double encounterChance,
-            IInterval encounterInterval,
-            bool mustBeMoving);
+            IReadOnlyEncounterTriggerPropertiesBehavior encounterTriggerPropertiesBehavior);
     }
 }

@@ -20096,7 +20096,7 @@
   </object>
   <object id="11" name="tiled specific name" type="tiled specific type" x="1280" y="-800" width="128" height="128">
     <property name="$typeId" value="static"/>
-    <property name="$templateId" value="rectangulartrigger"/>
+    <property name="$templateId" value="rectangularencountertrigger"/>
     <property name="EncounterId" value="Skeleton"/>
     <property name="EncounterChance" value="0.5"/>
     <property name="EncounterInterval" value="5000"/>

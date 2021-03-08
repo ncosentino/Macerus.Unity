@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Macerus.Plugins.Features.Encounters.GamObjects.Static.Triggers;
+
 using NexusLabs.Framework;
 
 using ProjectXyz.Api.Framework;
@@ -19,19 +21,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
 
         public void Stitch(
             GameObject unityGameObject,
-            IIdentifier encounterId,
-            double encounterChance,
-            IInterval encounterInterval,
-            bool mustBeMoving)
+            IReadOnlyEncounterTriggerPropertiesBehavior encounterTriggerPropertiesBehavior)
         {
             var encounterTriggerBehaviour = unityGameObject.AddComponent<EncounterTriggerBehaviour>();
             encounterTriggerBehaviour.Random = _random;
-            encounterTriggerBehaviour.ChanceToTrigger = encounterChance;
-            encounterTriggerBehaviour.MustBeMoving = mustBeMoving;
+            encounterTriggerBehaviour.ChanceToTrigger = encounterTriggerPropertiesBehavior.EncounterChance;
+            encounterTriggerBehaviour.MustBeMoving = encounterTriggerPropertiesBehavior.MustBeMoving;
 
             // FIXME: this casting is horrendous
             encounterTriggerBehaviour.TriggerInterval = TimeSpan.FromMilliseconds(
-                ((IInterval<double>)encounterInterval).Value);
+                ((IInterval<double>)encounterTriggerPropertiesBehavior.EncounterInterval).Value);
         }
     }
 }
