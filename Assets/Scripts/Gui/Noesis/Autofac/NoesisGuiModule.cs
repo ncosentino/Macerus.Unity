@@ -12,6 +12,10 @@ namespace Assets.Scripts.Gui.Noesis.Autofac
                 .RegisterType<NoesisGuiPrefabCreator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<ResourceImageSourceFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

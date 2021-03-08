@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Behaviours;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Scenes.MainMenu.Gui.Views;
+using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 
 using Autofac;
 

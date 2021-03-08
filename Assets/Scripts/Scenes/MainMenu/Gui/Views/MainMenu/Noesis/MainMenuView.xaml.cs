@@ -12,13 +12,13 @@ using System.Windows.Media.Imaging;
 #endif
 
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.Views
+namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis
 {
     public partial class MainMenuView :
         UserControl,
         IMainMenuView
     {
-        public MainMenuView(IMainMenuViewModel viewModel)
+        public MainMenuView(IMainMenuNoesisViewModel viewModel)
             : this()
         {
             DataContext = viewModel;
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Scenes.MainMenu.Gui.Views
 #if NOESIS
         private void InitializeComponent()
         {
-            Noesis.GUI.LoadComponent(this, XamlResolve.ExpectedXamlPath(GetType()));
+            GUI.LoadComponent(this, XamlResolve.ExpectedXamlPath(GetType()));
         }
 #endif
     }
