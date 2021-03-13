@@ -25,7 +25,7 @@ public class NoesisUpdater: EditorWindow
             string version = NoesisVersion.Get();
 
             // Remove the file that indicates Noesis package is being installed
-            AssetDatabase.DeleteAsset("Assets/NoesisGUI/Packages/Editor/installing");
+            AssetDatabase.DeleteAsset("Assets/NoesisGUI/Plugins/Editor/installing");
 
             // Detect if /Library is being recreated
             string noesisFile = Path.Combine(Application.dataPath, "../Library/noesis");
@@ -130,9 +130,9 @@ public class NoesisUpdater: EditorWindow
         NoesisPostprocessor.ImportAllAssets();
         progress_ = 0.90f;
 
-        //state_ = "Opening Welcome Window...\n";
-        //yield return null;
-        //EditorWindow.GetWindow(typeof(NoesisWelcome), true, "Welcome to NoesisGUI!");
+        state_ = "Opening Welcome Window...\n";
+        yield return null;
+        EditorWindow.GetWindow(typeof(NoesisWelcome), true, "Welcome to NoesisGUI!");
         progress_ = 1.0f;
 
         Debug.Log("NoesisGUI v" + version_ + " successfully installed");
