@@ -5,19 +5,20 @@ using Assets.Scripts.Plugins.Features.Hud.Api;
 using Macerus.Plugins.Features.GameObjects.Containers.Api.LootDrops;
 
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Hud
 {
     public sealed class DropItemHandler : IDropItemHandler
     {
-        private readonly IMutableGameObjectManager _gameObjectManager;
+        private readonly IMapGameObjectManager _mapGameObjectManager;
         private readonly ILootDropFactory _lootDropFactory;
 
         public DropItemHandler(
-            IMutableGameObjectManager gameObjectManager,
+            IMapGameObjectManager mapGameObjectManager,
             ILootDropFactory lootFactory)
         {
-            _gameObjectManager = gameObjectManager;
+            _mapGameObjectManager = mapGameObjectManager;
             _lootDropFactory = lootFactory;
         }
 
@@ -39,7 +40,7 @@ namespace Assets.Scripts.Plugins.Features.Hud
                 worldY,
                 false, // need to explicitly interact
                 item);
-            _gameObjectManager.MarkForAddition(loot);
+            _mapGameObjectManager.MarkForAddition(loot);
 
             return true;
         }

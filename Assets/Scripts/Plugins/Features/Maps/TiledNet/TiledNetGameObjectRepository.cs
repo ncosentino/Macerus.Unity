@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using System.Globalization;
 
+using Macerus.Api.GameObjects;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Logging;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
 {
-    using IMacerusObjectRepository = Macerus.Api.GameObjects.IGameObjectRepositoryFacade;
-
-    public sealed class TiledNetGameObjectRepository : IGameObjectRepository
+    public sealed class TiledNetGameObjectRepository : IMapGameObjectRepository
     {
         private readonly ITiledMapLoader _tiledMapLoader;
-        private readonly IMacerusObjectRepository _gameObjectRepository;
+        private readonly IGameObjectRepositoryAmenity _gameObjectRepositoryAmenity;
         private readonly ILogger _logger;
 
         public TiledNetGameObjectRepository(
             ITiledMapLoader tiledMapLoader,
-            IMacerusObjectRepository gameObjectRepository,
+            IGameObjectRepositoryAmenity gameObjectRepositoryAmenity,
             ILogger logger)
         {
             _tiledMapLoader = tiledMapLoader;
-            _gameObjectRepository = gameObjectRepository;
+            _gameObjectRepositoryAmenity = gameObjectRepositoryAmenity;
             _logger = logger;
         }
 
@@ -80,10 +81,10 @@ namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
 
                     if (properties.TryGetValue("TemplateId", out var templateId))
                     {
-                        var gameObjectFromTemplate = _gameObjectRepository.CreateFromTemplate(
+                        var gameObjectFromTemplate = _gameObjectRepositoryAmenity.CreateGameObjectFromTemplate(
                             new StringIdentifier(typeId.ToString()), // FIXME: assuming string is a bit hacky
-                            new StringIdentifier(templateId.ToString()), // FIXME: assuming string is a bit hacky
-                            properties);
+                            new StringIdentifier(templateId.ToString()),
+                            properties); // FIXME: assuming string is a bit hacky
                         yield return gameObjectFromTemplate;
                         continue;
                     }
@@ -95,7 +96,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
                             $"on map '{mapId}'.");
                     }
 
-                    var gameObject = _gameObjectRepository.Load(
+                    var gameObject = _gameObjectRepositoryAmenity.LoadSingleGameObject(
                         new StringIdentifier(typeId.ToString()), // FIXME: assuming string is a bit hacky
                         new StringIdentifier(uniqueId.ToString())); // FIXME: assuming string is a bit hacky
                     yield return gameObject;

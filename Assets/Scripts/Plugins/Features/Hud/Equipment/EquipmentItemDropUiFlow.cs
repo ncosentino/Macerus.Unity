@@ -8,6 +8,7 @@ using Macerus.Api.Behaviors;
 using Macerus.Game.GameObjects;
 
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
@@ -15,14 +16,14 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 {
     public sealed class EquipmentItemDropUiFlow : IEquipmentItemDropUiFlow
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private readonly IDropItemHandler _dropItemHandler;
 
         public EquipmentItemDropUiFlow(
-            IGameObjectManager gameObjectManager,
+            IReadOnlyMapGameObjectManager mapGameObjectManager,
             IDropItemHandler dropItemHandler)
         {
-            _gameObjectManager = gameObjectManager;
+            _mapGameObjectManager = mapGameObjectManager;
             _dropItemHandler = dropItemHandler;
         }
 
@@ -43,7 +44,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
             var item = dropped
                 .GetRequiredComponent<IReadOnlyHasGameObject>()
                 ?.GameObject;
-            var playerLocation = _gameObjectManager
+            var playerLocation = _mapGameObjectManager
                 .GetPlayer()
                 .GetOnly<IReadOnlyWorldLocationBehavior>();
 

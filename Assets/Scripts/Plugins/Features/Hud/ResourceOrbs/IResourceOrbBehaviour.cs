@@ -2,8 +2,8 @@
 using Assets.Scripts.Unity;
 
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
 {
@@ -11,7 +11,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
     {
         new IIdentifier CurrentStatDefinitionId { get; set; }
         
-        new IGameObjectManager GameObjectManager { get; set; }
+        new IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
         
         new IIdentifier MaximumStatDefinitionId { get; set; }
         

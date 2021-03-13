@@ -12,18 +12,21 @@ using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Enchantments.Stats;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
 {
-    public sealed class ResourceOrbBehaviour : MonoBehaviour, IResourceOrbBehaviour
+    public sealed class ResourceOrbBehaviour :
+        MonoBehaviour,
+        IResourceOrbBehaviour
     {
         private double _lastUpdate;
 
         public ITimeProvider TimeProvider { get; set; }
 
-        public IGameObjectManager GameObjectManager { get; set; }
+        public IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
 
         public IResourceOrbPrefab ResourceOrbPrefab { get; set; }
 
@@ -36,7 +39,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, TimeProvider, nameof(TimeProvider));
-            UnityContracts.RequiresNotNull(this, GameObjectManager, nameof(GameObjectManager));
+            UnityContracts.RequiresNotNull(this, MapGameObjectManager, nameof(MapGameObjectManager));
             UnityContracts.RequiresNotNull(this, ResourceOrbPrefab, nameof(ResourceOrbPrefab));
             UnityContracts.RequiresNotNull(this, StatCalculationService, nameof(StatCalculationService));
             UnityContracts.RequiresNotNull(this, CurrentStatDefinitionId, nameof(CurrentStatDefinitionId));
@@ -54,7 +57,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
 
             _lastUpdate = TimeProvider.SecondsSinceStartOfGame;
 
-            var player = GameObjectManager
+            var player = MapGameObjectManager
                 .GameObjects
                 .FirstOrDefault(x => x.Has<IPlayerControlledBehavior>());
             if (player == null)

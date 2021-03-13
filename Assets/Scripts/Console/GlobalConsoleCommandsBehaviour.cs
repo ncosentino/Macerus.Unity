@@ -1,15 +1,14 @@
 ﻿using Assets.Scripts.Behaviours;
 using Assets.Scripts.Gui;
-using Assets.Scripts.Scenes.MainMenu.Gui.Views;
 using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 
 using Autofac;
 
 using IngameDebugConsole;
 
-using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
@@ -18,7 +17,7 @@ namespace Assets.Scripts.Console
     public sealed class GlobalConsoleCommandsBehaviour : MonoBehaviour
     {
         private ProjectXyz.Api.Logging.ILogger _logger;
-        private IGameObjectManager _gameObjectManager;
+        private IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private IGuiPrefabCreator _guiPrefabCreator;
         private IViewWelderFactory _viewWelderFactory;
         private IMainMenuView _mainMenuView;
@@ -33,7 +32,7 @@ namespace Assets.Scripts.Console
             var container = GameDependencyBehaviour.Container;
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
-            _gameObjectManager = container.Resolve<IGameObjectManager>();
+            _mapGameObjectManager = container.Resolve<IReadOnlyMapGameObjectManager>();
             _guiPrefabCreator = container.Resolve<IGuiPrefabCreator>();
             _viewWelderFactory = container.Resolve<IViewWelderFactory>();
             _mainMenuView = container.Resolve<IMainMenuView>();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Hud.Api;
 using Assets.Scripts.Plugins.Features.Hud.Inventory.Api;
@@ -11,6 +10,7 @@ using Macerus.Game.GameObjects;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.GameObjects.Items.Socketing.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Items.SocketPatterns.Api;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
@@ -18,18 +18,18 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
 {
     public sealed class InventoryItemDropUiFlow : IInventoryItemDropUiFlow
     {
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private readonly IDropItemHandler _dropItemHandler;
         private readonly ISocketPatternHandlerFacade _socketPatternHandler;
         private readonly ISocketableInfoFactory _socketableInfoFactory;
 
         public InventoryItemDropUiFlow(
-            IGameObjectManager gameObjectManager,
+            IReadOnlyMapGameObjectManager mapGameObjectManager,
             IDropItemHandler dropItemHandler,
             ISocketPatternHandlerFacade socketPatternHandler,
             ISocketableInfoFactory socketableInfoFactory)
         {
-            _gameObjectManager = gameObjectManager;
+            _mapGameObjectManager = mapGameObjectManager;
             _dropItemHandler = dropItemHandler;
             _socketPatternHandler = socketPatternHandler;
             _socketableInfoFactory = socketableInfoFactory;
@@ -142,7 +142,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
         private bool TryDropItem(GameObject dropped)
         {
             var inventoryItemBehaviour = dropped.GetRequiredComponent<IInventoryItemBehaviour>();
-            var playerLocation = _gameObjectManager
+            var playerLocation = _mapGameObjectManager
                 .GetPlayer()
                 .GetOnly<IReadOnlyWorldLocationBehavior>();
 

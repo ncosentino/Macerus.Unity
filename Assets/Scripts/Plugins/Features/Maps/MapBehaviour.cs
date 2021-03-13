@@ -22,7 +22,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         MonoBehaviour,
         IMapBehaviour
     {
-        public IGameObjectManager GameObjectManager { get; set; }
+        public IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
 
         public IMapProvider MapProvider { get; set; }
 
@@ -37,13 +37,13 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, MapProvider, nameof(MapProvider));
-            UnityContracts.RequiresNotNull(this, GameObjectManager, nameof(GameObjectManager));
+            UnityContracts.RequiresNotNull(this, MapGameObjectManager, nameof(MapGameObjectManager));
             UnityContracts.RequiresNotNull(this, ExploreMapFormatter, nameof(ExploreMapFormatter));
             UnityContracts.RequiresNotNull(this, WeatherManager, nameof(WeatherManager));
             UnityContracts.RequiresNotNull(this, WeatherTableRepositoryFacade, nameof(WeatherTableRepositoryFacade));
 
             MapProvider.MapChanged += MapProvider_MapChanged;
-            GameObjectManager.Synchronized += GameObjectManager_Synchronized;
+            MapGameObjectManager.Synchronized += GameObjectManager_Synchronized;
 
             if (MapProvider.ActiveMap != null)
             {
@@ -58,9 +58,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 MapProvider.MapChanged -= MapProvider_MapChanged;
             }
 
-            if (GameObjectManager != null)
+            if (MapGameObjectManager != null)
             {
-                GameObjectManager.Synchronized -= GameObjectManager_Synchronized;
+                MapGameObjectManager.Synchronized -= GameObjectManager_Synchronized;
             }
         }
 

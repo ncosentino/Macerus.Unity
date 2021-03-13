@@ -20,6 +20,7 @@ using ProjectXyz.Plugins.Enchantments.Stats;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Plugins.Features.Weather.Api;
 using ProjectXyz.Shared.Framework;
 
@@ -30,7 +31,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
     public sealed class ConsoleCommandsBehaviour : MonoBehaviour
     {
         private ProjectXyz.Api.Logging.ILogger _logger;
-        private IGameObjectManager _gameObjectManager;
+        private IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private ISkillAmenity _skillAmenity;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
         private IStatCalculationService _statCalculationService;
@@ -48,7 +49,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             var container = GameDependencyBehaviour.Container;
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
-            _gameObjectManager = container.Resolve<IGameObjectManager>();
+            _mapGameObjectManager = container.Resolve<IReadOnlyMapGameObjectManager>();
             _skillAmenity = container.Resolve<ISkillAmenity>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
             _statCalculationService = container.Resolve<IStatCalculationService>();
@@ -94,7 +95,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
         private void PlayerGetStat(string rawStatDefinitionId)
         {
-            var player = _gameObjectManager
+            var player = _mapGameObjectManager
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>());
 
@@ -127,7 +128,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
         private void PlayerSetBaseStat(string rawStatDefinitionId, double value)
         {
-            var player = _gameObjectManager
+            var player = _mapGameObjectManager
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>());
 
@@ -155,7 +156,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
         private void PlayerAddSkill(string skillId)
         {
-            var player = _gameObjectManager
+            var player = _mapGameObjectManager
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>());
 

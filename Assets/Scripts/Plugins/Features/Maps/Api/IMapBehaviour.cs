@@ -7,7 +7,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
     public interface IMapBehaviour : IReadonlyMapBehaviour
     {
-        new IGameObjectManager GameObjectManager { get; set; }
+        new IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
 
         new IMapProvider MapProvider { get; set; }
 

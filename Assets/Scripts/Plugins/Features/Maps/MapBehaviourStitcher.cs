@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Plugins.Features.Maps.Api;
 
 using ProjectXyz.Api.Behaviors.Filtering;
-using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Plugins.Features.Weather.Api;
 
@@ -18,12 +17,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IFilterContextFactory _filterContextFactory;
         private readonly IWeatherManager _weatherManager;
         private readonly IWeatherTableRepositoryFacade _weatherTableRepositoryFacade;
-        private readonly IGameObjectManager _gameObjectManager;
+        private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private readonly ILogger _logger;
 
         public MapBehaviourStitcher(
             IMapProvider mapProvider,
-            IGameObjectManager gameObjectManager,
+            IReadOnlyMapGameObjectManager mapGameObjectManager,
             IMapFormatter exploreMapFormatter,
             IFilterContextFactory filterContextFactory,
             IWeatherManager weatherManager,
@@ -31,7 +30,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             ILogger logger)
         {
             _mapProvider = mapProvider;
-            _gameObjectManager = gameObjectManager;
+            _mapGameObjectManager = mapGameObjectManager;
             _exploreMapFormatter = exploreMapFormatter;
             _filterContextFactory = filterContextFactory;
             _weatherManager = weatherManager;
@@ -46,7 +45,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             var mapBehaviour = mapGameObject.AddComponent<MapBehaviour>();
             mapBehaviour.MapProvider = _mapProvider;
             mapBehaviour.ExploreMapFormatter = _exploreMapFormatter;
-            mapBehaviour.GameObjectManager = _gameObjectManager;
+            mapBehaviour.MapGameObjectManager = _mapGameObjectManager;
             mapBehaviour.FilterContextFactory = _filterContextFactory;
             mapBehaviour.WeatherManager = _weatherManager;
             mapBehaviour.WeatherTableRepositoryFacade = _weatherTableRepositoryFacade;
