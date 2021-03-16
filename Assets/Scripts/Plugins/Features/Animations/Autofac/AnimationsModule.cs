@@ -13,6 +13,10 @@ namespace Assets.Scripts.Plugins.Features.Animations.Autofac
             base.Load(builder);
 
             builder
+                .RegisterType<LpcSheetAnimationFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<SpriteAnimationProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
