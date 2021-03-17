@@ -1,9 +1,8 @@
 ﻿using System;
 
 using Assets.Scripts.Api.GameObjects;
-using Assets.Scripts.Shared.GameObjects;
 
-using Macerus.Plugins.Features.Weather;
+using Macerus.Plugins.Content.Weather;
 
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.Framework;
