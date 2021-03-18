@@ -4,7 +4,7 @@ using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Maps.TiledNet
 {
-    public sealed class TiledNetMapRepository : IMapRepository
+    public sealed class TiledNetMapRepository : IDiscoverableMapRepository
     {
         private readonly ITiledNetToMapConverter _tiledNetToMapConverter;
         private readonly ITiledMapLoader _tiledMapLoader;

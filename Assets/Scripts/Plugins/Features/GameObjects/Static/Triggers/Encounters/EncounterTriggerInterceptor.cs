@@ -2,7 +2,7 @@
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
-using Macerus.Plugins.Features.Encounters.GamObjects.Static.Triggers;
+using Macerus.Plugins.Features.Encounters.Triggers.GamObjects.Static;
 
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;

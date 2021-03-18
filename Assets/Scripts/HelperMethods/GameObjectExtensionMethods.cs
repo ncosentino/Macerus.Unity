@@ -27,18 +27,24 @@ namespace Assets.Scripts // shortened namespace for ease of ue
             where T : IBehavior
         {
             var result = unityGameObject
-                .GetComponent<IHasGameObject>()
-                ?.GameObject
+                .GetGameObject()
                 ?.Has<T>() == true;
             return result;
+        }
+
+        public static IGameObject GetGameObject(this GameObject unityGameObject)
+        {
+            var gameObject = unityGameObject
+                .GetComponent<IHasGameObject>()
+                ?.GameObject;
+            return gameObject;
         }
 
         public static IEnumerable<T> Get<T>(this GameObject unityGameObject)
             where T : IBehavior
         {
             var results = unityGameObject
-                .GetComponent<IHasGameObject>()
-                ?.GameObject
+                .GetGameObject()
                 ?.Get<T>() ?? Enumerable.Empty<T>();
             return results;
         }
@@ -49,9 +55,7 @@ namespace Assets.Scripts // shortened namespace for ease of ue
             var currentUnityGameObject = unityGameObject;
             while (currentUnityGameObject != null)
             {
-                var gameObject = currentUnityGameObject
-                    .GetComponent<IHasGameObject>()
-                    ?.GameObject;
+                var gameObject = unityGameObject.GetGameObject();
                 foreach (var result in gameObject?.Get<T>() ?? Enumerable.Empty<T>())
                 {
                     yield return result;

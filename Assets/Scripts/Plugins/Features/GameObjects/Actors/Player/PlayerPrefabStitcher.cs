@@ -24,7 +24,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _playerQuickSlotControlsBehaviourStitcher = playerQuickSlotControlsBehaviourStitcher;
         }
 
-        public IIdentifier PrefabResourceId { get; } = new StringIdentifier(@"Mapping/Prefabs/PlayerPlaceholder");
+        public IIdentifier PrefabResourceId { get; } = new StringIdentifier(@"Mapping/Prefabs/Actors/PlayerPlaceholder");
 
         public void Stitch(
             GameObject gameObject,

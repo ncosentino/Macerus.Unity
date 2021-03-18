@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Assets.Scripts.Shared.GameObjects;
+
+using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
@@ -12,13 +15,23 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
     {
         public IEnumerable<IBehavior> GetBehaviors(IReadOnlyCollection<IBehavior> baseBehaviors)
         {
-            yield return new HasPrefabResourceBehavior()
+            // TODO: pull this information from the back-end game object.
+            // translate as necessary (i.e. if it's an ID we need to lookup
+            // and translate to a path, so be it)
+            if (baseBehaviors.Any(x => x is IPlayerControlledBehavior))
             {
-                // TODO: pull this information from the back-end game object.
-                // translate as necessary (i.e. if it's an ID we need to lookup
-                // and translate to a path, so be it)
-                PrefabResourceId = new StringIdentifier("Mapping/Prefabs/PlayerPlaceholder"),
-            };
+                yield return new HasPrefabResourceBehavior()
+                {
+                    PrefabResourceId = new StringIdentifier("Mapping/Prefabs/Actors/PlayerPlaceholder"),
+                };
+            }
+            else
+            {
+                yield return new HasPrefabResourceBehavior()
+                {
+                    PrefabResourceId = new StringIdentifier("Mapping/Prefabs/Actors/Actor"),
+                };
+            }
         }
     }
 }
