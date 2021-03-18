@@ -55,11 +55,13 @@ namespace Assets.Scripts.Plugins.Features.Wip
             _skillAmenity = skillAmenity;
         }
 
-        public void Intercept(IReadOnlyCollection<IBehavior> behaviors)
+        public int Priority { get; } = 11000;
+
+        public IEnumerable<IBehavior> Intercept(IReadOnlyCollection<IBehavior> behaviors)
         {
             if (!behaviors.Has<IPlayerControlledBehavior>())
             {
-                return;
+                return behaviors;
             }
 
             var mutableStats = behaviors.GetOnly<IHasMutableStatsBehavior>();
@@ -76,6 +78,8 @@ namespace Assets.Scripts.Plugins.Features.Wip
             {
                 _skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
             });
+
+            return behaviors;
         }
     }
 }
