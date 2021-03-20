@@ -1,12 +1,11 @@
-﻿
+﻿using System;
+
 using Assets.Scripts.Plugins.Features.Animations.Api;
 using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources.Sprites;
 
 using Macerus.Api.Behaviors;
-
-using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 
@@ -43,6 +42,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             spriteAnimationBehaviour.SpriteAnimationProvider = _spriteAnimationProvider;
             spriteAnimationBehaviour.AnimationBehavior = animationBehavior;
             spriteAnimationBehaviour.DynamicAnimationBehavior = animationBehavior as IDynamicAnimationBehavior;
+            spriteAnimationBehaviour.UpdateDelay = TimeSpan.FromSeconds(0.1);
 
             return spriteAnimationBehaviour;
         }

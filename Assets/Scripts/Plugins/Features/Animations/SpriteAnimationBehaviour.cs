@@ -19,6 +19,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
         MonoBehaviour,
         ISpriteAnimationBehaviour
     {
+        private float _triggerTime;
         private int _currentFrameIndex;
         private float _secondsElapsedOnFrame;
         private IIdentifier _lastAnimationId;
@@ -37,35 +38,38 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         public ISpriteLoader SpriteLoader { get; set; }
 
+        public TimeSpan UpdateDelay { get; set; }
+
         IReadOnlyAnimationBehavior IReadOnlySpriteAnimationBehaviour.AnimationBehavior => AnimationBehavior;
 
         IReadOnlyDynamicAnimationBehavior IReadOnlySpriteAnimationBehaviour.DynamicAnimationBehavior => DynamicAnimationBehavior;
 
         private void Start()
         {
-            Contract.RequiresNotNull(
-                AnimationBehavior,
-                $"{nameof(AnimationBehavior)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                SpriteRenderer,
-                $"{nameof(SpriteRenderer)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                SpriteAnimationProvider,
-                $"{nameof(SpriteAnimationProvider)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                Logger,
-                $"{nameof(Logger)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                TimeProvider,
-                $"{nameof(TimeProvider)} was not set on '{gameObject}.{this}'.");
-            Contract.RequiresNotNull(
-                SpriteLoader,
-                $"{nameof(SpriteLoader)} was not set on '{gameObject}.{this}'.");
+            UnityContracts.RequiresNotNull(this, SpriteLoader, nameof(SpriteLoader));
+            UnityContracts.RequiresNotNull(this, TimeProvider, nameof(TimeProvider));
+            UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
+            UnityContracts.RequiresNotNull(this, SpriteAnimationProvider, nameof(SpriteAnimationProvider));
+            UnityContracts.RequiresNotNull(this, SpriteRenderer, nameof(SpriteRenderer));
+            UnityContracts.RequiresNotNull(this, AnimationBehavior, nameof(AnimationBehavior));
+            Contract.Requires(
+                UpdateDelay.TotalSeconds > 0,
+                $"'{nameof(UpdateDelay)}' must be set on '{transform.gameObject}.{this}'.");
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
+            if (Time.fixedTime < _triggerTime)
+            {
+                return;
+            }
+
             AnimationLoop();
+        }
+
+        private void ResetTriggerTime()
+        {
+            _triggerTime = Time.fixedTime + (float)UpdateDelay.TotalSeconds;
         }
 
         private void AnimationLoop()
