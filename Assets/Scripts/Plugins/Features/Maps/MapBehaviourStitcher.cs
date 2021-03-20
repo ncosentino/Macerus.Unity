@@ -44,7 +44,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             
             var mapBehaviour = mapGameObject.AddComponent<MapBehaviour>();
             mapBehaviour.MapProvider = _mapProvider;
-            mapBehaviour.ExploreMapFormatter = _exploreMapFormatter;
+            mapBehaviour.MapFormatter = _exploreMapFormatter;
             mapBehaviour.MapGameObjectManager = _mapGameObjectManager;
             mapBehaviour.FilterContextFactory = _filterContextFactory;
             mapBehaviour.WeatherManager = _weatherManager;

@@ -10,7 +10,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
 
         IMapProvider MapProvider { get; }
 
-        IMapFormatter ExploreMapFormatter { get; }
+        IMapFormatter MapFormatter { get; }
 
         IWeatherManager WeatherManager { get; }
 

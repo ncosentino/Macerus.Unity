@@ -64,7 +64,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void OnDestroy()
         {
-            ObjectDestroyer.Destroy(_itemList.GameObject);
+            ObjectDestroyer.Destroy(_itemList?.GameObject);
         }
     }
 }

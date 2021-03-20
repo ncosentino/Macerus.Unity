@@ -11,7 +11,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
 
         new IMapProvider MapProvider { get; set; }
 
-        new IMapFormatter ExploreMapFormatter { get; set; }
+        new IMapFormatter MapFormatter { get; set; }
 
         new IWeatherManager WeatherManager { get; set; }
 

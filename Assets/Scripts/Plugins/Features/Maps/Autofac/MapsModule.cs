@@ -1,9 +1,5 @@
 ﻿using Autofac;
 
-using ProjectXyz.Api.Framework;
-using ProjectXyz.Plugins.Features.Mapping.Api;
-using ProjectXyz.Shared.Framework.Collections;
-
 namespace Assets.Scripts.Plugins.Features.Maps.Autofac
 {
     public sealed class MapsModule : Module
@@ -19,10 +15,6 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<TilesetSpriteResourceResolver>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<MapBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -32,11 +24,6 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<MapObjectStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder
-                .Register(x => new Cache<IIdentifier, IMap>(5))
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

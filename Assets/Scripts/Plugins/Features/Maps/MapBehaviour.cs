@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Maps.Api;
@@ -26,7 +27,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         public IMapProvider MapProvider { get; set; }
 
-        public IMapFormatter ExploreMapFormatter { get; set; }
+        public IMapFormatter MapFormatter { get; set; }
 
         public IWeatherManager WeatherManager { get; set; }
 
@@ -38,16 +39,19 @@ namespace Assets.Scripts.Plugins.Features.Maps
         {
             UnityContracts.RequiresNotNull(this, MapProvider, nameof(MapProvider));
             UnityContracts.RequiresNotNull(this, MapGameObjectManager, nameof(MapGameObjectManager));
-            UnityContracts.RequiresNotNull(this, ExploreMapFormatter, nameof(ExploreMapFormatter));
+            UnityContracts.RequiresNotNull(this, MapFormatter, nameof(MapFormatter));
             UnityContracts.RequiresNotNull(this, WeatherManager, nameof(WeatherManager));
             UnityContracts.RequiresNotNull(this, WeatherTableRepositoryFacade, nameof(WeatherTableRepositoryFacade));
 
-            MapProvider.MapChanged += MapProvider_MapChanged;
             MapGameObjectManager.Synchronized += GameObjectManager_Synchronized;
+            MapProvider.MapChanged += MapProvider_MapChanged;
 
             if (MapProvider.ActiveMap != null)
             {
                 SwitchMap(MapProvider.ActiveMap);
+                SynchronizeObjects(
+                    MapGameObjectManager.GameObjects,
+                    new IGameObject[] { });
             }
         }
 
@@ -68,15 +72,24 @@ namespace Assets.Scripts.Plugins.Features.Maps
             object sender,
             GameObjectsSynchronizedEventArgs e)
         {
+            SynchronizeObjects(
+                e.Added,
+                e.Removed);
+        }
+
+        private void SynchronizeObjects(
+            IReadOnlyCollection<IGameObject> added,
+            IReadOnlyCollection<IGameObject> removed)
+        {
             Debug.Log($"Synchronizing game objects for map '{gameObject}'...");
-            ExploreMapFormatter.RemoveGameObjects(
+            MapFormatter.RemoveGameObjects(
                 gameObject,
-                e.Removed
+                removed
                  .Select(x => x.Behaviors.Get<IIdentifierBehavior>().First())
                  .Select(x => x.Id));
-            ExploreMapFormatter.AddGameObjects(
+            MapFormatter.AddGameObjects(
                 gameObject,
-                e.Added);
+                added);
             Debug.Log($"Synchronized game objects for map '{gameObject}'.");
         }
 
@@ -86,7 +99,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         private void SwitchMap(IMap map)
         {
-            ExploreMapFormatter.FormatMap(gameObject, map);
+            MapFormatter.FormatMap(gameObject, map);
 
             var weatherTableId = map
                 .Get<IMapWeatherTableBehavior>()

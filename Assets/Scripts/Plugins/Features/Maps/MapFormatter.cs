@@ -6,6 +6,8 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 
+using Macerus.Plugins.Features.Mapping;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.Mapping.Api;
@@ -47,6 +49,11 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
             foreach (Transform child in parentMapObjectTransform)
             {
+                // NOTE: we *MUST* remove the parent reference because
+                // destruction doesn't actually occur until the next engine
+                // tick. as a result, people can accidentally lookup these
+                // objects before the next tick.
+                child.transform.parent = null;
                 _objectDestroyer.Destroy(child.gameObject);
             }
 
