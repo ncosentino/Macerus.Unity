@@ -21,6 +21,7 @@ using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.TurnBased.Api;
 using ProjectXyz.Plugins.Features.Weather.Api;
 using ProjectXyz.Shared.Framework;
 
@@ -37,6 +38,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IStatCalculationService _statCalculationService;
         private IWeatherAmenity _weatherAmenity;
         private IWeatherManager _weatherManager;
+        private ITurnBasedManager _turnBasedManager;
 
 
         private void Start()
@@ -55,6 +57,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _statCalculationService = container.Resolve<IStatCalculationService>();
             _weatherAmenity = container.Resolve<IWeatherAmenity>();
             _weatherManager = container.Resolve<IWeatherManager>();
+            _turnBasedManager = container.Resolve<ITurnBasedManager>();
 
             AddCommand(
                 nameof(PlayerAddSkill),
@@ -68,6 +71,18 @@ namespace Assets.Scripts.Scenes.Explore.Console
             AddCommand(
                 nameof(WeatherSetTable),
                 "Sets the weather table to one with the specified ID.");
+            AddCommand(
+                nameof(TurnBasedManagerGetPoperties),
+                "Gets the properties for the turn based manager.");
+            AddCommand(
+                nameof(TurnBasedManagerSetClearApplicableOnUpdate),
+                "Sets whether or not to clear the applicable objects on update for the turn based manager.");
+            AddCommand(
+                nameof(TurnBasedManagerSetGlobalSync),
+                "Sets whether or not to use global syncing for the turn based manager.");
+            AddCommand(
+                nameof(TurnBasedManagerSetSyncTurnsFromElapsedTime),
+                "Sets whether or not to sync turns from elapsed time for the turn based manager.");
         }
 
         private void AddCommand(string name, string description)
@@ -77,6 +92,32 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 description,
                 name,
                 this);
+        }
+
+        private void TurnBasedManagerSetGlobalSync(bool value)
+        {
+            _turnBasedManager.GlobalSync = value;
+        }
+
+        private void TurnBasedManagerSetClearApplicableOnUpdate(bool value)
+        {
+            _turnBasedManager.ClearApplicableOnUpdate = value;
+        }
+
+        private void TurnBasedManagerSetSyncTurnsFromElapsedTime(bool value)
+        {
+            _turnBasedManager.SyncTurnsFromElapsedTime = value;
+        }
+
+        private void TurnBasedManagerGetPoperties()
+        {
+            _logger.Info(
+                $"Turn Based Manager:\r\n" +
+                $"\t{nameof(_turnBasedManager.ClearApplicableOnUpdate)}: {_turnBasedManager.ClearApplicableOnUpdate}\r\n" +
+                $"\t{nameof(_turnBasedManager.GlobalSync)}: {_turnBasedManager.GlobalSync}\r\n" +
+                $"\t{nameof(_turnBasedManager.SyncTurnsFromElapsedTime)}: {_turnBasedManager.SyncTurnsFromElapsedTime}\r\n" +
+                $"\t{nameof(_turnBasedManager.ApplicableGameObjects)}:\r\n" +
+                $"\t\t{string.Join("\r\n\t\t", _turnBasedManager.ApplicableGameObjects)}");
         }
 
         private void WeatherSetTable(string rawWeatherTableId)
