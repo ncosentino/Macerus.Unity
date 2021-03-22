@@ -37,7 +37,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 .Id;
             _currentAnimatedWeather = new AnimatedWeather()
             {
-                Duration = IntervalToTimespan(nextWeather.Duration),
+                Duration = TurnsToTimespan(nextWeather.DurationInTurns),
                 TransitionInDuration = IntervalToTimespan(nextWeather.TransitionInDuration),
                 TransitionOutDuration = IntervalToTimespan(nextWeather.TransitionOutDuration),
                 WeatherResourceId = nextWeather.GetOnly<IPrefabResourceBehavior>().PrefabResourceId,
@@ -49,6 +49,14 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             };
             _currentWeather = nextWeather;
             return _currentAnimatedWeather;
+        }
+
+        private TimeSpan TurnsToTimespan(double turns)
+        {
+            // FIXME: use a proper converter here
+            var milliseconds = turns * 1000;
+            var timespan = TimeSpan.FromMilliseconds(milliseconds);
+            return timespan;
         }
 
         private TimeSpan IntervalToTimespan(IInterval interval)
