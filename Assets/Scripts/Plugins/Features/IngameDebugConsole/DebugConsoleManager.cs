@@ -13,6 +13,8 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
         private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly ILogger _logger;
+        
+        private GameObject _debugConsole;
 
         public DebugConsoleManager(
             IUnityGameObjectManager gameObjectManager,
@@ -49,6 +51,11 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
 
         private GameObject GetSingleInstanceOfConsole()
         {
+            if (_debugConsole != null)
+            {
+                return _debugConsole;
+            }
+
             var allDebugConsoleObjects = _gameObjectManager
                 .FindAll(x => x.name == "DebugConsole")
                 .ToList();
@@ -83,6 +90,7 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
             }
 
             var singleInstance = allDebugConsoleObjects.Single();
+            _debugConsole = singleInstance;
             return singleInstance;
         }
     }
