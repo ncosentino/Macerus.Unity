@@ -4,6 +4,6 @@ namespace Assets.Scripts.Scenes.Explore
 {
     public interface IGameEngineUpdateBehaviour : IReadOnlyGameEngineUpdateBehaviour
     {
-        new IAsyncGameEngine GameEngine { get; set; }
+        new IGameEngine GameEngine { get; set; }
     }
 }

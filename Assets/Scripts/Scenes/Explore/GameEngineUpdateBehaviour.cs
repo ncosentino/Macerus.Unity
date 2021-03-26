@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using NexusLabs.Contracts;
 
@@ -13,24 +12,16 @@ namespace Assets.Scripts.Scenes.Explore
         MonoBehaviour,
         IGameEngineUpdateBehaviour
     {
-        private readonly CancellationTokenSource _cancellationTokenSource;
-
-        public GameEngineUpdateBehaviour()
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
-        }
-
-        public IAsyncGameEngine GameEngine { get; set; }
+        public IGameEngine GameEngine { get; set; }
 
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, GameEngine, nameof(GameEngine));
-            GameEngine.RunAsync(_cancellationTokenSource.Token);
         }
 
-        private void OnDestroy()
+        private async void Update()
         {
-            _cancellationTokenSource.Cancel();
+            await Task.Run(GameEngine.Update);
         }
     }
 }

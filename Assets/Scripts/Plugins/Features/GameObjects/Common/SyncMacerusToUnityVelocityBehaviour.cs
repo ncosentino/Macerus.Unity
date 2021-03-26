@@ -50,11 +50,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 
         private void SyncMacerusToUnityVelocity()
         {
-            if (RigidBody2D == null)
-            {
-                return;
-            }
-
             RigidBody2D.velocity = new Vector2(
                 (float)ObservableMovementBehavior.VelocityX,
                 (float)ObservableMovementBehavior.VelocityY);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Maps.Api;
-using Assets.Scripts.Unity.Threading;
 
 using NexusLabs.Contracts;
 
@@ -36,8 +35,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         public IFilterContextFactory FilterContextFactory { get; set; }
 
-        public IDispatcher Dispatcher { get; set; }
-
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, MapProvider, nameof(MapProvider));
@@ -45,7 +42,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
             UnityContracts.RequiresNotNull(this, MapFormatter, nameof(MapFormatter));
             UnityContracts.RequiresNotNull(this, WeatherManager, nameof(WeatherManager));
             UnityContracts.RequiresNotNull(this, WeatherTableRepositoryFacade, nameof(WeatherTableRepositoryFacade));
-            UnityContracts.RequiresNotNull(this, Dispatcher, nameof(Dispatcher));
 
             MapGameObjectManager.Synchronized += GameObjectManager_Synchronized;
             MapProvider.MapChanged += MapProvider_MapChanged;
@@ -76,9 +72,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
             object sender,
             GameObjectsSynchronizedEventArgs e)
         {
-            Dispatcher.RunOnMainThread(() => SynchronizeObjects(
+            SynchronizeObjects(
                 e.Added,
-                e.Removed));
+                e.Removed);
         }
 
         private void SynchronizeObjects(
@@ -99,7 +95,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         private void MapProvider_MapChanged(
             object sender,
-            EventArgs e) => Dispatcher.RunOnMainThread(() => SwitchMap(MapProvider.ActiveMap));
+            EventArgs e) => SwitchMap(MapProvider.ActiveMap);
 
         private void SwitchMap(IMap map)
         {
