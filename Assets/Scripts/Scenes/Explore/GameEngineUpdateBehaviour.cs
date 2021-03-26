@@ -1,5 +1,9 @@
-﻿using NexusLabs.Contracts;
+﻿using System.Threading.Tasks;
+
+using NexusLabs.Contracts;
+
 using ProjectXyz.Game.Interface.Engine;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore
@@ -12,14 +16,12 @@ namespace Assets.Scripts.Scenes.Explore
 
         private void Start()
         {
-            Contract.RequiresNotNull(
-                GameEngine,
-                $"{nameof(GameEngine)} was not set on '{gameObject}.{this}'.");
+            UnityContracts.RequiresNotNull(this, GameEngine, nameof(GameEngine));
         }
 
-        private void Update()
+        private async void Update()
         {
-            GameEngine.Update();
+            await Task.Run(GameEngine.Update);
         }
     }
 }

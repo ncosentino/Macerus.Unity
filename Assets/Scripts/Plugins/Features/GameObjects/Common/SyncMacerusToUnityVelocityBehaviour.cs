@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Api.Behaviors;
 
@@ -22,6 +23,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
         public IObservableMovementBehavior ObservableMovementBehavior { get; set; }
 
         public Rigidbody2D RigidBody2D { get; set; }
+
+        public IDispatcher Dispatcher { get; set; }
 
         private void Start()
         {
@@ -54,6 +57,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 
         private void ObservableMovementBehavior_VelocityChanged(
             object sender,
-            EventArgs e) => SyncMacerusToUnityVelocity();
+            EventArgs e) => Dispatcher.RunOnMainThread(SyncMacerusToUnityVelocity);
     }
 }
