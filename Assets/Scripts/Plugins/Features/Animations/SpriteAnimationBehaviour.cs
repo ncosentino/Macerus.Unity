@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Plugins.Features.Animations.Api;
 using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Resources.Sprites;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Api.Behaviors;
 
@@ -39,6 +41,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
         public ISpriteLoader SpriteLoader { get; set; }
 
         public TimeSpan UpdateDelay { get; set; }
+        
+        public IDispatcher Dispatcher { get; set; }
 
         IReadOnlyAnimationBehavior IReadOnlySpriteAnimationBehaviour.AnimationBehavior => AnimationBehavior;
 
@@ -52,19 +56,21 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             UnityContracts.RequiresNotNull(this, SpriteAnimationProvider, nameof(SpriteAnimationProvider));
             UnityContracts.RequiresNotNull(this, SpriteRenderer, nameof(SpriteRenderer));
             UnityContracts.RequiresNotNull(this, AnimationBehavior, nameof(AnimationBehavior));
+            UnityContracts.RequiresNotNull(this, Dispatcher, nameof(Dispatcher));
             Contract.Requires(
                 UpdateDelay.TotalSeconds > 0,
                 $"'{nameof(UpdateDelay)}' must be set on '{transform.gameObject}.{this}'.");
         }
 
-        private void FixedUpdate()
+        private async void FixedUpdate()
         {
-            if (Time.fixedTime < _triggerTime)
+            var secondsSinceLastFrame = TimeProvider.SecondsSinceLastFrame;
+            if (secondsSinceLastFrame < _triggerTime)
             {
                 return;
             }
 
-            AnimationLoop();
+            await AnimationLoopAsync(secondsSinceLastFrame);
         }
 
         private void ResetTriggerTime()
@@ -72,7 +78,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             _triggerTime = Time.fixedTime + (float)UpdateDelay.TotalSeconds;
         }
 
-        private void AnimationLoop()
+        private async Task AnimationLoopAsync(float secondsSinceLastFrame)
         {
             var currentAnimationId = AnimationBehavior.CurrentAnimationId;
             if (currentAnimationId == null)
@@ -93,86 +99,96 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 forceRefreshSprite = true;
             }
 
-            if (!SpriteAnimationProvider.TryGetAnimationById(
-                currentAnimationId,
-                out var currentAnimation))
-            {
-                throw new InvalidOperationException(
-                    $"The current animation ID '{currentAnimationId}' was not " +
-                    $"found for '{gameObject}.{this}'.");
-            }
-
-            if (_currentFrameIndex >= currentAnimation.Frames.Count ||
-                _currentFrameIndex < 0)
-            {
-                throw new InvalidOperationException(
-                    $"The current frame {_currentFrameIndex} was out " +
-                    $"of range on '{gameObject}.{this}' animation " +
-                    $"'{currentAnimationId}'.");
-            }
-
-            _secondsElapsedOnFrame += TimeProvider.SecondsSinceLastFrame;
-            ISpriteAnimationFrame currentFrame;
-            var lastFrameIndex = _currentFrameIndex;
-
-            var animationSpeedMultiplier = DynamicAnimationBehavior?.AnimationSpeedMultiplier ?? 1;
-
-            while (true)
-            {
-                currentFrame = currentAnimation.Frames[_currentFrameIndex];
-                if (currentFrame.DurationInSeconds == null)
+            await Task.Run(() =>
+            {               
+                if (!SpriteAnimationProvider.TryGetAnimationById(
+                    currentAnimationId,
+                    out var currentAnimation))
                 {
+                    throw new InvalidOperationException(
+                        $"The current animation ID '{currentAnimationId}' was not " +
+                        $"found for '{gameObject}.{this}'.");
+                }
+
+                if (_currentFrameIndex >= currentAnimation.Frames.Count ||
+                    _currentFrameIndex < 0)
+                {
+                    throw new InvalidOperationException(
+                        $"The current frame {_currentFrameIndex} was out " +
+                        $"of range on '{gameObject}.{this}' animation " +
+                        $"'{currentAnimationId}'.");
+                }
+
+                _secondsElapsedOnFrame += secondsSinceLastFrame;
+                ISpriteAnimationFrame currentFrame;
+                var lastFrameIndex = _currentFrameIndex;
+
+                var animationSpeedMultiplier = DynamicAnimationBehavior?.AnimationSpeedMultiplier ?? 1;
+
+                while (true)
+                {
+                    currentFrame = currentAnimation.Frames[_currentFrameIndex];
+                    if (currentFrame.DurationInSeconds == null)
+                    {
+                        break;
+                    }
+
+                    var durationInSeconds = (float)(currentFrame.DurationInSeconds.Value / animationSpeedMultiplier);
+                    if (_secondsElapsedOnFrame >= durationInSeconds)
+                    {
+                        _currentFrameIndex++;
+                        _secondsElapsedOnFrame -= durationInSeconds;
+
+                        if (_currentFrameIndex == currentAnimation.Frames.Count)
+                        {
+                            if (currentAnimation.Repeat)
+                            {
+                                _currentFrameIndex = 0;
+                            }
+                            else
+                            {
+                                AnimationBehavior.CurrentAnimationId = null;
+                                return;
+                            }
+                        }
+
+                        continue;
+                    }
+
                     break;
                 }
 
-                var durationInSeconds = (float)(currentFrame.DurationInSeconds.Value / animationSpeedMultiplier);
-                if (_secondsElapsedOnFrame >= durationInSeconds)
+                if (_currentFrameIndex == lastFrameIndex &&
+                    !forceRefreshSprite)
                 {
-                    _currentFrameIndex++;
-                    _secondsElapsedOnFrame -= durationInSeconds;
-
-                    if (_currentFrameIndex == currentAnimation.Frames.Count)
-                    {
-                        if (currentAnimation.Repeat)
-                        {
-                            _currentFrameIndex = 0;
-                        }
-                        else
-                        {
-                            AnimationBehavior.CurrentAnimationId = null;
-                            return;
-                        }
-                    }
-
-                    continue;
+                    return;
                 }
 
-                break;
-            }
+                var red = (float)(DynamicAnimationBehavior?.RedMultiplier ?? 1);
+                var green = (float)(DynamicAnimationBehavior?.GreenMultiplier ?? 1);
+                var blue = (float)(DynamicAnimationBehavior?.BlueMultiplier ?? 1);
+                var alpha = (float)(DynamicAnimationBehavior?.AlphaMultiplier ?? 1);
 
-            if (_currentFrameIndex == lastFrameIndex &&
-                !forceRefreshSprite)
-            {
-                return;
-            }
+                Dispatcher.RunOnMainThread(() =>
+                {
+                    if (SpriteRenderer == null)
+                    {
+                        return;
+                    }
 
-            var sprite = SpriteLoader.SpriteFromMultiSprite(
-                currentFrame.SpriteSheetResourceId,
-                currentFrame.SpriteResourceId);
-
-            SpriteRenderer.sprite = sprite;
-            SpriteRenderer.flipX = currentFrame.FlipHorizontal;
-            SpriteRenderer.flipY = currentFrame.FlipVertical;
-
-            var red = (float)(DynamicAnimationBehavior?.RedMultiplier ?? 1);
-            var green = (float)(DynamicAnimationBehavior?.GreenMultiplier ?? 1);
-            var blue = (float)(DynamicAnimationBehavior?.BlueMultiplier ?? 1);
-            var alpha = (float)(DynamicAnimationBehavior?.AlphaMultiplier ?? 1);
-            SpriteRenderer.color = new Color(
-                currentFrame.Color.r * red,
-                currentFrame.Color.g * green,
-                currentFrame.Color.b * blue,
-                currentFrame.Color.a * alpha);
+                    var sprite = SpriteLoader.SpriteFromMultiSprite(
+                        currentFrame.SpriteSheetResourceId,
+                        currentFrame.SpriteResourceId);
+                    SpriteRenderer.sprite = sprite;
+                    SpriteRenderer.flipX = currentFrame.FlipHorizontal;
+                    SpriteRenderer.flipY = currentFrame.FlipVertical;
+                    SpriteRenderer.color = new Color(
+                        currentFrame.Color.r * red,
+                        currentFrame.Color.g * green,
+                        currentFrame.Color.b * blue,
+                        currentFrame.Color.a * alpha);
+                });
+            });
         }
     }
 }

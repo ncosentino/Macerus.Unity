@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Resources.Sprites;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Api.Behaviors;
 
@@ -22,5 +23,7 @@ namespace Assets.Scripts.Plugins.Features.Animations.Api
         SpriteRenderer SpriteRenderer { get; set; }
 
         ITimeProvider TimeProvider { get; set; }
+
+        IDispatcher Dispatcher { get; set; }
     }
 }
