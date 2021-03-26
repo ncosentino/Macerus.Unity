@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Assets.Scripts.Plugins.Features.Animations.Api;
+using Macerus.Plugins.Features.Animations.Api;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Framework;

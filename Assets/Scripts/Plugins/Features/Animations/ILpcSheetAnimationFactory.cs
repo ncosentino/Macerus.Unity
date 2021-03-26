@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Assets.Scripts.Plugins.Features.Animations.Api;
+using Macerus.Plugins.Features.Animations.Api;
 
 using ProjectXyz.Api.Framework;
 

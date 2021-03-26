@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Scripts.Plugins.Features.Animations.Api;
+using Macerus.Plugins.Features.Animations.Api;
+using Macerus.Plugins.Features.Animations.Default;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Framework;
@@ -96,7 +97,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 false,
                 false,
                 duration,
-                Color.white);
+                new FrameColor(
+                    Color.white.r,
+                    Color.white.g,
+                    Color.white.b,
+                    Color.white.a));
         }
 
         private ISpriteAnimationFrame CreateWalkAnimationFrame(
@@ -112,7 +117,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 false,
                 false,
                 duration,
-                Color.white);
+                new FrameColor(
+                    Color.white.r,
+                    Color.white.g,
+                    Color.white.b,
+                    Color.white.a));
         }
 
         private string GetAnimationPrefix(IIdentifier spriteSheetResourceId)

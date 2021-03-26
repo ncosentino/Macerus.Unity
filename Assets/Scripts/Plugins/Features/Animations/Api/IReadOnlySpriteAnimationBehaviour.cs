@@ -6,6 +6,6 @@ namespace Assets.Scripts.Plugins.Features.Animations.Api
     {
         IReadOnlyAnimationBehavior AnimationBehavior { get; }
 
-        IReadOnlyDynamicAnimationBehavior DynamicAnimationBehavior { get; }
+        IObservableDynamicAnimationBehavior DynamicAnimationBehavior { get; }
     }
 }
