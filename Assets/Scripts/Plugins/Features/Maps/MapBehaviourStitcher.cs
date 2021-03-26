@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Plugins.Features.Maps.Api;
+using Assets.Scripts.Unity.Threading;
 
 using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Plugins.Features.Mapping.Api;
@@ -19,6 +20,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IWeatherTableRepositoryFacade _weatherTableRepositoryFacade;
         private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private readonly ILogger _logger;
+        private readonly IDispatcher _dispatcher;
 
         public MapBehaviourStitcher(
             IMapProvider mapProvider,
@@ -27,7 +29,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IFilterContextFactory filterContextFactory,
             IWeatherManager weatherManager,
             IWeatherTableRepositoryFacade weatherTableRepositoryFacade,
-            ILogger logger)
+            ILogger logger,
+            IDispatcher dispatcher)
         {
             _mapProvider = mapProvider;
             _mapGameObjectManager = mapGameObjectManager;
@@ -36,6 +39,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _weatherManager = weatherManager;
             _weatherTableRepositoryFacade = weatherTableRepositoryFacade;
             _logger = logger;
+            _dispatcher = dispatcher;
         }
 
         public void Attach(GameObject mapGameObject)
@@ -49,6 +53,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             mapBehaviour.FilterContextFactory = _filterContextFactory;
             mapBehaviour.WeatherManager = _weatherManager;
             mapBehaviour.WeatherTableRepositoryFacade = _weatherTableRepositoryFacade;
+            mapBehaviour.Dispatcher = _dispatcher;
 
             _logger.Debug($"Added '{mapBehaviour}' to '{mapGameObject}'.");
         }

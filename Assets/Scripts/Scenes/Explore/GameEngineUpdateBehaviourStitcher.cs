@@ -5,9 +5,9 @@ namespace Assets.Scripts.Scenes.Explore
 {
     public sealed class GameEngineUpdateBehaviourStitcher : IGameEngineUpdateBehaviourStitcher
     {
-        private readonly IGameEngine _gameEngine;
+        private readonly IAsyncGameEngine _gameEngine;
 
-        public GameEngineUpdateBehaviourStitcher(IGameEngine gameEngine)
+        public GameEngineUpdateBehaviourStitcher(IAsyncGameEngine gameEngine)
         {
             _gameEngine = gameEngine;
         }
