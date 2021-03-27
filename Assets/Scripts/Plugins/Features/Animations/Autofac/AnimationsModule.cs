@@ -1,6 +1,7 @@
-﻿
-using Assets.Scripts.Plugins.Features.Animations.Interceptors;
+﻿using Assets.Scripts.Plugins.Features.Animations.Interceptors;
 using Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours;
+
+using Macerus.Plugins.Features.Animations.Lpc;
 
 using Autofac;
 
@@ -13,11 +14,9 @@ namespace Assets.Scripts.Plugins.Features.Animations.Autofac
             base.Load(builder);
 
             builder
-                .RegisterType<LpcSheetAnimationFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<SpriteAnimationProvider>()
+                .Register(c => new LpcAnimationDiscovererSettings(
+                    @$"assets/resources",
+                    @"graphics/actors/LpcUniversal/"))
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
