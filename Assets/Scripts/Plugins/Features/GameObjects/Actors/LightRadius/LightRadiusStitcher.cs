@@ -1,9 +1,10 @@
 ﻿using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Resources.Prefabs;
 
+using Macerus.Plugins.Features.GameObjects.Actors.LightRadius;
+using Macerus.Plugins.Features.Stats;
+
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Api.Stats;
-using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 
 using UnityEngine;
 
@@ -12,19 +13,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
     public sealed class LightRadiusStitcher : ILightRadiusStitcher
     {
         private readonly IPrefabCreator _prefabCreator;
-        private readonly IStatCalculationService _statCalculationService;
-        private readonly IReadOnlyStatDefinitionToTermMappingRepositoryFacade _statDefinitionToTermMappingRepository;
+        private readonly IStatCalculationServiceAmenity _statCalculationServiceAmenity;
+        private readonly ILightRadiusIdentifiers _lightRadiusIdentifiers;
         private readonly ITimeProvider _timeProvider;
 
         public LightRadiusStitcher(
             IPrefabCreator prefabCreator,
-            IStatCalculationService statCalculationService,
-            IReadOnlyStatDefinitionToTermMappingRepositoryFacade statDefinitionToTermMappingRepository,
+            IStatCalculationServiceAmenity statCalculationServiceAmenity,
+            ILightRadiusIdentifiers lightRadiusIdentifiers,
             ITimeProvider timeProvider)
         {
             _prefabCreator = prefabCreator;
-            _statCalculationService = statCalculationService;
-            _statDefinitionToTermMappingRepository = statDefinitionToTermMappingRepository;
+            _statCalculationServiceAmenity = statCalculationServiceAmenity;
+            _lightRadiusIdentifiers = lightRadiusIdentifiers;
             _timeProvider = timeProvider;
         }
 
@@ -36,8 +37,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 
             var lightRadiusPrefab = new LightRadiusPrefab(lightRadiusObject);
             var lightRadiusUpdateBehaviour = lightRadiusObject.AddComponent<LightRadiusUpdateBehaviour>();
-            lightRadiusUpdateBehaviour.StatCalculationService = _statCalculationService;
-            lightRadiusUpdateBehaviour.StatDefinitionToTermMappingRepository = _statDefinitionToTermMappingRepository;
+            lightRadiusUpdateBehaviour.StatCalculationServiceAmenity = _statCalculationServiceAmenity;
+            lightRadiusUpdateBehaviour.LightRadiusIdentifiers = _lightRadiusIdentifiers;
             lightRadiusUpdateBehaviour.TimeProvider = _timeProvider;
             lightRadiusUpdateBehaviour.LightRadiusPrefab = lightRadiusPrefab;
             lightRadiusUpdateBehaviour.GameObject = gameObject;

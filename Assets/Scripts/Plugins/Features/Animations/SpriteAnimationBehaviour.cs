@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Plugins.Features.Animations.Api;
+﻿using System.Threading.Tasks;
+
+using Assets.Scripts.Plugins.Features.Animations.Api;
 using Assets.Scripts.Unity.Resources.Sprites;
 using Assets.Scripts.Unity.Threading;
 
@@ -49,10 +51,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         private void DynamicAnimationBehavior_AnimationFrameChanged(object sender, AnimationFrameEventArgs e)
         {
-            var red = (float)(DynamicAnimationBehavior?.RedMultiplier ?? 1);
-            var green = (float)(DynamicAnimationBehavior?.GreenMultiplier ?? 1);
-            var blue = (float)(DynamicAnimationBehavior?.BlueMultiplier ?? 1);
-            var alpha = (float)(DynamicAnimationBehavior?.AlphaMultiplier ?? 1);
+            var redTask = Task.Run(() => (float)(DynamicAnimationBehavior?.RedMultiplier ?? 1));
+            var greenTask = Task.Run(() => (float)(DynamicAnimationBehavior?.GreenMultiplier ?? 1));
+            var blueTask = Task.Run(() => (float)(DynamicAnimationBehavior?.BlueMultiplier ?? 1));
+            var alphaTask = Task.Run(() => (float)(DynamicAnimationBehavior?.AlphaMultiplier ?? 1));
+            
+            Task.WaitAll(redTask, greenTask, blueTask, alphaTask);
+            var red = redTask.Result;
+            var green = greenTask.Result;
+            var blue = blueTask.Result;
+            var alpha = alphaTask.Result;
             var currentFrame = e.CurrentFrame;
 
             Dispatcher.RunOnMainThread(() =>

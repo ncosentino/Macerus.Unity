@@ -1,13 +1,12 @@
-﻿using Assets.Scripts.Unity;
+﻿
+using Assets.Scripts.Unity;
+
+using Macerus.Plugins.Features.GameObjects.Actors.LightRadius;
+using Macerus.Plugins.Features.Stats;
 
 using NexusLabs.Contracts;
 
-using ProjectXyz.Api.Enchantments;
-using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Api.Stats;
-using ProjectXyz.Plugins.Enchantments.Stats;
-using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 
 using UnityEngine;
 
@@ -25,17 +24,17 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 
         public ILightRadiusPrefab LightRadiusPrefab { get; set; }
 
-        public IStatCalculationService StatCalculationService { get; set; }
+        public IStatCalculationServiceAmenity StatCalculationServiceAmenity { get; set; }
 
-        public IReadOnlyStatDefinitionToTermMappingRepositoryFacade StatDefinitionToTermMappingRepository { get; set; }
+        public ILightRadiusIdentifiers LightRadiusIdentifiers { get; set; }
 
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, TimeProvider, nameof(TimeProvider));
             UnityContracts.RequiresNotNull(this, GameObject, nameof(GameObject));
             UnityContracts.RequiresNotNull(this, LightRadiusPrefab, nameof(LightRadiusPrefab));
-            UnityContracts.RequiresNotNull(this, StatCalculationService, nameof(StatCalculationService));
-            UnityContracts.RequiresNotNull(this, StatDefinitionToTermMappingRepository, nameof(StatDefinitionToTermMappingRepository));
+            UnityContracts.RequiresNotNull(this, StatCalculationServiceAmenity, nameof(StatCalculationServiceAmenity));
+            UnityContracts.RequiresNotNull(this, LightRadiusIdentifiers, nameof(LightRadiusIdentifiers));
         }
 
         private void FixedUpdate()
@@ -48,46 +47,23 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 
             _lastUpdate = TimeProvider.SecondsSinceStartOfGame;
 
-            var context = new StatCalculationContext(
-                new IComponent[0],
-                new IEnchantment[0]);
-            var lightRadiusRadius = StatCalculationService.GetStatValue(
+            var lightRadiusStats = StatCalculationServiceAmenity.GetStatValues(
                 GameObject,
-                StatDefinitionToTermMappingRepository
-                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_RADIUS")
-                    .StatDefinitionId,
-                context);
-            var lightRadiusIntensity = StatCalculationService.GetStatValue(
-                GameObject,
-                 StatDefinitionToTermMappingRepository
-                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_INTENSITY")
-                    .StatDefinitionId,
-                context);
-            var lightRadiusRed = StatCalculationService.GetStatValue(
-                GameObject,
-                StatDefinitionToTermMappingRepository
-                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_RED")
-                    .StatDefinitionId,
-                context);
-            var lightRadiusGreen = StatCalculationService.GetStatValue(
-                GameObject,
-                StatDefinitionToTermMappingRepository
-                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_GREEN")
-                    .StatDefinitionId,
-                context);
-            var lightRadiusBlue = StatCalculationService.GetStatValue(
-                GameObject,
-                StatDefinitionToTermMappingRepository
-                    .GetStatDefinitionToTermMappingByTerm("LIGHT_RADIUS_BLUE")
-                    .StatDefinitionId,
-                context);
+                new[]
+                {
+                    LightRadiusIdentifiers.RadiusStatIdentifier,
+                    LightRadiusIdentifiers.IntensityStatIdentifier,
+                    LightRadiusIdentifiers.RedStatIdentifier,
+                    LightRadiusIdentifiers.GreenStatIdentifier,
+                    LightRadiusIdentifiers.BlueStatIdentifier,
+                });
 
             LightRadiusPrefab.Light.color = new Color(
-                (float)lightRadiusRed,
-                (float)lightRadiusGreen,
-                (float)lightRadiusBlue);
-            LightRadiusPrefab.Light.range = (float)lightRadiusRadius;
-            LightRadiusPrefab.Light.intensity = (float)lightRadiusIntensity;
+                (float)lightRadiusStats[LightRadiusIdentifiers.RedStatIdentifier],
+                (float)lightRadiusStats[LightRadiusIdentifiers.GreenStatIdentifier],
+                (float)lightRadiusStats[LightRadiusIdentifiers.BlueStatIdentifier]);
+            LightRadiusPrefab.Light.range = (float)lightRadiusStats[LightRadiusIdentifiers.RadiusStatIdentifier];
+            LightRadiusPrefab.Light.intensity = (float)lightRadiusStats[LightRadiusIdentifiers.IntensityStatIdentifier];
         }
     }
 }
