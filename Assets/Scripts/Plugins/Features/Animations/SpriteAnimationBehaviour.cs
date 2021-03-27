@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using Assets.Scripts.Plugins.Features.Animations.Api;
+﻿using Assets.Scripts.Plugins.Features.Animations.Api;
 using Assets.Scripts.Unity.Resources.Sprites;
 using Assets.Scripts.Unity.Threading;
 
@@ -51,18 +49,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         private void DynamicAnimationBehavior_AnimationFrameChanged(object sender, AnimationFrameEventArgs e)
         {
-            var redTask = Task.Run(() => (float)(DynamicAnimationBehavior?.RedMultiplier ?? 1));
-            var greenTask = Task.Run(() => (float)(DynamicAnimationBehavior?.GreenMultiplier ?? 1));
-            var blueTask = Task.Run(() => (float)(DynamicAnimationBehavior?.BlueMultiplier ?? 1));
-            var alphaTask = Task.Run(() => (float)(DynamicAnimationBehavior?.AlphaMultiplier ?? 1));
-            
-            Task.WaitAll(redTask, greenTask, blueTask, alphaTask);
-            var red = redTask.Result;
-            var green = greenTask.Result;
-            var blue = blueTask.Result;
-            var alpha = alphaTask.Result;
-            var currentFrame = e.CurrentFrame;
-
             Dispatcher.RunOnMainThread(() =>
             {
                 if (SpriteRenderer == null)
@@ -77,16 +63,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
                 }
 
                 var sprite = SpriteLoader.SpriteFromMultiSprite(
-                    currentFrame.SpriteSheetResourceId,
-                    currentFrame.SpriteResourceId);
+                    e.CurrentFrame.SpriteSheetResourceId,
+                    e.CurrentFrame.SpriteResourceId);
                 SpriteRenderer.sprite = sprite;
-                SpriteRenderer.flipX = currentFrame.FlipHorizontal;
-                SpriteRenderer.flipY = currentFrame.FlipVertical;
+                SpriteRenderer.flipX = e.CurrentFrame.FlipHorizontal;
+                SpriteRenderer.flipY = e.CurrentFrame.FlipVertical;
                 SpriteRenderer.color = new Color(
-                    (float)(currentFrame.Color.Red * red),
-                    (float)(currentFrame.Color.Green * green),
-                    (float)(currentFrame.Color.Blue * blue),
-                    (float)(currentFrame.Color.Alpha * alpha));
+                    (float)(e.CurrentFrame.Color.Red * e.AnimationMultipliers.RedMultiplier),
+                    (float)(e.CurrentFrame.Color.Green * e.AnimationMultipliers.GreenMultiplier),
+                    (float)(e.CurrentFrame.Color.Blue * e.AnimationMultipliers.BlueMultiplier),
+                    (float)(e.CurrentFrame.Color.Alpha * e.AnimationMultipliers.AlphaMultiplier));
             });
         }
     }

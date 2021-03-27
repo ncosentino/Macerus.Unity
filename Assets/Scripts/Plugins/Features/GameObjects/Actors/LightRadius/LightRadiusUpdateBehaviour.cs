@@ -37,7 +37,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
             UnityContracts.RequiresNotNull(this, LightRadiusIdentifiers, nameof(LightRadiusIdentifiers));
         }
 
-        private void FixedUpdate()
+        private async void FixedUpdate()
         {
             var secondsSinceLastUpdate = TimeProvider.SecondsSinceStartOfGame - _lastUpdate;
             if (secondsSinceLastUpdate < 1)
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 
             _lastUpdate = TimeProvider.SecondsSinceStartOfGame;
 
-            var lightRadiusStats = StatCalculationServiceAmenity.GetStatValues(
+            var lightRadiusStats = await StatCalculationServiceAmenity.GetStatValuesAsync(
                 GameObject,
                 new[]
                 {
