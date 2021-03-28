@@ -32,12 +32,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public ISkillUsage SkillUsage { get; set; }
 
+        public ISkillHandlerFacade SkillHandlerFacade { get; set; }
+
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
             UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
             UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
             UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
+            UnityContracts.RequiresNotNull(this, SkillHandlerFacade, nameof(SkillHandlerFacade));
         }
 
         private void Update()
@@ -85,9 +88,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 SkillUsage.UseRequiredResources(
                     player,
                     firstUsableSkill);
-                SkillUsage.ApplySkillEffectsToTarget(
+                SkillHandlerFacade.Handle(
+                    player,
                     firstUsableSkill,
-                    player);
+                    new[] { player });
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot2))
             {

@@ -17,18 +17,21 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IKeyboardInput _keyboardInput;
         private readonly ILogger _logger;
         private readonly ISkillUsage _skillUsage;
+        private readonly ISkillHandlerFacade _skillHandlerFacade;
 
         public PlayerQuickSlotControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
             IKeyboardInput keyboardInput,
             ILogger logger,
             ISkillUsage skillUsage,
+            ISkillHandlerFacade skillHandlerFacade,
             IDebugConsoleManager debugConsoleManager)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
             _logger = logger;
             _skillUsage = skillUsage;
+            _skillHandlerFacade = skillHandlerFacade;
             _debugConsoleManager = debugConsoleManager;
         }
 
@@ -40,6 +43,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerQuickSlotControlsBehaviour.KeyboardInput = _keyboardInput;
             playerQuickSlotControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerQuickSlotControlsBehaviour.SkillUsage = _skillUsage;
+            playerQuickSlotControlsBehaviour.SkillHandlerFacade = _skillHandlerFacade;
             return playerQuickSlotControlsBehaviour;
         }
     }

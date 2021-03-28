@@ -20,5 +20,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         ILogger Logger { get; }
 
         ISkillUsage SkillUsage { get; }
+
+        ISkillHandlerFacade SkillHandlerFacade { get; }
     }
 }
