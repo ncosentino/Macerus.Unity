@@ -4,6 +4,8 @@ using Assets.Scripts.Unity.Input;
 
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
+using ProjectXyz.Plugins.Features.Mapping.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
@@ -13,6 +15,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
     public sealed class PlayerQuickSlotControlsBehaviourStitcher : IPlayerQuickSlotControlsBehaviourStitcher
     {
         private readonly IDebugConsoleManager _debugConsoleManager;
+        private readonly IMapGameObjectManager _mapGameObjectManager;
         private readonly IKeyboardControls _keyboardControls;
         private readonly IKeyboardInput _keyboardInput;
         private readonly ILogger _logger;
@@ -25,7 +28,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             ILogger logger,
             ISkillUsage skillUsage,
             ISkillHandlerFacade skillHandlerFacade,
-            IDebugConsoleManager debugConsoleManager)
+            IDebugConsoleManager debugConsoleManager,
+            IMapGameObjectManager mapGameObjectManager)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
@@ -33,6 +37,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _skillUsage = skillUsage;
             _skillHandlerFacade = skillHandlerFacade;
             _debugConsoleManager = debugConsoleManager;
+            _mapGameObjectManager = mapGameObjectManager;
         }
 
         public IReadOnlyPlayerQuickSlotControlsBehaviour Attach(GameObject gameObject)
@@ -44,6 +49,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerQuickSlotControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerQuickSlotControlsBehaviour.SkillUsage = _skillUsage;
             playerQuickSlotControlsBehaviour.SkillHandlerFacade = _skillHandlerFacade;
+            playerQuickSlotControlsBehaviour.MapGameObjectManager = _mapGameObjectManager;
             return playerQuickSlotControlsBehaviour;
         }
     }

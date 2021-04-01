@@ -77,6 +77,7 @@ namespace Assets.Scripts.Plugins.Features.Wip
             skillsBehavior.Add(new[]
             {
                 _skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
+                _skillAmenity.GetSkillById(new StringIdentifier("test-fireball")),
             });
 
             return behaviors;

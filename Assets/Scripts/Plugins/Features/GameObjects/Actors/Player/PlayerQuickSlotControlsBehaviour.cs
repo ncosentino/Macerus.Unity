@@ -5,13 +5,17 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 
+using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
 using NexusLabs.Contracts;
 
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
+using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 
@@ -33,6 +37,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         public ISkillUsage SkillUsage { get; set; }
 
         public ISkillHandlerFacade SkillHandlerFacade { get; set; }
+
+        // FIXME: delete this, just for testing
+        public IMapGameObjectManager MapGameObjectManager { get; set; }
 
         private void Start()
         {
@@ -95,7 +102,40 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot2))
             {
+                var player = GetPlayer();
+                var skills = player
+                    .GetOnly<IHasSkillsBehavior>()
+                    .Skills;
+                // FIXME: this should actually pull this information from an assigned slot
+                var firstUsableSkill = skills.FirstOrDefault(x => x.Has<IInflictDamageBehavior>());
+                if (firstUsableSkill == null)
+                {
+                    return;
+                }
 
+                if (!SkillUsage.CanUseSkill(
+                    player,
+                    firstUsableSkill))
+                {
+                    return;
+                }
+
+                // FIXME: move this logic into the backend into some class?
+                // FIXME: check the targeting?
+                SkillUsage.UseRequiredResources(
+                    player,
+                    firstUsableSkill);
+
+                var target = MapGameObjectManager
+                    .GameObjects
+                    .First(x =>
+                        !x.Has<IPlayerControlledBehavior>() &&
+                        x.Get<ITypeIdentifierBehavior>()
+                            .Any(x => x.TypeId.Equals(new StringIdentifier("actor"))));
+                SkillHandlerFacade.Handle(
+                    player,
+                    firstUsableSkill,
+                    new[] { target });
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot3))
             {
