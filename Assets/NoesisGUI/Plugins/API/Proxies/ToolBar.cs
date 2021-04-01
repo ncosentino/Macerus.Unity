@@ -31,7 +31,7 @@ public class ToolBar : HeaderedItemsControl {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(ToolBar).TypeHandle) {
+    if (type == typeof(ToolBar)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_ToolBar();
     }
@@ -41,26 +41,31 @@ public class ToolBar : HeaderedItemsControl {
   }
 
   public static OverflowMode GetOverflowMode(DependencyObject element) {
-    OverflowMode ret = (OverflowMode)NoesisGUI_PINVOKE.ToolBar_GetOverflowMode(DependencyObject.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      OverflowMode ret = (OverflowMode)NoesisGUI_PINVOKE.ToolBar_GetOverflowMode(DependencyObject.getCPtr(element));
+      return ret;
+    }
   }
 
   public static void SetOverflowMode(DependencyObject element, OverflowMode mode) {
-    NoesisGUI_PINVOKE.ToolBar_SetOverflowMode(DependencyObject.getCPtr(element), (int)mode);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      NoesisGUI_PINVOKE.ToolBar_SetOverflowMode(DependencyObject.getCPtr(element), (int)mode);
+    }
   }
 
   public static bool GetIsOverflowItem(DependencyObject element) {
-    bool ret = NoesisGUI_PINVOKE.ToolBar_GetIsOverflowItem(DependencyObject.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      bool ret = NoesisGUI_PINVOKE.ToolBar_GetIsOverflowItem(DependencyObject.getCPtr(element));
+      return ret;
+    }
   }
 
   public static DependencyProperty BandIndexProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_BandIndexProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -68,7 +73,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty BandProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_BandProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -76,7 +80,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty HasOverflowItemsProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_HasOverflowItemsProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -84,7 +87,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty IsOverflowItemProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_IsOverflowItemProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -92,7 +94,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty IsOverflowOpenProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_IsOverflowOpenProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -100,7 +101,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty OrientationProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_OrientationProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -108,7 +108,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty OverflowModeProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_OverflowModeProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -116,7 +115,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty ButtonStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_ButtonStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -124,7 +122,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty ToggleButtonStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_ToggleButtonStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -132,7 +129,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty CheckBoxStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_CheckBoxStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -140,7 +136,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty RadioButtonStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_RadioButtonStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -148,7 +143,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty TextBoxStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_TextBoxStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -156,7 +150,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty ComboBoxStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_ComboBoxStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -164,7 +157,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty SeparatorStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_SeparatorStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -172,7 +164,6 @@ public class ToolBar : HeaderedItemsControl {
   public static DependencyProperty MenuStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBar_MenuStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -180,11 +171,9 @@ public class ToolBar : HeaderedItemsControl {
   public int Band {
     set {
       NoesisGUI_PINVOKE.ToolBar_Band_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       int ret = NoesisGUI_PINVOKE.ToolBar_Band_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -192,11 +181,9 @@ public class ToolBar : HeaderedItemsControl {
   public int BandIndex {
     set {
       NoesisGUI_PINVOKE.ToolBar_BandIndex_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       int ret = NoesisGUI_PINVOKE.ToolBar_BandIndex_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -204,7 +191,6 @@ public class ToolBar : HeaderedItemsControl {
   public bool HasOverflowItems {
     get {
       bool ret = NoesisGUI_PINVOKE.ToolBar_HasOverflowItems_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -212,11 +198,9 @@ public class ToolBar : HeaderedItemsControl {
   public bool IsOverflowOpen {
     set {
       NoesisGUI_PINVOKE.ToolBar_IsOverflowOpen_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       bool ret = NoesisGUI_PINVOKE.ToolBar_IsOverflowOpen_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -224,22 +208,12 @@ public class ToolBar : HeaderedItemsControl {
   public Orientation Orientation {
     get {
       Orientation ret = (Orientation)NoesisGUI_PINVOKE.ToolBar_Orientation_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.ToolBar_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_ToolBar(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_ToolBar(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

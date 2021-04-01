@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace Noesis
 {
@@ -7,32 +8,53 @@ namespace Noesis
     {
         public object FindResource(object key)
         {
+            object resource = TryFindResource(key);
+            if (resource != null)
+            {
+                return resource;
+            }
+
+            throw new InvalidOperationException("Resource not found '" + key.ToString() +  "'");
+        }
+
+        public object TryFindResource(object key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+
             if (key is string)
             {
-                return FindStringResource(key as string);
+                return FindResourceHelper((string)key);
             }
 
             if (key is Type)
             {
-                return FindTypeResource(key as Type);
+                return FindResourceHelper(((Type)key).FullName);
             }
 
             throw new Exception("Only String or Type resource keys supported.");
         }
 
-        public object TryFindResource(object key)
+        protected virtual Size MeasureOverride(Size availableSize)
         {
-            if (key is string)
+            Size desiredSize = new Size(0.0f, 0.0f);
+            if (_measureBaseCallback != null)
             {
-                return TryFindStringResource(key as string);
+                _measureBaseCallback(swigCPtr, ref availableSize, ref desiredSize);
             }
+            return desiredSize;
+        }
 
-            if (key is Type)
+        protected virtual Size ArrangeOverride(Size finalSize)
+        {
+            Size renderSize = new Size(0.0f, 0.0f);
+            if (_measureBaseCallback != null)
             {
-                return TryFindTypeResource(key as Type);
+                _measureBaseCallback(swigCPtr, ref finalSize, ref renderSize);
             }
-
-            throw new Exception("Only String or Type resource keys supported.");
+            return renderSize;
         }
 
         protected virtual bool ConnectEvent(object source, string eventName, string handlerName)
@@ -42,38 +64,42 @@ namespace Noesis
 
         #region FindResource implementation
 
-        private object FindStringResource(string key)
+        private object FindResourceHelper(string key)
         {
-            IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_FindStringResource(swigCPtr, key);
-            if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+            IntPtr cPtr = FrameworkElement_FindResourceHelper(swigCPtr, key);
             return Noesis.Extend.GetProxy(cPtr, false);
         }
 
-        private object FindTypeResource(Type key)
-        {
-            IntPtr nativeType = Noesis.Extend.GetNativeType(key);
-            IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_FindTypeResource(swigCPtr, nativeType);
-            if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-            return Noesis.Extend.GetProxy(cPtr, false);
-        }
-        private object TryFindStringResource(string key)
-        {
-            IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_TryFindStringResource(swigCPtr, key);
-            if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-            return Noesis.Extend.GetProxy(cPtr, false);
-        }
-
-        private object TryFindTypeResource(Type key)
-        {
-            IntPtr nativeType = Noesis.Extend.GetNativeType(key);
-            IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_TryFindTypeResource(swigCPtr, nativeType);
-            if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-            return Noesis.Extend.GetProxy(cPtr, false);
-        }
+        [DllImport(Library.Name)]
+        private static extern IntPtr FrameworkElement_FindResourceHelper(HandleRef element,
+            string key);
 
         #endregion
 
-        #region Connect implementation
+        #region Extend overrides implementation
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void MeasureBaseCallback(HandleRef cPtr, ref Size availableSize,
+            ref Size desiredSize);
+        MeasureBaseCallback _measureBaseCallback = null;
+
+        internal Size CallMeasureOverride(Size availableSize, MeasureBaseCallback callback)
+        {
+            _measureBaseCallback = callback;
+            Size desiredSize = MeasureOverride(availableSize);
+            _measureBaseCallback = null;
+
+            return desiredSize;
+        }
+
+        internal Size CallArrangeOverride(Size finalSize, MeasureBaseCallback callback)
+        {
+            _measureBaseCallback = callback;
+            Size renderSize = ArrangeOverride(finalSize);
+            _measureBaseCallback = null;
+
+            return renderSize;
+        }
 
         internal bool CallConnectEvent(object source, string eventName, string handlerName)
         {

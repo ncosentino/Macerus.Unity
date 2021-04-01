@@ -35,12 +35,6 @@ public class DiscreteInt16KeyFrame : Int16KeyFrame {
     return NoesisGUI_PINVOKE.new_DiscreteInt16KeyFrame();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.DiscreteInt16KeyFrame_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

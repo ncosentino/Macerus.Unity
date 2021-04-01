@@ -30,10 +30,24 @@ public class DispatcherObject : BaseComponent {
   protected DispatcherObject() {
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.DispatcherObject_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  public Dispatcher Dispatcher {
+    get { return Dispatcher.FromThreadId(ThreadId); }
+  }
+
+  public bool CheckAccess() {
+    bool ret = NoesisGUI_PINVOKE.DispatcherObject_CheckAccess(swigCPtr);
     return ret;
+  }
+
+  public void VerifyAccess() {
+    NoesisGUI_PINVOKE.DispatcherObject_VerifyAccess(swigCPtr);
+  }
+
+  public int ThreadId {
+    get {
+      int ret = NoesisGUI_PINVOKE.DispatcherObject_ThreadId_get(swigCPtr);
+      return ret;
+    } 
   }
 
 }

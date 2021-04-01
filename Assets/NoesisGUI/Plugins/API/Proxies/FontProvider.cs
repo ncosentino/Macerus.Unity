@@ -44,30 +44,45 @@ public class FontProvider : BaseComponent {
   /// </summary>
   /// <param name="folder">Path to the folder where font should be found.</param>
   /// <param name="id">Font ID, typically file name.</param>
-  public virtual System.IO.Stream OpenFont(string folder, string id) {
+  public virtual Stream OpenFont(string folder, string id) {
     return null;
   }
 
+  /// <summary>
+  /// Registers a font family associated to the specified folder
+  /// </summary>
   protected void RegisterFont(string folder, string id) {
     RegisterFontHelper(folder, id);
   }
 
+  /// <summary>
+  /// Notifies of changes to the specified texture file
+  /// </summary>
+  public delegate void FontChangedHandler(string baseUri, string familyName, FontWeight weight,
+    FontStretch stretch, FontStyle style);
+  public event FontChangedHandler FontChanged;
+
+  /// <summary>
+  /// Raises XamlChanged event notifying Noesis that it should reload the specified xaml
+  /// </summary>
+  public void RaiseFontChanged(string baseUri, string familyName, FontWeight weight,
+    FontStretch stretch, FontStyle style) {
+    FontChanged?.Invoke(baseUri, familyName, weight, stretch, style);
+    Noesis_RaiseFontChanged(swigCPtr, baseUri, familyName, (int)weight, (int)stretch, (int)style);
+  }
+
+  [DllImport(Library.Name)]
+  private static extern void Noesis_RaiseFontChanged(HandleRef provider,
+    [MarshalAs(UnmanagedType.LPWStr)]string baseUri,
+    [MarshalAs(UnmanagedType.LPWStr)]string familyName,
+    int weight, int stretch, int style);
+
   private void RegisterFontHelper(string folder, string id) {
     NoesisGUI_PINVOKE.FontProvider_RegisterFontHelper(swigCPtr, folder != null ? folder : string.Empty, id != null ? id : string.Empty);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.FontProvider_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_FontProvider(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_FontProvider(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

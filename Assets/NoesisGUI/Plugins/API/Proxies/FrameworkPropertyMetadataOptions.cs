@@ -15,20 +15,20 @@ using System.Runtime.InteropServices;
 namespace Noesis
 {
 
+[FlagsAttribute]
 public enum FrameworkPropertyMetadataOptions {
-  None = 1 << 0,
-  AffectsMeasure = 1 << 1,
-  AffectsArrange = 1 << 2,
-  AffectsParentMeasure = 1 << 3,
-  AffectsParentArrange = 1 << 4,
-  AffectsRender = 1 << 5,
-  Inherits = 1 << 6,
-  OverridesInheritanceBehavior = 1 << 7,
-  NotDataBindable = 1 << 8,
-  BindsTwoWayByDefault = 1 << 9,
-  SubPropertiesDoNotAffectRender = 1 << 11,
-  UpdateSourceTriggerLostFocus = 1 << 12,
-  UpdateSourceTriggerExplicit = 1 << 13
+  None = 0x000,
+  AffectsMeasure = 0x001,
+  AffectsArrange = 0x002,
+  AffectsParentMeasure = 0x004,
+  AffectsParentArrange = 0x008,
+  AffectsRender = 0x010,
+  Inherits = 0x020,
+  OverridesInheritanceBehavior = 0x040,
+  NotDataBindable = 0x080,
+  BindsTwoWayByDefault = 0x100,
+  Journal = 0x400,
+  SubPropertiesDoNotAffectRender = 0x800
 }
 
 }

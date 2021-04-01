@@ -31,21 +31,12 @@ public class FileTextureProvider : TextureProvider {
   protected FileTextureProvider() {
   }
 
-  public virtual System.IO.Stream OpenStream(string filename) {
+  public virtual Stream OpenStream(string filename) {
     return null;
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.FileTextureProvider_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_FileTextureProvider(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_FileTextureProvider(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

@@ -6,8 +6,15 @@ public class NoesisEditor
 {
     static NoesisEditor()
     {
+        EditorApplication.update += () => Noesis.GUI.UpdateInspector();
+
         EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
-        SceneView.onSceneGUIDelegate += OnSceneGUI;
+
+#if UNITY_2019_1_OR_NEWER
+        SceneView.duringSceneGui += OnSceneGUI;
+#else
+        SceneView.onSceneGUIDelegate += OnSceneGUI; 
+#endif
     }
 
     /// <summary>

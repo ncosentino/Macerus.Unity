@@ -27,17 +27,11 @@ public class StatusBarItem : ContentControl {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.StatusBarItem_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
   public StatusBarItem() {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(StatusBarItem).TypeHandle) {
+    if (type == typeof(StatusBarItem)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_StatusBarItem();
     }
@@ -46,11 +40,8 @@ public class StatusBarItem : ContentControl {
     }
   }
 
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_StatusBarItem(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_StatusBarItem(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

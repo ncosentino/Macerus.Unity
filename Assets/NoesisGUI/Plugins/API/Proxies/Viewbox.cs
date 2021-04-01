@@ -31,7 +31,7 @@ public class Viewbox : FrameworkElement {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(Viewbox).TypeHandle) {
+    if (type == typeof(Viewbox)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_Viewbox();
     }
@@ -43,7 +43,6 @@ public class Viewbox : FrameworkElement {
   public static DependencyProperty StretchDirectionProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Viewbox_StretchDirectionProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -51,7 +50,6 @@ public class Viewbox : FrameworkElement {
   public static DependencyProperty StretchProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Viewbox_StretchProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -59,11 +57,9 @@ public class Viewbox : FrameworkElement {
   public StretchDirection StretchDirection {
     set {
       NoesisGUI_PINVOKE.Viewbox_StretchDirection_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       StretchDirection ret = (StretchDirection)NoesisGUI_PINVOKE.Viewbox_StretchDirection_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -71,11 +67,9 @@ public class Viewbox : FrameworkElement {
   public Stretch Stretch {
     set {
       NoesisGUI_PINVOKE.Viewbox_Stretch_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       Stretch ret = (Stretch)NoesisGUI_PINVOKE.Viewbox_Stretch_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -83,26 +77,15 @@ public class Viewbox : FrameworkElement {
   public UIElement Child {
     set {
       NoesisGUI_PINVOKE.Viewbox_Child_set(swigCPtr, UIElement.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Viewbox_Child_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (UIElement)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.Viewbox_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_Viewbox(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_Viewbox(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

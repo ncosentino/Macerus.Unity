@@ -30,47 +30,33 @@ public class RoutedEvent : BaseComponent {
   protected RoutedEvent() {
   }
 
-  public Type OwnerType {
-    get {
-      return Noesis.Extend.GetNativeTypeInfo(GetOwnerTypeHelper()).Type;
-    }
-  }
-
-  public RoutedEvent(string name) : this(NoesisGUI_PINVOKE.new_RoutedEvent__SWIG_0(name != null ? name : string.Empty), true) {
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  public RoutedEvent(string name, Type ownerType, RoutingStrategy routingStrategy) : this(NoesisGUI_PINVOKE.new_RoutedEvent(name != null ? name : string.Empty, ownerType != null ? Noesis.Extend.EnsureNativeType(ownerType) : IntPtr.Zero, (int)routingStrategy), true) {
   }
 
   public string Name {
     get {
       IntPtr strPtr = NoesisGUI_PINVOKE.RoutedEvent_Name_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       string str = Noesis.Extend.StringFromNativeUtf8(strPtr);
       return str;
     }
   }
 
+  public Type OwnerType {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.RoutedEvent_OwnerType_get(swigCPtr);
+      if (cPtr != IntPtr.Zero) {
+        Noesis.Extend.NativeTypeInfo info = Noesis.Extend.GetNativeTypeInfo(cPtr);
+        return info.Type;
+      }
+      return null;
+    }
+  }
+
   public RoutingStrategy RoutingStrategy {
-    set {
-      NoesisGUI_PINVOKE.RoutedEvent_RoutingStrategy_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    } 
     get {
       RoutingStrategy ret = (RoutingStrategy)NoesisGUI_PINVOKE.RoutedEvent_RoutingStrategy_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
-  }
-
-  private IntPtr GetOwnerTypeHelper() {
-    IntPtr ret = NoesisGUI_PINVOKE.RoutedEvent_GetOwnerTypeHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.RoutedEvent_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
   }
 
 }

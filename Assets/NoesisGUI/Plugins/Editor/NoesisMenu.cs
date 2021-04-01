@@ -19,17 +19,17 @@ public class NoesisMenu
     [UnityEditor.MenuItem("Tools/NoesisGUI/Welcome Screen...", false, 30100)]
     static void OpenWelcome()
     {
-        EditorWindow.GetWindow(typeof(NoesisWelcome), true, "Welcome to NoesisGUI!");
+        NoesisWelcome.Open();
     }
 
     [UnityEditor.MenuItem("Tools/NoesisGUI/Documentation", false, 30103)]
     static void OpenDocumentation()
     {
-        string docPath = Application.dataPath + "/../NoesisDoc/index.html";
+        string docPath = Application.dataPath + "/../NoesisDoc/Documentation.html";
 
         if (File.Exists(docPath))
         {
-            UnityEngine.Application.OpenURL("file://" + docPath);
+            UnityEngine.Application.OpenURL("file://" + docPath.Replace(" ", "%20"));
         }
         else
         {
@@ -56,7 +56,7 @@ public class NoesisMenu
 
         if (File.Exists(docPath))
         {
-            UnityEngine.Application.OpenURL("file://" + docPath);
+            UnityEngine.Application.OpenURL("file://" + docPath.Replace(" ", "%20"));
         }
         else
         {
@@ -68,5 +68,26 @@ public class NoesisMenu
     static void OpenReportBug()
     {
         UnityEngine.Application.OpenURL("http://bugs.noesisengine.com/");
+    }
+
+    [UnityEditor.MenuItem("Assets/Create/Noesis Render Texture", false, 304)]
+    static void CreateNoesisRenderTexture()
+    {
+        // Render textures created by Unity editor always have sRGB property set to false
+        // Creating them by code allow us to set readWrite to Default
+        string folder = "Assets";
+        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets))
+        {
+            folder = AssetDatabase.GetAssetPath(obj);
+            if (!string.IsNullOrEmpty(folder) && File.Exists(folder))
+            {
+                folder = Path.GetDirectoryName(folder);
+                break;
+            }
+        }
+
+        RenderTexture rt = new RenderTexture(256, 256, 24);
+        string path = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(folder, "New Render Texture.renderTexture"));
+        UnityEditor.AssetDatabase.CreateAsset(rt, path);
     }
 }

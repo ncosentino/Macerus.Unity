@@ -47,17 +47,26 @@ public class TextureProvider : BaseComponent {
     return null;
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.TextureProvider_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  /// <summary>
+  /// Notifies of changes to the specified texture file
+  /// </summary>
+  public delegate void TextureChangedHandler(string uri);
+  public event TextureChangedHandler TextureChanged;
+
+  /// <summary>
+  /// Raises TextureChanged event notifying Noesis that it should reload the specified texture
+  /// </summary>
+  public void RaiseTextureChanged(string uri) {
+    TextureChanged?.Invoke(uri);
+    Noesis_RaiseTextureChanged(swigCPtr, uri);
   }
 
+  [DllImport(Library.Name)]
+  private static extern void Noesis_RaiseTextureChanged(HandleRef provider,
+    [MarshalAs(UnmanagedType.LPWStr)]string uri);
 
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_TextureProvider(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_TextureProvider(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

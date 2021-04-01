@@ -35,12 +35,6 @@ public class ItemsPanelTemplate : FrameworkTemplate {
     return NoesisGUI_PINVOKE.new_ItemsPanelTemplate();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.ItemsPanelTemplate_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

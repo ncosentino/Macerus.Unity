@@ -40,7 +40,6 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
         _ItemsChanged.Add(swigCPtr.Handle, null);
 
         NoesisGUI_PINVOKE.BindEvent_ItemContainerGenerator_ItemsChanged(_raiseItemsChanged, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       }
 
       _ItemsChanged[swigCPtr.Handle] += value;
@@ -52,7 +51,6 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
 
         if (_ItemsChanged[swigCPtr.Handle] == null) {
           NoesisGUI_PINVOKE.UnbindEvent_ItemContainerGenerator_ItemsChanged(_raiseItemsChanged, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
 
           _ItemsChanged.Remove(swigCPtr.Handle);
         }
@@ -66,26 +64,26 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
   [MonoPInvokeCallback(typeof(RaiseItemsChangedCallback))]
   private static void RaiseItemsChanged(IntPtr cPtr, IntPtr sender, IntPtr e) {
     try {
-      if (!_ItemsChanged.ContainsKey(cPtr)) {
-        throw new System.InvalidOperationException("Delegate not registered for ItemsChanged event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _ItemsChanged.Remove(cPtr);
-        return;
-      }
       if (Noesis.Extend.Initialized) {
-        ItemsChangedHandler handler = _ItemsChanged[cPtr];
+        if (sender == IntPtr.Zero && e == IntPtr.Zero) {
+          _ItemsChanged.Remove(cPtr);
+          return;
+        }
+        ItemsChangedHandler handler = null;
+        if (!_ItemsChanged.TryGetValue(cPtr, out handler)) {
+          throw new System.InvalidOperationException("Delegate not registered for ItemsChanged event");
+        }
         if (handler != null) {
           handler(Noesis.Extend.GetProxy(sender, false), new ItemsChangedEventArgs(e, false));
         }
       }
     }
     catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+      Noesis.Error.UnhandledException(exception);
     }
   }
 
-  static Dictionary<IntPtr, ItemsChangedHandler> _ItemsChanged =
+  internal static Dictionary<IntPtr, ItemsChangedHandler> _ItemsChanged =
       new Dictionary<IntPtr, ItemsChangedHandler>();
   #endregion
 
@@ -97,7 +95,6 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
         _StatusChanged.Add(swigCPtr.Handle, null);
 
         NoesisGUI_PINVOKE.BindEvent_ItemContainerGenerator_StatusChanged(_raiseStatusChanged, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       }
 
       _StatusChanged[swigCPtr.Handle] += value;
@@ -109,7 +106,6 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
 
         if (_StatusChanged[swigCPtr.Handle] == null) {
           NoesisGUI_PINVOKE.UnbindEvent_ItemContainerGenerator_StatusChanged(_raiseStatusChanged, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
 
           _StatusChanged.Remove(swigCPtr.Handle);
         }
@@ -123,32 +119,35 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
   [MonoPInvokeCallback(typeof(RaiseStatusChangedCallback))]
   private static void RaiseStatusChanged(IntPtr cPtr, IntPtr sender, IntPtr e) {
     try {
-      if (!_StatusChanged.ContainsKey(cPtr)) {
-        throw new System.InvalidOperationException("Delegate not registered for StatusChanged event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _StatusChanged.Remove(cPtr);
-        return;
-      }
       if (Noesis.Extend.Initialized) {
-        StatusChangedHandler handler = _StatusChanged[cPtr];
+        if (sender == IntPtr.Zero && e == IntPtr.Zero) {
+          _StatusChanged.Remove(cPtr);
+          return;
+        }
+        StatusChangedHandler handler = null;
+        if (!_StatusChanged.TryGetValue(cPtr, out handler)) {
+          throw new System.InvalidOperationException("Delegate not registered for StatusChanged event");
+        }
         if (handler != null) {
           handler(Noesis.Extend.GetProxy(sender, false), new EventArgs(e, false));
         }
       }
     }
     catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+      Noesis.Error.UnhandledException(exception);
     }
   }
 
-  static Dictionary<IntPtr, StatusChangedHandler> _StatusChanged =
+  internal static Dictionary<IntPtr, StatusChangedHandler> _StatusChanged =
       new Dictionary<IntPtr, StatusChangedHandler>();
   #endregion
 
   #endregion
 
   ItemContainerGenerator IItemContainerGenerator.GetItemContainerGeneratorForPanel(Panel panel) {
+    if (!panel.IsItemsHost) {
+      throw new ArgumentException("Panel is not an ItemsHost");
+    }
     return GetItemContainerGeneratorForPanelHelper(panel);
   }
 
@@ -157,21 +156,28 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
   }
 
   IDisposable IItemContainerGenerator.StartAt(GeneratorPosition position, GeneratorDirection direction, bool allowStartAtRealizedItem) {
+    if (Status == GeneratorStatus.GeneratingContainers) {
+        throw new InvalidOperationException("Generation already in progress");
+    }
     StartAtHelper(position, direction, allowStartAtRealizedItem);
     return new Generator(this);
   }
 
   DependencyObject IItemContainerGenerator.GenerateNext() {
+    if (Status != GeneratorStatus.GeneratingContainers) {
+        throw new InvalidOperationException("Generation is not in progress");
+    }
     IntPtr cPtr = GenerateNextHelper();
-    Noesis.Extend.AddPendingRelease(cPtr);
-    return (DependencyObject)Noesis.Extend.GetProxy(cPtr, false);
+    return (DependencyObject)Noesis.Extend.GetProxy(cPtr, true);
   }
 
   DependencyObject IItemContainerGenerator.GenerateNext(out bool isNewlyRealized) {
+    if (Status != GeneratorStatus.GeneratingContainers) {
+        throw new InvalidOperationException("Generation is not in progress");
+    }
     isNewlyRealized = false;
     IntPtr cPtr = GenerateNextRealizedHelper(ref isNewlyRealized);
-    Noesis.Extend.AddPendingRelease(cPtr);
-    return (DependencyObject)Noesis.Extend.GetProxy(cPtr, false);
+    return (DependencyObject)Noesis.Extend.GetProxy(cPtr, true);
   }
 
   void IItemContainerGenerator.PrepareItemContainer(DependencyObject container) {
@@ -183,6 +189,20 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
   }
 
   void IItemContainerGenerator.Remove(GeneratorPosition position, int count) {
+    if (position.Offset != 0) {
+      throw new ArgumentException("Remove requires a position with offset zero");
+    }
+    if (count <= 0) {
+      throw new ArgumentException("Remove requires a position with positive count");
+    }
+    int index = ((IItemContainerGenerator)this).IndexFromGeneratorPosition(position);
+    if (index < 0) {
+      throw new IndexOutOfRangeException("position");
+    }
+    int numItems = ((IItemContainerGenerator)this).IndexFromGeneratorPosition(new GeneratorPosition(-1, -1)) + 1;
+    if (index >= numItems) {
+      throw new IndexOutOfRangeException("position");
+    }
     RemoveHelper(position, count);
   }
 
@@ -197,6 +217,20 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
   }
 
   void IRecyclingItemContainerGenerator.Recycle(GeneratorPosition position, int count) {
+    if (position.Offset != 0) {
+      throw new ArgumentException("Remove requires a position with offset zero");
+    }
+    if (count <= 0) {
+      throw new ArgumentException("Remove requires a position with positive count");
+    }
+    int index = ((IItemContainerGenerator)this).IndexFromGeneratorPosition(position);
+    if (index < 0) {
+      throw new IndexOutOfRangeException("position");
+    }
+    int numItems = ((IItemContainerGenerator)this).IndexFromGeneratorPosition(new GeneratorPosition(-1, -1)) + 1;
+    if (index >= numItems) {
+      throw new IndexOutOfRangeException("position");
+    }
     RecycleHelper(position, count);
   }
 
@@ -219,32 +253,35 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
 
   public DependencyObject ContainerFromIndex(int index) {
     IntPtr cPtr = NoesisGUI_PINVOKE.ItemContainerGenerator_ContainerFromIndex(swigCPtr, index);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return (DependencyObject)Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public DependencyObject ContainerFromItem(object item) {
     IntPtr cPtr = NoesisGUI_PINVOKE.ItemContainerGenerator_ContainerFromItem(swigCPtr, Noesis.Extend.GetInstanceHandle(item));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return (DependencyObject)Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public int IndexFromContainer(DependencyObject container) {
     int ret = NoesisGUI_PINVOKE.ItemContainerGenerator_IndexFromContainer(swigCPtr, DependencyObject.getCPtr(container));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   public object ItemFromContainer(DependencyObject container) {
     IntPtr cPtr = NoesisGUI_PINVOKE.ItemContainerGenerator_ItemFromContainer(swigCPtr, DependencyObject.getCPtr(container));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return Noesis.Extend.GetProxy(cPtr, false);
+  }
+
+  public void StartBatch() {
+    NoesisGUI_PINVOKE.ItemContainerGenerator_StartBatch(swigCPtr);
+  }
+
+  public void StopBatch() {
+    NoesisGUI_PINVOKE.ItemContainerGenerator_StopBatch(swigCPtr);
   }
 
   public GeneratorStatus Status {
     get {
       GeneratorStatus ret = (GeneratorStatus)NoesisGUI_PINVOKE.ItemContainerGenerator_Status_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -252,67 +289,50 @@ public class ItemContainerGenerator : BaseComponent, Noesis.IRecyclingItemContai
   private ItemContainerGenerator GetItemContainerGeneratorForPanelHelper(Panel panel) {
     IntPtr cPtr = NoesisGUI_PINVOKE.ItemContainerGenerator_GetItemContainerGeneratorForPanelHelper(swigCPtr, Panel.getCPtr(panel));
     ItemContainerGenerator ret = (cPtr == IntPtr.Zero) ? null : new ItemContainerGenerator(cPtr, false);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private void GeneratorPositionFromIndexHelper(int itemIndex, ref GeneratorPosition position) {
     NoesisGUI_PINVOKE.ItemContainerGenerator_GeneratorPositionFromIndexHelper(swigCPtr, itemIndex, ref position);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   private int IndexFromGeneratorPositionHelper(GeneratorPosition position) {
     int ret = NoesisGUI_PINVOKE.ItemContainerGenerator_IndexFromGeneratorPositionHelper(swigCPtr, ref position);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private void StartAtHelper(GeneratorPosition position, GeneratorDirection direction, bool allowStartAtRealizedItem) {
     NoesisGUI_PINVOKE.ItemContainerGenerator_StartAtHelper(swigCPtr, ref position, (int)direction, allowStartAtRealizedItem);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   private IntPtr GenerateNextHelper() {
     IntPtr ret = NoesisGUI_PINVOKE.ItemContainerGenerator_GenerateNextHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private IntPtr GenerateNextRealizedHelper(ref bool isNewlyRealized) {
     IntPtr ret = NoesisGUI_PINVOKE.ItemContainerGenerator_GenerateNextRealizedHelper(swigCPtr, ref isNewlyRealized);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private void StopHelper() {
     NoesisGUI_PINVOKE.ItemContainerGenerator_StopHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   private void PrepareItemContainerHelper(DependencyObject container) {
     NoesisGUI_PINVOKE.ItemContainerGenerator_PrepareItemContainerHelper(swigCPtr, DependencyObject.getCPtr(container));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   private void RemoveAllHelper() {
     NoesisGUI_PINVOKE.ItemContainerGenerator_RemoveAllHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   private void RemoveHelper(GeneratorPosition position, int count) {
     NoesisGUI_PINVOKE.ItemContainerGenerator_RemoveHelper(swigCPtr, ref position, count);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   private void RecycleHelper(GeneratorPosition position, int count) {
     NoesisGUI_PINVOKE.ItemContainerGenerator_RecycleHelper(swigCPtr, ref position, count);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.ItemContainerGenerator_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
   }
 
 }

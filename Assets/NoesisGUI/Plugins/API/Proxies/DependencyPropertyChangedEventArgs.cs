@@ -45,19 +45,24 @@ public class DependencyPropertyChangedEventArgs : IDisposable {
     }
   }
 
+  internal static void InvokeHandler(Delegate handler, IntPtr sender, IntPtr args) {
+    DependencyPropertyChangedEventHandler handler_ = (DependencyPropertyChangedEventHandler)handler;
+    if (handler_ != null) {
+      handler_(Extend.GetProxy(sender, false), new DependencyPropertyChangedEventArgs(args, false));
+    }
+  }
+
   public object NewValue {
     get {
       IntPtr cPtr = GetNewValueHelper();
-      Noesis.Extend.AddPendingRelease(cPtr);
-      return GetValueHelper(Noesis.Extend.GetProxy(cPtr, false));
+      return GetValueHelper(Noesis.Extend.GetProxy(cPtr, true));
     }
   }
 
   public object OldValue {
     get {
       IntPtr cPtr = GetOldValueHelper();
-      Noesis.Extend.AddPendingRelease(cPtr);
-      return GetValueHelper(Noesis.Extend.GetProxy(cPtr, false));
+      return GetValueHelper(Noesis.Extend.GetProxy(cPtr, true));
     }
   }
 
@@ -79,19 +84,16 @@ public class DependencyPropertyChangedEventArgs : IDisposable {
 
   private IntPtr GetNewValueHelper() {
     IntPtr ret = NoesisGUI_PINVOKE.DependencyPropertyChangedEventArgs_GetNewValueHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private IntPtr GetOldValueHelper() {
     IntPtr ret = NoesisGUI_PINVOKE.DependencyPropertyChangedEventArgs_GetOldValueHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private DependencyProperty GetPropertyHelper() {
     IntPtr cPtr = NoesisGUI_PINVOKE.DependencyPropertyChangedEventArgs_GetPropertyHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
   }
 

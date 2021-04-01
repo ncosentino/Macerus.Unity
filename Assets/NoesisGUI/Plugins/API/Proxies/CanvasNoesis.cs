@@ -31,7 +31,7 @@ public class Canvas : Panel {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(Canvas).TypeHandle) {
+    if (type == typeof(Canvas)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_Canvas();
     }
@@ -41,53 +41,68 @@ public class Canvas : Panel {
   }
 
   public static float GetLeft(UIElement element) {
-    float ret = NoesisGUI_PINVOKE.Canvas_GetLeft(UIElement.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      float ret = NoesisGUI_PINVOKE.Canvas_GetLeft(UIElement.getCPtr(element));
+      return ret;
+    }
   }
 
   public static void SetLeft(UIElement element, float left) {
-    NoesisGUI_PINVOKE.Canvas_SetLeft(UIElement.getCPtr(element), left);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      NoesisGUI_PINVOKE.Canvas_SetLeft(UIElement.getCPtr(element), left);
+    }
   }
 
   public static float GetTop(UIElement element) {
-    float ret = NoesisGUI_PINVOKE.Canvas_GetTop(UIElement.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      float ret = NoesisGUI_PINVOKE.Canvas_GetTop(UIElement.getCPtr(element));
+      return ret;
+    }
   }
 
   public static void SetTop(UIElement element, float top) {
-    NoesisGUI_PINVOKE.Canvas_SetTop(UIElement.getCPtr(element), top);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      NoesisGUI_PINVOKE.Canvas_SetTop(UIElement.getCPtr(element), top);
+    }
   }
 
   public static float GetRight(UIElement element) {
-    float ret = NoesisGUI_PINVOKE.Canvas_GetRight(UIElement.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      float ret = NoesisGUI_PINVOKE.Canvas_GetRight(UIElement.getCPtr(element));
+      return ret;
+    }
   }
 
   public static void SetRight(UIElement element, float right) {
-    NoesisGUI_PINVOKE.Canvas_SetRight(UIElement.getCPtr(element), right);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      NoesisGUI_PINVOKE.Canvas_SetRight(UIElement.getCPtr(element), right);
+    }
   }
 
   public static float GetBottom(UIElement element) {
-    float ret = NoesisGUI_PINVOKE.Canvas_GetBottom(UIElement.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      float ret = NoesisGUI_PINVOKE.Canvas_GetBottom(UIElement.getCPtr(element));
+      return ret;
+    }
   }
 
   public static void SetBottom(UIElement element, float bottom) {
-    NoesisGUI_PINVOKE.Canvas_SetBottom(UIElement.getCPtr(element), bottom);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      NoesisGUI_PINVOKE.Canvas_SetBottom(UIElement.getCPtr(element), bottom);
+    }
   }
 
   public static DependencyProperty BottomProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Canvas_BottomProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -95,7 +110,6 @@ public class Canvas : Panel {
   public static DependencyProperty LeftProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Canvas_LeftProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -103,7 +117,6 @@ public class Canvas : Panel {
   public static DependencyProperty RightProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Canvas_RightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -111,22 +124,12 @@ public class Canvas : Panel {
   public static DependencyProperty TopProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.Canvas_TopProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.Canvas_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_Canvas(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_Canvas(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

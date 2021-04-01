@@ -2,76 +2,97 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections.Generic;
+using UnityEngine.Video;
 
 /// <summary>
-/// Post-processor for XAML and Fonts
+/// Post-processor for XAMLs and Fonts
 /// </summary>
 public class NoesisPostprocessor : AssetPostprocessor
 {
     public static void ImportAllAssets()
     {
-        var assets = AssetDatabase.FindAssets("").Select(guid => AssetDatabase.GUIDToAssetPath(guid))
-            .Where(s => s.EndsWith(".xaml", StringComparison.OrdinalIgnoreCase) ||
-                        s.EndsWith(".ttf", StringComparison.OrdinalIgnoreCase) ||
-                        s.EndsWith(".otf", StringComparison.OrdinalIgnoreCase))
-            .Distinct().ToArray();
-
-        NoesisPostprocessor.ImportAssets(assets, (progress, asset) => EditorUtility.DisplayProgressBar("Reimport All XAMLs", asset, progress));
+        NoesisPostprocessor.ImportAllAssets((progress, asset) => EditorUtility.DisplayProgressBar("Reimport All XAMLs", asset, progress));
         EditorUtility.ClearProgressBar();
     }
 
-    private delegate void UpdateProgress(float progress, string asset);
+    public delegate void UpdateProgress(float progress, string asset);
 
-    private static void ImportAssets(string[] assets, UpdateProgress d)
+    public static void ImportAllAssets(UpdateProgress d)
     {
-        int numFonts = assets.Count(asset => HasExtension(asset, ".ttf") || HasExtension(asset, ".otf"));
-        int numXamls = assets.Count(asset => HasExtension(asset, ".xaml"));
+        var assets = AssetDatabase.FindAssets("")
+            .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
+            .Where(s => IsFont(s) || IsXaml(s))
+            .Distinct().ToArray();
+
+        NoesisPostprocessor.ImportAssets(assets, false, d);
+    }
+
+    private static void ImportAssets(string[] assets, bool reload, UpdateProgress d)
+    {
+        int numFonts = assets.Count(asset => asset.StartsWith("Assets/") && IsFont(asset));
+        int numXamls = assets.Count(asset => asset.StartsWith("Assets/") && IsXaml(asset));
         int numAssets = numFonts + numXamls;
 
-        float delta = 1.0f / numAssets;
-        float progress = 0.0f;
-
-        // Do fonts first because XAML depends on the generated .asset
-        foreach (var asset in assets)
+        if (numAssets > 0)
         {
-            if (HasExtension(asset, ".ttf") || HasExtension(asset, ".otf"))
-            {
-                ImportFont(asset);
+            Log("→ Import assets (XAMLs: " + numXamls + " Fonts: " + numFonts + ")");
 
-                if (d != null)
+            float delta = 1.0f / numAssets;
+            float progress = 0.0f;
+
+            if (numXamls > 0)
+            {
+                NoesisUnity.Init();
+
+                // Theme
+                NoesisXaml theme = NoesisSettings.Get().applicationResources;
+                if (theme != null)
                 {
-                    d(progress, asset);
-                    progress += delta;
+                    Log("Scanning for theme changes...");
+
+                    bool changed;
+                    ImportXaml(theme.source, false, false, out changed);
+
+                    if (changed)
+                    {
+                        Log("↔ Reload ApplicationResources");
+                        NoesisUnity.LoadApplicationResources();
+                    }
                 }
             }
-        }
 
-        // First, create all .asset resources to allow dependencies between XAMLs
-        foreach (var asset in assets)
-        {
-            if (HasExtension(asset, ".xaml"))
+            foreach (var asset in assets)
             {
-                CreateXamlAsset(asset);
-            }
-        }
-
-        // And now, fully import each XAML
-        foreach (var asset in assets)
-        {
-            if (HasExtension(asset, ".xaml"))
-            {
-                ImportXaml(asset);
-
-                if (d != null)
+                // Make sure read-only folders from Package Manager are not processed
+                if (asset.StartsWith("Assets/"))
                 {
-                    d(progress, asset);
-                    progress += delta;
+                    try
+                    {
+                        if (IsFont(asset))
+                        {
+                            ImportFont(asset, true, reload);
+                        }
+                        else if (IsXaml(asset))
+                        {
+                            ImportXaml(asset, true, reload);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+
+                    if (d != null && (IsFont(asset) || IsXaml(asset)))
+                    {
+                        d(progress, asset);
+                        progress += delta;
+                    }
                 }
             }
+
+            Log("← Import assets");
         }
     }
 
@@ -79,7 +100,20 @@ public class NoesisPostprocessor : AssetPostprocessor
     {
         if (NoesisSettings.IsNoesisEnabled())
         {
-            ImportAssets(importedAssets.Concat(movedAssets).ToArray(), null);
+            EditorApplication.CallbackFunction d = null;
+
+            // Delay the import process to have all texture assets ready
+            d = () =>
+            {
+                EditorApplication.update -= d;
+
+                string[] assets = importedAssets.Concat(movedAssets).ToArray();
+                ImportAssets(assets,  NoesisSettings.Get().hotReloading, (progress, asset) =>
+                    EditorUtility.DisplayProgressBar("Import XAMLs", asset, progress));
+                EditorUtility.ClearProgressBar();
+            };
+
+            EditorApplication.update += d;
         }
     }
 
@@ -88,295 +122,390 @@ public class NoesisPostprocessor : AssetPostprocessor
         return filename.EndsWith(extension, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>
-    /// Imports a TrueType into a NoesisFont asset
-    /// </summary>
-    private static void ImportFont(string filename)
+    private static bool IsXaml(string filename)
     {
-        using (FileStream file = File.Open(filename, FileMode.Open))
-        {
-            string path = Path.ChangeExtension(filename, ".asset");
-            var font = AssetDatabase.LoadAssetAtPath<NoesisFont>(path);
-
-            if (font == null)
-            {
-                font = (NoesisFont)ScriptableObject.CreateInstance(typeof(NoesisFont));
-                font.source = filename;
-                font.content = new byte[file.Length];
-                file.Read(font.content, 0, (int)file.Length);
-                AssetDatabase.CreateAsset(font, path);
-            }
-            else
-            {
-                font.source = filename;
-                font.content = new byte[file.Length];
-                file.Read(font.content, 0, (int)file.Length);
-                EditorUtility.SetDirty(font);
-            }
-        }
+        return HasExtension(filename, ".xaml");
     }
 
-    /// <summary>
-    /// Unity always expects paths with forward slashes (/) and rooted at "Assets/"
-    /// </summary>
-    private static string NormalizePath(string uri)
+    private static bool IsFont(string filename)
     {
-        string full = Path.GetFullPath(uri).Replace('\\', '/');
-        return full.Substring(full.IndexOf("Assets/"));
+        return HasExtension(filename, ".ttf") || HasExtension(filename, ".otf") || HasExtension(filename, ".ttc");
     }
 
-    /// <summary>
-    /// In XAML, URIs are relative by default. Absolute URIs use the following syntaxes:
-    ///     "pack://application:,,,/path1/path2/resource.ext"
-    ///     "/ReferencedAssembly;component/path1/path2/resource.ext"
-    ///     "/path1/path2/resource.ext"
-    /// </summary>
-    private static string AbsolutePath(string parent, string uri)
+    private static NoesisFont ImportFont(string filename, bool reimport, bool reload)
     {
-        const string PackUri = "pack://application:,,,";
-        int n = uri.IndexOf(PackUri);
-        if (n != -1)
+        string path = Path.ChangeExtension(filename, ".asset");
+        NoesisFont font = AssetDatabase.LoadAssetAtPath<NoesisFont>(path);
+
+        if (font == null)
         {
-            uri = uri.Substring(n + PackUri.Length);
+            Log("↔ Create " + filename);
+            font = (NoesisFont)ScriptableObject.CreateInstance(typeof(NoesisFont));
+            AssetDatabase.CreateAsset(font, path);
         }
 
-        const string ComponentUri = ";component";
-        n = uri.IndexOf(ComponentUri);
-        if (n != -1)
+        byte[] content = File.ReadAllBytes(filename);
+
+        if (reimport || font.content == null || !font.content.SequenceEqual(content) || font.source != filename)
         {
-            uri = uri.Substring(n + ComponentUri.Length);
+            Log("→ ImportFont " + filename);
+            font.source = filename;
+            font.content = content;
+            EditorUtility.SetDirty(font);
+            AssetDatabase.SaveAssets();
+            Log("← ImportFont");
         }
 
-        if (uri.StartsWith("/"))
+        // Hot reloading of font
+        if (NoesisUnity.Initialized && reimport && reload)
         {
-            return NormalizePath(uri);
+            ReloadFont(font.source);
         }
-        else
-        {
-            return NormalizePath(parent + "/" + uri);
-        }
+
+        return font;
     }
 
-    /// <summary>
-    /// Returns all the usages found of the given keyword under quotation marks
-    /// </summary>
-    private static List<string> ScanKeyword(string text, string keyword)
+    private static void ReloadFont(string uri)
     {
-        List<string> strings = new List<string>();
-
-        int cur = 0;
-        int pos;
-
-        while ((pos = text.IndexOf(keyword, cur, StringComparison.OrdinalIgnoreCase)) != -1)
-        {
-            int start = pos;
-            while (start >= 0 && text[start] != '\"' && text[start] != '\'' && text[start] != '>')
-            {
-                start--;
-            }
-
-            int end = pos;
-            while (end < text.Length && text[end] != '\"' && text[end] != '\'' && text[end] != '<')
-            {
-                end++;
-            }
-
-            if (start >= 0 && end < text.Length)
-            {
-                strings.Add(text.Substring(start + 1, end - start - 1));
-            }
-
-            cur = pos + keyword.Length;
-        }
-
-        return strings;
+        Log("ReloadFont " + uri);
+        NoesisFontProvider.instance.ReloadFont(uri);
     }
 
-    private static void ScanTexture(string directory, string text, string extension, HashSet<Texture> textures)
+    private static void ScanFont(string uri, ref List<NoesisFont> fonts)
     {
-        List<string> keywords = ScanKeyword(text, extension);
-
-        foreach (var keyword in keywords)
+        int index = uri.IndexOf('#');
+        if (index != -1)
         {
-            string uri = AbsolutePath(directory, keyword);
-            string guid = AssetDatabase.AssetPathToGUID(uri);
-
-            if (!String.IsNullOrEmpty(guid))
+            string folder = uri.Substring(0, index);
+            if (Directory.Exists(folder))
             {
-                Texture t = AssetDatabase.LoadAssetAtPath<Texture>(uri);
+                string family = uri.Substring(index + 1);
+                var files = Directory.GetFiles(folder).Where(s => IsFont(s));
 
-                if (t != null)
+                foreach (var font in files)
                 {
-                    textures.Add(t);
-                }
-            }
-        }
-    }
+                    bool hasFamily = false;
 
-    private static void ScanTextures(NoesisXaml xaml, string directory, string text)
-    {
-        var textures = new HashSet<Texture>();
-
-        ScanTexture(directory, text, ".jpg", textures);
-        ScanTexture(directory, text, ".tga", textures);
-        ScanTexture(directory, text, ".png", textures);
-        ScanTexture(directory, text, ".gif", textures);
-        ScanTexture(directory, text, ".bmp", textures);
-
-        xaml.textures = textures.ToArray();
-        xaml.texturePaths = textures.Select(t => AssetDatabase.GetAssetPath(t)).ToArray();
-    }
-
-    private static void FindFamilyNames(string directory, string family, HashSet<NoesisFont> fonts)
-    {
-        try
-        {
-            var files = Directory.GetFiles(directory)
-                .Where(s => s.EndsWith(".ttf", StringComparison.OrdinalIgnoreCase) || 
-                            s.EndsWith(".otf", StringComparison.OrdinalIgnoreCase));
-
-            foreach (var filename in files)
-            {
-                using (FileStream file = File.Open(filename, FileMode.Open))
-                {
-                    if (NoesisUnity.HasFamily(file, family))
+                    using (FileStream file = File.Open(font, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        string uri = Path.ChangeExtension(NormalizePath(filename), ".asset");
-                        string guid = AssetDatabase.AssetPathToGUID(uri);
+                        hasFamily = NoesisUnity.HasFamily(file, family);
+                    }
 
-                        if (!String.IsNullOrEmpty(guid))
-                        {
-                            NoesisFont f = AssetDatabase.LoadAssetAtPath<NoesisFont>(uri);
-
-                            if (f != null)
-                            {
-                                fonts.Add(f);
-                            }
-                        }
+                    if (hasFamily)
+                    {
+                        fonts.Add(ImportFont(font, false, false));
                     }
                 }
             }
         }
-        catch(System.Exception) {}
     }
 
-    private static void ScanFonts(NoesisXaml xaml, string directory, string text)
+    private static void ScanTexture(string uri, ref List<Texture> textures)
     {
-        var fonts = new HashSet<NoesisFont>();
-
-        List<string> keywords = ScanKeyword(text, "#");
-        foreach (var keyword in keywords)
+        if (!String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(uri)))
         {
-            int index = keyword.IndexOf('#');
-            string folder = AbsolutePath(directory, keyword.Substring(0, index));
-            string family = keyword.Substring(index + 1);
-            FindFamilyNames(folder, family, fonts);
+            Texture texture = AssetDatabase.LoadAssetAtPath<Texture>(uri);
+
+            if (texture != null)
+            {
+                textures.Add(texture);
+            }
+        }
+    }
+
+    private static void ScanAudio(string uri, ref List<AudioClip> audios)
+    {
+        if (!String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(uri)))
+        {
+            AudioClip audio = AssetDatabase.LoadAssetAtPath<AudioClip>(uri);
+
+            if (audio != null)
+            {
+                audios.Add(audio);
+            }
+        }
+    }
+
+    private static void ScanVideo(string uri, ref List<VideoClip> videos)
+    {
+        if (!String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(uri)))
+        {
+            VideoClip video = AssetDatabase.LoadAssetAtPath<VideoClip>(uri);
+
+            if (video != null)
+            {
+                videos.Add(video);
+            }
+        }
+    }
+
+    private static void ScanXaml(string uri, ref List<NoesisXaml> xamls)
+    {
+        if (IsXaml(uri))
+        {
+            if (File.Exists(uri))
+            {
+                xamls.Add(ImportXaml(uri, false, false));
+            }
+        }
+    }
+
+    private static void ScanDependencies(string filename, out List<NoesisFont> fonts_, out List<Texture> textures_, out List<AudioClip> audios_, out List<VideoClip> videos_, out List<NoesisXaml> xamls_)
+    {
+        List<NoesisFont> fonts = new List<NoesisFont>();
+        List<Texture> textures = new List<Texture>();
+        List<AudioClip> audios = new List<AudioClip>();
+        List<VideoClip> videos = new List<VideoClip>();
+        List<NoesisXaml> xamls = new List<NoesisXaml>();
+
+        try
+        {
+            using (FileStream file = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                string directory = Path.GetDirectoryName(filename);
+                Noesis.GUI.GetXamlDependencies(file, directory, (uri, type) =>
+                {
+                    try
+                    {
+                        if (type == Noesis.XamlDependencyType.Filename)
+                        {
+                            ScanXaml(uri, ref xamls);
+                            ScanTexture(uri, ref textures);
+                            ScanAudio(uri, ref audios);
+                            ScanVideo(uri, ref videos);
+                        }
+                        else if (type == Noesis.XamlDependencyType.Font)
+                        {
+                            ScanFont(uri, ref fonts);
+                        }
+                        else if (type == Noesis.XamlDependencyType.UserControl)
+                        {
+                            string userControl = AssetDatabase.FindAssets("")
+                                .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
+                                .Where(s => String.Equals(Path.GetFileName(s), uri + ".xaml", StringComparison.OrdinalIgnoreCase))
+                                .FirstOrDefault();
+
+                            if (!String.IsNullOrEmpty(userControl) && userControl != filename)
+                            {
+                                ScanXaml(userControl, ref xamls);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                         Debug.LogException(e);
+                    }
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
         }
 
-        xaml.fonts = fonts.ToArray();
+        fonts_ = fonts;
+        textures_ = textures;
+        audios_ = audios;
+        videos_ = videos;
+        xamls_ = xamls;
     }
 
-    private static void ScanXamls(NoesisXaml xaml, string directory, string text)
+    private static NoesisXaml ImportXaml(string filename, bool reimport, bool reload)
     {
-        var xamls = new HashSet<NoesisXaml>();
+        bool changed;
+        return ImportXaml(filename, reimport, reload, out changed);
+    }
 
-        List<string> keywords = ScanKeyword(text, ".xaml");
-        foreach (var keyword in keywords)
+    // A user control xaml can reference the same user control when used in a template, creating a circular
+    // dependency (from the same xaml or from a merged dictionary) that we need to break. We are using
+    // the following stack to detect when a xaml is being processed to stop scanning for its dependencies
+    private static Stack<string> _xamlDependencyStack = new Stack<string>();
+
+    private static NoesisXaml ImportXaml(string filename, bool reimport, bool reload, out bool changed)
+    {
+        changed = false;
+        string path = Path.ChangeExtension(filename, ".asset");
+        NoesisXaml xaml = AssetDatabase.LoadAssetAtPath<NoesisXaml>(path);
+
+        if (xaml == null)
         {
-            string uri = AbsolutePath(directory, Path.ChangeExtension(keyword, ".asset"));
-            string guid = AssetDatabase.AssetPathToGUID(uri);
+            Log("↔ Create " + filename);
+            xaml = (NoesisXaml)ScriptableObject.CreateInstance(typeof(NoesisXaml));
+            AssetDatabase.CreateAsset(xaml, path);
+        }
 
-            if (!String.IsNullOrEmpty(guid))
+        // Unify CRLF,LF between Windows and macOS
+        String text = File.ReadAllText(filename);
+        text = text.Replace("\r\n", "\n");
+        byte[] content = System.Text.Encoding.UTF8.GetBytes(text);
+
+        // Keep track of the xaml being imported
+        _xamlDependencyStack.Push(filename);
+
+        if (reimport || xaml.content == null || !xaml.content.SequenceEqual(content) || xaml.source != filename)
+        {
+            Log("→ ImportXaml " + filename);
+            changed = true;
+
+            xaml.source = filename;
+            xaml.content = content;
+
+            List<NoesisFont> fonts;
+            List<Texture> textures;
+            List<AudioClip> audios;
+            List<VideoClip> videos;
+            List<NoesisXaml> xamls;
+            xaml.UnregisterDependencies();
+            ScanDependencies(filename, out fonts, out textures, out audios, out videos, out xamls);
+
+            xaml.xamls = xamls.ToArray();
+            xaml.textures = textures.Select(t => new NoesisXaml.Texture { uri = AssetDatabase.GetAssetPath(t), texture = t} ).ToArray();
+            xaml.audios = audios.Select(t => new NoesisXaml.Audio { uri = AssetDatabase.GetAssetPath(t), audio = t} ).ToArray();
+            xaml.videos = videos.Select(t => new NoesisXaml.Video { uri = AssetDatabase.GetAssetPath(t), video = t }).ToArray();
+            xaml.fonts = fonts.ToArray();
+            xaml.RegisterDependencies();
+
+            EditorUtility.SetDirty(xaml);
+            AssetDatabase.SaveAssets();
+            Log("← ImportXaml");
+        }
+        else
+        {
+            // XAML didn't change, let's continue scanning its dependencies
+            foreach (var dep in xaml.xamls)
             {
-                NoesisXaml x = AssetDatabase.LoadAssetAtPath<NoesisXaml>(uri);
-
-                if (x != null)
+                if (dep && File.Exists(dep.source) && !_xamlDependencyStack.Contains(dep.source))
                 {
-                    xamls.Add(x);
+                    bool changed_;
+                    ImportXaml(dep.source, false, false, out changed_);
+                    changed = changed || changed_;
+                }
+            }
+
+            foreach (var dep in xaml.fonts)
+            {
+                if (dep && File.Exists(dep.source))
+                {
+                    ImportFont(dep.source, false, false);
                 }
             }
         }
 
-        xaml.xamls = xamls.ToArray();
-    }
+        // Dependencies scan finished, remove it from the stack
+        _xamlDependencyStack.Pop();
 
-    private static void ScanDependencies(NoesisXaml xaml, string directory)
-    {
-        string text = System.Text.Encoding.UTF8.GetString(xaml.content);
-
-        // Remove comments
-        Regex exp = new Regex("<!--(.*?)-->", RegexOptions.Singleline);
-        text = exp.Replace(text, "");
-
-        ScanTextures(xaml, directory, text);
-        ScanFonts(xaml, directory, text);
-        ScanXamls(xaml, directory, text);
-
-        xaml.ReloadDependencies();
-    }
-
-    private static void ImportXaml(NoesisXaml xaml, string directory, FileStream file)
-    {
-        xaml.content = new byte[file.Length];
-        file.Read(xaml.content, 0, (int)file.Length);
-
-        ScanDependencies(xaml, directory);
-    }
-
-    private static void ImportXaml(string filename)
-    {
-        NoesisUnity.Init();
-
-        string path = Path.ChangeExtension(filename, ".asset");
-        var xaml = AssetDatabase.LoadAssetAtPath<NoesisXaml>(path);
-
-        using (FileStream file = File.Open(filename, FileMode.Open))
+        if (reimport)
         {
-            string directory = Path.GetDirectoryName(filename);
-            ImportXaml(xaml, directory, file);
-        }
-
-        // The following steps (updating thumbnail and loading XAML for logging errors) must be
-        // done after all XAMLs are imported to avoid dependency order issues. It is also a good
-        // idea doing this outside OnPostprocessAllAssets to avoid continuously crashing Unity if
-        // Load() raises an unexception exception. That is the reason we use a deferred call.
-        EditorApplication.CallbackFunction d = null;
-
-        d = () =>
-        {
-            // TODO: if Unity is compiling scripts (EditorApplication.isCompiling) we should wait
-
-            EditorApplication.update -= d;
-
+            // Show parsing errors in the console
             try
             {
                 xaml.Load();
-                EditorUtility.SetDirty(xaml);
 
+                if (reload)
+                {
+                    ReloadXaml(xaml.source);
+                }
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogException(e, xaml);
+                Debug.LogException(e, xaml);
             }
-        };
+        }
 
-        EditorApplication.update += d;
+        return xaml;
     }
 
-    private static void CreateXamlAsset(string filename)
+    private static void ReloadXaml(string uri)
     {
-        string uri = Path.ChangeExtension(filename, ".asset");
-        var xaml = AssetDatabase.LoadAssetAtPath<NoesisXaml>(uri);
+        Log("ReloadXaml" + uri);
 
-        if (xaml == null)
+        NoesisUnity.MuteLog();
+        NoesisXamlProvider.instance.ReloadXaml(uri);
+        NoesisUnity.UnmuteLog();
+    }
+
+    private void OnPreprocessTexture()
+    {
+        if (AssetDatabase.GetLabels(assetImporter).Contains("Noesis") || assetPath.StartsWith("Assets/NoesisGUI/Samples"))
         {
-            xaml = (NoesisXaml)ScriptableObject.CreateInstance(typeof(NoesisXaml));
-            xaml.source = filename;
-            AssetDatabase.CreateAsset(xaml, uri);
+            // If the texture is going to be modified it is required to be readable
+            TextureImporter importer = (TextureImporter)assetImporter;
+            importer.isReadable = true;
         }
-        else
+    }
+
+    private void OnPostprocessTexture(Texture2D texture)
+    {
+        // Although our samples use the label 'Noesis' it seems to be ignored by Unity when the package is being imported
+        if (AssetDatabase.GetLabels(assetImporter).Contains("Noesis") || assetPath.StartsWith("Assets/NoesisGUI/Samples"))
         {
-            xaml.source = filename;
+            Color[] c = texture.GetPixels(0);
+
+            // NoesisGUI needs premultipled alpha
+            if (QualitySettings.activeColorSpace == ColorSpace.Linear)
+            {
+                for (int i = 0; i < c.Length; i++)
+                {
+                    c[i].r = Mathf.LinearToGammaSpace(Mathf.GammaToLinearSpace(c[i].r) * c[i].a);
+                    c[i].g = Mathf.LinearToGammaSpace(Mathf.GammaToLinearSpace(c[i].g) * c[i].a);
+                    c[i].b = Mathf.LinearToGammaSpace(Mathf.GammaToLinearSpace(c[i].b) * c[i].a);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < c.Length; i++)
+                {
+                    c[i].r = c[i].r * c[i].a;
+                    c[i].g = c[i].g * c[i].a;
+                    c[i].b = c[i].b * c[i].a;
+                }
+            }
+
+            // Set new content and make the texture unreadable at runtime
+            texture.SetPixels(c, 0);
+            texture.Apply(true, true);
+        }
+
+        if (NoesisUnity.Initialized)
+        {
+            // Reloading of texture
+            UpdateTextures();
+        }
+    }
+
+    private static Action<PlayModeStateChange> _updateTextures = null;
+
+    private static void UpdateTextures()
+    {
+        // Texture native pointer is invalidated, update it before next frame is rendered. We cannot query
+        // the new native pointer right now (during the import process) because it is not yet created
+        NoesisTextureProvider.instance.dirtyTextures = true;
+
+        // NOTE: When a texture is modified (while playing or not), next time Play is clicked it recreates
+        // all live textures, so we need to set 'dirtyTextures' flag just after exiting Edit mode to
+        // update texture native pointers before the first frame is rendered
+        if (_updateTextures == null)
+        {
+            _updateTextures = (mode) =>
+            {
+                if (mode == PlayModeStateChange.ExitingEditMode)
+                {
+                    EditorApplication.playModeStateChanged -= _updateTextures;
+                    _updateTextures = null;
+
+                    NoesisTextureProvider.instance.dirtyTextures = true;
+                }
+            };
+
+            EditorApplication.playModeStateChanged += _updateTextures;
+        }
+    }
+
+    private static void Log(string message)
+    {
+        if (NoesisSettings.Get().debugImporter)
+        {
+            Debug.Log(message);
         }
     }
 }

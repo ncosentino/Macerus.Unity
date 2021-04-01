@@ -44,62 +44,54 @@ public class SizeChangedEventArgs : RoutedEventArgs {
     }
   }
 
-  public Noesis.Size NewSize {
-    get {
-      return GetNewSizeHelper();
+  internal static new void InvokeHandler(Delegate handler, IntPtr sender, IntPtr args) {
+    SizeChangedEventHandler handler_ = (SizeChangedEventHandler)handler;
+    if (handler_ != null) {
+      handler_(Extend.GetProxy(sender, false), new SizeChangedEventArgs(args, false));
     }
   }
 
-  public Noesis.Size OldSize {
+  public Size NewSize {
     get {
-      return GetOldSizeHelper();
+      IntPtr ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_NewSize_get(swigCPtr);
+      if (ret != IntPtr.Zero) {
+        return Marshal.PtrToStructure<Size>(ret);
+      }
+      else {
+        return new Size();
+      }
     }
+
+  }
+
+  public Size PreviousSize {
+    get {
+      IntPtr ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_PreviousSize_get(swigCPtr);
+      if (ret != IntPtr.Zero) {
+        return Marshal.PtrToStructure<Size>(ret);
+      }
+      else {
+        return new Size();
+      }
+    }
+
   }
 
   public bool WidthChanged {
     get {
-      return GetWidthChangedHelper();
-    }
+      bool ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_WidthChanged_get(swigCPtr);
+      return ret;
+    } 
   }
 
   public bool HeightChanged {
     get {
-      return GetHeightChangedHelper();
-    }
+      bool ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_HeightChanged_get(swigCPtr);
+      return ret;
+    } 
   }
 
-  private Size GetNewSizeHelper() {
-    IntPtr ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_GetNewSizeHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    if (ret != IntPtr.Zero) {
-      return Marshal.PtrToStructure<Size>(ret);
-    }
-    else {
-      return new Size();
-    }
-  }
-
-  private Size GetOldSizeHelper() {
-    IntPtr ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_GetOldSizeHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    if (ret != IntPtr.Zero) {
-      return Marshal.PtrToStructure<Size>(ret);
-    }
-    else {
-      return new Size();
-    }
-  }
-
-  private bool GetWidthChangedHelper() {
-    bool ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_GetWidthChangedHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  private bool GetHeightChangedHelper() {
-    bool ret = NoesisGUI_PINVOKE.SizeChangedEventArgs_GetHeightChangedHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  public SizeChangedEventArgs(object source, RoutedEvent arg1, SizeChangedInfo info) : this(NoesisGUI_PINVOKE.new_SizeChangedEventArgs(Noesis.Extend.GetInstanceHandle(source), RoutedEvent.getCPtr(arg1), SizeChangedInfo.getCPtr(info)), true) {
   }
 
 }

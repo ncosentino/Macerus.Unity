@@ -51,7 +51,6 @@ public class InputBinding : Freezable {
   public static DependencyProperty CommandProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_CommandProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -59,7 +58,6 @@ public class InputBinding : Freezable {
   public static DependencyProperty CommandParameterProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_CommandParameterProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -67,7 +65,6 @@ public class InputBinding : Freezable {
   public static DependencyProperty CommandTargetProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_CommandTargetProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -75,11 +72,9 @@ public class InputBinding : Freezable {
   public object CommandParameter {
     set {
       NoesisGUI_PINVOKE.InputBinding_CommandParameter_set(swigCPtr, Noesis.Extend.GetInstanceHandle(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_CommandParameter_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -87,11 +82,9 @@ public class InputBinding : Freezable {
   public UIElement CommandTarget {
     set {
       NoesisGUI_PINVOKE.InputBinding_CommandTarget_set(swigCPtr, UIElement.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_CommandTarget_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (UIElement)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -99,36 +92,25 @@ public class InputBinding : Freezable {
   public InputGesture Gesture {
     set {
       NoesisGUI_PINVOKE.InputBinding_Gesture_set(swigCPtr, InputGesture.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_Gesture_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (InputGesture)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
   private static IntPtr CreateInputBinding(object command, InputGesture gesture) {
     IntPtr ret = NoesisGUI_PINVOKE.InputBinding_CreateInputBinding(Noesis.Extend.GetInstanceHandle(command), InputGesture.getCPtr(gesture));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   private object GetCommandHelper() {
     IntPtr cPtr = NoesisGUI_PINVOKE.InputBinding_GetCommandHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return Noesis.Extend.GetProxy(cPtr, false);
   }
 
   private void SetCommandHelper(object command) {
     NoesisGUI_PINVOKE.InputBinding_SetCommandHelper(swigCPtr, Noesis.Extend.GetInstanceHandle(command));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.InputBinding_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
   }
 
 }

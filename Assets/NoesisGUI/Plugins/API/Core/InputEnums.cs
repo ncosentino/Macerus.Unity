@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Noesis
 {
@@ -16,11 +17,12 @@ public enum MouseButton
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public enum MouseButtonState
 {
-    Pressed,
-    Released
+    Released,
+    Pressed
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+[TypeConverter(typeof(KeyConverter))]
 public enum Key
 {
     None,
@@ -269,20 +271,22 @@ public enum Key
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public enum KeyStateFlags
+[Flags]
+public enum KeyStates
 {
-    /// The key is not pressed.
-    None = 0x00,
+    /// The key is not pressed (same as up).
+    None = 0,
 
     /// The key is pressed.
-    Down = 0x01,
+    Down = 1,
 
-    /// The key is toggled.
-    Toggled = 0x02
+    /// The key is toggled on.
+    Toggled = 2
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-[FlagsAttribute]
+[Flags]
+[TypeConverter(typeof(ModifierKeysConverter))]
 public enum ModifierKeys
 {
     None = 0,
@@ -292,4 +296,23 @@ public enum ModifierKeys
     Windows = 8
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+[Flags]
+public enum ManipulationModes
+{
+    /// Manipulation events do not occur
+    None = 0,
+    /// A manipulation can translate an object horizontally
+    TranslateX = 1,
+    /// A manipulation can translate an object vertically
+    TranslateY = 2,
+    /// A manipulation can translate an object
+    Translate = TranslateX | TranslateY,
+    /// A manipulation can rotate an object
+    Rotate = 4,
+    /// A manipulation can scale an object
+    Scale = 8,
+    /// A manipulation can scale, translate, or rotate an object
+    All = Translate | Rotate | Scale
+}
 }

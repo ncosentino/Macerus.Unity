@@ -1,8 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Noesis
 {
+    /// <summary> Called when a text control requires to show or hide software keyboard </summary>
+    public delegate void SoftwareKeyboardCallback(UIElement focused, bool open);
+
+    /// <summary> Called when View requires to update its cursor </summary>
+    public delegate void UpdateCursorCallback(View view, Cursor cursor);
+
+    /// <summary> Called when an element requires to open an URL </summary>
+    public delegate void OpenUrlCallback(string url);
+
+    /// <summary> Called when an element wants to play a sound </summary>
+    public delegate void PlayAudioCallback(string filename, float volume);
+
+    /// <summary> Called for every xaml dependency found </summary>
+    public delegate void XamlDependencyCallback(string uri, XamlDependencyType type);
+
+    /// <summary> Called for every font face found in the ttf </summary>
+    public delegate void FontFaceInfoCallback(int index, string familyName, FontWeight weight,
+        FontStyle style, FontStretch stretch);
+
     public static class GUI
     {
         /// <summary>
@@ -11,30 +32,52 @@ namespace Noesis
         public static string GetBuildVersion()
         {
             IntPtr version = Noesis_GetBuildVersion();
-            return Noesis.Extend.StringFromNativeUtf8(version);
+            return Extend.StringFromNativeUtf8(version);
+        }
+
+        /// <summary>
+        /// Disables all connections from the remote Inspector tool.
+        /// Must be invoked before Noesis.GUI.Init()
+        /// </summary>
+        public static void DisableInspector()
+        {
+            Noesis_DisableInspector();
+        }
+
+        /// <summary>
+        /// Returns whether the remote Inspector is currently connected.
+        /// </summary>
+        public static bool IsInspectorConnected
+        {
+            get { return Noesis_IsInspectorConnected(); }
+        }
+
+        /// <summary>
+        /// Keeps alive the Inspector connection. Only needed if Inspector is connected before any
+        /// view is created. Views call this function internally when updated
+        /// </summary>
+        public static void UpdateInspector()
+        {
+            Noesis_UpdateInspector();
         }
 
         private static bool _initialized = false;
 
         /// <summary>
-        /// Initializes NoesisGUI.
+        /// Initializes NoesisGUI. Use Name and Key provided when you purchased your NoesisGUI license.
         /// </summary>
-        public static void Init()
+        public static void Init(string licenseName = "", string licenseKey = "")
         {
             if (!_initialized)
             {
                 _initialized = true;
 
-                NoesisGUI_PINVOKE.Init();
-                Error.RegisterCallback();
+                UriHelper.RegisterPack();
                 Extend.RegisterCallbacks();
 
-                Noesis_Init_();
+                Noesis_Init(licenseName, licenseKey);
 
                 Extend.Init();
-                SoftwareKeyboard = new SoftwareKeyboard();
-                Noesis_SetSoftwareKeyboardCallbacks_(_showSoftwareKeyboard, _hideSoftwareKeyboard);
-                Noesis_SetUpdateCursorCallback(_updateCursor);
             }
         }
 
@@ -43,13 +86,18 @@ namespace Noesis
         /// </summary>
         public static void Shutdown()
         {
-            Noesis_SetUpdateCursorCallback_(null);
-            Noesis_SetSoftwareKeyboardCallbacks_(null, null);
+            Noesis_SetPlayAudioCallback(null);
+            Noesis_SetOpenUrlCallback(null);
+            Noesis_SetCursorCallback(null);
+            Noesis_SetSoftwareKeyboardCallback(null);
+
             Extend.Shutdown();
 
-            Noesis_Shutdown_();
+            Noesis_Shutdown();
 
             Extend.UnregisterCallbacks();
+
+            _initialized = false;
         }
 
         /// <summary>
@@ -57,7 +105,7 @@ namespace Noesis
         /// </summary>
         public static void SetXamlProvider(XamlProvider provider)
         {
-            Noesis_SetXamlProvider_(Extend.GetInstanceHandle(provider));
+            Noesis_SetXamlProvider(Extend.GetInstanceHandle(provider));
         }
 
         /// <summary>
@@ -65,7 +113,7 @@ namespace Noesis
         /// </summary>
         public static void SetTextureProvider(TextureProvider provider)
         {
-            Noesis_SetTextureProvider_(Extend.GetInstanceHandle(provider));
+            Noesis_SetTextureProvider(Extend.GetInstanceHandle(provider));
         }
 
         /// <summary>
@@ -73,7 +121,41 @@ namespace Noesis
         /// </summary>
         public static void SetFontProvider(FontProvider provider)
         {
-            Noesis_SetFontProvider_(Extend.GetInstanceHandle(provider));
+            Noesis_SetFontProvider(Extend.GetInstanceHandle(provider));
+        }
+
+        /// <summary>
+        /// Sets the family names to be used by the global font fallback mechanism. These fonts are used
+        /// whenever the FontFamily of an element does not contain needed glyphs. Fallback sequence can
+        /// specify font locations, for example { "./Fonts/#Pericles Light", "Tahoma" , "Verdana" } 
+        /// </summary>
+        public static void SetFontFallbacks(string[] familyNames)
+        {
+            if (familyNames == null)
+            {
+                throw new ArgumentNullException("familyNames");
+            }
+
+            Noesis_SetFontFallbacks(familyNames, familyNames.Length);
+        }
+
+        /// <summary>
+        /// Sets default font properties to be used when not specified in an element
+        /// </summary>
+        public static void SetFontDefaultProperties(float size, FontWeight weight, FontStretch stretch,
+            FontStyle style)
+        {
+            Noesis_SetFontDefaultProperties(size, (int)weight, (int)stretch, (int)style);
+        }
+
+        /// <summary>
+        /// Loads the specified dictionary file as the application-scope resources.
+        /// </summary>
+        public static void LoadApplicationResources(string filename)
+        {
+            ResourceDictionary app = new ResourceDictionary();
+            SetApplicationResources(app);
+            app.Source = new Uri(filename, UriKind.RelativeOrAbsolute);
         }
 
         /// <summary>
@@ -83,56 +165,131 @@ namespace Noesis
         /// <param name="resources">Application resources.</param>
         public static void SetApplicationResources(ResourceDictionary resources)
         {
-            Noesis_SetApplicationResources_(Extend.GetInstanceHandle(resources));
+            Noesis_SetApplicationResources(Extend.GetInstanceHandle(resources));
         }
 
         /// <summary>
-        /// Gets or sets the object that manages the visibility of software keyboard on touch devices.
+        /// Sets a callback that is called when a text control gets focus.
         /// </summary>
-        public static SoftwareKeyboard SoftwareKeyboard
+        public static void SetSoftwareKeyboardCallback(SoftwareKeyboardCallback callback)
         {
-            get { return _softwareKeyboard; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("SoftwareKeyboard");
-                }
-
-                if (_softwareKeyboard != value)
-                {
-                    _softwareKeyboard = value;
-                }
-            }
+            _softwareKeyboardCallback = callback;
+            Noesis_SetSoftwareKeyboardCallback(callback != null ? _softwareKeyboard : null);
         }
 
         /// <summary>
         /// Sets a callback that is called each time cursor icon needs to be updated.
         /// </summary>
-        public delegate void UpdateCursorCallback(Cursor cursor);
-        public static void SetUpdateCursorCallback(UpdateCursorCallback callback)
+        public static void SetCursorCallback(UpdateCursorCallback callback)
         {
             _updateCursorCallback = callback;
+            Noesis_SetCursorCallback(callback != null ? _updateCursor : null);
+        }
+
+        /// <summary>
+        /// Callback for opening URL in a browser.
+        /// </summary>
+        public static void SetOpenUrlCallback(OpenUrlCallback callback)
+        {
+            _openUrlCallback = callback;
+            Noesis_SetOpenUrlCallback(callback != null ? _openUrl : null);
+        }
+
+        /// <summary>
+        /// Opens the specified URL with the provided callback.
+        /// </summary>
+        public static void OpenUrl(string url)
+        {
+            if (_openUrlCallback != null)
+            {
+                _openUrlCallback(url);
+            }
+        }
+
+        /// <summary>
+        /// Callback for playing audio.
+        /// </summary>
+        public static void SetPlayAudioCallback(PlayAudioCallback callback)
+        {
+            _playAudioCallback = callback;
+            Noesis_SetPlayAudioCallback(callback != null ? _playAudio : null);
+        }
+
+        /// <summary>
+        /// Plays the specified sound with the provided callback.
+        /// </summary>
+        public static void PlayAudio(string filename, float volume)
+        {
+            if (_playAudioCallback != null)
+            {
+                _playAudioCallback(filename, volume);
+            }
+        }
+
+        /// <summary>
+        /// Finds dependencies to other XAMLS and resources (fonts, textures, sounds...).
+        /// </summary>
+        /// <param name="xaml">Stream with xaml content.</param>
+        /// <param name="folder">Root directory used for relative dependencies.</param>
+        /// <param name="callback">Called for each dependency found.</param>
+        public static void GetXamlDependencies(Stream xaml, string folder,
+            XamlDependencyCallback callback)
+        {
+            Deps deps = new Deps { Callback = callback };
+            int callbackId = deps.GetHashCode();
+            _depsCallbacks[callbackId] = deps;
+            Noesis_GetXamlDependencies(Extend.GetInstanceHandle(xaml), folder, callbackId, _xamlDep);
+            _depsCallbacks.Remove(callbackId);
         }
 
         /// <summary>
         /// Loads a XAML resource.
         /// </summary>
-        /// <param name="xaml">Path to the resource.</param>
+        /// <param name="filename">Path to the resource.</param>
         /// <returns>Root of the loaded XAML.</returns>
-        public static object LoadXaml(string xaml)
+        public static object LoadXaml(string filename)
         {
-            IntPtr root = Noesis_LoadXaml_(xaml);
+            IntPtr root = Noesis_LoadXaml(filename);
             return Extend.GetProxy(root, true);
+        }
+
+        /// <summary>
+        /// Parses a well-formed XAML fragment and creates the corresponding object tree.
+        /// </summary>
+        public static object ParseXaml(string xamlText)
+        {
+            IntPtr root = Noesis_ParseXaml(xamlText);
+            return Extend.GetProxy(root, true);
+        }
+
+        /// <summary>
+        /// Loads a XAML resource, like an audio, at the given uniform resource identifier.
+        /// </summary>
+        public static Stream LoadXamlResource(string filename)
+        {
+            IntPtr stream = Noesis_LoadXamlResource(filename);
+            return (Stream)Extend.GetProxy(stream, true);
+        }
+
+        /// <summary>
+        /// Enumerates all the faces found in the provided font stream resource
+        /// </summary>
+        public static void EnumFontFaces(Stream font, FontFaceInfoCallback callback)
+        {
+            Faces faces = new Faces { Callback = callback };
+            int callbackId = faces.GetHashCode();
+            _facesCallbacks[callbackId] = faces;
+            Noesis_EnumFontFaces(Extend.GetInstanceHandle(font), callbackId, _fontFaces);
+            _facesCallbacks.Remove(callbackId);
         }
 
         /// <summary>
         /// Loads contents of the specified component from a XAML.
         /// Used from InitializeComponent; supplied component must match the type of the XAML root
         /// </summary>
-        public static void LoadComponent(object component, string xaml)
+        public static void LoadComponent(object component, string filename)
         {
-            Noesis_LoadComponent_(Extend.GetInstanceHandle(component), xaml);
+            Noesis_LoadComponent(Extend.GetInstanceHandle(component), filename);
         }
 
         /// <summary>
@@ -155,138 +312,171 @@ namespace Noesis
         }
 
         #region Software Keyboard
-        delegate bool ShowSoftwareKeyboardCallback(IntPtr focusedElement);
-        private static ShowSoftwareKeyboardCallback _showSoftwareKeyboard = ShowSoftwareKeyboard;
-        [MonoPInvokeCallback(typeof(ShowSoftwareKeyboardCallback))]
-        private static bool ShowSoftwareKeyboard(IntPtr focusedElement)
+        private static SoftwareKeyboardCallback _softwareKeyboardCallback;
+
+        private delegate void NoesisSoftwareKeyboardCallback(IntPtr cPtrFocused, bool open);
+        private static NoesisSoftwareKeyboardCallback _softwareKeyboard = OnSoftwareKeyboard;
+        [MonoPInvokeCallback(typeof(NoesisSoftwareKeyboardCallback))]
+        private static void OnSoftwareKeyboard(IntPtr cPtrFocused, bool open)
         {
             try
             {
                 if (_initialized)
                 {
-                    UIElement element = Extend.GetProxy(focusedElement, false) as UIElement;
-                    return _softwareKeyboard.Show(element);
+                    UIElement focused = Extend.GetProxy(cPtrFocused, false) as UIElement;
+                    _softwareKeyboardCallback(focused, open);
                 }
             }
             catch (Exception e)
             {
-                Noesis.Error.SetNativePendingError(e);
+                Error.UnhandledException(e);
             }
-
-            return false;
-        }
-
-        delegate void HideSoftwareKeyboardCallback();
-        static private HideSoftwareKeyboardCallback _hideSoftwareKeyboard = HideSoftwareKeyboard;
-        [MonoPInvokeCallback(typeof(HideSoftwareKeyboardCallback))]
-        private static void HideSoftwareKeyboard()
-        {
-            try
-            {
-                if (_initialized)
-                {
-                    _softwareKeyboard.Hide();
-                }
-            }
-            catch (Exception e)
-            {
-                Error.SetNativePendingError(e);
-            }
-        }
-
-        private static SoftwareKeyboard _softwareKeyboard;
-
-        static void Noesis_SetSoftwareKeyboardCallbacks_(ShowSoftwareKeyboardCallback showCallback,
-            HideSoftwareKeyboardCallback hideCallback)
-        {
-            Noesis_SetSoftwareKeyboardCallbacks(showCallback, hideCallback);
-            Error.Check();
         }
         #endregion
 
         #region Cursor
         private static UpdateCursorCallback _updateCursorCallback;
 
-        delegate void NoesisUpdateCursorCallback(int cursor);
-        private static NoesisUpdateCursorCallback _updateCursor = UpdateCursor;
+        private delegate void NoesisUpdateCursorCallback(IntPtr cPtrView, int cursor);
+        private static NoesisUpdateCursorCallback _updateCursor = OnUpdateCursor;
         [MonoPInvokeCallback(typeof(NoesisUpdateCursorCallback))]
-        private static void UpdateCursor(int cursor)
+        private static void OnUpdateCursor(IntPtr cPtrView, int cursor)
         {
             try
             {
-                if (_initialized && _updateCursorCallback != null)
+                if (_initialized)
                 {
-                    _updateCursorCallback((Cursor)cursor);
+                    View view = (View)Extend.GetProxy(cPtrView, false);
+                    _updateCursorCallback(view, (Cursor)cursor);
                 }
             }
             catch (Exception e)
             {
-                Error.SetNativePendingError(e);
+                Error.UnhandledException(e);
             }
-        }
-
-        static void Noesis_SetUpdateCursorCallback_(NoesisUpdateCursorCallback callback)
-        {
-            Noesis_SetUpdateCursorCallback(callback);
-            Error.Check();
         }
         #endregion
 
+        #region OpenURL
+        private static OpenUrlCallback _openUrlCallback;
+
+        private delegate void NoesisOpenUrlCallback(IntPtr url);
+        private static NoesisOpenUrlCallback _openUrl = OnOpenUrl;
+        [MonoPInvokeCallback(typeof(NoesisOpenUrlCallback))]
+        private static void OnOpenUrl(IntPtr url)
+        {
+            try
+            {
+                if (_initialized)
+                {
+                    _openUrlCallback(Extend.StringFromNativeUtf8(url));
+                }
+            }
+            catch (Exception e)
+            {
+                Error.UnhandledException(e);
+            }
+        }
+        #endregion
+
+        #region PlayAudio
+        private static PlayAudioCallback _playAudioCallback;
+
+        private delegate void NoesisPlayAudioCallback(IntPtr sound, float volume);
+        private static NoesisPlayAudioCallback _playAudio = OnPlayAudio;
+        [MonoPInvokeCallback(typeof(NoesisPlayAudioCallback))]
+        private static void OnPlayAudio(IntPtr sound, float volume)
+        {
+            try
+            {
+                if (_initialized)
+                {
+                    _playAudioCallback(Extend.StringFromNativeUtf8(sound), volume);
+                }
+            }
+            catch (Exception e)
+            {
+                Error.UnhandledException(e);
+            }
+        }
+        #endregion
+
+        #region Xaml Dependencies
+        private struct Deps
+        {
+            public XamlDependencyCallback Callback { get; set; }
+        }
+
+        private delegate void NoesisXamlDependencyCallback(int callbackId, IntPtr uri, int type);
+        private static NoesisXamlDependencyCallback _xamlDep = OnXamlDependency;
+        [MonoPInvokeCallback(typeof(NoesisXamlDependencyCallback))]
+        private static void OnXamlDependency(int callbackId, IntPtr uri, int type)
+        {
+            try
+            {
+                if (_initialized)
+                {
+                    Deps deps = _depsCallbacks[callbackId];
+                    deps.Callback(Extend.StringFromNativeUtf8(uri), (XamlDependencyType)type);
+                }
+            }
+            catch (Exception e)
+            {
+                Error.UnhandledException(e);
+            }
+        }
+
+        private static Dictionary<int, Deps> _depsCallbacks = new Dictionary<int, Deps>();
+        #endregion
+
+        #region Enum Font Faces
+        private struct Faces
+        {
+            public FontFaceInfoCallback Callback { get; set; }
+        }
+
+        private delegate void NoesisFontFaceInfoCallback(int callbackId, int index,
+            IntPtr familyName, int weight, int style, int stretch);
+        private static NoesisFontFaceInfoCallback _fontFaces = OnFontFace;
+        [MonoPInvokeCallback(typeof(NoesisFontFaceInfoCallback))]
+        private static void OnFontFace(int callbackId, int index, IntPtr familyName,
+            int weight, int style, int stretch)
+        {
+            try
+            {
+                if (_initialized)
+                {
+                    Faces faces = _facesCallbacks[callbackId];
+                    faces.Callback(index, Extend.StringFromNativeUtf8(familyName),
+                        (FontWeight)weight, (FontStyle)style, (FontStretch)stretch);
+                }
+            }
+            catch (Exception e)
+            {
+                Error.UnhandledException(e);
+            }
+        }
+
+        private static Dictionary<int, Faces> _facesCallbacks = new Dictionary<int, Faces>();
+        #endregion
+
         #region Imports
-        static void Noesis_Init_()
-        {
-            Noesis_Init();
-            Error.Check();
-        }
-
-        static void Noesis_Shutdown_()
-        {
-            Noesis_Shutdown();
-            Error.Check();
-        }
-
-        static void Noesis_SetXamlProvider_(HandleRef provider)
-        {
-            Noesis_SetXamlProvider(provider);
-            Error.Check();
-        }
-
-        static void Noesis_SetTextureProvider_(HandleRef provider)
-        {
-            Noesis_SetTextureProvider(provider);
-            Error.Check();
-        }
-
-        static void Noesis_SetFontProvider_(HandleRef provider)
-        {
-            Noesis_SetFontProvider(provider);
-            Error.Check();
-        }
-
-        static void Noesis_SetApplicationResources_(HandleRef resources)
-        {
-            Noesis_SetApplicationResources(resources);
-            Error.Check();
-        }
-
-        static IntPtr Noesis_LoadXaml_(string xaml)
-        {
-            IntPtr result = Noesis_LoadXaml(xaml);
-            Error.Check();
-            return result;
-        }
-
-        static void Noesis_LoadComponent_(HandleRef component, string xaml)
-        {
-            Noesis_LoadComponent(component, xaml);
-            Error.Check();
-        }
-
         [DllImport(Library.Name)]
         static extern IntPtr Noesis_GetBuildVersion();
 
         [DllImport(Library.Name)]
-        static extern void Noesis_Init();
+        static extern void Noesis_DisableInspector();
+
+        [DllImport(Library.Name)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        static extern bool Noesis_IsInspectorConnected();
+
+        [DllImport(Library.Name)]
+        static extern void Noesis_UpdateInspector();
+
+        [DllImport(Library.Name)]
+        static extern void Noesis_Init([MarshalAs(UnmanagedType.LPStr)] string licenseName,
+            [MarshalAs(UnmanagedType.LPStr)] string licenseKey);
 
         [DllImport(Library.Name)]
         static extern void Noesis_Shutdown();
@@ -301,28 +491,50 @@ namespace Noesis
         static extern void Noesis_SetFontProvider(HandleRef provider);
 
         [DllImport(Library.Name)]
+        static extern void Noesis_SetFontFallbacks(string[] familyNames, int count);
+
+        [DllImport(Library.Name)]
+        static extern void Noesis_SetFontDefaultProperties(float size, int weight, int stretch,
+            int style);
+
+        [DllImport(Library.Name)]
         static extern void Noesis_SetApplicationResources(HandleRef resources);
 
         [DllImport(Library.Name)]
-        static extern void Noesis_SetSoftwareKeyboardCallbacks(
-            ShowSoftwareKeyboardCallback showCallback, HideSoftwareKeyboardCallback hideCallback);
+        static extern void Noesis_SetSoftwareKeyboardCallback(
+            NoesisSoftwareKeyboardCallback callback);
 
         [DllImport(Library.Name)]
-        static extern void Noesis_SetUpdateCursorCallback(NoesisUpdateCursorCallback callback);
+        static extern void Noesis_SetCursorCallback(NoesisUpdateCursorCallback callback);
 
         [DllImport(Library.Name)]
-        static extern IntPtr Noesis_LoadXaml([MarshalAs(UnmanagedType.LPStr)] string xaml);
+        static extern void Noesis_SetOpenUrlCallback(NoesisOpenUrlCallback callback);
+
+        [DllImport(Library.Name)]
+        static extern void Noesis_SetPlayAudioCallback(NoesisPlayAudioCallback callback);
+
+        [DllImport(Library.Name)]
+        static extern void Noesis_GetXamlDependencies(HandleRef stream,
+            [MarshalAs(UnmanagedType.LPStr)] string folder, int callbackId,
+            NoesisXamlDependencyCallback callback);
+
+        [DllImport(Library.Name)]
+        static extern IntPtr Noesis_LoadXaml([MarshalAs(UnmanagedType.LPStr)] string filename);
+
+        [DllImport(Library.Name)]
+        static extern IntPtr Noesis_ParseXaml([MarshalAs(UnmanagedType.LPStr)] string xamlText);
+
+        [DllImport(Library.Name)]
+        static extern IntPtr Noesis_LoadXamlResource(
+            [MarshalAs(UnmanagedType.LPStr)] string filename);
+
+        [DllImport(Library.Name)]
+        static extern void Noesis_EnumFontFaces(HandleRef stream, int callbackId,
+            NoesisFontFaceInfoCallback callback);
 
         [DllImport(Library.Name)]
         static extern void Noesis_LoadComponent(HandleRef component,
-            [MarshalAs(UnmanagedType.LPStr)] string xaml);
+            [MarshalAs(UnmanagedType.LPStr)] string filename);
         #endregion
-    }
-
-    public class Provider
-    {
-        public XamlProvider XamlProvider { get; set; }
-        public TextureProvider TextureProvider { get; set; }
-        public FontProvider FontProvider { get; set; }
     }
 }

@@ -35,12 +35,6 @@ public class DiscreteRectKeyFrame : RectKeyFrame {
     return NoesisGUI_PINVOKE.new_DiscreteRectKeyFrame();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.DiscreteRectKeyFrame_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

@@ -27,35 +27,30 @@ public partial class PropertyMetadata : BaseComponent {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  protected PropertyMetadata() {
-  }
-
   public object DefaultValue {
     get {
       IntPtr cPtr = GetDefaultValueHelper();
-      Noesis.Extend.AddPendingRelease(cPtr);
-      return Noesis.Extend.GetProxy(cPtr, false);
+      return Noesis.Extend.GetProxy(cPtr, true);
+    }
+    set {
+      SetDefaultValueHelper(value);
     }
   }
 
   public bool HasDefaultValue {
     get {
       bool ret = NoesisGUI_PINVOKE.PropertyMetadata_HasDefaultValue_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.PropertyMetadata_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  private IntPtr GetDefaultValueHelper() {
+    IntPtr ret = NoesisGUI_PINVOKE.PropertyMetadata_GetDefaultValueHelper(swigCPtr);
     return ret;
   }
 
-  private IntPtr GetDefaultValueHelper() {
-    IntPtr ret = NoesisGUI_PINVOKE.PropertyMetadata_GetDefaultValueHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  private void SetDefaultValueHelper(object value) {
+    NoesisGUI_PINVOKE.PropertyMetadata_SetDefaultValueHelper(swigCPtr, Noesis.Extend.GetInstanceHandle(value));
   }
 
 }

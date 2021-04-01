@@ -35,12 +35,6 @@ public class LinearInt32KeyFrame : Int32KeyFrame {
     return NoesisGUI_PINVOKE.new_LinearInt32KeyFrame();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.LinearInt32KeyFrame_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

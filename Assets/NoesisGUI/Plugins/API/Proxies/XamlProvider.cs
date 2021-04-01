@@ -35,21 +35,30 @@ public class XamlProvider : BaseComponent {
   /// Opens xaml file for reading returning a stream.
   /// </summary>
   /// <param name="filename">Path to the xaml file being opened.</param>
-  public virtual System.IO.Stream LoadXaml(string filename) {
+  public virtual Stream LoadXaml(string filename) {
     return null;
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.XamlProvider_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  /// <summary>
+  /// Notifies of changes to the specified xaml file
+  /// </summary>
+  public delegate void XamlChangedHandler(string uri);
+  public event XamlChangedHandler XamlChanged;
+
+  /// <summary>
+  /// Raises XamlChanged event notifying Noesis that it should reload the specified xaml
+  /// </summary>
+  public void RaiseXamlChanged(string uri) {
+    XamlChanged?.Invoke(uri);
+    Noesis_RaiseXamlChanged(swigCPtr, uri);
   }
 
+  [DllImport(Library.Name)]
+  private static extern void Noesis_RaiseXamlChanged(HandleRef provider,
+    [MarshalAs(UnmanagedType.LPWStr)]string uri);
 
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_XamlProvider(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_XamlProvider(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

@@ -35,12 +35,6 @@ public class ItemsPresenter : FrameworkElement {
     return NoesisGUI_PINVOKE.new_ItemsPresenter();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.ItemsPresenter_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

@@ -30,12 +30,34 @@ public class Animatable : Freezable {
   protected Animatable() {
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.Animatable_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  public void BeginAnimation(DependencyProperty dp, AnimationTimeline animation) {
+    this.BeginAnimation(dp, animation, HandoffBehavior.SnapshotAndReplace);
   }
 
+  public void BeginAnimation(DependencyProperty dp, AnimationTimeline animation, HandoffBehavior handoffBehavior) {
+    if (dp == null) {
+      throw new ArgumentNullException("dp");
+    }
+    if (animation != null && !animation.IsValidTarget(dp)) {
+      throw new ArgumentException("AnimationTimeline type mismatch: " + animation.GetType() +
+          " on property " + dp.OwnerType.GetType() + "." + dp.Name + " of type " + dp.PropertyType);
+    }
+    if (base.IsFrozen) {
+      throw new InvalidOperationException("Resource is frozen and cannot be animated");
+    }
+    if (animation == null) {
+      base.ClearAnimation(dp);
+    }
+    else {
+      Storyboard storyboard = new Storyboard();
+      storyboard.Children.Add(animation);
+      storyboard.Begin(FrameworkElement.FindTreeElement(this), handoffBehavior);
+    }
+  }
+
+  internal new static IntPtr Extend(string typeName) {
+    return NoesisGUI_PINVOKE.Extend_Animatable(Marshal.StringToHGlobalAnsi(typeName));
+  }
 }
 
 }

@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 namespace Noesis
 {
 
-public class TriggerCollection : Collection {
+public class TriggerCollection : UICollection<TriggerBase> {
   internal new static TriggerCollection CreateProxy(IntPtr cPtr, bool cMemoryOwn) {
     return new TriggerCollection(cPtr, cMemoryOwn);
   }
@@ -32,13 +32,7 @@ public class TriggerCollection : Collection {
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
     registerExtend = false;
-    return NoesisGUI_PINVOKE.new_TriggerCollection__SWIG_0();
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.TriggerCollection_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    return NoesisGUI_PINVOKE.new_TriggerCollection();
   }
 
 }

@@ -31,7 +31,7 @@ public class CheckBox : ToggleButton {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(CheckBox).TypeHandle) {
+    if (type == typeof(CheckBox)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_CheckBox();
     }
@@ -40,17 +40,8 @@ public class CheckBox : ToggleButton {
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.CheckBox_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_CheckBox(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_CheckBox(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

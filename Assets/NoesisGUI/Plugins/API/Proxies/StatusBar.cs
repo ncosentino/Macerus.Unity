@@ -31,7 +31,7 @@ public class StatusBar : ItemsControl {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(StatusBar).TypeHandle) {
+    if (type == typeof(StatusBar)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_StatusBar();
     }
@@ -43,22 +43,12 @@ public class StatusBar : ItemsControl {
   public static DependencyProperty SeparatorStyleKey {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.StatusBar_SeparatorStyleKey_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.StatusBar_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_StatusBar(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_StatusBar(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

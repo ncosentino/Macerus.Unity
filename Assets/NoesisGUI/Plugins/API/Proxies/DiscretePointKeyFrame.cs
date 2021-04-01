@@ -35,12 +35,6 @@ public class DiscretePointKeyFrame : PointKeyFrame {
     return NoesisGUI_PINVOKE.new_DiscretePointKeyFrame();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.DiscretePointKeyFrame_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

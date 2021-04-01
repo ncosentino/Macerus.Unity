@@ -27,26 +27,29 @@ public class RoutedUICommand : RoutedCommand {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  protected RoutedUICommand() {
+  public RoutedUICommand() {
+  }
+
+  protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
+    registerExtend = false;
+    return NoesisGUI_PINVOKE.new_RoutedUICommand__SWIG_0();
+  }
+
+  public RoutedUICommand(string text, string name, Type owner) : this(NoesisGUI_PINVOKE.new_RoutedUICommand__SWIG_1(text != null ? text : string.Empty, name != null ? name : string.Empty, owner != null ? Noesis.Extend.EnsureNativeType(owner) : IntPtr.Zero), true) {
+  }
+
+  public RoutedUICommand(string text, string name, Type owner, InputGestureCollection inputGestures) : this(NoesisGUI_PINVOKE.new_RoutedUICommand__SWIG_2(text != null ? text : string.Empty, name != null ? name : string.Empty, owner != null ? Noesis.Extend.EnsureNativeType(owner) : IntPtr.Zero, InputGestureCollection.getCPtr(inputGestures)), true) {
   }
 
   public string Text {
     set {
       NoesisGUI_PINVOKE.RoutedUICommand_Text_set(swigCPtr, value != null ? value : string.Empty);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr strPtr = NoesisGUI_PINVOKE.RoutedUICommand_Text_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       string str = Noesis.Extend.StringFromNativeUtf8(strPtr);
       return str;
     }
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.RoutedUICommand_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
   }
 
 }

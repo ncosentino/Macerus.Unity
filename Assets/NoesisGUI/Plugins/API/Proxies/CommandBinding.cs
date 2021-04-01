@@ -39,7 +39,6 @@ public class CommandBinding : BaseComponent {
         _PreviewCanExecute.Add(swigCPtr.Handle, null);
 
         NoesisGUI_PINVOKE.BindEvent_CommandBinding_PreviewCanExecute(_raisePreviewCanExecute, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       }
 
       _PreviewCanExecute[swigCPtr.Handle] += value;
@@ -51,7 +50,6 @@ public class CommandBinding : BaseComponent {
 
         if (_PreviewCanExecute[swigCPtr.Handle] == null) {
           NoesisGUI_PINVOKE.UnbindEvent_CommandBinding_PreviewCanExecute(_raisePreviewCanExecute, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
 
           _PreviewCanExecute.Remove(swigCPtr.Handle);
         }
@@ -65,26 +63,26 @@ public class CommandBinding : BaseComponent {
   [MonoPInvokeCallback(typeof(RaisePreviewCanExecuteCallback))]
   private static void RaisePreviewCanExecute(IntPtr cPtr, IntPtr sender, IntPtr e) {
     try {
-      if (!_PreviewCanExecute.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for PreviewCanExecute event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _PreviewCanExecute.Remove(cPtr);
-        return;
-      }
       if (Noesis.Extend.Initialized) {
-        PreviewCanExecuteHandler handler = _PreviewCanExecute[cPtr];
+        if (sender == IntPtr.Zero && e == IntPtr.Zero) {
+          _PreviewCanExecute.Remove(cPtr);
+          return;
+        }
+        PreviewCanExecuteHandler handler = null;
+        if (!_PreviewCanExecute.TryGetValue(cPtr, out handler)) {
+          throw new InvalidOperationException("Delegate not registered for PreviewCanExecute event");
+        }
         if (handler != null) {
           handler(Noesis.Extend.GetProxy(sender, false), new CanExecuteRoutedEventArgs(e, false));
         }
       }
     }
     catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+      Noesis.Error.UnhandledException(exception);
     }
   }
 
-  static Dictionary<IntPtr, PreviewCanExecuteHandler> _PreviewCanExecute =
+  internal static Dictionary<IntPtr, PreviewCanExecuteHandler> _PreviewCanExecute =
       new Dictionary<IntPtr, PreviewCanExecuteHandler>();
   #endregion
 
@@ -96,7 +94,6 @@ public class CommandBinding : BaseComponent {
         _CanExecute.Add(swigCPtr.Handle, null);
 
         NoesisGUI_PINVOKE.BindEvent_CommandBinding_CanExecute(_raiseCanExecute, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       }
 
       _CanExecute[swigCPtr.Handle] += value;
@@ -108,7 +105,6 @@ public class CommandBinding : BaseComponent {
 
         if (_CanExecute[swigCPtr.Handle] == null) {
           NoesisGUI_PINVOKE.UnbindEvent_CommandBinding_CanExecute(_raiseCanExecute, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
 
           _CanExecute.Remove(swigCPtr.Handle);
         }
@@ -122,26 +118,26 @@ public class CommandBinding : BaseComponent {
   [MonoPInvokeCallback(typeof(RaiseCanExecuteCallback))]
   private static void RaiseCanExecute(IntPtr cPtr, IntPtr sender, IntPtr e) {
     try {
-      if (!_CanExecute.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for CanExecute event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _CanExecute.Remove(cPtr);
-        return;
-      }
       if (Noesis.Extend.Initialized) {
-        CanExecuteHandler handler = _CanExecute[cPtr];
+        if (sender == IntPtr.Zero && e == IntPtr.Zero) {
+          _CanExecute.Remove(cPtr);
+          return;
+        }
+        CanExecuteHandler handler = null;
+        if (!_CanExecute.TryGetValue(cPtr, out handler)) {
+          throw new InvalidOperationException("Delegate not registered for CanExecute event");
+        }
         if (handler != null) {
           handler(Noesis.Extend.GetProxy(sender, false), new CanExecuteRoutedEventArgs(e, false));
         }
       }
     }
     catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+      Noesis.Error.UnhandledException(exception);
     }
   }
 
-  static Dictionary<IntPtr, CanExecuteHandler> _CanExecute =
+  internal static Dictionary<IntPtr, CanExecuteHandler> _CanExecute =
       new Dictionary<IntPtr, CanExecuteHandler>();
   #endregion
 
@@ -153,7 +149,6 @@ public class CommandBinding : BaseComponent {
         _PreviewExecuted.Add(swigCPtr.Handle, null);
 
         NoesisGUI_PINVOKE.BindEvent_CommandBinding_PreviewExecuted(_raisePreviewExecuted, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       }
 
       _PreviewExecuted[swigCPtr.Handle] += value;
@@ -165,7 +160,6 @@ public class CommandBinding : BaseComponent {
 
         if (_PreviewExecuted[swigCPtr.Handle] == null) {
           NoesisGUI_PINVOKE.UnbindEvent_CommandBinding_PreviewExecuted(_raisePreviewExecuted, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
 
           _PreviewExecuted.Remove(swigCPtr.Handle);
         }
@@ -179,26 +173,26 @@ public class CommandBinding : BaseComponent {
   [MonoPInvokeCallback(typeof(RaisePreviewExecutedCallback))]
   private static void RaisePreviewExecuted(IntPtr cPtr, IntPtr sender, IntPtr e) {
     try {
-      if (!_PreviewExecuted.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for PreviewExecuted event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _PreviewExecuted.Remove(cPtr);
-        return;
-      }
       if (Noesis.Extend.Initialized) {
-        PreviewExecutedHandler handler = _PreviewExecuted[cPtr];
+        if (sender == IntPtr.Zero && e == IntPtr.Zero) {
+          _PreviewExecuted.Remove(cPtr);
+          return;
+        }
+        PreviewExecutedHandler handler = null;
+        if (!_PreviewExecuted.TryGetValue(cPtr, out handler)) {
+          throw new InvalidOperationException("Delegate not registered for PreviewExecuted event");
+        }
         if (handler != null) {
           handler(Noesis.Extend.GetProxy(sender, false), new ExecutedRoutedEventArgs(e, false));
         }
       }
     }
     catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+      Noesis.Error.UnhandledException(exception);
     }
   }
 
-  static Dictionary<IntPtr, PreviewExecutedHandler> _PreviewExecuted =
+  internal static Dictionary<IntPtr, PreviewExecutedHandler> _PreviewExecuted =
       new Dictionary<IntPtr, PreviewExecutedHandler>();
   #endregion
 
@@ -210,7 +204,6 @@ public class CommandBinding : BaseComponent {
         _Executed.Add(swigCPtr.Handle, null);
 
         NoesisGUI_PINVOKE.BindEvent_CommandBinding_Executed(_raiseExecuted, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       }
 
       _Executed[swigCPtr.Handle] += value;
@@ -222,7 +215,6 @@ public class CommandBinding : BaseComponent {
 
         if (_Executed[swigCPtr.Handle] == null) {
           NoesisGUI_PINVOKE.UnbindEvent_CommandBinding_Executed(_raiseExecuted, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
 
           _Executed.Remove(swigCPtr.Handle);
         }
@@ -236,26 +228,26 @@ public class CommandBinding : BaseComponent {
   [MonoPInvokeCallback(typeof(RaiseExecutedCallback))]
   private static void RaiseExecuted(IntPtr cPtr, IntPtr sender, IntPtr e) {
     try {
-      if (!_Executed.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for Executed event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _Executed.Remove(cPtr);
-        return;
-      }
       if (Noesis.Extend.Initialized) {
-        ExecutedHandler handler = _Executed[cPtr];
+        if (sender == IntPtr.Zero && e == IntPtr.Zero) {
+          _Executed.Remove(cPtr);
+          return;
+        }
+        ExecutedHandler handler = null;
+        if (!_Executed.TryGetValue(cPtr, out handler)) {
+          throw new InvalidOperationException("Delegate not registered for Executed event");
+        }
         if (handler != null) {
           handler(Noesis.Extend.GetProxy(sender, false), new ExecutedRoutedEventArgs(e, false));
         }
       }
     }
     catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+      Noesis.Error.UnhandledException(exception);
     }
   }
 
-  static Dictionary<IntPtr, ExecutedHandler> _Executed =
+  internal static Dictionary<IntPtr, ExecutedHandler> _Executed =
       new Dictionary<IntPtr, ExecutedHandler>();
   #endregion
 
@@ -280,19 +272,11 @@ public class CommandBinding : BaseComponent {
 
   private object GetCommandHelper() {
     IntPtr cPtr = NoesisGUI_PINVOKE.CommandBinding_GetCommandHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return Noesis.Extend.GetProxy(cPtr, false);
   }
 
   private void SetCommandHelper(object command) {
     NoesisGUI_PINVOKE.CommandBinding_SetCommandHelper(swigCPtr, Noesis.Extend.GetInstanceHandle(command));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.CommandBinding_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
   }
 
 }

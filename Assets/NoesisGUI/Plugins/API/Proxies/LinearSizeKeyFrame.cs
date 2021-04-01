@@ -35,12 +35,6 @@ public class LinearSizeKeyFrame : SizeKeyFrame {
     return NoesisGUI_PINVOKE.new_LinearSizeKeyFrame();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.LinearSizeKeyFrame_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

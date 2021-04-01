@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 namespace Noesis
 {
 
-public class VisualCollection : Collection {
+public class VisualCollection : UICollection<Visual> {
   internal new static VisualCollection CreateProxy(IntPtr cPtr, bool cMemoryOwn) {
     return new VisualCollection(cPtr, cMemoryOwn);
   }
@@ -27,21 +27,21 @@ public class VisualCollection : Collection {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  public VisualCollection() {
+  protected VisualCollection() {
   }
 
-  protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    registerExtend = false;
-    return NoesisGUI_PINVOKE.new_VisualCollection__SWIG_0();
+  public VisualCollection(Visual parent) : this(Create(CheckParent(parent)), true) {
   }
 
-  public VisualCollection(Visual visualParent) : this(NoesisGUI_PINVOKE.new_VisualCollection__SWIG_1(Visual.getCPtr(visualParent)), true) {
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  private static Visual CheckParent(Visual parent) {
+    if (parent == null) {
+      throw new ArgumentNullException("parent");
+    }
+    return parent;
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.VisualCollection_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  private static IntPtr Create(Visual parent) {
+    IntPtr ret = NoesisGUI_PINVOKE.VisualCollection_Create(Visual.getCPtr(parent));
     return ret;
   }
 

@@ -35,12 +35,6 @@ public class DiscreteColorKeyFrame : ColorKeyFrame {
     return NoesisGUI_PINVOKE.new_DiscreteColorKeyFrame();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.DiscreteColorKeyFrame_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
 }
 
 }

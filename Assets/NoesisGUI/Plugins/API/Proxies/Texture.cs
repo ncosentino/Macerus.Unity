@@ -29,13 +29,34 @@ public partial class Texture : BaseComponent {
 
   public void SetPrivateData(object context) {
     NoesisGUI_PINVOKE.Texture_SetPrivateData(swigCPtr, Noesis.Extend.GetInstanceHandle(context));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.Texture_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  public uint Width {
+    get {
+      uint ret = NoesisGUI_PINVOKE.Texture_Width_get(swigCPtr);
+      return ret;
+    } 
+  }
+
+  public uint Height {
+    get {
+      uint ret = NoesisGUI_PINVOKE.Texture_Height_get(swigCPtr);
+      return ret;
+    } 
+  }
+
+  public bool HasMipMaps {
+    get {
+      bool ret = NoesisGUI_PINVOKE.Texture_HasMipMaps_get(swigCPtr);
+      return ret;
+    } 
+  }
+
+  public bool IsInverted {
+    get {
+      bool ret = NoesisGUI_PINVOKE.Texture_IsInverted_get(swigCPtr);
+      return ret;
+    } 
   }
 
 }

@@ -11,7 +11,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 
 namespace Noesis
 {
@@ -29,575 +28,104 @@ public partial class FrameworkElement : UIElement {
   }
 
   #region Events
-  #region ContextMenuClosing
-  public delegate void ContextMenuClosingHandler(object sender, ContextMenuEventArgs e);
-  public event ContextMenuClosingHandler ContextMenuClosing {
+  public event ContextMenuEventHandler ContextMenuClosing {
     add {
-      if (!_ContextMenuClosing.ContainsKey(swigCPtr.Handle)) {
-        _ContextMenuClosing.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_ContextMenuClosing(_raiseContextMenuClosing, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _ContextMenuClosing[swigCPtr.Handle] += value;
+      AddHandler(ContextMenuClosingEvent, value);
     }
     remove {
-      if (_ContextMenuClosing.ContainsKey(swigCPtr.Handle)) {
-
-        _ContextMenuClosing[swigCPtr.Handle] -= value;
-
-        if (_ContextMenuClosing[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_ContextMenuClosing(_raiseContextMenuClosing, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _ContextMenuClosing.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(ContextMenuClosingEvent, value);
     }
   }
 
-  internal delegate void RaiseContextMenuClosingCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseContextMenuClosingCallback _raiseContextMenuClosing = RaiseContextMenuClosing;
-
-  [MonoPInvokeCallback(typeof(RaiseContextMenuClosingCallback))]
-  private static void RaiseContextMenuClosing(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_ContextMenuClosing.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for ContextMenuClosing event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _ContextMenuClosing.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        ContextMenuClosingHandler handler = _ContextMenuClosing[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new ContextMenuEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, ContextMenuClosingHandler> _ContextMenuClosing =
-      new Dictionary<IntPtr, ContextMenuClosingHandler>();
-  #endregion
-
-  #region ContextMenuOpening
-  public delegate void ContextMenuOpeningHandler(object sender, ContextMenuEventArgs e);
-  public event ContextMenuOpeningHandler ContextMenuOpening {
+  public event ContextMenuEventHandler ContextMenuOpening {
     add {
-      if (!_ContextMenuOpening.ContainsKey(swigCPtr.Handle)) {
-        _ContextMenuOpening.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_ContextMenuOpening(_raiseContextMenuOpening, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _ContextMenuOpening[swigCPtr.Handle] += value;
+      AddHandler(ContextMenuOpeningEvent, value);
     }
     remove {
-      if (_ContextMenuOpening.ContainsKey(swigCPtr.Handle)) {
-
-        _ContextMenuOpening[swigCPtr.Handle] -= value;
-
-        if (_ContextMenuOpening[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_ContextMenuOpening(_raiseContextMenuOpening, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _ContextMenuOpening.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(ContextMenuOpeningEvent, value);
     }
   }
 
-  internal delegate void RaiseContextMenuOpeningCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseContextMenuOpeningCallback _raiseContextMenuOpening = RaiseContextMenuOpening;
-
-  [MonoPInvokeCallback(typeof(RaiseContextMenuOpeningCallback))]
-  private static void RaiseContextMenuOpening(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_ContextMenuOpening.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for ContextMenuOpening event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _ContextMenuOpening.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        ContextMenuOpeningHandler handler = _ContextMenuOpening[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new ContextMenuEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, ContextMenuOpeningHandler> _ContextMenuOpening =
-      new Dictionary<IntPtr, ContextMenuOpeningHandler>();
-  #endregion
-
-  #region DataContextChanged
-  public delegate void DataContextChangedHandler(object sender, DependencyPropertyChangedEventArgs e);
-  public event DataContextChangedHandler DataContextChanged {
+  public event RoutedEventHandler Loaded {
     add {
-      if (!_DataContextChanged.ContainsKey(swigCPtr.Handle)) {
-        _DataContextChanged.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_DataContextChanged(_raiseDataContextChanged, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _DataContextChanged[swigCPtr.Handle] += value;
+      AddHandler(LoadedEvent, value);
     }
     remove {
-      if (_DataContextChanged.ContainsKey(swigCPtr.Handle)) {
-
-        _DataContextChanged[swigCPtr.Handle] -= value;
-
-        if (_DataContextChanged[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_DataContextChanged(_raiseDataContextChanged, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _DataContextChanged.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(LoadedEvent, value);
     }
   }
 
-  internal delegate void RaiseDataContextChangedCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseDataContextChangedCallback _raiseDataContextChanged = RaiseDataContextChanged;
-
-  [MonoPInvokeCallback(typeof(RaiseDataContextChangedCallback))]
-  private static void RaiseDataContextChanged(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_DataContextChanged.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for DataContextChanged event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _DataContextChanged.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        DataContextChangedHandler handler = _DataContextChanged[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new DependencyPropertyChangedEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, DataContextChangedHandler> _DataContextChanged =
-      new Dictionary<IntPtr, DataContextChangedHandler>();
-  #endregion
-
-  #region Initialized
-  public delegate void InitializedHandler(object sender, EventArgs e);
-  public event InitializedHandler Initialized {
+  public event RoutedEventHandler Reloaded {
     add {
-      if (!_Initialized.ContainsKey(swigCPtr.Handle)) {
-        _Initialized.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_Initialized(_raiseInitialized, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _Initialized[swigCPtr.Handle] += value;
+      AddHandler(ReloadedEvent, value);
     }
     remove {
-      if (_Initialized.ContainsKey(swigCPtr.Handle)) {
-
-        _Initialized[swigCPtr.Handle] -= value;
-
-        if (_Initialized[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_Initialized(_raiseInitialized, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _Initialized.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(ReloadedEvent, value);
     }
   }
 
-  internal delegate void RaiseInitializedCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseInitializedCallback _raiseInitialized = RaiseInitialized;
-
-  [MonoPInvokeCallback(typeof(RaiseInitializedCallback))]
-  private static void RaiseInitialized(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_Initialized.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for Initialized event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _Initialized.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        InitializedHandler handler = _Initialized[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new EventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, InitializedHandler> _Initialized =
-      new Dictionary<IntPtr, InitializedHandler>();
-  #endregion
-
-  #region Loaded
-  public delegate void LoadedHandler(object sender, RoutedEventArgs e);
-  public event LoadedHandler Loaded {
+  public event RequestBringIntoViewEventHandler RequestBringIntoView {
     add {
-      if (!_Loaded.ContainsKey(swigCPtr.Handle)) {
-        _Loaded.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_Loaded(_raiseLoaded, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _Loaded[swigCPtr.Handle] += value;
+      AddHandler(RequestBringIntoViewEvent, value);
     }
     remove {
-      if (_Loaded.ContainsKey(swigCPtr.Handle)) {
-
-        _Loaded[swigCPtr.Handle] -= value;
-
-        if (_Loaded[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_Loaded(_raiseLoaded, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _Loaded.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(RequestBringIntoViewEvent, value);
     }
   }
 
-  internal delegate void RaiseLoadedCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseLoadedCallback _raiseLoaded = RaiseLoaded;
-
-  [MonoPInvokeCallback(typeof(RaiseLoadedCallback))]
-  private static void RaiseLoaded(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_Loaded.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for Loaded event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _Loaded.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        LoadedHandler handler = _Loaded[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new RoutedEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, LoadedHandler> _Loaded =
-      new Dictionary<IntPtr, LoadedHandler>();
-  #endregion
-
-  #region RequestBringIntoView
-  public delegate void RequestBringIntoViewHandler(object sender, RequestBringIntoViewEventArgs e);
-  public event RequestBringIntoViewHandler RequestBringIntoView {
+  public event SizeChangedEventHandler SizeChanged {
     add {
-      if (!_RequestBringIntoView.ContainsKey(swigCPtr.Handle)) {
-        _RequestBringIntoView.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_RequestBringIntoView(_raiseRequestBringIntoView, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _RequestBringIntoView[swigCPtr.Handle] += value;
+      AddHandler(SizeChangedEvent, value);
     }
     remove {
-      if (_RequestBringIntoView.ContainsKey(swigCPtr.Handle)) {
-
-        _RequestBringIntoView[swigCPtr.Handle] -= value;
-
-        if (_RequestBringIntoView[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_RequestBringIntoView(_raiseRequestBringIntoView, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _RequestBringIntoView.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(SizeChangedEvent, value);
     }
   }
 
-  internal delegate void RaiseRequestBringIntoViewCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseRequestBringIntoViewCallback _raiseRequestBringIntoView = RaiseRequestBringIntoView;
-
-  [MonoPInvokeCallback(typeof(RaiseRequestBringIntoViewCallback))]
-  private static void RaiseRequestBringIntoView(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_RequestBringIntoView.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for RequestBringIntoView event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _RequestBringIntoView.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        RequestBringIntoViewHandler handler = _RequestBringIntoView[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new RequestBringIntoViewEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, RequestBringIntoViewHandler> _RequestBringIntoView =
-      new Dictionary<IntPtr, RequestBringIntoViewHandler>();
-  #endregion
-
-  #region SizeChanged
-  public delegate void SizeChangedHandler(object sender, SizeChangedEventArgs e);
-  public event SizeChangedHandler SizeChanged {
+  public event ToolTipEventHandler ToolTipClosing {
     add {
-      if (!_SizeChanged.ContainsKey(swigCPtr.Handle)) {
-        _SizeChanged.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_SizeChanged(_raiseSizeChanged, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _SizeChanged[swigCPtr.Handle] += value;
+      AddHandler(ToolTipClosingEvent, value);
     }
     remove {
-      if (_SizeChanged.ContainsKey(swigCPtr.Handle)) {
-
-        _SizeChanged[swigCPtr.Handle] -= value;
-
-        if (_SizeChanged[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_SizeChanged(_raiseSizeChanged, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _SizeChanged.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(ToolTipClosingEvent, value);
     }
   }
 
-  internal delegate void RaiseSizeChangedCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseSizeChangedCallback _raiseSizeChanged = RaiseSizeChanged;
-
-  [MonoPInvokeCallback(typeof(RaiseSizeChangedCallback))]
-  private static void RaiseSizeChanged(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_SizeChanged.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for SizeChanged event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _SizeChanged.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        SizeChangedHandler handler = _SizeChanged[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new SizeChangedEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, SizeChangedHandler> _SizeChanged =
-      new Dictionary<IntPtr, SizeChangedHandler>();
-  #endregion
-
-  #region ToolTipClosing
-  public delegate void ToolTipClosingHandler(object sender, ToolTipEventArgs e);
-  public event ToolTipClosingHandler ToolTipClosing {
+  public event ToolTipEventHandler ToolTipOpening {
     add {
-      if (!_ToolTipClosing.ContainsKey(swigCPtr.Handle)) {
-        _ToolTipClosing.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_ToolTipClosing(_raiseToolTipClosing, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _ToolTipClosing[swigCPtr.Handle] += value;
+      AddHandler(ToolTipOpeningEvent, value);
     }
     remove {
-      if (_ToolTipClosing.ContainsKey(swigCPtr.Handle)) {
-
-        _ToolTipClosing[swigCPtr.Handle] -= value;
-
-        if (_ToolTipClosing[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_ToolTipClosing(_raiseToolTipClosing, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _ToolTipClosing.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(ToolTipOpeningEvent, value);
     }
   }
 
-  internal delegate void RaiseToolTipClosingCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseToolTipClosingCallback _raiseToolTipClosing = RaiseToolTipClosing;
-
-  [MonoPInvokeCallback(typeof(RaiseToolTipClosingCallback))]
-  private static void RaiseToolTipClosing(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_ToolTipClosing.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for ToolTipClosing event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _ToolTipClosing.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        ToolTipClosingHandler handler = _ToolTipClosing[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new ToolTipEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, ToolTipClosingHandler> _ToolTipClosing =
-      new Dictionary<IntPtr, ToolTipClosingHandler>();
-  #endregion
-
-  #region ToolTipOpening
-  public delegate void ToolTipOpeningHandler(object sender, ToolTipEventArgs e);
-  public event ToolTipOpeningHandler ToolTipOpening {
+  public event RoutedEventHandler Unloaded {
     add {
-      if (!_ToolTipOpening.ContainsKey(swigCPtr.Handle)) {
-        _ToolTipOpening.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_ToolTipOpening(_raiseToolTipOpening, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _ToolTipOpening[swigCPtr.Handle] += value;
+      AddHandler(UnloadedEvent, value);
     }
     remove {
-      if (_ToolTipOpening.ContainsKey(swigCPtr.Handle)) {
-
-        _ToolTipOpening[swigCPtr.Handle] -= value;
-
-        if (_ToolTipOpening[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_ToolTipOpening(_raiseToolTipOpening, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _ToolTipOpening.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveHandler(UnloadedEvent, value);
     }
   }
 
-  internal delegate void RaiseToolTipOpeningCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseToolTipOpeningCallback _raiseToolTipOpening = RaiseToolTipOpening;
-
-  [MonoPInvokeCallback(typeof(RaiseToolTipOpeningCallback))]
-  private static void RaiseToolTipOpening(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_ToolTipOpening.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for ToolTipOpening event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _ToolTipOpening.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        ToolTipOpeningHandler handler = _ToolTipOpening[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new ToolTipEventArgs(e, false));
-        }
-      }
-    }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
-    }
-  }
-
-  static Dictionary<IntPtr, ToolTipOpeningHandler> _ToolTipOpening =
-      new Dictionary<IntPtr, ToolTipOpeningHandler>();
-  #endregion
-
-  #region Unloaded
-  public delegate void UnloadedHandler(object sender, RoutedEventArgs e);
-  public event UnloadedHandler Unloaded {
+  public event DependencyPropertyChangedEventHandler DataContextChanged {
     add {
-      if (!_Unloaded.ContainsKey(swigCPtr.Handle)) {
-        _Unloaded.Add(swigCPtr.Handle, null);
-
-        NoesisGUI_PINVOKE.BindEvent_FrameworkElement_Unloaded(_raiseUnloaded, swigCPtr.Handle);
-        if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      }
-
-      _Unloaded[swigCPtr.Handle] += value;
+      AddEventHandler("DataContextChanged", value);
     }
     remove {
-      if (_Unloaded.ContainsKey(swigCPtr.Handle)) {
-
-        _Unloaded[swigCPtr.Handle] -= value;
-
-        if (_Unloaded[swigCPtr.Handle] == null) {
-          NoesisGUI_PINVOKE.UnbindEvent_FrameworkElement_Unloaded(_raiseUnloaded, swigCPtr.Handle);
-          if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-
-          _Unloaded.Remove(swigCPtr.Handle);
-        }
-      }
+      RemoveEventHandler("DataContextChanged", value);
     }
   }
 
-  internal delegate void RaiseUnloadedCallback(IntPtr cPtr, IntPtr sender, IntPtr e);
-  private static RaiseUnloadedCallback _raiseUnloaded = RaiseUnloaded;
-
-  [MonoPInvokeCallback(typeof(RaiseUnloadedCallback))]
-  private static void RaiseUnloaded(IntPtr cPtr, IntPtr sender, IntPtr e) {
-    try {
-      if (!_Unloaded.ContainsKey(cPtr)) {
-        throw new InvalidOperationException("Delegate not registered for Unloaded event");
-      }
-      if (sender == IntPtr.Zero && e == IntPtr.Zero) {
-        _Unloaded.Remove(cPtr);
-        return;
-      }
-      if (Noesis.Extend.Initialized) {
-        UnloadedHandler handler = _Unloaded[cPtr];
-        if (handler != null) {
-          handler(Noesis.Extend.GetProxy(sender, false), new RoutedEventArgs(e, false));
-        }
-      }
+  public event EventHandler Initialized {
+    add {
+      AddEventHandler("Initialized", value);
     }
-    catch (Exception exception) {
-      Noesis.Error.SetNativePendingError(exception);
+    remove {
+      RemoveEventHandler("Initialized", value);
     }
   }
-
-  static Dictionary<IntPtr, UnloadedHandler> _Unloaded =
-      new Dictionary<IntPtr, UnloadedHandler>();
-  #endregion
 
   #endregion
 
@@ -605,7 +133,7 @@ public partial class FrameworkElement : UIElement {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(FrameworkElement).TypeHandle) {
+    if (type == typeof(FrameworkElement)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_FrameworkElement();
     }
@@ -616,78 +144,68 @@ public partial class FrameworkElement : UIElement {
 
   public BindingExpression GetBindingExpression(DependencyProperty dp) {
     IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_GetBindingExpression(swigCPtr, DependencyProperty.getCPtr(dp));
-    BindingExpression ret = (cPtr == IntPtr.Zero) ? null : new BindingExpression(cPtr, false);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    return (BindingExpression)Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public BindingExpressionBase SetBinding(DependencyProperty dp, BindingBase binding) {
     IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_SetBinding__SWIG_0(swigCPtr, DependencyProperty.getCPtr(dp), BindingBase.getCPtr(binding));
     BindingExpressionBase ret = (cPtr == IntPtr.Zero) ? null : new BindingExpressionBase(cPtr, false);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   public BindingExpression SetBinding(DependencyProperty dp, string path) {
     IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_SetBinding__SWIG_1(swigCPtr, DependencyProperty.getCPtr(dp), path != null ? path : string.Empty);
-    BindingExpression ret = (cPtr == IntPtr.Zero) ? null : new BindingExpression(cPtr, false);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    return (BindingExpression)Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public void BringIntoView() {
     NoesisGUI_PINVOKE.FrameworkElement_BringIntoView__SWIG_0(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   public void BringIntoView(Rect targetRectangle) {
     NoesisGUI_PINVOKE.FrameworkElement_BringIntoView__SWIG_1(swigCPtr, ref targetRectangle);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public bool ApplyTemplate() {
+    bool ret = NoesisGUI_PINVOKE.FrameworkElement_ApplyTemplate(swigCPtr);
+    return ret;
   }
 
   public object GetTemplateChild(string name) {
     IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_GetTemplateChild(swigCPtr, name != null ? name : string.Empty);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public object FindName(string name) {
     IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_FindName(swigCPtr, name != null ? name : string.Empty);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public void RegisterName(string name, object arg1) {
     NoesisGUI_PINVOKE.FrameworkElement_RegisterName(swigCPtr, name != null ? name : string.Empty, Noesis.Extend.GetInstanceHandle(arg1));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   public void UnregisterName(string name) {
     NoesisGUI_PINVOKE.FrameworkElement_UnregisterName(swigCPtr, name != null ? name : string.Empty);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   public void UpdateName(string name, object arg1) {
     NoesisGUI_PINVOKE.FrameworkElement_UpdateName(swigCPtr, name != null ? name : string.Empty, Noesis.Extend.GetInstanceHandle(arg1));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   public override sealed bool MoveFocus(TraversalRequest request) {
     bool ret = NoesisGUI_PINVOKE.FrameworkElement_MoveFocus(swigCPtr, TraversalRequest.getCPtr(request));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
   public override sealed DependencyObject PredictFocus(FocusNavigationDirection direction) {
     IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_PredictFocus(swigCPtr, (int)direction);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return (DependencyObject)Noesis.Extend.GetProxy(cPtr, false);
   }
 
   public static DependencyProperty ActualHeightProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ActualHeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -695,7 +213,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty ActualWidthProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ActualWidthProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -703,7 +220,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty ContextMenuProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ContextMenuProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -711,7 +227,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty CursorProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_CursorProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -719,7 +234,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty DataContextProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_DataContextProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -727,7 +241,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty DefaultStyleKeyProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_DefaultStyleKeyProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -735,7 +248,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty FocusVisualStyleProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_FocusVisualStyleProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -743,7 +255,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty ForceCursorProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ForceCursorProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -751,7 +262,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty HeightProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_HeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -759,7 +269,13 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty HorizontalAlignmentProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_HorizontalAlignmentProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+      return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static DependencyProperty InputScopeProperty {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_InputScopeProperty_get();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -767,7 +283,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty LayoutTransformProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_LayoutTransformProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -775,7 +290,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty MarginProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_MarginProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -783,7 +297,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty MaxHeightProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_MaxHeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -791,7 +304,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty MaxWidthProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_MaxWidthProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -799,7 +311,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty MinHeightProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_MinHeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -807,7 +318,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty MinWidthProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_MinWidthProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -815,7 +325,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty NameProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_NameProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -823,7 +332,27 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty OverridesDefaultStyleProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_OverridesDefaultStyleProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+      return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static DependencyProperty PPAAModeProperty {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_PPAAModeProperty_get();
+      return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static DependencyProperty PPAAInProperty {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_PPAAInProperty_get();
+      return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static DependencyProperty PPAAOutProperty {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_PPAAOutProperty_get();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -831,7 +360,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty StyleProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_StyleProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -839,7 +367,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty TagProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_TagProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -847,7 +374,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty ToolTipProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ToolTipProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -855,7 +381,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty UseLayoutRoundingProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_UseLayoutRoundingProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -863,7 +388,6 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty VerticalAlignmentProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_VerticalAlignmentProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -871,15 +395,76 @@ public partial class FrameworkElement : UIElement {
   public static DependencyProperty WidthProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_WidthProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent ContextMenuClosingEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ContextMenuClosingEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent ContextMenuOpeningEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ContextMenuOpeningEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent LoadedEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_LoadedEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent ReloadedEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ReloadedEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent RequestBringIntoViewEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_RequestBringIntoViewEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent SizeChangedEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_SizeChangedEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent ToolTipClosingEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ToolTipClosingEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent ToolTipOpeningEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ToolTipOpeningEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
+    }
+  }
+
+  public static RoutedEvent UnloadedEvent {
+    get {
+      IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_UnloadedEvent_get();
+      return (RoutedEvent)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
   public float ActualHeight {
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_ActualHeight_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -887,7 +472,6 @@ public partial class FrameworkElement : UIElement {
   public float ActualWidth {
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_ActualWidth_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -895,11 +479,9 @@ public partial class FrameworkElement : UIElement {
   public ContextMenu ContextMenu {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_ContextMenu_set(swigCPtr, ContextMenu.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ContextMenu_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (ContextMenu)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -907,11 +489,9 @@ public partial class FrameworkElement : UIElement {
   public Cursor Cursor {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Cursor_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       Cursor ret = (Cursor)NoesisGUI_PINVOKE.FrameworkElement_Cursor_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -919,23 +499,19 @@ public partial class FrameworkElement : UIElement {
   public object DataContext {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_DataContext_set(swigCPtr, Noesis.Extend.GetInstanceHandle(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_DataContext_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
   public Type DefaultStyleKey {
     set {
-      NoesisGUI_PINVOKE.FrameworkElement_DefaultStyleKey_set(swigCPtr, new HandleRef(value, (value != null ? Noesis.Extend.GetNativeType(value) : IntPtr.Zero)));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+      NoesisGUI_PINVOKE.FrameworkElement_DefaultStyleKey_set(swigCPtr, value != null ? Noesis.Extend.EnsureNativeType(value) : IntPtr.Zero);
     }
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_DefaultStyleKey_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       if (cPtr != IntPtr.Zero) {
         Noesis.Extend.NativeTypeInfo info = Noesis.Extend.GetNativeTypeInfo(cPtr);
         return info.Type;
@@ -947,11 +523,9 @@ public partial class FrameworkElement : UIElement {
   public Style FocusVisualStyle {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_FocusVisualStyle_set(swigCPtr, Style.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_FocusVisualStyle_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (Style)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -959,11 +533,9 @@ public partial class FrameworkElement : UIElement {
   public bool ForceCursor {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_ForceCursor_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       bool ret = NoesisGUI_PINVOKE.FrameworkElement_ForceCursor_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -971,11 +543,9 @@ public partial class FrameworkElement : UIElement {
   public float Height {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Height_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_Height_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -983,11 +553,19 @@ public partial class FrameworkElement : UIElement {
   public HorizontalAlignment HorizontalAlignment {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_HorizontalAlignment_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       HorizontalAlignment ret = (HorizontalAlignment)NoesisGUI_PINVOKE.FrameworkElement_HorizontalAlignment_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+      return ret;
+    } 
+  }
+
+  public InputScope InputScope {
+    set {
+      NoesisGUI_PINVOKE.FrameworkElement_InputScope_set(swigCPtr, (int)value);
+    } 
+    get {
+      InputScope ret = (InputScope)NoesisGUI_PINVOKE.FrameworkElement_InputScope_get(swigCPtr);
       return ret;
     } 
   }
@@ -995,7 +573,6 @@ public partial class FrameworkElement : UIElement {
   public bool IsInitialized {
     get {
       bool ret = NoesisGUI_PINVOKE.FrameworkElement_IsInitialized_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1003,7 +580,6 @@ public partial class FrameworkElement : UIElement {
   public bool IsLoaded {
     get {
       bool ret = NoesisGUI_PINVOKE.FrameworkElement_IsLoaded_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1011,11 +587,9 @@ public partial class FrameworkElement : UIElement {
   public Transform LayoutTransform {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_LayoutTransform_set(swigCPtr, Transform.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_LayoutTransform_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (Transform)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1023,12 +597,10 @@ public partial class FrameworkElement : UIElement {
   public Thickness Margin {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Margin_set(swigCPtr, ref value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
 
     get {
       IntPtr ret = NoesisGUI_PINVOKE.FrameworkElement_Margin_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       if (ret != IntPtr.Zero) {
         return Marshal.PtrToStructure<Thickness>(ret);
       }
@@ -1042,11 +614,9 @@ public partial class FrameworkElement : UIElement {
   public float MaxHeight {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_MaxHeight_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_MaxHeight_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1054,11 +624,9 @@ public partial class FrameworkElement : UIElement {
   public float MaxWidth {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_MaxWidth_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_MaxWidth_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1066,11 +634,9 @@ public partial class FrameworkElement : UIElement {
   public float MinHeight {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_MinHeight_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_MinHeight_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1078,11 +644,9 @@ public partial class FrameworkElement : UIElement {
   public float MinWidth {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_MinWidth_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_MinWidth_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1090,11 +654,9 @@ public partial class FrameworkElement : UIElement {
   public string Name {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Name_set(swigCPtr, value != null ? value : string.Empty);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr strPtr = NoesisGUI_PINVOKE.FrameworkElement_Name_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       string str = Noesis.Extend.StringFromNativeUtf8(strPtr);
       return str;
     }
@@ -1103,11 +665,39 @@ public partial class FrameworkElement : UIElement {
   public bool OverridesDefaultStyle {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_OverridesDefaultStyle_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       bool ret = NoesisGUI_PINVOKE.FrameworkElement_OverridesDefaultStyle_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+      return ret;
+    } 
+  }
+
+  public PPAAMode PPAAMode {
+    set {
+      NoesisGUI_PINVOKE.FrameworkElement_PPAAMode_set(swigCPtr, (int)value);
+    } 
+    get {
+      PPAAMode ret = (PPAAMode)NoesisGUI_PINVOKE.FrameworkElement_PPAAMode_get(swigCPtr);
+      return ret;
+    } 
+  }
+
+  public float PPAAIn {
+    set {
+      NoesisGUI_PINVOKE.FrameworkElement_PPAAIn_set(swigCPtr, value);
+    } 
+    get {
+      float ret = NoesisGUI_PINVOKE.FrameworkElement_PPAAIn_get(swigCPtr);
+      return ret;
+    } 
+  }
+
+  public float PPAAOut {
+    set {
+      NoesisGUI_PINVOKE.FrameworkElement_PPAAOut_set(swigCPtr, value);
+    } 
+    get {
+      float ret = NoesisGUI_PINVOKE.FrameworkElement_PPAAOut_get(swigCPtr);
       return ret;
     } 
   }
@@ -1115,11 +705,9 @@ public partial class FrameworkElement : UIElement {
   public Style Style {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Style_set(swigCPtr, Style.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_Style_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (Style)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1127,11 +715,9 @@ public partial class FrameworkElement : UIElement {
   public object Tag {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Tag_set(swigCPtr, Noesis.Extend.GetInstanceHandle(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_Tag_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1139,11 +725,9 @@ public partial class FrameworkElement : UIElement {
   public object ToolTip {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_ToolTip_set(swigCPtr, Noesis.Extend.GetInstanceHandle(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_ToolTip_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1151,11 +735,9 @@ public partial class FrameworkElement : UIElement {
   public bool UseLayoutRounding {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_UseLayoutRounding_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       bool ret = NoesisGUI_PINVOKE.FrameworkElement_UseLayoutRounding_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1163,11 +745,9 @@ public partial class FrameworkElement : UIElement {
   public VerticalAlignment VerticalAlignment {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_VerticalAlignment_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       VerticalAlignment ret = (VerticalAlignment)NoesisGUI_PINVOKE.FrameworkElement_VerticalAlignment_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1175,11 +755,9 @@ public partial class FrameworkElement : UIElement {
   public float Width {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Width_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.FrameworkElement_Width_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -1187,7 +765,6 @@ public partial class FrameworkElement : UIElement {
   public TriggerCollection Triggers {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_Triggers_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (TriggerCollection)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1195,7 +772,6 @@ public partial class FrameworkElement : UIElement {
   public FrameworkElement Parent {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_Parent_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (FrameworkElement)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1203,7 +779,6 @@ public partial class FrameworkElement : UIElement {
   public FrameworkElement TemplatedParent {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_TemplatedParent_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (FrameworkElement)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -1211,26 +786,20 @@ public partial class FrameworkElement : UIElement {
   public ResourceDictionary Resources {
     set {
       NoesisGUI_PINVOKE.FrameworkElement_Resources_set(swigCPtr, ResourceDictionary.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_Resources_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (ResourceDictionary)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.FrameworkElement_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  public static FrameworkElement FindTreeElement(object instance) {
+    IntPtr cPtr = NoesisGUI_PINVOKE.FrameworkElement_FindTreeElement(Noesis.Extend.GetInstanceHandle(instance));
+    return (FrameworkElement)Noesis.Extend.GetProxy(cPtr, false);
   }
 
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_FrameworkElement(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_FrameworkElement(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

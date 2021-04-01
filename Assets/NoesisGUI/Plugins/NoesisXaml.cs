@@ -2,7 +2,6 @@ using UnityEngine;
 using System.IO;
 
 
-[PreferBinarySerialization]
 public class NoesisXaml: ScriptableObject
 {
     void OnEnable()
@@ -33,7 +32,7 @@ public class NoesisXaml: ScriptableObject
 
     public void LoadComponent(object component)
     {
-        if (CanLoad())
+        if (!CanLoad())
         {
             throw new System.Exception("Unexpected empty XAML. Please reimport again");
         }
@@ -42,23 +41,17 @@ public class NoesisXaml: ScriptableObject
         Noesis.GUI.LoadComponent(component, source);
     }
 
-    public void ReloadDependencies()
-    {
-        UnregisterDependencies();
-        RegisterDependencies();
-    }
-
-    private void RegisterDependencies()
+    public void RegisterDependencies()
     {
         if (!_registered && CanLoad())
         {
             NoesisUnity.Init();
-            _RegisterDependencies();
             _registered = true;
+            _RegisterDependencies();
         }
     }
 
-    private void UnregisterDependencies()
+    public void UnregisterDependencies()
     {
         if (_registered)
         {
@@ -71,11 +64,14 @@ public class NoesisXaml: ScriptableObject
     {
         NoesisXamlProvider.instance.Register(this);
 
-        if (textures != null && texturePaths != null)
+        if (textures != null)
         {
-            for (int i = 0; i < texturePaths.Length; i++)
+            foreach (var texture in textures)
             {
-                NoesisTextureProvider.instance.Register(texturePaths[i], textures[i]);
+                if (texture.uri != null && texture.texture != null)
+                {
+                    NoesisTextureProvider.instance.Register(texture.uri, texture.texture);
+                }
             }
         }
 
@@ -83,7 +79,32 @@ public class NoesisXaml: ScriptableObject
         {
             foreach (var font in fonts)
             {
-                NoesisFontProvider.instance.Register(font);
+                if (font != null)
+                {
+                    NoesisFontProvider.instance.Register(font);
+                }
+            }
+        }
+
+        if (audios != null)
+        {
+            foreach (var audio in audios)
+            {
+                if (audio.uri != null && audio.audio != null)
+                {
+                    AudioProvider.instance.Register(audio.uri, audio.audio);
+                }
+            }
+        }
+
+        if (videos != null)
+        {
+            foreach (var video in videos)
+            {
+                if (video.uri != null && video.video != null)
+                {
+                    VideoProvider.instance.Register(video.uri, video.video);
+                }
             }
         }
 
@@ -91,7 +112,10 @@ public class NoesisXaml: ScriptableObject
         {
             foreach (var xaml in xamls)
             {
-                xaml.RegisterDependencies();
+                if (xaml != null)
+                {
+                    xaml.RegisterDependencies();
+                }
             }
         }
     }
@@ -100,11 +124,14 @@ public class NoesisXaml: ScriptableObject
     {
         NoesisXamlProvider.instance.Unregister(this);
 
-        if (texturePaths != null)
+        if (textures != null)
         {
-            foreach (var texture in texturePaths)
+            foreach (var texture in textures)
             {
-                NoesisTextureProvider.instance.Unregister(texture);
+                if (texture.uri != null)
+                {
+                    NoesisTextureProvider.instance.Unregister(texture.uri);
+                }
             }
         }
 
@@ -112,26 +139,68 @@ public class NoesisXaml: ScriptableObject
         {
             foreach (var font in fonts)
             {
-                NoesisFontProvider.instance.Unregister(font);
+                if (font != null)
+                {
+                    NoesisFontProvider.instance.Unregister(font);
+                }
             }
         }
 
-        if (xamls != null)
+        if (audios != null)
         {
-            foreach (var xaml in xamls)
+            foreach (var audio in audios)
             {
-                xaml.UnregisterDependencies();
+                if (audio.uri != null)
+                {
+                    AudioProvider.instance.Unregister(audio.uri);
+                }
             }
         }
+
+        if (videos != null)
+        {
+            foreach (var video in videos)
+            {
+                if (video.uri != null && video.video != null)
+                {
+                    VideoProvider.instance.Unregister(video.uri);
+                }
+            }
+        }
+
+        // As we didn't increase the references in the list of xamls, we don't need to
+        // unregister anything. Each xaml in that list will be unloaded whenever is needed
     }
 
     public string source;
     public byte[] content;
 
-    public NoesisFont[] fonts;
-    public string[] texturePaths;
-    public UnityEngine.Texture[] textures;
+    [System.Serializable]
+    public struct Texture
+    {
+        public string uri;
+        public UnityEngine.Texture texture;
+    }
+
+    [System.Serializable]
+    public struct Audio
+    {
+        public string uri;
+        public UnityEngine.AudioClip audio;
+    }
+
+    [System.Serializable]
+    public struct Video
+    {
+        public string uri;
+        public UnityEngine.Video.VideoClip video;
+    }
+
     public NoesisXaml[] xamls;
+    public NoesisFont[] fonts;
+    public Texture[] textures;
+    public Audio[] audios;
+    public Video[] videos;
 
     private bool _registered = false;
 }

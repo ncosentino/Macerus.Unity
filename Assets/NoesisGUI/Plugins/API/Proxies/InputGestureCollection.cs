@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 namespace Noesis
 {
 
-public class InputGestureCollection : Collection {
+public class InputGestureCollection : UICollection<InputGesture> {
   internal new static InputGestureCollection CreateProxy(IntPtr cPtr, bool cMemoryOwn) {
     return new InputGestureCollection(cPtr, cMemoryOwn);
   }
@@ -32,13 +32,7 @@ public class InputGestureCollection : Collection {
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
     registerExtend = false;
-    return NoesisGUI_PINVOKE.new_InputGestureCollection__SWIG_0();
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.InputGestureCollection_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    return NoesisGUI_PINVOKE.new_InputGestureCollection();
   }
 
 }

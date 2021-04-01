@@ -45,98 +45,60 @@ public class ManipulationDelta : IDisposable {
     }
   }
 
-  public Noesis.Point Expansion {
+  public Vector Scale {
     get {
-      return GetExpansionHelper();
+      float scale = GetScaleHelper();
+      return new Vector(scale, scale);
     }
-    set {
-      SetExpansionHelper(value);
+  }
+
+  public Vector Translation {
+    get {
+      Point trans = GetTranslationHelper();
+      return new Vector(trans.X, trans.Y);
+    }
+  }
+
+  public Vector Expansion {
+    get {
+      Point exp = GetExpansionHelper();
+      return new Vector(exp.X, exp.Y);
     }
   }
 
   public float Rotation {
     get {
-      return GetRotationHelper();
-    }
-    set {
-      SetRotationHelper(value);
-    }
+      float ret = NoesisGUI_PINVOKE.ManipulationDelta_Rotation_get(swigCPtr);
+      return ret;
+    } 
   }
 
-  public float Scale {
-    get {
-      return GetScaleHelper();
-    }
-    set {
-      SetScaleHelper(value);
-    }
+  private float GetScaleHelper() {
+    float ret = NoesisGUI_PINVOKE.ManipulationDelta_GetScaleHelper(swigCPtr);
+    return ret;
   }
 
-  public Noesis.Point Translation {
-    get {
-      return GetTranslationHelper();
+  private Point GetTranslationHelper() {
+    IntPtr ret = NoesisGUI_PINVOKE.ManipulationDelta_GetTranslationHelper(swigCPtr);
+    if (ret != IntPtr.Zero) {
+      return Marshal.PtrToStructure<Point>(ret);
     }
-    set {
-      SetTranslationHelper(value);
+    else {
+      return new Point();
     }
   }
 
   private Point GetExpansionHelper() {
     IntPtr ret = NoesisGUI_PINVOKE.ManipulationDelta_GetExpansionHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     if (ret != IntPtr.Zero) {
       return Marshal.PtrToStructure<Point>(ret);
     }
     else {
       return new Point();
     }
-  }
-
-  private void SetExpansionHelper(Point v) {
-    NoesisGUI_PINVOKE.ManipulationDelta_SetExpansionHelper(swigCPtr, ref v);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  private float GetRotationHelper() {
-    float ret = NoesisGUI_PINVOKE.ManipulationDelta_GetRotationHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  private void SetRotationHelper(float v) {
-    NoesisGUI_PINVOKE.ManipulationDelta_SetRotationHelper(swigCPtr, v);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  private float GetScaleHelper() {
-    float ret = NoesisGUI_PINVOKE.ManipulationDelta_GetScaleHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  private void SetScaleHelper(float v) {
-    NoesisGUI_PINVOKE.ManipulationDelta_SetScaleHelper(swigCPtr, v);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  private Point GetTranslationHelper() {
-    IntPtr ret = NoesisGUI_PINVOKE.ManipulationDelta_GetTranslationHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    if (ret != IntPtr.Zero) {
-      return Marshal.PtrToStructure<Point>(ret);
-    }
-    else {
-      return new Point();
-    }
-  }
-
-  private void SetTranslationHelper(Point v) {
-    NoesisGUI_PINVOKE.ManipulationDelta_SetTranslationHelper(swigCPtr, ref v);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
   public ManipulationDelta() : this(NoesisGUI_PINVOKE.new_ManipulationDelta(), true) {
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
   }
 
 }

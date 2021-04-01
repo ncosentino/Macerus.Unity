@@ -27,7 +27,7 @@ public class BitmapImage : BitmapSource {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  public BitmapImage(string uriSource) {
+  public BitmapImage(Uri uriSource) {
     UriSource = uriSource;
   }
 
@@ -39,23 +39,22 @@ public class BitmapImage : BitmapSource {
     return NoesisGUI_PINVOKE.new_BitmapImage();
   }
 
-  public string UriSource {
-    set {
-      NoesisGUI_PINVOKE.BitmapImage_UriSource_set(swigCPtr, value != null ? value : string.Empty);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    }
+  public static DependencyProperty UriSourceProperty {
     get {
-      IntPtr strPtr = NoesisGUI_PINVOKE.BitmapImage_UriSource_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-      string str = Noesis.Extend.StringFromNativeUtf8(strPtr);
-      return str;
+      IntPtr cPtr = NoesisGUI_PINVOKE.BitmapImage_UriSourceProperty_get();
+      return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.BitmapImage_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+  public Uri UriSource {
+    set {
+      NoesisGUI_PINVOKE.BitmapImage_UriSource_set(swigCPtr, value != null ? UriHelper.GetPath(value) : string.Empty);
+    }
+    get {
+      IntPtr uriPtr = NoesisGUI_PINVOKE.BitmapImage_UriSource_get(swigCPtr);
+      string uri = Noesis.Extend.StringFromNativeUtf8(uriPtr);
+      return new Uri(uri, UriKind.Relative);
+    }
   }
 
 }

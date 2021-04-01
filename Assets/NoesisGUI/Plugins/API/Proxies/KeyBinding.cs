@@ -28,10 +28,25 @@ public class KeyBinding : InputBinding {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  public KeyBinding(ICommand command, KeyGesture gesture) : this(CreateKeyBinding(command, gesture), true) {
+  public KeyBinding(ICommand command, KeyGesture gesture)
+    : this(CreateKeyBinding(command, gesture), true) {
   }
 
-  public KeyBinding(ICommand command, Key key, ModifierKeys modifiers) : this(CreateKeyBinding(command, new KeyGesture(key, modifiers)), true) {
+  public KeyBinding(ICommand command, Key key, ModifierKeys modifiers)
+    : this(CreateKeyBinding(command, new KeyGesture(key, modifiers)), true) {
+  }
+
+  internal static Key ParseKey(string source) {
+    return (Key)KeyBinding.ParseKeyHelper(source);
+  }
+
+  internal static ModifierKeys ParseModifierKeys(string source) {
+    return (ModifierKeys)KeyBinding.ParseModifierKeysHelper(source);
+  }
+
+  internal static KeyGesture ParseKeyGesture(string source) {
+    IntPtr cPtr = KeyBinding.ParseKeyGestureHelper(source);
+    return (KeyGesture)Noesis.Extend.GetProxy(cPtr, true);
   }
 
   public KeyBinding() {
@@ -39,13 +54,12 @@ public class KeyBinding : InputBinding {
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
     registerExtend = false;
-    return NoesisGUI_PINVOKE.new_KeyBinding__SWIG_0();
+    return NoesisGUI_PINVOKE.new_KeyBinding();
   }
 
   public static DependencyProperty KeyProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.KeyBinding_KeyProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -53,7 +67,6 @@ public class KeyBinding : InputBinding {
   public static DependencyProperty ModifiersProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.KeyBinding_ModifiersProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -61,11 +74,9 @@ public class KeyBinding : InputBinding {
   public Key Key {
     set {
       NoesisGUI_PINVOKE.KeyBinding_Key_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       Key ret = (Key)NoesisGUI_PINVOKE.KeyBinding_Key_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -73,24 +84,30 @@ public class KeyBinding : InputBinding {
   public ModifierKeys Modifiers {
     set {
       NoesisGUI_PINVOKE.KeyBinding_Modifiers_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       ModifierKeys ret = (ModifierKeys)NoesisGUI_PINVOKE.KeyBinding_Modifiers_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
 
   private static IntPtr CreateKeyBinding(object command, KeyGesture gesture) {
     IntPtr ret = NoesisGUI_PINVOKE.KeyBinding_CreateKeyBinding(Noesis.Extend.GetInstanceHandle(command), KeyGesture.getCPtr(gesture));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.KeyBinding_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  private static uint ParseKeyHelper(string str) {
+    uint ret = NoesisGUI_PINVOKE.KeyBinding_ParseKeyHelper(str != null ? str : string.Empty);
+    return ret;
+  }
+
+  private static uint ParseModifierKeysHelper(string str) {
+    uint ret = NoesisGUI_PINVOKE.KeyBinding_ParseModifierKeysHelper(str != null ? str : string.Empty);
+    return ret;
+  }
+
+  private static IntPtr ParseKeyGestureHelper(string str) {
+    IntPtr ret = NoesisGUI_PINVOKE.KeyBinding_ParseKeyGestureHelper(str != null ? str : string.Empty);
     return ret;
   }
 

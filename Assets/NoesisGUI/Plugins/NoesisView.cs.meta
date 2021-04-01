@@ -1,8 +1,7 @@
 fileFormatVersion: 2
 guid: 29355477be96127469aed699dd82b4be
-timeCreated: 1485414933
-licenseType: Store
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences:
   - _xaml: {instanceID: 0}

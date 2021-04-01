@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 namespace Noesis
 {
 
-public class TextCompositionEventArgs : RoutedEventArgs {
+public class TextCompositionEventArgs : InputEventArgs {
   private HandleRef swigCPtr;
 
   internal TextCompositionEventArgs(IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn) {
@@ -44,19 +44,24 @@ public class TextCompositionEventArgs : RoutedEventArgs {
     }
   }
 
+  internal static new void InvokeHandler(Delegate handler, IntPtr sender, IntPtr args) {
+    TextCompositionEventHandler handler_ = (TextCompositionEventHandler)handler;
+    if (handler_ != null) {
+      handler_(Extend.GetProxy(sender, false), new TextCompositionEventArgs(args, false));
+    }
+  }
+
   public string Text {
     get {
       return ((char)GetTextHelper()).ToString();
     }
   }
 
-  public TextCompositionEventArgs(object s, RoutedEvent e, uint ch) : this(NoesisGUI_PINVOKE.new_TextCompositionEventArgs(Noesis.Extend.GetInstanceHandle(s), RoutedEvent.getCPtr(e), ch), true) {
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+  public TextCompositionEventArgs(object source, RoutedEvent arg1, uint ch) : this(NoesisGUI_PINVOKE.new_TextCompositionEventArgs(Noesis.Extend.GetInstanceHandle(source), RoutedEvent.getCPtr(arg1), ch), true) {
   }
 
   private uint GetTextHelper() {
     uint ret = NoesisGUI_PINVOKE.TextCompositionEventArgs_GetTextHelper(swigCPtr);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 

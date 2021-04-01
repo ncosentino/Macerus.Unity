@@ -31,7 +31,7 @@ public class RadioButton : ToggleButton {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(RadioButton).TypeHandle) {
+    if (type == typeof(RadioButton)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_RadioButton();
     }
@@ -43,7 +43,6 @@ public class RadioButton : ToggleButton {
   public static DependencyProperty GroupNameProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.RadioButton_GroupNameProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -51,27 +50,16 @@ public class RadioButton : ToggleButton {
   public string GroupName {
     set {
       NoesisGUI_PINVOKE.RadioButton_GroupName_set(swigCPtr, value != null ? value : string.Empty);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
     get {
       IntPtr strPtr = NoesisGUI_PINVOKE.RadioButton_GroupName_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       string str = Noesis.Extend.StringFromNativeUtf8(strPtr);
       return str;
     }
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.RadioButton_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_RadioButton(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_RadioButton(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

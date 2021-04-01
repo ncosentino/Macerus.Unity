@@ -57,6 +57,9 @@ public struct Thickness {
   public Thickness(float size) : this(size, size, size, size) {
   }
 
+  public Thickness(float lr, float tb) : this(lr, tb, lr, tb)  {
+  }
+
   public Thickness(float left, float top, float right, float bottom) {
     this._l = left;
     this._t = top;
@@ -106,7 +109,6 @@ public struct Thickness {
 
   public static bool TryParse(string str, out Thickness result) {
     bool ret = NoesisGUI_PINVOKE.Thickness_TryParse(str != null ? str : string.Empty, out result);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 

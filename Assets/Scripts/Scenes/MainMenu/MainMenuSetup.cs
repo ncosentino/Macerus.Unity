@@ -1,5 +1,4 @@
-﻿
-using Assets.Scripts.Console;
+﻿using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 using Assets.Scripts.Scenes.MainMenu.Input;

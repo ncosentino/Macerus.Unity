@@ -6,14 +6,19 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 
+using LoadAction = UnityEngine.Rendering.RenderBufferLoadAction;
+using StoreAction = UnityEngine.Rendering.RenderBufferStoreAction;
+
 //[ExecuteInEditMode]
 [AddComponentMenu("NoesisGUI/Noesis View")]
-public class NoesisView: MonoBehaviour
+[HelpURL("https://www.noesisengine.com/docs")]
+[DisallowMultipleComponent]
+public class NoesisView: MonoBehaviour, ISerializationCallbackReceiver
 {
     #region Public properties
 
     /// <summary>
-    /// XAML that will be loaded when this component is enabled.
+    /// User interface definition XAML
     /// </summary>
     public NoesisXaml Xaml
     {
@@ -22,30 +27,95 @@ public class NoesisView: MonoBehaviour
     }
 
     /// <summary>
-    /// Selects antialiasing mode.
+    /// The texture to render this View into
     /// </summary>
-    public bool IsPPAAEnabled
+    public RenderTexture Texture
     {
-        set { this._isPPAAEnabled = value; }
-        get { return this._isPPAAEnabled; }
+        set { this._texture = value; }
+        get { return this._texture; }
     }
 
     /// <summary>
-    /// Determines the quantity of triangles generated for vector shapes.
+    /// Tessellation curve tolerance in screen space. 'Medium Quality' is usually fine for PPAA (non-multisampled) 
+    /// while 'High Quality' is the recommended pixel error if you are rendering to a 8x multisampled surface
     /// </summary>
-    public View.TessellationQuality TessellationQuality
+    public float TessellationMaxPixelError
     {
-        set { this._tessellationQuality = value; }
-        get { return this._tessellationQuality; }
+        set
+        {
+            if (_uiView != null)
+            {
+                _uiView.SetTessellationMaxPixelError(value);
+            }
+
+            this._tessellationMaxPixelError = value;
+        }
+
+        get
+        {
+            if (_uiView != null)
+            {
+                return _uiView.GetTessellationMaxPixelError().Error;
+            }
+
+            return this._tessellationMaxPixelError; 
+        }
     }
 
     /// <summary>
     /// Bit flags used for debug rendering purposes.
     /// </summary>
-    public View.RenderFlags RenderFlags
+    public RenderFlags RenderFlags
     {
-        set { this._renderFlags = value; }
-        get { return this._renderFlags; }
+        set
+        {
+            if (_uiView != null)
+            {
+                _uiView.SetFlags(value);
+            }
+
+            this._renderFlags = value;
+        }
+        get
+        {
+            if (_uiView != null)
+            {
+                return _uiView.GetFlags();
+            }
+
+            return this._renderFlags;
+        }
+    }
+
+    /// <summary>
+    /// When continuous rendering is disabled, rendering only happens when UI changes. For performance
+    /// purposes and to save battery this is the default mode when rendering to texture. If not rendering
+    /// to texture, this property is ignored. Use the property 'NeedsRendering' instead.
+    /// </summary>
+    public bool ContinuousRendering
+    {
+        set { this._continuousRendering = value; }
+        get { return this._continuousRendering; }
+    }
+
+    /// <summary>
+    /// When enabled, the view must be explicitly updated by calling 'ExternalUpdate()'.
+    /// By default, the view is automatically updated during LateUpdate.
+    /// </summary>
+    public bool EnableExternalUpdate
+    {
+        set { this._enableExternalUpdate = value; }
+        get { return this._enableExternalUpdate; }
+    }
+
+    /// <summary>
+    /// After updating the view, this flag indicates if the GUI needs to be repainted.
+    /// This flag can be used on manually painted cameras to optimize performance and save battery.
+    /// </summary>
+    public bool NeedsRendering
+    {
+        set { this._needsRendering = value; }
+        get { return this._needsRendering; }
     }
 
     /// <summary>
@@ -76,11 +146,28 @@ public class NoesisView: MonoBehaviour
     }
 
     /// <summary>
+    /// Enables gamepad input management.
+    /// </summary>
+    public bool EnableGamepad
+    {
+        set { this._enableGamepad = value; }
+        get { return this._enableGamepad; }
+    }
+
+    /// <summary>
     /// Emulate touch input with mouse.
     /// </summary>
     public bool EmulateTouch
     {
-        set { this._emulateTouch = value; }
+        set
+        {
+            if (_uiView != null)
+            {
+                _uiView.SetEmulateTouch(value);
+            }
+
+            this._emulateTouch = value;
+        }
         get { return this._emulateTouch; }
     }
 
@@ -108,7 +195,7 @@ public class NoesisView: MonoBehaviour
     /// <returns></returns>
     public bool IsRenderToTexture()
     {
-        return FindRenderTexture() != null;
+        return gameObject.GetComponent<Camera>() == null;
     }
 
     #endregion
@@ -150,36 +237,42 @@ public class NoesisView: MonoBehaviour
     /// Notifies Renderer that a key was pressed.
     /// </summary>
     /// <param name="key">Key identifier.</param>
-    public void KeyDown(Noesis.Key key)
+    public bool KeyDown(Noesis.Key key)
     {
         if (_uiView != null)
         {
-            _uiView.KeyDown(key);
+            return _uiView.KeyDown(key);
         }
+
+        return false;
     }
 
     /// <summary>
     /// Notifies Renderer that a key was released.
     /// </summary>
     /// <param name="key">Key identifier.</param>
-    public void KeyUp(Noesis.Key key)
+    public bool KeyUp(Noesis.Key key)
     {
         if (_uiView != null)
         {
-            _uiView.KeyUp(key);
+            return _uiView.KeyUp(key);
         }
+
+        return false;
     }
 
     /// <summary>
     /// Notifies Renderer that a key was translated to the corresponding character.
     /// </summary>
     /// <param name="ch">Unicode character value.</param>
-    public void Char(uint ch)
+    public bool Char(uint ch)
     {
         if (_uiView != null)
         {
-            _uiView.Char(ch);
+            return _uiView.Char(ch);
         }
+
+        return false;
     }
     #endregion
 
@@ -190,12 +283,14 @@ public class NoesisView: MonoBehaviour
     /// </summary>
     /// <param name="x">Mouse x-coordinate.</param>
     /// <param name="y">Mouse y-coordinate.</param>
-    public void MouseMove(int x, int y)
+    public bool MouseMove(int x, int y)
     {
         if (_uiView != null)
         {
-            _uiView.MouseMove(x, y);
+            return _uiView.MouseMove(x, y);
         }
+
+        return false;
     }
 
     /// <summary>
@@ -205,12 +300,14 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Mouse x-coordinate.</param>
     /// <param name="y">Mouse y-coordinate.</param>
     /// <param name="button">Indicates which button was pressed.</param>
-    public void MouseButtonDown(int x, int y, Noesis.MouseButton button)
+    public bool MouseButtonDown(int x, int y, Noesis.MouseButton button)
     {
         if (_uiView != null)
         {
-            _uiView.MouseButtonDown(x, y, button);
+            return _uiView.MouseButtonDown(x, y, button);
         }
+
+        return false;
     }
 
     /// Notifies Renderer that a mouse button was released. The mouse position is specified in
@@ -219,12 +316,14 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Mouse x-coordinate.</param>
     /// <param name="y">Mouse y-coordinate.</param>
     /// <param name="button">Indicates which button was released.</param>
-    public void MouseButtonUp(int x, int y, Noesis.MouseButton button)
+    public bool MouseButtonUp(int x, int y, Noesis.MouseButton button)
     {
         if (_uiView != null)
         {
-            _uiView.MouseButtonUp(x, y, button);
+            return _uiView.MouseButtonUp(x, y, button);
         }
+
+        return false;
     }
 
     /// <summary>
@@ -234,12 +333,14 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Mouse x-coordinate.</param>
     /// <param name="y">Mouse y-coordinate.</param>
     /// <param name="button">Indicates which button was pressed.</param>
-    public void MouseDoubleClick(int x, int y, Noesis.MouseButton button)
+    public bool MouseDoubleClick(int x, int y, Noesis.MouseButton button)
     {
         if (_uiView != null)
         {
-            _uiView.MouseDoubleClick(x, y, button);
+            return _uiView.MouseDoubleClick(x, y, button);
         }
+
+        return false;
     }
 
     /// <summary>
@@ -249,12 +350,14 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Mouse x-coordinate.</param>
     /// <param name="y">Mouse y-coordinate.</param>
     /// <param name="wheelRotation">Indicates the amount mouse wheel has changed.</param>
-    public void MouseWheel(int x, int y, int wheelRotation)
+    public bool MouseWheel(int x, int y, int wheelRotation)
     {
         if (_uiView != null)
         {
-            _uiView.MouseWheel(x, y, wheelRotation);
+            return _uiView.MouseWheel(x, y, wheelRotation);
         }
+
+        return false;
     }
     #endregion
 
@@ -266,12 +369,14 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Finger x-coordinate.</param>
     /// <param name="y">Finger y-coordinate.</param>
     /// <param name="touchId">Finger identifier.</param>
-    public void TouchMove(int x, int y, uint touchId)
+    public bool TouchMove(int x, int y, uint touchId)
     {
         if (_uiView != null)
         {
-            _uiView.TouchMove(x, y, touchId);
+            return _uiView.TouchMove(x, y, touchId);
         }
+
+        return false;
     }
 
     /// <summary>
@@ -281,12 +386,14 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Finger x-coordinate.</param>
     /// <param name="y">Finger y-coordinate.</param>
     /// <param name="touchId">Finger identifier.</param>
-    public void TouchDown(int x, int y, uint touchId)
+    public bool TouchDown(int x, int y, uint touchId)
     {
         if (_uiView != null)
         {
-            _uiView.TouchDown(x, y, touchId);
+            return _uiView.TouchDown(x, y, touchId);
         }
+
+        return false;
     }
 
     /// <summary>
@@ -296,23 +403,16 @@ public class NoesisView: MonoBehaviour
     /// <param name="x">Finger x-coordinate.</param>
     /// <param name="y">Finger y-coordinate.</param>
     /// <param name="touchId">Finger identifier.</param>
-    public void TouchUp(int x, int y, uint touchId)
+    public bool TouchUp(int x, int y, uint touchId)
     {
         if (_uiView != null)
         {
-            _uiView.TouchUp(x, y, touchId);
+            return _uiView.TouchUp(x, y, touchId);
         }
+
+        return false;
     }
     #endregion
-
-    /// <summary>
-    /// Occurs just before the objects in the UI tree are rendered.
-    /// </summary>
-    /*public event System.EventHandler Rendering
-    {
-        add { if (_uiView != null) { _uiView.Rendering += value; } }
-        remove { if (_uiView != null) { _uiView.Rendering -= value; } }
-    }*/
 
     #endregion
 
@@ -353,68 +453,124 @@ public class NoesisView: MonoBehaviour
     void Reset()
     {
         _isPPAAEnabled = true;
-        _tessellationQuality = View.TessellationQuality.Medium;
+        _tessellationMaxPixelError = Noesis.TessellationMaxPixelError.MediumQuality.Error;
         _renderFlags = 0;
+        _continuousRendering = gameObject.GetComponent<Camera>() != null;
+        _enableExternalUpdate = false;
         _enableKeyboard = true;
         _enableMouse = true;
         _enableTouch = true;
+        _enableGamepad = false;
         _emulateTouch = false;
         _useRealTimeClock = false;
     }
 
-    void Start()
-    {
-        // Disabling this lets you skip the GUI layout phase
-        useGUILayout = false;
-    }
+    Camera _camera;
 
     void OnEnable()
     {
-        if (gameObject.GetComponent<Camera>() == null)
-        {
-            _texture = FindRenderTexture();
-
-            if (_textureCamera == null)
-            {
-                _textureCamera = gameObject.AddComponent<Camera>();
-                _textureCamera.clearFlags = CameraClearFlags.SolidColor;
-                _textureCamera.backgroundColor = new UnityEngine.Color(0.0f, 0.0f, 0.0f, 0.0f);
-                _textureCamera.renderingPath = RenderingPath.Forward;
-                _textureCamera.depthTextureMode = DepthTextureMode.None;
-                _textureCamera.opaqueSortMode = UnityEngine.Rendering.OpaqueSortMode.NoDistanceSort;
-                _textureCamera.transparencySortMode = TransparencySortMode.Orthographic;
-                _textureCamera.clearStencilAfterLightingPass = false;
-#if UNITY_5_6_OR_NEWER
-                _textureCamera.allowHDR = false;
-#else
-                _textureCamera.hdr = false;
-#endif
-                _textureCamera.useOcclusionCulling = false;
-                _textureCamera.cullingMask = 0;
-                _textureCamera.targetTexture = _texture;
-            }
-        }
+        _commands = new UnityEngine.Rendering.CommandBuffer();
+        _camera = GetComponent<Camera>();
 
         LoadXaml(false);
 
         Camera.onPreRender += PreRender;
+
+#if UNITY_2019_1_OR_NEWER
+        // When SRP is active PreRender and PostRender camera events are disabled. Pipeline callbacks need to be used
+        RenderPipelineAsset pipeline = GraphicsSettings.renderPipelineAsset;
+        if (pipeline)
+        {
+            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
+            UnityEngine.Rendering.RenderPipelineManager.endCameraRendering += EndCameraRendering;
+        }
+#endif
     }
 
     void OnDisable()
     {
         Camera.onPreRender -= PreRender;
+
+#if UNITY_2019_1_OR_NEWER
+        UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
+        UnityEngine.Rendering.RenderPipelineManager.endCameraRendering -= EndCameraRendering;
+#endif
     }
+
+    bool _haveNoesisVertical = false;
+    bool _haveNoesisHorizontal = false;
+    bool _haveNoesisAccept = false;
+    bool _haveNoesisCancel = false;
+    bool _haveNoesisMenu = false;
+    bool _haveNoesisView = false;
+    bool _haveNoesisPageLeft = false;
+    bool _haveNoesisPageRight = false;
+    bool _haveNoesisPageUp = false;
+    bool _haveNoesisPageDown = false;
+    bool _haveNoesisScroll = false;
+    bool _haveNoesisHScroll = false;
+
+    void Awake()
+    {
+        // Unity does not offer a better way to detect mapped axis
+        try { Input.GetAxis("Noesis_Vertical"); _haveNoesisVertical = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_Horizontal"); _haveNoesisHorizontal = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_Accept"); _haveNoesisAccept = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_Cancel"); _haveNoesisCancel = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_Menu"); _haveNoesisMenu = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_View"); _haveNoesisView = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_PageLeft"); _haveNoesisPageLeft = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_PageRight"); _haveNoesisPageRight = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_PageUp"); _haveNoesisPageUp = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_PageDown"); _haveNoesisPageDown = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_Scroll"); _haveNoesisScroll = true; } catch (Exception) {}
+        try { Input.GetAxis("Noesis_HScroll"); _haveNoesisHScroll = true; } catch (Exception) {}
+    }
+
+#if UNITY_2019_1_OR_NEWER
+    private void BeginCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        if (_camera == camera)
+        {
+            if (_uiView != null && _visible)
+            {
+                _commands.name = "Noesis.Offscreen";
+                NoesisRenderer.RenderOffscreen(_uiView, _commands);
+                context.ExecuteCommandBuffer(_commands);
+                _commands.Clear();
+
+                context.Submit();
+                GL.InvalidateState();
+                ForceRestoreCameraRenderTarget();
+
+            #if UNITY_EDITOR
+                _pendingUpdates = 0;
+            #endif
+            }
+        }
+    }
+
+    private void EndCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        if (_camera == camera)
+        {
+            if (_uiView != null && _visible)
+            {
+                _commands.name = "Noesis.Onscreen";
+                NoesisRenderer.RenderOnscreen(_uiView, FlipRender(), _commands);
+                context.ExecuteCommandBuffer(_commands);
+                _commands.Clear();
+
+                // This Submit() is generating 'Missing Profiler.EndSample' when profiling under HDRP (Reported Case 1287027)
+                context.Submit();
+                GL.InvalidateState();
+            }
+        }
+    }
+#endif
 
     void OnDestroy()
     {
-        if (_textureCamera != null)
-        {
-            UnityEngine.Object.Destroy(_textureCamera);
-            _textureCamera = null;
-        }
-
-        _texture = null;
-
         DestroyView();
     }
 
@@ -422,11 +578,11 @@ public class NoesisView: MonoBehaviour
 
     private UnityEngine.Vector2 ProjectPointer(float x, float y)
     {
-        if (_texture == null)
+        if (_camera != null)
         {
             return new UnityEngine.Vector2(x, UnityEngine.Screen.height - y);
         }
-        else
+        else if (_texture != null)
         {
             // Project using texture coordinates
 
@@ -473,7 +629,7 @@ public class NoesisView: MonoBehaviour
             }
 
             // NOTE: A MeshCollider must be attached to the target to obtain valid
-            // texture coordintates, otherwise Hit Testing won't work
+            // texture coordinates, otherwise Hit Testing won't work
 
             UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(new UnityEngine.Vector3(x, y, 0));
 
@@ -490,42 +646,39 @@ public class NoesisView: MonoBehaviour
 
             return new UnityEngine.Vector2(-1, -1);
         }
+
+        return Vector2.zero;
     }
 
-    private bool _touchEmulated = false;
     private UnityEngine.Vector3 _mousePos;
+    private int _activeDisplay = 0;
+
+    private Vector3 MousePosition(Vector3 mousePosition)
+    {
+        Vector3 p = Display.RelativeMouseAt(mousePosition);
+
+        if (p == Vector3.zero)
+        {
+            return mousePosition;
+        }
+
+        _activeDisplay = (int)p.z;
+        return p;
+    }
 
     private void UpdateMouse()
     {
+        Vector3 mousePos = MousePosition(UnityEngine.Input.mousePosition);
+
         // mouse move
-        if (_mousePos != UnityEngine.Input.mousePosition)
+        if ((_camera == null || _activeDisplay == _camera.targetDisplay) && _mousePos != mousePos)
         {
-            _mousePos = UnityEngine.Input.mousePosition;
+            _mousePos = mousePos;
+
             UnityEngine.Vector2 mouse = ProjectPointer(_mousePos.x, _mousePos.y);
 
-            if (_emulateTouch && _touchEmulated)
-            {
-                _uiView.TouchMove((int)mouse.x, (int)mouse.y, 0);
-            }
-            else
-            {
-                _uiView.MouseMove((int)mouse.x, (int)mouse.y);
-            }
+            _uiView.MouseMove((int)mouse.x, (int)mouse.y);
         }
-
-        try
-        {
-            // mouse wheel
-            // NOTE: Scroll wheel axis produces deltas of 0,1 * Axis Sensitivity (def=1), and our
-            // view expects a value of 120 as a tick in the mouse wheel
-            int mouseWheel = (int)(UnityEngine.Input.GetAxis("Mouse ScrollWheel") * 1200.0f);
-            if (mouseWheel != 0)
-            {
-                UnityEngine.Vector2 mouse = ProjectPointer(_mousePos.x, _mousePos.y);
-                _uiView.MouseWheel((int)mouse.x, (int)mouse.y, mouseWheel);
-            }
-        }
-        catch (Exception) {}
     }
 
     private void UpdateTouch()
@@ -553,7 +706,7 @@ public class NoesisView: MonoBehaviour
     }
 
     [FlagsAttribute] 
-    enum VirtualKeys
+    enum GamepadButtons
     {
          Up = 1,
          Down = 2,
@@ -569,59 +722,102 @@ public class NoesisView: MonoBehaviour
          PageRight = 2048
     }
 
-    private static readonly Dictionary<VirtualKeys, Noesis.Key> VirtualKeysMap = new Dictionary<VirtualKeys, Noesis.Key>
+    private static readonly Dictionary<GamepadButtons, Noesis.Key> GamepadButtonsMap = new Dictionary<GamepadButtons, Noesis.Key>
     {
-        { VirtualKeys.Up, Key.GamepadUp },
-        { VirtualKeys.Down, Key.GamepadDown },
-        { VirtualKeys.Left, Key.GamepadLeft },
-        { VirtualKeys.Right, Key.GamepadRight },
-        { VirtualKeys.Accept, Key.GamepadAccept },
-        { VirtualKeys.Cancel, Key.GamepadCancel },
-        { VirtualKeys.Menu, Key.GamepadMenu},
-        { VirtualKeys.View, Key.GamepadView },
-        { VirtualKeys.PageUp, Key.GamepadPageUp },
-        { VirtualKeys.PageDown, Key.GamepadPageDown },
-        { VirtualKeys.PageLeft, Key.GamepadPageLeft },
-        { VirtualKeys.PageRight, Key.GamepadPageRight },
+        { GamepadButtons.Up, Key.GamepadUp },
+        { GamepadButtons.Down, Key.GamepadDown },
+        { GamepadButtons.Left, Key.GamepadLeft },
+        { GamepadButtons.Right, Key.GamepadRight },
+        { GamepadButtons.Accept, Key.GamepadAccept },
+        { GamepadButtons.Cancel, Key.GamepadCancel },
+        { GamepadButtons.Menu, Key.GamepadMenu},
+        { GamepadButtons.View, Key.GamepadView },
+        { GamepadButtons.PageUp, Key.GamepadPageUp },
+        { GamepadButtons.PageDown, Key.GamepadPageDown },
+        { GamepadButtons.PageLeft, Key.GamepadPageLeft },
+        { GamepadButtons.PageRight, Key.GamepadPageRight },
     };
 
-    private VirtualKeys _virtualKeys = 0;
+    private GamepadButtons _gamepadButtons = 0;
 
-    private void UpdateVirtualKeys()
+    private void UpdateGamepad()
     {
-        VirtualKeys virtualKeys = 0;
+        GamepadButtons gamepadButtons = 0;
 
-        try
+        if (_haveNoesisVertical)
         {
-            if (Input.GetAxis("Noesis_Vertical") > 0.5f) virtualKeys |= VirtualKeys.Up;
-            if (Input.GetAxis("Noesis_Vertical") < -0.5f) virtualKeys |= VirtualKeys.Down;
+            float v = Input.GetAxis("Noesis_Vertical");
+            if (v > 0.5f) gamepadButtons |= GamepadButtons.Up;
+            if (v < -0.5f) gamepadButtons |= GamepadButtons.Down;
         }
-        catch (Exception) {}
 
-        try
+        if (_haveNoesisHorizontal)
         {
-            if (Input.GetAxis("Noesis_Horizontal") > 0.5f) virtualKeys |= VirtualKeys.Right;
-            if (Input.GetAxis("Noesis_Horizontal") < -0.5f) virtualKeys |= VirtualKeys.Left;
+            float v = Input.GetAxis("Noesis_Horizontal");
+            if (v > 0.5f) gamepadButtons |= GamepadButtons.Right;
+            if (v < -0.5f) gamepadButtons |= GamepadButtons.Left;
         }
-        catch (Exception) {}
 
-        try { if (Input.GetButton("Noesis_Accept")) virtualKeys |= VirtualKeys.Accept; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_Cancel")) virtualKeys |= VirtualKeys.Cancel; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_Menu")) virtualKeys |= VirtualKeys.Menu; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_View")) virtualKeys |= VirtualKeys.View; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_PageUp")) virtualKeys |= VirtualKeys.PageUp; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_PageDown")) virtualKeys |= VirtualKeys.PageDown; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_PageLeft")) virtualKeys |= VirtualKeys.PageLeft; } catch (Exception) {}
-        try { if (Input.GetButton("Noesis_PageRight")) virtualKeys |= VirtualKeys.PageRight; } catch (Exception) {}
+        if (_haveNoesisAccept)
+        {
+            if (Input.GetButton("Noesis_Accept")) gamepadButtons |= GamepadButtons.Accept;
+        }
 
-        VirtualKeys delta = virtualKeys ^ _virtualKeys;
+        if (_haveNoesisCancel)
+        {
+            if (Input.GetButton("Noesis_Cancel")) gamepadButtons |= GamepadButtons.Cancel;
+        }
+
+        if (_haveNoesisMenu)
+        {
+            if (Input.GetButton("Noesis_Menu")) gamepadButtons |= GamepadButtons.Menu;
+        }
+
+        if (_haveNoesisView)
+        {
+            if (Input.GetButton("Noesis_View")) gamepadButtons |= GamepadButtons.View;
+        }
+
+        if (_haveNoesisPageLeft)
+        {
+            if (Input.GetButton("Noesis_PageLeft")) gamepadButtons |= GamepadButtons.PageLeft;
+        }
+
+        if (_haveNoesisPageRight)
+        {
+            if (Input.GetButton("Noesis_PageRight")) gamepadButtons |= GamepadButtons.PageRight;
+        }
+
+        if (_haveNoesisPageUp)
+        {
+            if (Input.GetAxis("Noesis_PageUp") > 0.5f) gamepadButtons |= GamepadButtons.PageUp;
+        }
+
+        if (_haveNoesisPageDown)
+        {
+            if (Input.GetAxis("Noesis_PageDown") > 0.5f) gamepadButtons |= GamepadButtons.PageDown;
+        }
+
+        if (_haveNoesisScroll)
+        {
+            float v = Input.GetAxisRaw("Noesis_Scroll");
+            if (Math.Abs(v) > 0.05f) _uiView.Scroll(v);
+        }
+
+        if (_haveNoesisHScroll)
+        {
+            float v = Input.GetAxisRaw("Noesis_HScroll");
+            if (Math.Abs(v) > 0.05f) _uiView.HScroll(v);
+        }
+
+        GamepadButtons delta = gamepadButtons ^ _gamepadButtons;
         if (delta != 0)
         {
-            foreach (var pair in VirtualKeysMap)
+            foreach (var pair in GamepadButtonsMap)
             {
                 if ((delta & pair.Key) > 0)
                 {
-                    if ((virtualKeys & pair.Key) > 0)
+                    if ((gamepadButtons & pair.Key) > 0)
                     {
                         _uiView.KeyDown(pair.Value);
                     }
@@ -633,7 +829,7 @@ public class NoesisView: MonoBehaviour
             }
         }
 
-         _virtualKeys = virtualKeys;
+         _gamepadButtons = gamepadButtons;
     }
 
     private void UpdateInputs()
@@ -648,30 +844,91 @@ public class NoesisView: MonoBehaviour
             UpdateTouch();
         }
 
-        if (_enableKeyboard)
+        if (_enableGamepad)
         {
-            UpdateVirtualKeys();
+            UpdateGamepad();
         }
     }
 
-    private void UpdateSettings()
+    private void UpdateSize()
     {
-        Camera camera = gameObject.GetComponent<Camera>();
-        _uiView.SetSize(camera.pixelWidth, camera.pixelHeight);
-        _uiView.SetIsPPAAEnabled(_isPPAAEnabled);
-        _uiView.SetTessellationQuality(_tessellationQuality);
-        _uiView.SetFlags(_renderFlags);
+        if (_camera != null)
+        {
+            _uiView.SetSize(_camera.pixelWidth, _camera.pixelHeight);
+        }
+        else if (_texture != null)
+        {
+            _uiView.SetSize(_texture.width, _texture.height);
+        }
     }
 
     private bool _visible = true;
 
+#if UNITY_EDITOR
+    private int _pendingUpdates = 0;
+#endif
+
     void LateUpdate()
+    {
+        if (!_enableExternalUpdate)
+        {
+            ExternalUpdateInternal();
+        }
+    }
+
+    public void ExternalUpdate()
+    {
+        Debug.Assert(_enableExternalUpdate, "Calling ExternalUpdate() with EnableExternalUpdate disabled", this);
+        ExternalUpdateInternal();
+    }
+
+    private void ExternalUpdateInternal()
     {
         if (_uiView != null && _visible)
         {
+
+#if UNITY_EDITOR
+            // Make sure render queue is flushed to avoid memory growing
+            // Under normal circumstances this counter will be 0, but if for example we are in
+            // Play mode and the Game view is hidden (by switching to Scene View) then we need to
+            // force an Update in the render to clear the queue
+            if (_pendingUpdates > 4)
+            {
+                RenderOffscreen();
+            }
+#endif
+            UpdateSize();
             UpdateInputs();
-            UpdateSettings();
-           _uiView.Update(_useRealTimeClock ? Time.realtimeSinceStartup : Time.time);
+            NoesisUnity.IME.Update(_uiView);
+            NoesisUnity.TouchKeyboard.Update();
+            Noesis_UnityUpdate();
+            _needsRendering = _uiView.Update(_useRealTimeClock ? Time.realtimeSinceStartup : Time.time);
+
+            if (_camera == null && _texture != null)
+            {
+                if (_continuousRendering || _needsRendering)
+                {
+                    _commands.name = "Noesis.Texture";
+                    NoesisRenderer.RenderOffscreen(_uiView, _commands);
+                    _commands.SetRenderTarget(_texture, LoadAction.DontCare, StoreAction.Store, LoadAction.DontCare, StoreAction.DontCare);
+                    _commands.ClearRenderTarget(true, true, UnityEngine.Color.clear, 0.0f);
+                    NoesisRenderer.RenderOnscreen(_uiView, !IsGL(), _commands);
+                    Graphics.ExecuteCommandBuffer(_commands);
+                    _commands.Clear();
+
+                    GL.InvalidateState();
+                    _texture.DiscardContents(false, true);
+                }
+            }
+        #if UNITY_EDITOR
+            else
+            {
+                if (_needsRendering)
+                {
+                    _pendingUpdates++;
+                }
+            }
+        #endif
         }
     }
 
@@ -695,80 +952,84 @@ public class NoesisView: MonoBehaviour
 
     private void PreRender(Camera cam)
     {
-        // We need the offscreen phase to happen before any camera rendering. This is critical for tiled architectures.
-        // This method is invoked for each camera in the scene. We enqueue the offscreen phase in the first camera and disable for rest of cameras
-        if (_updatePending)
+        if (_camera != null)
         {
-            RenderOffscreen();
-            _updatePending = false;
+            // In case there are several cameras rendering to the same texture (Camera Stacking),
+            // the camera rendered first (less depth) is the one that must apply our offscreen phase
+            // to avoid inefficient Load/Store in Tiled architectures
+            if (_updatePending && cam.targetTexture == _camera.targetTexture && cam.depth <= _camera.depth)
+            {
+                RenderOffscreen();
+                _updatePending = false;
+            }
         }
     }
 
-    void RenderOffscreen()
+    private void ForceRestoreCameraRenderTarget()
+    {
+        // Unity should automatically restore the render target but sometimes (for example a scene without lights)
+        // it doesn't. We use this hack to flush the active render target and force unity to set the camera RT afterward
+        RenderTexture surface = RenderTexture.GetTemporary(1,1);
+        Graphics.SetRenderTarget(surface);
+        RenderTexture.ReleaseTemporary(surface);
+    }
+
+    private void RenderOffscreen()
     {
         if (_uiView != null && _visible)
         {
-            NoesisRenderer.RenderOffscreen(_uiView);
+            _commands.name = "Noesis.Offscreen";
+            NoesisRenderer.RenderOffscreen(_uiView, _commands);
+            Graphics.ExecuteCommandBuffer(_commands);
+            _commands.Clear();
 
-            // Unity should restore the render target at this point but sometimes (for example a scene without lights)
-            // it doesn't. We use this hack to flush the active render target and force unity to set the camera RT afterward
-            RenderTexture surface = RenderTexture.GetTemporary(1,1);
-            Graphics.SetRenderTarget(surface);
-            RenderTexture.ReleaseTemporary(surface);
+            GL.InvalidateState();
+            ForceRestoreCameraRenderTarget();
+
+        #if UNITY_EDITOR
+            _pendingUpdates = 0;
+        #endif
         }
     }
 
-    private bool IsD3D()
+    private bool IsGL()
     {
         return
-#if !UNITY_2017_2_OR_NEWER
-            SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D9 ||
-#endif
-            SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D11 ||
-            SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D12 ||
-            SystemInfo.graphicsDeviceType == GraphicsDeviceType.XboxOne;
+            SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLES2 ||
+            SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLES3 ||
+            SystemInfo.graphicsDeviceType == GraphicsDeviceType.OpenGLCore;
     }
 
     private bool FlipRender()
     {
-#if UNITY_5_6_OR_NEWER
         // In D3D when Unity is rendering to an intermmediate texture instead of the back buffer, we need to vertically flip the output
         // Note that camera.activeTexture should only be checked from OnPostRender
-        if (IsD3D())
+        if (!IsGL())
         {
-            UnityEngine.Camera camera = GetComponent<Camera>();
-            return camera.activeTexture != null;
+            return _camera.activeTexture != null;
         }
 
         return false;
-#else
-        // This path doesn't catch all scenarios correctly, but there is no better way for <5.6
-        if (IsD3D())
-        {
-            UnityEngine.Camera camera = GetComponent<Camera>();
-
-            return camera.targetTexture != null ||
-                camera.actualRenderingPath == UnityEngine.RenderingPath.DeferredLighting ||
-                camera.actualRenderingPath == UnityEngine.RenderingPath.DeferredShading;
-        }
-
-        return false;
-#endif
     }
 
-    void OnPostRender()
+    private void RenderOnscreen()
     {
         if (_uiView != null && _visible)
         {
-            NoesisRenderer.RenderOnscreen(_uiView, FlipRender());
+            _commands.name = "Noesis.Onscreen";
+            NoesisRenderer.RenderOnscreen(_uiView, FlipRender(), _commands);
+            Graphics.ExecuteCommandBuffer(_commands);
+            _commands.Clear();
 
-            if (_texture != null)
-            {
-                _texture.DiscardContents(false, true);
-            }
+            GL.InvalidateState();
 
             _updatePending = true;
         }
+    }
+
+    private void OnPostRender()
+    {
+        RenderOnscreen();
     }
 
     private UnityEngine.EventModifiers _modifiers = 0;
@@ -790,7 +1051,7 @@ public class NoesisView: MonoBehaviour
 
     private bool HitTest(float x, float y)
     {
-        return VisualTreeHelper.HitTest(_uiView.Content, new Point(x, y)).VisualHit != null;
+        return VisualTreeHelper.HitTest((Visual)VisualTreeHelper.GetRoot(_uiView.Content), new Point(x, y)).VisualHit != null;
     }
 
 #if !UNITY_EDITOR && UNITY_STANDALONE_OSX
@@ -798,7 +1059,7 @@ public class NoesisView: MonoBehaviour
     private static Noesis.Key lastKeyDown;
 #endif
 
-    private void ProcessEvent(UnityEngine.Event ev, bool enableKeyboard, bool enableMouse, bool emulateTouch)
+    private void ProcessEvent(UnityEngine.Event ev, bool enableKeyboard, bool enableMouse)
     {
         // Process keyboard modifiers
         if (enableKeyboard)
@@ -828,24 +1089,17 @@ public class NoesisView: MonoBehaviour
                         ev.Use();
                     }
 
-                    if (emulateTouch)
+                    // Ignore events generated by Unity to simulate a mouse down when a touch event occurs
+                    bool mouseEmulated = Input.simulateMouseWithTouches && Input.touchCount > 0;
+                    if (!mouseEmulated)
                     {
-                        _uiView.TouchDown((int)mouse.x, (int)mouse.y, 0);
-                        _touchEmulated = true;
-                    }
-                    else
-                    {
-                        // Ignore events generated by Unity to simulate a mouse down when a
-                        // touch event occurs
-                        bool mouseEmulated = Input.simulateMouseWithTouches && Input.touchCount > 0;
-                        if (!mouseEmulated)
+                        if (ev.clickCount == 1)
                         {
                             _uiView.MouseButtonDown((int)mouse.x, (int)mouse.y, (Noesis.MouseButton)ev.button);
-
-                            if (ev.clickCount == 2)
-                            {
-                                _uiView.MouseDoubleClick((int)mouse.x, (int)mouse.y, (Noesis.MouseButton)ev.button);
-                            }
+                        }
+                        else
+                        {
+                            _uiView.MouseDoubleClick((int)mouse.x, (int)mouse.y, (Noesis.MouseButton)ev.button);
                         }
                     }
                 }
@@ -855,28 +1109,36 @@ public class NoesisView: MonoBehaviour
             {
                 if (enableMouse)
                 {
-                    UnityEngine.Vector2 mouse = ProjectPointer(ev.mousePosition.x,
-                        UnityEngine.Screen.height - ev.mousePosition.y);
+                    UnityEngine.Vector2 mouse = ProjectPointer(ev.mousePosition.x, UnityEngine.Screen.height - ev.mousePosition.y);
 
                     if (HitTest(mouse.x, mouse.y))
                     {
                         ev.Use();
                     }
 
-                    if (emulateTouch && _touchEmulated)
+                    // Ignore events generated by Unity to simulate a mouse up when a touch event occurs
+                    bool mouseEmulated = Input.simulateMouseWithTouches && Input.touchCount > 0;
+                    if (!mouseEmulated)
                     {
-                        _uiView.TouchUp((int)mouse.x, (int)mouse.y, 0);
-                        _touchEmulated = false;
+                        _uiView.MouseButtonUp((int)mouse.x, (int)mouse.y, (Noesis.MouseButton)ev.button);
                     }
-                    else
+                }
+                break;
+            }
+            case UnityEngine.EventType.ScrollWheel:
+            {
+                if (enableMouse)
+                {
+                    UnityEngine.Vector2 mouse = ProjectPointer(ev.mousePosition.x, UnityEngine.Screen.height - ev.mousePosition.y);
+
+                    if (ev.delta.y != 0.0f)
                     {
-                        // Ignore events generated by Unity to simulate a mouse up when a
-                        // touch event occurs
-                        bool mouseEmulated = Input.simulateMouseWithTouches && Input.touchCount > 0;
-                        if (!mouseEmulated)
-                        {
-                            _uiView.MouseButtonUp((int)mouse.x, (int)mouse.y, (Noesis.MouseButton)ev.button);
-                        }
+                        _uiView.MouseWheel((int)mouse.x, (int)mouse.y, -(int)(ev.delta.y * 40.0f));
+                    }
+
+                    if (ev.delta.x != 0.0f)
+                    {
+                        _uiView.MouseHWheel((int)mouse.x, (int)mouse.y, (int)(ev.delta.x * 40.0f));
                     }
                 }
                 break;
@@ -885,7 +1147,8 @@ public class NoesisView: MonoBehaviour
             {
                 if (enableKeyboard)
                 {
-                    if (ev.keyCode != KeyCode.None)
+                    // Don't process key when IME composition is being used
+                    if (ev.keyCode != KeyCode.None && NoesisUnity.IME.compositionString == "")
                     {
                         Noesis.Key noesisKeyCode = NoesisKeyCodes.Convert(ev.keyCode);
                         if (noesisKeyCode != Noesis.Key.None)
@@ -922,14 +1185,16 @@ public class NoesisView: MonoBehaviour
                             _uiView.Char((uint)ev.character);
                         }
                     }
+
                 }
                 break;
             }
             case UnityEngine.EventType.KeyUp:
             {
+                // Don't process key when IME composition is being used
                 if (enableKeyboard)
                 {
-                    if (ev.keyCode != UnityEngine.KeyCode.None)
+                    if (ev.keyCode != KeyCode.None && NoesisUnity.IME.compositionString == "")
                     {
                         Noesis.Key noesisKeyCode = NoesisKeyCodes.Convert(ev.keyCode);
                         if (noesisKeyCode != Noesis.Key.None)
@@ -945,9 +1210,14 @@ public class NoesisView: MonoBehaviour
 
     void OnGUI()
     {
-        if (_uiView != null)
+        if (_uiView != null && (_camera == null || _activeDisplay == _camera.targetDisplay))
         {
-            ProcessEvent(UnityEngine.Event.current, _enableKeyboard, _enableMouse, _emulateTouch);
+            if (_camera)
+            {
+                UnityEngine.GUI.depth = -(int)_camera.depth;
+            }
+
+            ProcessEvent(UnityEngine.Event.current, _enableKeyboard, _enableMouse);
         }
     }
 
@@ -955,7 +1225,7 @@ public class NoesisView: MonoBehaviour
     {
         if (_uiView != null)
         {
-            if (!Noesis.GUI.SoftwareKeyboard.IsOpen)
+            if (NoesisUnity.TouchKeyboard.keyboard == null)
             {
                 if (focused)
                 {
@@ -970,71 +1240,26 @@ public class NoesisView: MonoBehaviour
     }
 #endregion
 
-    void SetRenderSettings()
-    {
-        NoesisSettings settings = NoesisSettings.Get();
-
-        bool linearRendering = QualitySettings.activeColorSpace == ColorSpace.Linear;
-
-        int offscreenWidth = (int)settings.offscreenTextureSize.x;
-        int offscreenHeight = (int)settings.offscreenTextureSize.y;
-        int sampleCount = QualitySettings.antiAliasing;
-
-        uint offscreenDefaultNumSurfaces = settings.offscreenInitSurfaces;
-        uint offscreenMaxNumSurfaces = settings.offscreenMaxSurfaces;
-        uint glyphCacheMeshThreshold = settings.glyphMeshThreshold;
-
-        int glyphCacheTextureWidth = 1024;
-        int glyphCacheTextureHeight = 1024;
-
-        switch (settings.glyphTextureSize)
-        {
-            case NoesisSettings.TextureSize._256x256:
-            {
-                glyphCacheTextureWidth = 256;
-                glyphCacheTextureHeight = 256;
-                break;
-            }
-            case NoesisSettings.TextureSize._512x512:
-            {
-                glyphCacheTextureWidth = 512;
-                glyphCacheTextureHeight = 512;
-                break;
-            }
-            case NoesisSettings.TextureSize._1024x1024:
-            {
-                glyphCacheTextureWidth = 1024;
-                glyphCacheTextureHeight = 1024;
-                break;
-            }
-            case NoesisSettings.TextureSize._2048x2048:
-            {
-                glyphCacheTextureWidth = 2048;
-                glyphCacheTextureHeight = 2048;
-                break;
-            }
-            case NoesisSettings.TextureSize._4096x4096:
-            {
-                glyphCacheTextureWidth = 4096;
-                glyphCacheTextureHeight = 4096;
-                break;
-            }
-        }
-
-        Noesis_RendererSettings(linearRendering, offscreenWidth, offscreenHeight, sampleCount,
-            offscreenDefaultNumSurfaces, offscreenMaxNumSurfaces, glyphCacheTextureWidth,
-            glyphCacheTextureHeight, glyphCacheMeshThreshold);
-    }
-
     private void CreateView(FrameworkElement content)
     {
         if (_uiView == null)
         {
             // Send settings for the internal device, created by the first view
-            SetRenderSettings();
+            NoesisRenderer.SetRenderSettings();
 
             _uiView = new Noesis.View(content);
-            NoesisRenderer.RegisterView(_uiView);
+            _uiView.SetTessellationMaxPixelError(_tessellationMaxPixelError);
+            _uiView.SetEmulateTouch(_emulateTouch);
+            _uiView.SetFlags(_renderFlags);
+
+            _commands.name = "";
+            NoesisRenderer.RegisterView(_uiView, _commands);
+            Graphics.ExecuteCommandBuffer(_commands);
+            _commands.Clear();
+
+        #if UNITY_EDITOR
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += DestroyView;
+        #endif
         }
     }
 
@@ -1042,77 +1267,51 @@ public class NoesisView: MonoBehaviour
     {
         if (_uiView != null)
         {
-            NoesisRenderer.Shutdown(_uiView);
+            _commands.name = "";
+            NoesisRenderer.UnregisterView(_uiView, _commands);
+            Graphics.ExecuteCommandBuffer(_commands);
+            _commands.Clear();
+
             _uiView = null;
         }
     }
 
-    public UnityEngine.RenderTexture FindRenderTexture()
+    public void OnBeforeSerialize() {}
+
+    public void OnAfterDeserialize()
     {
-        // Check if NoesisGUI was attached to a Unity GUI RawImage object with a RenderTexture
-        UnityEngine.UI.RawImage img = gameObject.GetComponent<UnityEngine.UI.RawImage>();
-        if (img != null && img.texture != null)
+        // (3.0) PPAA flag is now in view render flags 
+        if (_isPPAAEnabled)
         {
-            return img.texture as UnityEngine.RenderTexture;
+            _renderFlags |= RenderFlags.PPAA;
+            _isPPAAEnabled = false;
         }
-
-        // Check if NoesisGUI was attached to a GameObject with a RenderTexture set
-        UnityEngine.Renderer renderer = gameObject.GetComponent<UnityEngine.Renderer>();
-        if (renderer != null && renderer.sharedMaterial != null)
-        {
-            string[] textureNames =
-            {
-                "_MainTex",
-                "_EmissionMap",
-                "_MetallicGlossMap",
-                "_BumpMap",
-                "_ParallaxMap",
-                "_OcclusionMap",
-                "_DetailMask",
-                "_DetailAlbedoMap",
-                "_DetailNormalMap"
-            };
-
-            foreach (string textureName in textureNames)
-            {
-                UnityEngine.RenderTexture texture = renderer.sharedMaterial.GetTexture(textureName)
-                    as UnityEngine.RenderTexture;
-
-                if (texture != null)
-                {
-                    return texture;
-                }
-            }
-        }
-
-        // No valid texture found
-        return null;
     }
 
     private Noesis.View _uiView;
+    private UnityEngine.Rendering.CommandBuffer _commands;
+    private bool _needsRendering = false;
 
-    private UnityEngine.RenderTexture _texture;
-    private UnityEngine.Camera _textureCamera;
+#region Serialized properties
+    [SerializeField] private NoesisXaml _xaml;
+    [SerializeField] private RenderTexture _texture;
 
-#region Properties needed by component editor
-    public NoesisXaml _xaml;
-
-    public bool _isPPAAEnabled = true;
-    public View.TessellationQuality _tessellationQuality = View.TessellationQuality.Medium;
-    public View.RenderFlags _renderFlags = 0;
-
-    public bool _enableKeyboard = true;
-    public bool _enableMouse = true;
-    public bool _enableTouch = true;
-    public bool _emulateTouch = false;
-    public bool _useRealTimeClock = false;
+    [SerializeField] private bool _isPPAAEnabled = true;
+    [SerializeField] private float _tessellationMaxPixelError = Noesis.TessellationMaxPixelError.MediumQuality.Error;
+    [SerializeField] private RenderFlags _renderFlags = 0;
+    [SerializeField] private bool _continuousRendering = true;
+    [SerializeField] private bool _enableExternalUpdate = false;
+    [SerializeField] private bool _enableKeyboard = true;
+    [SerializeField] private bool _enableMouse = true;
+    [SerializeField] private bool _enableTouch = true;
+    [SerializeField] private bool _enableGamepad = false;
+    [SerializeField] private bool _emulateTouch = false;
+    [SerializeField] private bool _useRealTimeClock = false;
 #endregion
 
 #region Imports
     [DllImport(Library.Name)]
-    static extern void Noesis_RendererSettings(bool linearSpaceRendering, int offscreenWidth, int offscreenHeight,
-        int offscreenSampleCount, uint offscreenDefaultNumSurfaces, uint offscreenMaxNumSurfaces,
-        int glyphCacheTextureWidth, int glyphCacheTextureHeight, uint glyphCacheMeshTreshold);
+    private static extern void Noesis_UnityUpdate();
 #endregion
 
 #endregion

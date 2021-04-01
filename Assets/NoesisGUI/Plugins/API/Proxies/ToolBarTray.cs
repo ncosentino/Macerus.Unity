@@ -31,7 +31,7 @@ public class ToolBarTray : FrameworkElement {
   }
 
   protected override IntPtr CreateCPtr(Type type, out bool registerExtend) {
-    if ((object)type.TypeHandle == typeof(ToolBarTray).TypeHandle) {
+    if (type == typeof(ToolBarTray)) {
       registerExtend = false;
       return NoesisGUI_PINVOKE.new_ToolBarTray();
     }
@@ -41,20 +41,23 @@ public class ToolBarTray : FrameworkElement {
   }
 
   public static bool GetIsLocked(DependencyObject element) {
-    bool ret = NoesisGUI_PINVOKE.ToolBarTray_GetIsLocked(DependencyObject.getCPtr(element));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      bool ret = NoesisGUI_PINVOKE.ToolBarTray_GetIsLocked(DependencyObject.getCPtr(element));
+      return ret;
+    }
   }
 
   public static void SetIsLocked(DependencyObject element, bool isLocked) {
-    NoesisGUI_PINVOKE.ToolBarTray_SetIsLocked(DependencyObject.getCPtr(element), isLocked);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
+    if (element == null) throw new ArgumentNullException("element");
+    {
+      NoesisGUI_PINVOKE.ToolBarTray_SetIsLocked(DependencyObject.getCPtr(element), isLocked);
+    }
   }
 
   public static DependencyProperty BackgroundProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBarTray_BackgroundProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -62,7 +65,6 @@ public class ToolBarTray : FrameworkElement {
   public static DependencyProperty IsLockedProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBarTray_IsLockedProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -70,7 +72,6 @@ public class ToolBarTray : FrameworkElement {
   public static DependencyProperty OrientationProperty {
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBarTray_OrientationProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -78,11 +79,9 @@ public class ToolBarTray : FrameworkElement {
   public Brush Background {
     set {
       NoesisGUI_PINVOKE.ToolBarTray_Background_set(swigCPtr, Brush.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.ToolBarTray_Background_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (Brush)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -90,26 +89,15 @@ public class ToolBarTray : FrameworkElement {
   public Orientation Orientation {
     set {
       NoesisGUI_PINVOKE.ToolBarTray_Orientation_set(swigCPtr, (int)value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       Orientation ret = (Orientation)NoesisGUI_PINVOKE.ToolBarTray_Orientation_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
 
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.ToolBarTray_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-
   internal new static IntPtr Extend(string typeName) {
-    IntPtr nativeType = NoesisGUI_PINVOKE.Extend_ToolBarTray(Marshal.StringToHGlobalAnsi(typeName));
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return nativeType;
+    return NoesisGUI_PINVOKE.Extend_ToolBarTray(Marshal.StringToHGlobalAnsi(typeName));
   }
 }
 

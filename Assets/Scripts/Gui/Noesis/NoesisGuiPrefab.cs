@@ -2,6 +2,8 @@
 
 using Assets.Scripts.Unity.GameObjects;
 
+using NexusLabs.Contracts;
+
 using Noesis;
 
 using UnityEngine;
@@ -17,10 +19,13 @@ namespace Assets.Scripts.Gui.Noesis
             GameObject = gameObject;
             _lazyContainerControl = new Lazy<ContentControl>(() =>
             {
-                var viewBox = (ContentControl)GameObject
-                    .GetRequiredComponent<NoesisView>()
-                    .Content;
-                return viewBox;
+                var noesisView = GameObject.GetRequiredComponent<NoesisView>();
+                var contentControl = (ContentControl)noesisView.Content;
+                Contract.RequiresNotNull(
+                    contentControl,
+                    $"The '{nameof(NoesisView.Content)}' property on " +
+                    $"'{noesisView}' was not set.");
+                return contentControl;
             });
         }
 

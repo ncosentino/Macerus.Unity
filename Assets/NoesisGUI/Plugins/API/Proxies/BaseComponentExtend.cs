@@ -16,6 +16,7 @@ namespace Noesis
                 bool registerExtend;
                 IntPtr cPtr = CreateCPtr(type, out registerExtend);
                 Init(cPtr, true, registerExtend);
+                Noesis.Extend.Initialize(this);
             }
             else
             {
@@ -62,10 +63,6 @@ namespace Noesis
                     component.swigCPtr = new HandleRef(null, IntPtr.Zero);
                     Noesis.Extend.RemoveProxy(cPtr);
                 }
-                else
-                {
-                    Noesis.Extend.ForceRemoveExtend(instance, cPtr);
-                }
 
                 Release(cPtr);
             }
@@ -85,7 +82,22 @@ namespace Noesis
         protected IntPtr CreateExtendCPtr(Type type, out bool registerExtend)
         {
             registerExtend = true;
-            return Noesis.Extend.NewCPtr(type, this);
+            return Noesis.Extend.NewCPtr(type);
+        }
+
+        public static IntPtr GetPtr(object instance)
+        {
+            return Noesis.Extend.GetInstanceHandle(instance).Handle;
+        }
+
+        public static object GetProxy(IntPtr ptr)
+        {
+            return Noesis.Extend.GetProxy(ptr, false);
+        }
+
+        public bool IsDisposed
+        {
+            get { return swigCPtr.Handle == IntPtr.Zero; }
         }
 
         public static bool operator ==(BaseComponent a, BaseComponent b)
@@ -96,14 +108,32 @@ namespace Noesis
                 return true;
             }
 
-            // If one is null, but not both, return false.
-            if ((object)a == null || (object)b == null)
+            if ((object)a != null)
             {
-                return false;
+                if ((object)b != null)
+                {
+                    // will be true if both proxies point to the same native pointer
+                    return a.swigCPtr.Handle == b.swigCPtr.Handle;
+                }
+                else
+                {
+                    // will be true if A is a disposed proxy
+                    return a.swigCPtr.Handle == IntPtr.Zero;
+                }
             }
-
-            // Return true if wrapped c++ objects match:
-            return a.swigCPtr.Handle == b.swigCPtr.Handle;
+            else
+            {
+                if ((object)b != null)
+                {
+                    // will be true if B is a disposed proxy
+                    return b.swigCPtr.Handle == IntPtr.Zero;
+                }
+                else
+                {
+                    // both are null
+                    return true;
+                }
+            }
         }
 
         public static bool operator !=(BaseComponent a, BaseComponent b)

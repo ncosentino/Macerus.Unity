@@ -38,7 +38,6 @@ public class BitmapSource : ImageSource {
   public float DpiX {
     get {
       float ret = NoesisGUI_PINVOKE.BitmapSource_DpiX_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -46,7 +45,6 @@ public class BitmapSource : ImageSource {
   public float DpiY {
     get {
       float ret = NoesisGUI_PINVOKE.BitmapSource_DpiY_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -54,7 +52,6 @@ public class BitmapSource : ImageSource {
   public int PixelWidth {
     get {
       int ret = NoesisGUI_PINVOKE.BitmapSource_PixelWidth_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -62,20 +59,12 @@ public class BitmapSource : ImageSource {
   public int PixelHeight {
     get {
       int ret = NoesisGUI_PINVOKE.BitmapSource_PixelHeight_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
 
   private static IntPtr CreateHelper(int pixelWidth, int pixelHeight, float dpiX, float dpiY, byte[] buffer, int stride, uint format) {
     IntPtr ret = NoesisGUI_PINVOKE.BitmapSource_CreateHelper(pixelWidth, pixelHeight, dpiX, dpiY, buffer, stride, format);
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.BitmapSource_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 

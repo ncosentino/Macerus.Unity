@@ -36,37 +36,22 @@ public class RowDefinition : DefinitionBase {
   }
 
   public new static DependencyProperty HeightProperty {
-    set {
-      NoesisGUI_PINVOKE.RowDefinition_HeightProperty_set(DependencyProperty.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.RowDefinition_HeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
   public new static DependencyProperty MinHeightProperty {
-    set {
-      NoesisGUI_PINVOKE.RowDefinition_MinHeightProperty_set(DependencyProperty.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.RowDefinition_MinHeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
 
   public new static DependencyProperty MaxHeightProperty {
-    set {
-      NoesisGUI_PINVOKE.RowDefinition_MaxHeightProperty_set(DependencyProperty.getCPtr(value));
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    } 
     get {
       IntPtr cPtr = NoesisGUI_PINVOKE.RowDefinition_MaxHeightProperty_get();
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return (DependencyProperty)Noesis.Extend.GetProxy(cPtr, false);
     }
   }
@@ -74,12 +59,10 @@ public class RowDefinition : DefinitionBase {
   public new GridLength Height {
     set {
       NoesisGUI_PINVOKE.RowDefinition_Height_set(swigCPtr, ref value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     }
 
     get {
       IntPtr ret = NoesisGUI_PINVOKE.RowDefinition_Height_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       if (ret != IntPtr.Zero) {
         return Marshal.PtrToStructure<GridLength>(ret);
       }
@@ -93,11 +76,9 @@ public class RowDefinition : DefinitionBase {
   public new float MaxHeight {
     set {
       NoesisGUI_PINVOKE.RowDefinition_MaxHeight_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.RowDefinition_MaxHeight_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
   }
@@ -105,19 +86,11 @@ public class RowDefinition : DefinitionBase {
   public new float MinHeight {
     set {
       NoesisGUI_PINVOKE.RowDefinition_MinHeight_set(swigCPtr, value);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
     } 
     get {
       float ret = NoesisGUI_PINVOKE.RowDefinition_MinHeight_get(swigCPtr);
-      if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
       return ret;
     } 
-  }
-
-  new internal static IntPtr GetStaticType() {
-    IntPtr ret = NoesisGUI_PINVOKE.RowDefinition_GetStaticType();
-    if (NoesisGUI_PINVOKE.SWIGPendingException.Pending) throw NoesisGUI_PINVOKE.SWIGPendingException.Retrieve();
-    return ret;
   }
 
 }
