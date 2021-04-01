@@ -88,8 +88,6 @@ namespace Assets.Scripts.UnityEditor
                     destinationPluginsDirectory,
                     destinationResourcesDirectory);
             }));
-
-            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
         private void BuildDependency(

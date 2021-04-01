@@ -47,6 +47,8 @@ namespace Assets.Scripts.UnityEditor
             {
                 _isUpdateDependenciesDisabled = false;
             }
+
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
     }
 }
