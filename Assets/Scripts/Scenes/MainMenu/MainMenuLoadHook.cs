@@ -8,12 +8,12 @@ namespace Assets.Scripts.Scenes.MainMenu
 {
     public sealed class MainMenuLoadHook : IDiscoverableSceneLoadHook
     {
-        private readonly IMainMenuSetup _mainMenuSetup;
+        private readonly Lazy<IMainMenuSetup> _lazyMainMenuSetup;
 
-        public MainMenuLoadHook(IMainMenuSetup mainMenuSetup)
+        public MainMenuLoadHook(Lazy<IMainMenuSetup> mainMenuSetup)
         {
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-            _mainMenuSetup = mainMenuSetup;
+            _lazyMainMenuSetup = mainMenuSetup;
         }
 
         public void SwitchScene()
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Scenes.MainMenu
                 return;
             }
 
-            _mainMenuSetup.Setup();
+            _lazyMainMenuSetup.Value.Setup();
         }
 
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode sceneLoadMode)

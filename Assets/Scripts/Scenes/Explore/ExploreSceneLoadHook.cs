@@ -6,11 +6,11 @@ namespace Assets.Scripts.Scenes.Explore
 {
     public sealed class ExploreSceneLoadHook : IDiscoverableSceneLoadHook
     {
-        private readonly IExploreSetup _exploreSetup;
+        private readonly Lazy<IExploreSetup> _lazyExploreSetup;
 
-        public ExploreSceneLoadHook(IExploreSetup exploreSetup)
+        public ExploreSceneLoadHook(Lazy<IExploreSetup> exploreSetup)
         {
-            _exploreSetup = exploreSetup;
+            _lazyExploreSetup = exploreSetup;
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
         }
 
@@ -31,7 +31,7 @@ namespace Assets.Scripts.Scenes.Explore
                 return;
             }
 
-            _exploreSetup.Setup();
+            _lazyExploreSetup.Value.Setup();
         }
 
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode sceneLoadMode)
