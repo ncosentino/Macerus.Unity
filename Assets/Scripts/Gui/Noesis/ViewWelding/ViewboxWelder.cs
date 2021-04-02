@@ -1,4 +1,5 @@
-﻿using Noesis;
+﻿
+using Noesis;
 
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
@@ -17,9 +18,10 @@ namespace Assets.Scripts.Gui.Noesis.ViewWelding
             _child = child;
         }
 
-        public void Weld()
+        public IWeldResult Weld()
         {
             _parent.Child = _child;
+            return new WeldResult(_parent, _parent.Child);
         }
     }
 }

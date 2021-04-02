@@ -9,7 +9,7 @@ namespace Assets.Scripts.Gui.Noesis.Autofac
             base.Load(builder);
 
             builder
-                .RegisterType<NoesisGuiPrefabCreator>()
+                .RegisterType<LateBindNoesisGuiBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

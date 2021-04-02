@@ -11,8 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 #endif
 
-
-namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis
+namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis.Resources
 {
     public partial class MainMenuView :
         UserControl,
@@ -32,7 +31,7 @@ namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis
 #if NOESIS
         private void InitializeComponent()
         {
-            GUI.LoadComponent(this, XamlResolve.ExpectedXamlPath(GetType()));
+            NoesisComponentInitializer.InitializeComponentXaml(this);
         }
 #endif
     }

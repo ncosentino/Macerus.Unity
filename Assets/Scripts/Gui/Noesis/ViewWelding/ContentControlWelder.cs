@@ -18,9 +18,10 @@ namespace Assets.Scripts.Gui.Noesis.ViewWelding
             _child = child;
         }
 
-        public void Weld()
+        public IWeldResult Weld()
         {
             _parent.Content = _child;
+            return new WeldResult(_parent, _parent.Content);
         }
     }
 }

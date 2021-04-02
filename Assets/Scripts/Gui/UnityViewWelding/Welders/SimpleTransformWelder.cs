@@ -16,11 +16,12 @@ namespace Assets.Scripts.Gui.UnityViewWelding.Welders
             _child = child;
         }
 
-        public void Weld()
+        public IWeldResult Weld()
         {
             _child.SetParent(
                 _parent,
                 false);
+            return new WeldResult(_parent, _child);
         }
     }
 }

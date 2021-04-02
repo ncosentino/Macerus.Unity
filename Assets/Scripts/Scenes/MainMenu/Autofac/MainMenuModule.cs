@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis;
+using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis.Resources;
 using Assets.Scripts.Scenes.MainMenu.Input;
 
 using Autofac;

@@ -1,10 +1,10 @@
-﻿using Assets.Scripts.Console;
+﻿using System.Linq;
+
+using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 using Assets.Scripts.Scenes.MainMenu.Input;
-
-using ProjectXyz.Framework.ViewWelding.Api;
-using ProjectXyz.Framework.ViewWelding.Api.Welders;
+using Assets.Scripts.Unity.GameObjects;
 
 using UnityEngine;
 
@@ -12,19 +12,19 @@ namespace Assets.Scripts.Scenes.MainMenu
 {
     public sealed class MainMenuSetup : IMainMenuSetup
     {
-        private readonly IGuiPrefabCreator _guiPrefabCreator;
-        private readonly IViewWelderFactory _viewWelderFactory;
+        private readonly IUnityGameObjectManager _unityGameObjectManager;
+        private readonly IGuiBehaviourStitcher _guiBehaviourStitcher;
         private readonly IMainMenuView _mainMenuView;
         private readonly IGuiInputStitcher _guiInputStitcher;
 
         public MainMenuSetup(
-            IGuiPrefabCreator guiPrefabCreator,
-            IViewWelderFactory viewWelderFactory,
+            IUnityGameObjectManager unityGameObjectManager,
+            IGuiBehaviourStitcher guiBehaviourStitcher,
             IMainMenuView mainMenuView,
             IGuiInputStitcher guiInputStitcher)
         {
-            _guiPrefabCreator = guiPrefabCreator;
-            _viewWelderFactory = viewWelderFactory;
+            _unityGameObjectManager = unityGameObjectManager;
+            _guiBehaviourStitcher = guiBehaviourStitcher;
             _mainMenuView = mainMenuView;
             _guiInputStitcher = guiInputStitcher;
         }
@@ -37,11 +37,15 @@ namespace Assets.Scripts.Scenes.MainMenu
             };
             consoleObject.AddComponent<GlobalConsoleCommandsBehaviour>();
 
-            var gui = _guiPrefabCreator.Create();
-            _viewWelderFactory
-                .Create<ISimpleWelder>(gui, _mainMenuView)
-                .Weld();
-            _guiInputStitcher.Attach(gui.GameObject);
+            var camera = _unityGameObjectManager
+                .FindAll(x => x.activeSelf && x.name == "Camera")
+                .Single();
+
+            _guiBehaviourStitcher.Stitch(
+                camera,
+                x => x == camera,
+                _mainMenuView);
+            _guiInputStitcher.Attach(camera);
         }
     }
 }

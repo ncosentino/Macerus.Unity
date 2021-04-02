@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 
 using Assets.Scripts.Console;
+using Assets.Scripts.Gui;
+using Assets.Scripts.Gui.Noesis.Views.Resources;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Console;
@@ -22,6 +24,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IExploreSceneStartupInterceptorFacade _exploreSceneStartupInterceptorFacade;
         private readonly IGameEngineUpdateBehaviourStitcher _gameEngineUpdateBehaviourStitcher;
         private readonly IMapManager _mapManager;
+        private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
@@ -29,7 +32,8 @@ namespace Assets.Scripts.Scenes.Explore
             IGuiInputStitcher guiInputStitcher,
             IExploreSceneStartupInterceptorFacade exploreSceneStartupInterceptorFacade,
             IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
-            IMapManager mapManager)
+            IMapManager mapManager,
+            IGuiBehaviourStitcher guiBehaviourStitcher)
         {
             _gameObjectManager = gameObjectManager;
             _mapPrefabFactory = mapPrefabFactory;
@@ -37,6 +41,7 @@ namespace Assets.Scripts.Scenes.Explore
             _exploreSceneStartupInterceptorFacade = exploreSceneStartupInterceptorFacade;
             _gameEngineUpdateBehaviourStitcher = gameEngineUpdateBehaviourStitcher;
             _mapManager = mapManager;
+            _guiBehaviorStitcher = guiBehaviourStitcher;
         }
 
         public void Setup()
@@ -45,7 +50,12 @@ namespace Assets.Scripts.Scenes.Explore
                 .FindAll(x => x.name == "Game")
                 .Single();
             _gameEngineUpdateBehaviourStitcher.Attach(rootGameObject);
-            
+            var container = new Container(); // FIXME: replace with the actual GUI we want to use here
+            _guiBehaviorStitcher.Stitch(
+                rootGameObject,
+                x => x.activeInHierarchy && x.name == "FollowCamera",
+                container);
+
             var consoleObject = new GameObject()
             {
                 name = "ConsoleCommands",

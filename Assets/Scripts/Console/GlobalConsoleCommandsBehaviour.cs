@@ -1,14 +1,8 @@
 ﻿using Assets.Scripts.Behaviours;
-using Assets.Scripts.Gui;
-using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 
 using Autofac;
 
 using IngameDebugConsole;
-
-using ProjectXyz.Framework.ViewWelding.Api;
-using ProjectXyz.Framework.ViewWelding.Api.Welders;
-using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
@@ -17,10 +11,6 @@ namespace Assets.Scripts.Console
     public sealed class GlobalConsoleCommandsBehaviour : MonoBehaviour
     {
         private ProjectXyz.Api.Logging.ILogger _logger;
-        private IReadOnlyMapGameObjectManager _mapGameObjectManager;
-        private IGuiPrefabCreator _guiPrefabCreator;
-        private IViewWelderFactory _viewWelderFactory;
-        private IMainMenuView _mainMenuView;
 
         private void Start()
         {
@@ -32,14 +22,6 @@ namespace Assets.Scripts.Console
             var container = GameDependencyBehaviour.Container;
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
-            _mapGameObjectManager = container.Resolve<IReadOnlyMapGameObjectManager>();
-            _guiPrefabCreator = container.Resolve<IGuiPrefabCreator>();
-            _viewWelderFactory = container.Resolve<IViewWelderFactory>();
-            _mainMenuView = container.Resolve<IMainMenuView>();
-
-            AddCommand(
-                nameof(AddTestGui),
-                "Adds the WIP gui.");
         }
 
         private void AddCommand(string name, string description)
@@ -49,14 +31,6 @@ namespace Assets.Scripts.Console
                 description,
                 name,
                 this);
-        }
-
-        private void AddTestGui()
-        {
-            var gui = _guiPrefabCreator.Create();
-            _viewWelderFactory
-                .Create<ISimpleWelder>(gui, _mainMenuView)
-                .Weld();
         }
     }
 }
