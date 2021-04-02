@@ -19,9 +19,14 @@ namespace Assets.Scripts.Scenes.Explore
             UnityContracts.RequiresNotNull(this, GameEngine, nameof(GameEngine));
         }
 
-        private async void Update()
+        //private async void Update()
+        //{
+        //    await Task.Run(GameEngine.Update);
+        //}
+
+        private void Update()
         {
-            await Task.Run(GameEngine.Update);
+            GameEngine.Update();
         }
     }
 }
