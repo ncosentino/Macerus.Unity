@@ -1,5 +1,6 @@
-﻿using ProjectXyz.Api.Behaviors.Filtering;
-using ProjectXyz.Api.GameObjects;
+﻿using Assets.Scripts.Unity.Threading;
+
+using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Plugins.Features.Weather.Api;
 
@@ -18,5 +19,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
         new IWeatherTableRepositoryFacade WeatherTableRepositoryFacade { get; set; }
 
         new IFilterContextFactory FilterContextFactory { get; set; }
+
+        IDispatcher Dispatcher { get; set; }
     }
 }
