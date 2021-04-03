@@ -68,8 +68,6 @@ namespace Assets.Scripts.Scenes.Explore
             consoleObject.AddComponent<ConsoleCommandsBehaviour>();
             consoleObject.transform.parent = rootGameObject.transform;
 
-            rootGameObject.AddComponent<ConsoleCommandsBehaviour>();
-
             var mapObject = _mapPrefabFactory.CreateMap();
             mapObject.transform.parent = rootGameObject.transform;
 
