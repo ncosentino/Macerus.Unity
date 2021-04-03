@@ -5,6 +5,7 @@ using Assets.Scripts.Unity.Input;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
 using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.TurnBased.Api;
 
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
     {
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IMapGameObjectManager _mapGameObjectManager;
+        private readonly ITurnBasedManager _turnBasedManager;
         private readonly IKeyboardControls _keyboardControls;
         private readonly IKeyboardInput _keyboardInput;
         private readonly ILogger _logger;
@@ -29,7 +31,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             ISkillUsage skillUsage,
             ISkillHandlerFacade skillHandlerFacade,
             IDebugConsoleManager debugConsoleManager,
-            IMapGameObjectManager mapGameObjectManager)
+            IMapGameObjectManager mapGameObjectManager,
+            ITurnBasedManager turnBasedManager)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
@@ -38,6 +41,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _skillHandlerFacade = skillHandlerFacade;
             _debugConsoleManager = debugConsoleManager;
             _mapGameObjectManager = mapGameObjectManager;
+            _turnBasedManager = turnBasedManager;
         }
 
         public IReadOnlyPlayerQuickSlotControlsBehaviour Attach(GameObject gameObject)
@@ -50,6 +54,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerQuickSlotControlsBehaviour.SkillUsage = _skillUsage;
             playerQuickSlotControlsBehaviour.SkillHandlerFacade = _skillHandlerFacade;
             playerQuickSlotControlsBehaviour.MapGameObjectManager = _mapGameObjectManager;
+            playerQuickSlotControlsBehaviour.TurnBasedManager = _turnBasedManager;
             return playerQuickSlotControlsBehaviour;
         }
     }

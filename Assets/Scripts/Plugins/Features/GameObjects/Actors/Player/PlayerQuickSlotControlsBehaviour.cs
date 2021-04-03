@@ -15,6 +15,7 @@ using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.TurnBased.Api;
 using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
@@ -40,6 +41,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         // FIXME: delete this, just for testing
         public IMapGameObjectManager MapGameObjectManager { get; set; }
+
+        // FIXME: delete this, just for testing
+        public ITurnBasedManager TurnBasedManager { get; set; }
 
         private void Start()
         {
@@ -136,6 +140,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     player,
                     firstUsableSkill,
                     new[] { target });
+                TurnBasedManager.SetApplicableObjects(new[] { player });
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot3))
             {
