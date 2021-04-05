@@ -3,6 +3,7 @@ using Assets.Scripts.Unity.Resources.Sprites;
 using Assets.Scripts.Unity.Threading;
 
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.Animations.Api;
 
 using NexusLabs.Contracts;
 
@@ -29,7 +30,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         IObservableDynamicAnimationBehavior IReadOnlySpriteAnimationBehaviour.DynamicAnimationBehavior => DynamicAnimationBehavior;
 
-        private void Start()
+        private async void Start()
         {
             UnityContracts.RequiresNotNull(this, SpriteLoader, nameof(SpriteLoader));
             UnityContracts.RequiresNotNull(this, SpriteRenderer, nameof(SpriteRenderer));
@@ -37,6 +38,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             UnityContracts.RequiresNotNull(this, Dispatcher, nameof(Dispatcher));
 
             DynamicAnimationBehavior.AnimationFrameChanged += DynamicAnimationBehavior_AnimationFrameChanged;
+            UpdateSprite(
+                DynamicAnimationBehavior.CurrentFrame,
+                await DynamicAnimationBehavior.GetAnimationMultipliersAsync());
         }
 
         private void OnDestroy()
@@ -47,33 +51,39 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
             }
         }
 
-        private void DynamicAnimationBehavior_AnimationFrameChanged(object sender, AnimationFrameEventArgs e)
+        private void UpdateSprite(
+            ISpriteAnimationFrame currentFrame,
+            IAnimationMultipliers animationMultipliers)
         {
-            Dispatcher.RunOnMainThread(() =>
+            if (SpriteRenderer == null)
             {
-                if (SpriteRenderer == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                if (e.CurrentFrame == null)
-                {
-                    SpriteRenderer.sprite = null;
-                    return;
-                }
+            if (currentFrame == null)
+            {
+                SpriteRenderer.sprite = null;
+                return;
+            }
 
-                var sprite = SpriteLoader.SpriteFromMultiSprite(
-                    e.CurrentFrame.SpriteSheetResourceId,
-                    e.CurrentFrame.SpriteResourceId);
-                SpriteRenderer.sprite = sprite;
-                SpriteRenderer.flipX = e.CurrentFrame.FlipHorizontal;
-                SpriteRenderer.flipY = e.CurrentFrame.FlipVertical;
-                SpriteRenderer.color = new Color(
-                    (float)(e.CurrentFrame.Color.Red * e.AnimationMultipliers.RedMultiplier),
-                    (float)(e.CurrentFrame.Color.Green * e.AnimationMultipliers.GreenMultiplier),
-                    (float)(e.CurrentFrame.Color.Blue * e.AnimationMultipliers.BlueMultiplier),
-                    (float)(e.CurrentFrame.Color.Alpha * e.AnimationMultipliers.AlphaMultiplier));
-            });
+            var sprite = SpriteLoader.SpriteFromMultiSprite(
+                currentFrame.SpriteSheetResourceId,
+                currentFrame.SpriteResourceId);
+            SpriteRenderer.sprite = sprite;
+            SpriteRenderer.flipX = currentFrame.FlipHorizontal;
+            SpriteRenderer.flipY = currentFrame.FlipVertical;
+            SpriteRenderer.color = new Color(
+                (float)(currentFrame.Color.Red * animationMultipliers.RedMultiplier),
+                (float)(currentFrame.Color.Green * animationMultipliers.GreenMultiplier),
+                (float)(currentFrame.Color.Blue * animationMultipliers.BlueMultiplier),
+                (float)(currentFrame.Color.Alpha * animationMultipliers.AlphaMultiplier));
         }
+
+        private void DynamicAnimationBehavior_AnimationFrameChanged(
+            object sender,
+            AnimationFrameEventArgs e) => Dispatcher.RunOnMainThread(() =>
+            {
+                UpdateSprite(e.CurrentFrame, e.AnimationMultipliers);
+            });
     }
 }
