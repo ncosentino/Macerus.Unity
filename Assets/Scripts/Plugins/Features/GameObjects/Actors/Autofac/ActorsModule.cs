@@ -31,6 +31,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .RegisterType<HasFollowCameraBehaviorInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<ActorsCantBePushedInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();            
 
             // player
             builder
