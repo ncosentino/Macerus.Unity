@@ -57,13 +57,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
                     LightRadiusIdentifiers.GreenStatIdentifier,
                     LightRadiusIdentifiers.BlueStatIdentifier,
                 });
-
-            LightRadiusPrefab.Light.color = new Color(
+            
+            var light = LightRadiusPrefab.Light;
+            if (light == null)
+            {
+                return;
+            }
+            
+            light.color = new Color(
                 (float)lightRadiusStats[LightRadiusIdentifiers.RedStatIdentifier],
                 (float)lightRadiusStats[LightRadiusIdentifiers.GreenStatIdentifier],
                 (float)lightRadiusStats[LightRadiusIdentifiers.BlueStatIdentifier]);
-            LightRadiusPrefab.Light.range = (float)lightRadiusStats[LightRadiusIdentifiers.RadiusStatIdentifier];
-            LightRadiusPrefab.Light.intensity = (float)lightRadiusStats[LightRadiusIdentifiers.IntensityStatIdentifier];
+            light.range = (float)lightRadiusStats[LightRadiusIdentifiers.RadiusStatIdentifier];
+            light.intensity = (float)lightRadiusStats[LightRadiusIdentifiers.IntensityStatIdentifier];
         }
     }
 }
