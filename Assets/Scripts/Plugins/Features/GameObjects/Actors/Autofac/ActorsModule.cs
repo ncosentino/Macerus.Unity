@@ -34,7 +34,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             builder
                 .RegisterType<ActorsCantBePushedInterceptor>()
                 .AsImplementedInterfaces()
-                .SingleInstance();            
+                .SingleInstance();
+            builder
+                .RegisterType<DrawActorWalkPathInterceptor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<DrawWalkPathBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             // player
             builder

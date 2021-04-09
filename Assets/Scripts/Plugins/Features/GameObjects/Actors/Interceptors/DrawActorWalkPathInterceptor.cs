@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Plugins.Features.Combat.Api;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
 
@@ -9,15 +8,17 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
 {
-    public sealed class ActorsCantBePushedInterceptor : IDiscoverableGameObjectBehaviorInterceptor
+    public sealed class DrawActorWalkPathInterceptor : IDiscoverableGameObjectBehaviorInterceptor
     {
         private readonly IActorIdentifiers _actorIdentifiers;
-        private readonly ICombatTurnManager _combatTurnManager;
+        private readonly IDrawWalkPathBehaviourStitcher _drawWalkPathBehaviourStitcher;
 
-        public ActorsCantBePushedInterceptor(IActorIdentifiers actorIdentifiers, ICombatTurnManager combatTurnManager)
+        public DrawActorWalkPathInterceptor(
+            IActorIdentifiers actorIdentifiers,
+            IDrawWalkPathBehaviourStitcher drawWalkPathBehaviourStitcher)
         {
             _actorIdentifiers = actorIdentifiers;
-            _combatTurnManager = combatTurnManager;
+            _drawWalkPathBehaviourStitcher = drawWalkPathBehaviourStitcher;
         }
 
         public void Intercept(
@@ -29,10 +30,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
                 return;
             }
 
-            // FIXME: set this up as a stitcher?
-            var cantBePushedBehaviour = unityGameObject.AddComponent<CantBePushedBehaviour>();
-            cantBePushedBehaviour.CombatTurnManager = _combatTurnManager;
-            cantBePushedBehaviour.RigidBody = unityGameObject.GetComponent<Rigidbody2D>();
+            var drawWalkPathBehaviour = _drawWalkPathBehaviourStitcher.Stitch(
+                gameObject,
+                unityGameObject);
+
+            // FIXME: maybe change the color for different teams?
         }
     }
 }
