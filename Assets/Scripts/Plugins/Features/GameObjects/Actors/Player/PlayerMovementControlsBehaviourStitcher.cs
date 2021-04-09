@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
@@ -19,17 +20,23 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
     {
         private readonly IKeyboardControls _keyboardControls;
         private readonly IKeyboardInput _keyboardInput;
+        private readonly IMouseInput _mouseInput;
+        private readonly IGuiHitTester _guiHitTester;
         private readonly ILogger _logger;
         private readonly IDebugConsoleManager _debugConsoleManager;
 
         public PlayerMovementControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
             IKeyboardInput keyboardInput,
+            IMouseInput mouseInput,
+            IGuiHitTester guiHitTester,
             ILogger logger,
             IDebugConsoleManager debugConsoleManager)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
+            _mouseInput = mouseInput;
+            _guiHitTester = guiHitTester;
             _logger = logger;
             _debugConsoleManager = debugConsoleManager;
         }
@@ -40,11 +47,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInputControlsBehaviour.Logger = _logger;
             playerInputControlsBehaviour.KeyboardControls = _keyboardControls;
             playerInputControlsBehaviour.KeyboardInput = _keyboardInput;
+            playerInputControlsBehaviour.MouseInput = _mouseInput;
             playerInputControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
+            playerInputControlsBehaviour.GuiHitTester = _guiHitTester;
             playerInputControlsBehaviour.MovementBehavior = gameObject
                 .GetRequiredComponent<IReadOnlyHasGameObject>()
                 .GameObject
-                .GetOnly<IMovementBehavior>();
+                .GetOnly<IMovementBehavior>();            
         }
     }
 }

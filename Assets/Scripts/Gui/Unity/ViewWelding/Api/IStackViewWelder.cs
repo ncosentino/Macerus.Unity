@@ -1,6 +1,7 @@
-﻿using ProjectXyz.Framework.ViewWelding.Api;
+﻿
+using ProjectXyz.Framework.ViewWelding.Api;
 
-namespace Assets.Scripts.Gui.UnityViewWelding.Api
+namespace Assets.Scripts.Gui.Unity.ViewWelding.Api
 {
     public interface IStackViewWelder : IViewWelder
     {

@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
 {
-
     public sealed class DrawWalkPathBehaviour :
         MonoBehaviour,
         IDrawWalkPathBehaviour

@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Gui.UnityViewWelding.Api;
-using Assets.Scripts.Gui.UnityViewWelding.Welders;
+﻿using Assets.Scripts.Gui.Unity.ViewWelding.Api;
+using Assets.Scripts.Gui.Unity.ViewWelding.Welders;
 
 using Autofac;
 
@@ -8,7 +8,7 @@ using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Gui.UnityViewWelding.Autofac
+namespace Assets.Scripts.Gui.Unity.ViewWelding.Autofac
 {
     public sealed class ProvidedImplementationsModule : Module
     {

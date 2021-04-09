@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Gui.UnityViewWelding.Api;
+﻿using Assets.Scripts.Gui.Unity.ViewWelding.Api;
 using Assets.Scripts.Scenes.Explore.Gui.Api;
 
 using ProjectXyz.Framework.ViewWelding.Api;

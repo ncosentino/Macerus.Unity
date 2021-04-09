@@ -2,14 +2,14 @@
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using UnityEngine;
 
-namespace Assets.Scripts.Gui.UnityViewWelding.Welders
+namespace Assets.Scripts.Gui.Unity.ViewWelding.Welders
 {
-    public sealed class InsetGameObjectWelder : IInsetWelder
+    public sealed class MarginGameObjectWelder : IMarginWelder
     {
         private readonly GameObject _parent;
         private readonly GameObject _child;
 
-        public InsetGameObjectWelder(
+        public MarginGameObjectWelder(
             GameObject parent,
             GameObject child)
         {
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Gui.UnityViewWelding.Welders
             _child = child;
         }
 
-        public void Weld(IInsetWeldOptions weldOptions)
+        public void Weld(IMarginWeldOptions weldOptions)
         {
             _child.transform.SetParent(
                 _parent.transform,
@@ -31,7 +31,7 @@ namespace Assets.Scripts.Gui.UnityViewWelding.Welders
                 transform.SetInsetAndSizeFromParentEdge(
                     RectTransform.Edge.Left,
                     weldOptions.LeftMargin,
-                    transform.rect.width - weldOptions.LeftMargin);
+                    transform.rect.width);
             }
 
             if (weldOptions.RightMargin != 0)
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Gui.UnityViewWelding.Welders
                 transform.SetInsetAndSizeFromParentEdge(
                     RectTransform.Edge.Right,
                     weldOptions.RightMargin,
-                    transform.rect.width - weldOptions.RightMargin);
+                    transform.rect.width);
             }
 
             if (weldOptions.TopMargin != 0)
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Gui.UnityViewWelding.Welders
                 transform.SetInsetAndSizeFromParentEdge(
                     RectTransform.Edge.Top,
                     weldOptions.TopMargin,
-                    transform.rect.height - weldOptions.TopMargin);
+                    transform.rect.height);
             }
 
             if (weldOptions.BottomMargin != 0)
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Gui.UnityViewWelding.Welders
                 transform.SetInsetAndSizeFromParentEdge(
                     RectTransform.Edge.Bottom,
                     weldOptions.BottomMargin,
-                    transform.rect.height - weldOptions.BottomMargin);
+                    transform.rect.height);
             }
         }
 

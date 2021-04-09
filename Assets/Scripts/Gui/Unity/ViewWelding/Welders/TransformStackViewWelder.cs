@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Gui.UnityViewWelding.Api;
+﻿using Assets.Scripts.Gui.Unity.ViewWelding.Api;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Gui.UnityViewWelding.Welders
+namespace Assets.Scripts.Gui.Unity.ViewWelding.Welders
 {
     public sealed class TransformStackViewWelder : IStackViewWelder
     {

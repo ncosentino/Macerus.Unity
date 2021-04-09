@@ -1,7 +1,7 @@
 ﻿using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using UnityEngine;
 
-namespace Assets.Scripts.Gui.UnityViewWelding.Welders
+namespace Assets.Scripts.Gui.Unity.ViewWelding.Welders
 {
     public sealed class SimpleTransformWelder : ISimpleWelder
     {

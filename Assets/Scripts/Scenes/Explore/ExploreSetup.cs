@@ -2,6 +2,7 @@
 using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis.Views.Resources;
+using Assets.Scripts.Gui.Unity;
 using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
@@ -12,6 +13,8 @@ using Assets.Scripts.Unity.GameObjects;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Scenes.Explore
 {
@@ -25,6 +28,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IMapManager _mapManager;
         private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
         private readonly ISoundPlayingBehaviourStitcher _soundPlayingBehaviourStitcher;
+        private readonly IUnityGuiHitTester _unityGuiHitTester;
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
@@ -34,7 +38,8 @@ namespace Assets.Scripts.Scenes.Explore
             IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
             IMapManager mapManager,
             IGuiBehaviourStitcher guiBehaviourStitcher,
-            ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher)
+            ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher,
+            IUnityGuiHitTester unityGuiHitTester)
         {
             _gameObjectManager = gameObjectManager;
             _mapPrefabFactory = mapPrefabFactory;
@@ -44,6 +49,7 @@ namespace Assets.Scripts.Scenes.Explore
             _mapManager = mapManager;
             _guiBehaviorStitcher = guiBehaviourStitcher;
             _soundPlayingBehaviourStitcher = soundPlayingBehaviourStitcher;
+            _unityGuiHitTester = unityGuiHitTester;
         }
 
         public void Setup()
@@ -59,6 +65,16 @@ namespace Assets.Scripts.Scenes.Explore
                 rootGameObject,
                 x => x.activeInHierarchy && x.name == "FollowCamera",
                 container);
+
+            _unityGuiHitTester.Setup(
+                _gameObjectManager
+                    .FindAll(x => x.name == "Canvas")
+                    .Single()
+                    .GetComponent<GraphicRaycaster>(),
+                _gameObjectManager
+                    .FindAll(x => x.name == "EventSystem")
+                    .Single()
+                    .GetComponent<EventSystem>());
 
             var consoleObject = new GameObject()
             {

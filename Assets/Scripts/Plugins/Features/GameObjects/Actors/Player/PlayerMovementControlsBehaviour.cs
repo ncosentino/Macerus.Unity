@@ -1,4 +1,8 @@
-﻿using Assets.Scripts.Input.Api;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Assets.Scripts.Gui;
+using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 
@@ -7,18 +11,26 @@ using Macerus.Api.Behaviors;
 using NexusLabs.Contracts;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerMovementControlsBehaviour :
         MonoBehaviour,
-        IPlayerMovementControlsBehaviour
+        IPlayerMovementControlsBehaviour,
+        IPointerUpHandler,
+        IPointerDownHandler
     {
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 
         public IKeyboardControls KeyboardControls { get; set; }
 
         public IKeyboardInput KeyboardInput { get; set; }
+
+        public IMouseInput MouseInput { get; set; }
+
+        public IGuiHitTester GuiHitTester { get; set; }
 
         public IMovementBehavior MovementBehavior { get; set; }
 
@@ -28,9 +40,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         {
             UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
             UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
+            UnityContracts.RequiresNotNull(this, MouseInput, nameof(MouseInput));
             UnityContracts.RequiresNotNull(this, MovementBehavior, nameof(MovementBehavior));
             UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
             UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
+            UnityContracts.RequiresNotNull(this, GuiHitTester, nameof(GuiHitTester));
         }
 
         private void Update()
@@ -40,12 +54,25 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void HandleMovementControls()
         {
+            if (MouseInput.GetMouseButtonDown(0))
+            {
+                if (!GuiHitTester.HitTest(MouseInput.Position).Any())
+                {
+                    var worldLocation = Camera.main.ScreenToWorldPoint(MouseInput.Position);
+                    // FIXME: actually generate a path here, not just a single point
+                    MovementBehavior.SetWalkPath(new[]
+                    {
+                        new System.Numerics.Vector2(worldLocation.x, worldLocation.y)
+                    });
+                }
+            }
+
             if (DebugConsoleManager.GetConsoleWindowVisible())
             {
                 return;
             }
 
-            float throttleY;
+            double throttleY;
             if (KeyboardInput.GetKey(KeyboardControls.MoveDown))
             {
                 throttleY = -1;
@@ -54,12 +81,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             {
                 throttleY = 1;
             }
-            else
+            else if(MovementBehavior.PointsToWalk.Count < 1)
             {
                 throttleY = 0;
             }
+            else
+            {
+                throttleY = MovementBehavior.ThrottleY;
+            }
 
-            float throttleX;
+            double throttleX;
             if (KeyboardInput.GetKey(KeyboardControls.MoveLeft))
             {
                 throttleX = -1;
@@ -68,13 +99,35 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             {
                 throttleX = 1;
             }
-            else
+            else if (MovementBehavior.PointsToWalk.Count < 1)
             {
                 throttleX = 0;
             }
+            else
+            {
+                throttleX = MovementBehavior.ThrottleX;
+            }
 
-            MovementBehavior.ThrottleX = throttleX;
-            MovementBehavior.ThrottleY = throttleY;
+            MovementBehavior.SetThrottle(throttleX, throttleY);
+        }
+
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left)
+            {
+                return;
+            }
+
+            if (eventData.pointerCurrentRaycast.gameObject == null)
+            {
+
+            }
         }
     }
 }

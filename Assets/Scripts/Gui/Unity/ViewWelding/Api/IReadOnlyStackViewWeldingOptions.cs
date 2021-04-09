@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Gui.UnityViewWelding.Api
+﻿namespace Assets.Scripts.Gui.Unity.ViewWelding.Api
 {
     public interface IReadOnlyStackViewWeldingOptions
     {
