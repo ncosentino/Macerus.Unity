@@ -23,6 +23,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
 
             CombatTurnManager.CombatStarted += CombatTurnManager_CombatStarted;
             CombatTurnManager.TurnProgressed += CombatTurnManager_TurnProgressed;
+            CombatTurnManager.CombatEnded += CombatTurnManager_CombatEnded;
         }
 
         private void OnDestroy()
@@ -31,7 +32,14 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
             {
                 CombatTurnManager.CombatStarted -= CombatTurnManager_CombatStarted;
                 CombatTurnManager.TurnProgressed -= CombatTurnManager_TurnProgressed;
+                CombatTurnManager.CombatEnded -= CombatTurnManager_CombatEnded;
             }
+        }
+
+        private void CombatTurnManager_CombatEnded(object sender, CombatEndedEventArgs e)
+        {
+            RigidBody.velocity = Vector2.zero;
+            RigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         private void CombatTurnManager_TurnProgressed(object sender, TurnProgressedEventArgs e)
