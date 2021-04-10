@@ -1,13 +1,10 @@
-using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
     public interface ITileLoader
     {
-        GameObject CreateTile(
-            int x,
-            int y,
-            int z,
+        Tile LoadTile(
             string relativeResourcePath,
             string spriteResourceName);
     }

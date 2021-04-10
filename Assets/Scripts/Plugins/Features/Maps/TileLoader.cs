@@ -1,49 +1,46 @@
 using Assets.Scripts.Plugins.Features.Maps.Api;
-using Assets.Scripts.Unity.Resources.Prefabs;
 using Assets.Scripts.Unity.Resources.Sprites;
 
+using ProjectXyz.Api.Framework.Collections;
 using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
     public sealed class TileLoader : ITileLoader
     {
         private readonly ISpriteLoader _spriteLoader;
-        private readonly IPrefabCreator _prefabCreator;
+        private readonly ICache<string, Tile> _tileCache;
 
         public TileLoader(
             ISpriteLoader spriteLoader,
-            IPrefabCreator prefabCreator)
+            ICache<string, Tile> tileCache)
         {;
             _spriteLoader = spriteLoader;
-            _prefabCreator = prefabCreator;
+            _tileCache = tileCache;
         }
 
-        public GameObject CreateTile(
-            int x,
-            int y,
-            int z,
+        public Tile LoadTile(
             string relativeResourcePath,
             string spriteResourceName)
         {
-            var tileObject = _prefabCreator.Create<GameObject>("Mapping/Prefabs/Tile");
-            tileObject.name = $"Tile ({x}x{y})";
-            tileObject.transform.position = new Vector3(
-                x,
-                y,
-                z);
-
-            var renderer = tileObject.GetComponent<SpriteRenderer>();
+            var cacheKey = relativeResourcePath + spriteResourceName;
+            if (_tileCache.TryGetValue(cacheKey, out var cachedTile))
+            {
+                return cachedTile;
+            }
 
             // FIXME: resource path/name to ID conversion
             var sprite = _spriteLoader.SpriteFromMultiSprite(
                 new StringIdentifier(relativeResourcePath),
                 new StringIdentifier(spriteResourceName));
-            renderer.sprite = sprite;
+            var unityTile = ScriptableObject.CreateInstance<Tile>();
+            unityTile.sprite = sprite;
 
-            return tileObject;
+            _tileCache.AddOrUpdate(cacheKey, unityTile);
+            return unityTile;
         }
     }
 }

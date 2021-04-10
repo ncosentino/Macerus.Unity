@@ -7,6 +7,8 @@ using Autofac;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Shared.Framework.Collections;
 
+using UnityEngine.Tilemaps;
+
 namespace Assets.Scripts.Autofac.Unity
 {
     public sealed class ResourceModule : Module
@@ -14,14 +16,17 @@ namespace Assets.Scripts.Autofac.Unity
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .Register(x => new Cache<string, ISpriteSheet>(10))
+                .Register(x => new Cache<string, ISpriteSheet>(20))
                 .AsImplementedInterfaces();
             //.SingleInstance();
             // FIXME: we want to cache by IIdentifier
             //builder
-            //    .Register(x => new Cache<IIdentifier, ISpriteSheet>(10))
+            //    .Register(x => new Cache<IIdentifier, ISpriteSheet>(20))
             //    .AsImplementedInterfaces();
             //.SingleInstance();
+            builder
+                .Register(x => new Cache<string, Tile>(100))
+                .AsImplementedInterfaces();
             builder
                 .RegisterType<SpriteLoader>()
                 .AsImplementedInterfaces()
