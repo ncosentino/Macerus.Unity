@@ -1,7 +1,8 @@
 ﻿using Assets.Scripts.Unity;
 
+using Macerus.Plugins.Features.Stats;
+
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
@@ -10,16 +11,16 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
     {
         private readonly ITimeProvider _timeProvider;
         private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
-        private readonly IStatCalculationService _statCalculationService;
+        private readonly IStatCalculationServiceAmenity _statCalculationServiceAmenity;
 
         public ResourceOrbBehaviourStitcher(
             ITimeProvider timeProvider,
             IReadOnlyMapGameObjectManager mapGameObjectManager,
-            IStatCalculationService statCalculationService)
+            IStatCalculationServiceAmenity statCalculationServiceAmenity)
         {
             _timeProvider = timeProvider;
             _mapGameObjectManager = mapGameObjectManager;
-            _statCalculationService = statCalculationService;
+            _statCalculationServiceAmenity = statCalculationServiceAmenity;
         }
 
         public IReadOnlyResourceOrbBehaviour Stitch(
@@ -32,7 +33,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
                 .AddComponent<ResourceOrbBehaviour>();
             resourceOrbBehaviour.TimeProvider = _timeProvider;
             resourceOrbBehaviour.MapGameObjectManager = _mapGameObjectManager;
-            resourceOrbBehaviour.StatCalculationService = _statCalculationService;
+            resourceOrbBehaviour.StatCalculationServiceAmenity = _statCalculationServiceAmenity;
             resourceOrbBehaviour.CurrentStatDefinitionId = currentStatDefinitionId;
             resourceOrbBehaviour.MaximumStatDefinitionId = maximumStatDefinitionId;
             resourceOrbBehaviour.ResourceOrbPrefab = resourceOrbPrefab;

@@ -3,15 +3,13 @@
 using Assets.Scripts.Unity;
 
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.Stats;
 
 using NexusLabs.Contracts;
 
-using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Plugins.Enchantments.Stats;
-using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
@@ -30,7 +28,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
 
         public IResourceOrbPrefab ResourceOrbPrefab { get; set; }
 
-        public IStatCalculationService StatCalculationService { get; set; }
+        public IStatCalculationServiceAmenity StatCalculationServiceAmenity { get; set; }
 
         public IIdentifier CurrentStatDefinitionId { get; set; }
 
@@ -41,13 +39,13 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
             UnityContracts.RequiresNotNull(this, TimeProvider, nameof(TimeProvider));
             UnityContracts.RequiresNotNull(this, MapGameObjectManager, nameof(MapGameObjectManager));
             UnityContracts.RequiresNotNull(this, ResourceOrbPrefab, nameof(ResourceOrbPrefab));
-            UnityContracts.RequiresNotNull(this, StatCalculationService, nameof(StatCalculationService));
+            UnityContracts.RequiresNotNull(this, StatCalculationServiceAmenity, nameof(StatCalculationServiceAmenity));
             UnityContracts.RequiresNotNull(this, CurrentStatDefinitionId, nameof(CurrentStatDefinitionId));
             UnityContracts.RequiresNotNull(this, MaximumStatDefinitionId, nameof(MaximumStatDefinitionId));
             UpdateFill(1);
         }
 
-        private void FixedUpdate()
+        private async void FixedUpdate()
         {
             var secondsSinceLastUpdate = TimeProvider.SecondsSinceStartOfGame - _lastUpdate;
             if (secondsSinceLastUpdate < 0.25)
@@ -66,17 +64,11 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
                 return;
             }
 
-            var context = new StatCalculationContext(
-                new IComponent[0],
-                new IEnchantment[0]);
-            var resourceCurrent = StatCalculationService.GetStatValue(
+            var resources = await StatCalculationServiceAmenity.GetStatValuesAsync(
                 player,
-                CurrentStatDefinitionId,
-                context);
-            var resourceMaximum = StatCalculationService.GetStatValue(
-                player,
-                MaximumStatDefinitionId,
-                context);
+                new[] { CurrentStatDefinitionId, MaximumStatDefinitionId });
+            var resourceCurrent = resources[CurrentStatDefinitionId];
+            var resourceMaximum = resources[MaximumStatDefinitionId];
             UpdateFill(resourceMaximum == 0 ? 0 : resourceCurrent / resourceMaximum);
         }
 

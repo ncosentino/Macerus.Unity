@@ -1,7 +1,8 @@
 ﻿using Assets.Scripts.Unity;
 
+using Macerus.Plugins.Features.Stats;
+
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
@@ -15,8 +16,8 @@ namespace Assets.Scripts.Plugins.Features.Hud.ResourceOrbs
         IIdentifier MaximumStatDefinitionId { get; }
         
         IResourceOrbPrefab ResourceOrbPrefab { get; }
-        
-        IStatCalculationService StatCalculationService { get; }
+
+        IStatCalculationServiceAmenity StatCalculationServiceAmenity { get; }
         
         ITimeProvider TimeProvider { get; }
     }
