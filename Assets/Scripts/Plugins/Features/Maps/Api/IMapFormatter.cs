@@ -11,7 +11,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
     public interface IMapFormatter
     {
         void FormatMap(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             IMap map);
 
         void RemoveGameObjects(

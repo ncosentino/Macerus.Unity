@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common;
@@ -14,7 +15,6 @@ using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
@@ -22,13 +22,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
     public sealed class MapFormatter : IMapFormatter
     {
-        private const string GAME_OBJECT_LAYER_NAME = "Game Objects";
         private readonly ITileLoader _tileLoader;
-        private readonly IPrefabCreator _prefabCreator;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
         private readonly ILogger _logger;
 
+        private IMapPrefab _mapPrefab;
         private int _maxWidth;
         private int _maxHeight;
         private int _minWidth;
@@ -36,27 +35,26 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         public MapFormatter(
             ITileLoader tileLoader,
-            IPrefabCreator prefabCreator,
             IObjectDestroyer objectDestroyer,
             IUnityGameObjectRepository unityGameObjectRepository,
             ILogger logger)
         {
             _tileLoader = tileLoader;
-            _prefabCreator = prefabCreator;
             _objectDestroyer = objectDestroyer;
             _unityGameObjectRepository = unityGameObjectRepository;
             _logger = logger;
         }
 
         public void FormatMap(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             IMap map)
         {
-            _logger.Debug($"Formatting map object '{mapObject}' for '{map}'...");
+            _mapPrefab = mapPrefab;
+            _logger.Debug($"Formatting map object '{mapPrefab}' for '{map}'...");
 
-            var parentMapObjectTransform = mapObject.transform;
+            var parentMapObjectTransform = mapPrefab.GameObject.transform;
 
-            foreach (Transform child in parentMapObjectTransform)
+            foreach (Transform child in _mapPrefab.GameObjectLayer.transform)
             {
                 // NOTE: we *MUST* remove the parent reference because
                 // destruction doesn't actually occur until the next engine
@@ -65,17 +63,14 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 child.transform.parent = null;
                 _objectDestroyer.Destroy(child.gameObject);
             }
-
-            var tilemapLayerObject = _prefabCreator.Create<GameObject>("mapping/prefabs/tilemap");
-            tilemapLayerObject.name = "TileMap";
-            tilemapLayerObject.transform.parent = parentMapObjectTransform;
-            var tilemap = tilemapLayerObject.GetComponent<Tilemap>();
             
             int z = 0;
             _minWidth = int.MaxValue;
             _maxWidth = int.MinValue;
             _minHeight = int.MaxValue;
             _maxHeight = int.MinValue;
+
+            mapPrefab.Tilemap.ClearAllTiles();
             foreach (var mapLayer in map.Layers)
             {
                 foreach (var tile in mapLayer.Tiles)
@@ -84,14 +79,14 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     var unityTile = _tileLoader.LoadTile(
                         tileResource.TilesetResourcePath,
                         tileResource.SpriteResourceName);
-                    tilemap.SetTile(
+                    mapPrefab.Tilemap.SetTile(
                         new Vector3Int(tile.X, tile.Y, z),
                         unityTile);
 
-                    _maxWidth = System.Math.Max(_maxWidth, tile.X);
-                    _minWidth = System.Math.Min(_minWidth, tile.X);
-                    _maxHeight = System.Math.Max(_maxHeight, tile.Y);
-                    _minHeight = System.Math.Min(_minHeight, tile.Y);
+                    _maxWidth = Math.Max(_maxWidth, tile.X);
+                    _minWidth = Math.Min(_minWidth, tile.X);
+                    _maxHeight = Math.Max(_maxHeight, tile.Y);
+                    _minHeight = Math.Min(_minHeight, tile.Y);
                 }
                 
                 z++;
@@ -104,20 +99,15 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     var unityTile = _tileLoader.LoadTile(
                         "mapping/tilesets/",
                         "tile-border-overlay");
-                    tilemap.SetTile(
+                    mapPrefab.Tilemap.SetTile(
                         new Vector3Int(i, j, z),
                         unityTile);
                 }
             }
 
-            // FIXME: probably want multiple layers and stuff for this
-            var gameObjectLayerObject = new GameObject(GAME_OBJECT_LAYER_NAME);
-            gameObjectLayerObject.transform.parent = parentMapObjectTransform;
-            gameObjectLayerObject.transform.Translate(0, 0, -1);
+            mapPrefab.Tilemap.RefreshAllTiles();
 
-            tilemap.RefreshAllTiles();
-
-            _logger.Debug($"Formatted map object '{mapObject}' for '{map}'.");
+            _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
         }
 
         public void RemoveGameObjects(
@@ -131,7 +121,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IEnumerable<IIdentifier> gameObjectIds)
         {
             var set = new HashSet<IIdentifier>(gameObjectIds);
-            var gameObjectLayerObject = FindGameObjectLayer(mapObject);
+            var gameObjectLayerObject = _mapPrefab.GameObjectLayer;
 
             foreach (var toRemove in gameObjectLayerObject
                 .GetComponentsInChildren<IdentifierBehaviour>() // FIXME: this is a hack to require concrete type
@@ -152,7 +142,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             GameObject mapObject,
             IEnumerable<IGameObject> gameObjects)
         {
-            var gameObjectLayerObject = FindGameObjectLayer(mapObject);
+            var gameObjectLayerObject = _mapPrefab.GameObjectLayer;
 
             foreach (var gameObject in gameObjects)
             {
@@ -163,14 +153,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 unityGameObject.transform.parent = gameObjectLayerObject.transform;
                 _logger.Debug($"Adding unity game object '{unityGameObject}' to '{gameObjectLayerObject}'...");
             }
-        }
-
-        private GameObject FindGameObjectLayer(GameObject mapObject)
-        {
-            var gameObjectLayer = mapObject
-                .GetChildGameObjects()
-                .First(x => x.name == GAME_OBJECT_LAYER_NAME);
-            return gameObjectLayer;
         }
     }
 }

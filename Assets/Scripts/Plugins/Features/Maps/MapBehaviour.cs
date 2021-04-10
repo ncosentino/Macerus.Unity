@@ -24,6 +24,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
         MonoBehaviour,
         IMapBehaviour
     {
+        private IMapPrefab _mapPrefab;
+
         public IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
 
         public IMapProvider MapProvider { get; set; }
@@ -46,6 +48,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             UnityContracts.RequiresNotNull(this, WeatherManager, nameof(WeatherManager));
             UnityContracts.RequiresNotNull(this, WeatherTableRepositoryFacade, nameof(WeatherTableRepositoryFacade));
             UnityContracts.RequiresNotNull(this, Dispatcher, nameof(Dispatcher));
+            _mapPrefab = new MapPrefab(gameObject);
 
             MapGameObjectManager.Synchronized += GameObjectManager_Synchronized;
             MapProvider.MapChanged += MapProvider_MapChanged;
@@ -104,7 +107,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         private void SwitchMap(IMap map)
         {
-            MapFormatter.FormatMap(gameObject, map);
+            MapFormatter.FormatMap(
+                _mapPrefab,
+                map);
 
             var weatherTableId = map
                 .Get<IMapWeatherTableBehavior>()
