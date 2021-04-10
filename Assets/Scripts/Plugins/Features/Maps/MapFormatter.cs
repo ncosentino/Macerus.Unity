@@ -104,7 +104,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     var unityTile = _tileLoader.LoadTile(
                         "mapping/tilesets/",
                         "tile-border-overlay");
-                    _tilemap.SetTile(
+                    tilemap.SetTile(
                         new Vector3Int(i, j, z),
                         unityTile);
                 }
