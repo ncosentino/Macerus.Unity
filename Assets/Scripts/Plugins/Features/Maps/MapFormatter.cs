@@ -6,7 +6,6 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources.Prefabs;
-using Assets.Scripts.Unity.Resources.Sprites;
 
 using Macerus.Plugins.Features.Mapping;
 
@@ -29,6 +28,11 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
         private readonly ILogger _logger;
+
+        private int _maxWidth;
+        private int _maxHeight;
+        private int _minWidth;
+        private int _minHeight;
 
         public MapFormatter(
             ITileLoader tileLoader,
@@ -68,6 +72,10 @@ namespace Assets.Scripts.Plugins.Features.Maps
             var tilemap = tilemapLayerObject.GetComponent<Tilemap>();
             
             int z = 0;
+            _minWidth = int.MaxValue;
+            _maxWidth = int.MinValue;
+            _minHeight = int.MaxValue;
+            _maxHeight = int.MinValue;
             foreach (var mapLayer in map.Layers)
             {
                 foreach (var tile in mapLayer.Tiles)
@@ -79,17 +87,35 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     tilemap.SetTile(
                         new Vector3Int(tile.X, tile.Y, z),
                         unityTile);
+
+                    _maxWidth = System.Math.Max(_maxWidth, tile.X);
+                    _minWidth = System.Math.Min(_minWidth, tile.X);
+                    _maxHeight = System.Math.Max(_maxHeight, tile.Y);
+                    _minHeight = System.Math.Min(_minHeight, tile.Y);
                 }
                 
                 z++;
             }
 
-            tilemap.RefreshAllTiles();
+            for (int i = _minWidth; i <= _maxWidth; i++)
+            {
+                for (int j = _minHeight; j <= _maxHeight; j++)
+                {
+                    var unityTile = _tileLoader.LoadTile(
+                        "mapping/tilesets/",
+                        "tile-border-overlay");
+                    _tilemap.SetTile(
+                        new Vector3Int(i, j, z),
+                        unityTile);
+                }
+            }
 
             // FIXME: probably want multiple layers and stuff for this
             var gameObjectLayerObject = new GameObject(GAME_OBJECT_LAYER_NAME);
             gameObjectLayerObject.transform.parent = parentMapObjectTransform;
             gameObjectLayerObject.transform.Translate(0, 0, -1);
+
+            tilemap.RefreshAllTiles();
 
             _logger.Debug($"Formatted map object '{mapObject}' for '{map}'.");
         }
