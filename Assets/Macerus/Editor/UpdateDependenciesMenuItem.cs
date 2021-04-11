@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 using UnityEditor;
@@ -11,7 +10,7 @@ namespace Assets.Scripts.UnityEditor
     {
         private static bool _isUpdateDependenciesDisabled;
 
-        private const string UpdateAndBuildMenu = "Macerus Tools/Update and Build Dependencies";
+        private const string UpdateAndBuildMenu = "Macerus Tools/Build+Copy Dependencies";
         [MenuItem(UpdateAndBuildMenu)]
         public static async void UpdateAndBuildDependencies()
         {
@@ -21,7 +20,7 @@ namespace Assets.Scripts.UnityEditor
         [MenuItem(UpdateAndBuildMenu, true)]
         public static bool IsUpdateAndBuildDependenciesEnabled() => !_isUpdateDependenciesDisabled;
 
-        private const string OnlyUpdateMenu = "Macerus Tools/Only Update Dependencies";
+        private const string OnlyUpdateMenu = "Macerus Tools/Only Copy Dependencies";
         [MenuItem(OnlyUpdateMenu)]
         public static async void OnlyUpdateDependencies()
         {
@@ -52,4 +51,3 @@ namespace Assets.Scripts.UnityEditor
         }
     }
 }
-#endif

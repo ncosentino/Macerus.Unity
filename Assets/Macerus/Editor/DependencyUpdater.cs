@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -17,12 +16,15 @@ namespace Assets.Scripts.UnityEditor
 {
     public sealed class DependencyUpdater
     {
+        private const string MSBUILD_CONFIGURATION = "Debug";
+        private const string MSBUILD_VERBOSITY = "quiet";
+        private static readonly string MSBUILD_PARAMS = $"-t:Build -p:Configuration={MSBUILD_CONFIGURATION} -verbosity:{MSBUILD_VERBOSITY} -clp:ErrorsOnly";
         private const string MSBUILD_EXE_PATH = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe";
 
         private static readonly IReadOnlyCollection<string> BUILD_TARGETS = new[]
         {
-            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz.sln")).LocalPath + "\"",
-            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\macerus-game\macerus.sln")).LocalPath + "\"",
+            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\..\..\libraries\projectxyz\projectxyz\projectxyz.csproj")).LocalPath + "\" " + MSBUILD_PARAMS,
+            "\"" + new Uri(Path.Combine(Application.dataPath, @"..\..\macerus-game\macerus\macerus.csproj")).LocalPath + "\" " + MSBUILD_PARAMS,
         };
 
         private readonly string _dataPath;
@@ -437,4 +439,3 @@ namespace Assets.Scripts.UnityEditor
         }
     }
 }
-#endif
