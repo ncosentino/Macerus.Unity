@@ -54,7 +54,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, SkillHandlerFacade, nameof(SkillHandlerFacade));
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             HandleQuickSlotControls();
         }
