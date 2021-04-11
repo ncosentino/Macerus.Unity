@@ -2,16 +2,12 @@
 
 using Autofac;
 
-using IngameDebugConsole;
-
 using UnityEngine;
 
-namespace Assets.Scripts.Console
+namespace Assets.Scripts.Plugins.Features.Console
 {
     public sealed class GlobalConsoleCommandsBehaviour : MonoBehaviour
     {
-        private ProjectXyz.Api.Logging.ILogger _logger;
-
         private void Start()
         {
             // NOTE: we're violating the stitcher pattern here and *YES* using 
@@ -21,16 +17,11 @@ namespace Assets.Scripts.Console
             // without making separate classes for stitching etc...
             var container = GameDependencyBehaviour.Container;
 
-            _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
+            container
+                .Resolve<IConsoleCommandRegistrar>()
+                .RegisterDiscoverableCommandsFromInstance(this);
         }
 
-        private void AddCommand(string name, string description)
-        {
-            DebugLogConsole.AddCommandInstance(
-                name,
-                description,
-                name,
-                this);
-        }
+        // FIXME: define commands here with the discoverable attribute
     }
 }

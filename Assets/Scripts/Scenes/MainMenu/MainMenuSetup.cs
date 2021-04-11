@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
-using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
+using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
 using Assets.Scripts.Scenes.MainMenu.Input;
 using Assets.Scripts.Unity.GameObjects;

@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 
-using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis.Views.Resources;
 using Assets.Scripts.Gui.Unity;
 using Assets.Scripts.Plugins.Features.Audio.Api;
+using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Console;

@@ -2,17 +2,18 @@
 
 using Assets.Scripts;
 using Assets.Scripts.Behaviours;
+using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using Autofac;
 
-using IngameDebugConsole;
-
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 using Macerus.Plugins.Features.Weather;
 
+using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Entities;
@@ -43,6 +44,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IWeatherManager _weatherManager;
         private ITurnBasedManager _turnBasedManager;
         private IMapFormatter _mapFormatter;
+        private IEncounterManager _encounterManager;
+        private IFilterContextProvider _filterContextProvider;
 
         private void Start()
         {
@@ -63,59 +66,30 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _weatherManager = container.Resolve<IWeatherManager>();
             _turnBasedManager = container.Resolve<ITurnBasedManager>();
             _mapFormatter = container.Resolve<IMapFormatter>();
+            _encounterManager = container.Resolve<IEncounterManager>();
+            _filterContextProvider = container.Resolve<IFilterContextProvider>();
 
-            AddCommand(
-                nameof(PlayerAddSkill),
-                "Adds a skill with the specified ID to the player.");
-            AddCommand(
-                nameof(PlayerGetStat),
-                "Gets a stat value with the specified ID (or term) from the player.");
-            AddCommand(
-                nameof(PlayerSetBaseStat),
-                "Sets a base stat value with the specified ID (or term) and valu on the player.");
-            AddCommand(
-                nameof(PlayerGetSize),
-                "Gets the size of the player.");
-            AddCommand(
-                nameof(PlayerGetLocation),
-                "Gets the location of the player.");
-            AddCommand(
-                nameof(PlayerSetLocation),
-                "Sets the location of the player.");
-            AddCommand(
-                nameof(WeatherSetTable),
-                "Sets the weather table to one with the specified ID.");
-            AddCommand(
-                nameof(TurnBasedManagerGetPoperties),
-                "Gets the properties for the turn based manager.");
-            AddCommand(
-                nameof(TurnBasedManagerSetClearApplicableOnUpdate),
-                "Sets whether or not to clear the applicable objects on update for the turn based manager.");
-            AddCommand(
-                nameof(TurnBasedManagerSetGlobalSync),
-                "Sets whether or not to use global syncing for the turn based manager.");
-            AddCommand(
-                nameof(TurnBasedManagerSetSyncTurnsFromElapsedTime),
-                "Sets whether or not to sync turns from elapsed time for the turn based manager.");
-            AddCommand(
-                nameof(MapGridLinesToggle),
-                "Toggles the map grid lines on or off.");
+            container
+                .Resolve<IConsoleCommandRegistrar>()
+                .RegisterDiscoverableCommandsFromInstance(this);
         }
 
-        private void AddCommand(string name, string description)
+        [DiscoverableConsoleCommand("Starts an encounter with the specified ID.")]
+        private void EncounterStart(string encounterId)
         {
-            DebugLogConsole.AddCommandInstance(
-                name,
-                description,
-                name,
-                this);
+            var filterContext = _filterContextProvider.GetContext();
+            _encounterManager.StartEncounter(
+                filterContext,
+                new StringIdentifier(encounterId));
         }
 
+        [DiscoverableConsoleCommand("Toggles the map grid lines on or off.")]
         private void MapGridLinesToggle(bool enabled)
         {
             _mapFormatter.ToggleGridLines(enabled);
         }
 
+        [DiscoverableConsoleCommand("Gets the location of the player.")]
         private void PlayerGetLocation()
         {
             var worldLocationBehavior = _mapGameObjectManager
@@ -126,6 +100,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"({worldLocationBehavior.X},{worldLocationBehavior.Y})");
         }
 
+        [DiscoverableConsoleCommand("Sets the location of the player.")]
         private void PlayerSetLocation(double x, double y)
         {
             var worldLocationBehavior = _mapGameObjectManager
@@ -145,6 +120,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"Set player location to ({worldLocationBehavior.X},{worldLocationBehavior.Y}).");
         }
 
+        [DiscoverableConsoleCommand("Gets the size of the player.")]
         private void PlayerGetSize()
         {
             var worldLocationBehavior = _mapGameObjectManager
@@ -155,21 +131,25 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"({worldLocationBehavior.Width},{worldLocationBehavior.Height})");
         }
 
+        [DiscoverableConsoleCommand("Sets whether or not to use global syncing for the turn based manager.")]
         private void TurnBasedManagerSetGlobalSync(bool value)
         {
             _turnBasedManager.GlobalSync = value;
         }
 
+        [DiscoverableConsoleCommand("Sets whether or not to clear the applicable objects on update for the turn based manager.")]
         private void TurnBasedManagerSetClearApplicableOnUpdate(bool value)
         {
             _turnBasedManager.ClearApplicableOnUpdate = value;
         }
 
+        [DiscoverableConsoleCommand("Sets whether or not to sync turns from elapsed time for the turn based manager.")]
         private void TurnBasedManagerSetSyncTurnsFromElapsedTime(bool value)
         {
             _turnBasedManager.SyncTurnsFromElapsedTime = value;
         }
 
+        [DiscoverableConsoleCommand("Gets the properties for the turn based manager.")]
         private void TurnBasedManagerGetPoperties()
         {
             _logger.Info(
@@ -181,6 +161,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"\t\t{string.Join("\r\n\t\t", _turnBasedManager.ApplicableGameObjects)}");
         }
 
+        [DiscoverableConsoleCommand("Sets the weather table to one with the specified ID.")]
         private void WeatherSetTable(string rawWeatherTableId)
         {
             var weatherTableId = new StringIdentifier(rawWeatherTableId);
@@ -195,6 +176,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _weatherManager.WeatherTable = weatherTable;
         }
 
+        [DiscoverableConsoleCommand("Gets a stat value with the specified ID (or term) from the player.")]
         private void PlayerGetStat(string rawStatDefinitionId)
         {
             var player = _mapGameObjectManager
@@ -228,6 +210,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _logger.Info($"{value}");
         }
 
+        [DiscoverableConsoleCommand("Sets a base stat value with the specified ID (or term) and valu on the player.")]
         private void PlayerSetBaseStat(string rawStatDefinitionId, double value)
         {
             var player = _mapGameObjectManager
@@ -256,6 +239,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 .MutateStats(stats => stats[statDefinitionId] = value);
         }
 
+        [DiscoverableConsoleCommand("Adds a skill with the specified ID to the player.")]
         private void PlayerAddSkill(string skillId)
         {
             var player = _mapGameObjectManager
