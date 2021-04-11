@@ -2,6 +2,8 @@
 
 using Assets.Scripts;
 using Assets.Scripts.Behaviours;
+using Assets.Scripts.Plugins.Features.Maps.Api;
+using Assets.Scripts.Unity.GameObjects;
 
 using Autofac;
 
@@ -32,6 +34,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
     public sealed class ConsoleCommandsBehaviour : MonoBehaviour
     {
         private ProjectXyz.Api.Logging.ILogger _logger;
+        private IUnityGameObjectManager _unityGameObjectManager;
         private IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private ISkillAmenity _skillAmenity;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
@@ -39,7 +42,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IWeatherAmenity _weatherAmenity;
         private IWeatherManager _weatherManager;
         private ITurnBasedManager _turnBasedManager;
-
+        private IMapFormatter _mapFormatter;
 
         private void Start()
         {
@@ -52,12 +55,14 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
             _mapGameObjectManager = container.Resolve<IReadOnlyMapGameObjectManager>();
+            _unityGameObjectManager = container.Resolve<IUnityGameObjectManager>();
             _skillAmenity = container.Resolve<ISkillAmenity>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
             _statCalculationService = container.Resolve<IStatCalculationService>();
             _weatherAmenity = container.Resolve<IWeatherAmenity>();
             _weatherManager = container.Resolve<IWeatherManager>();
             _turnBasedManager = container.Resolve<ITurnBasedManager>();
+            _mapFormatter = container.Resolve<IMapFormatter>();
 
             AddCommand(
                 nameof(PlayerAddSkill),
@@ -68,6 +73,15 @@ namespace Assets.Scripts.Scenes.Explore.Console
             AddCommand(
                 nameof(PlayerSetBaseStat),
                 "Sets a base stat value with the specified ID (or term) and valu on the player.");
+            AddCommand(
+                nameof(PlayerGetSize),
+                "Gets the size of the player.");
+            AddCommand(
+                nameof(PlayerGetLocation),
+                "Gets the location of the player.");
+            AddCommand(
+                nameof(PlayerSetLocation),
+                "Sets the location of the player.");
             AddCommand(
                 nameof(WeatherSetTable),
                 "Sets the weather table to one with the specified ID.");
@@ -83,6 +97,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
             AddCommand(
                 nameof(TurnBasedManagerSetSyncTurnsFromElapsedTime),
                 "Sets whether or not to sync turns from elapsed time for the turn based manager.");
+            AddCommand(
+                nameof(MapGridLinesToggle),
+                "Toggles the map grid lines on or off.");
         }
 
         private void AddCommand(string name, string description)
@@ -92,6 +109,50 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 description,
                 name,
                 this);
+        }
+
+        private void MapGridLinesToggle(bool enabled)
+        {
+            _mapFormatter.ToggleGridLines(enabled);
+        }
+
+        private void PlayerGetLocation()
+        {
+            var worldLocationBehavior = _mapGameObjectManager
+                .GameObjects
+                .Single(x => x.Has<IPlayerControlledBehavior>())
+                .GetOnly<IWorldLocationBehavior>();
+            _logger.Info(
+                $"({worldLocationBehavior.X},{worldLocationBehavior.Y})");
+        }
+
+        private void PlayerSetLocation(double x, double y)
+        {
+            var worldLocationBehavior = _mapGameObjectManager
+                .GameObjects
+                .Single(x => x.Has<IPlayerControlledBehavior>())
+                .GetOnly<IWorldLocationBehavior>();
+            var unityPlayerObject = _unityGameObjectManager
+                .FindAll(x => x.IsPlayerControlled())
+                .Single();
+
+            worldLocationBehavior.SetLocation(x, y);
+            unityPlayerObject.transform.position = new Vector3(
+                (float)x,
+                (float)y,
+                unityPlayerObject.transform.position.z);
+            _logger.Info(
+                $"Set player location to ({worldLocationBehavior.X},{worldLocationBehavior.Y}).");
+        }
+
+        private void PlayerGetSize()
+        {
+            var worldLocationBehavior = _mapGameObjectManager
+                .GameObjects
+                .Single(x => x.Has<IPlayerControlledBehavior>())
+                .GetOnly<IWorldLocationBehavior>();
+            _logger.Info(
+                $"({worldLocationBehavior.Width},{worldLocationBehavior.Height})");
         }
 
         private void TurnBasedManagerSetGlobalSync(bool value)
