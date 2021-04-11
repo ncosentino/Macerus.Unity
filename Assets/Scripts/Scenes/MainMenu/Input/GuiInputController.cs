@@ -24,10 +24,6 @@ namespace Assets.Scripts.Scenes.MainMenu.Input
                 // is a sub-menu open?
                 // is the game running behind the main menu?
             }
-            else if (UnityEngine.Input.GetKeyUp(_keyboardControls.DebugConsole))
-            {
-                _debugConsoleManager.Toggle();
-            }
         }
     }
 }

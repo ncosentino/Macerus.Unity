@@ -46,7 +46,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
         private void Start()
         {
-            // NOTE: we're violating the sticher pattern here and *YES* using 
+            // NOTE: we're violating the stitcher pattern here and *YES* using 
             // the most evil service locator pattern here BUT here me out...
             // This class will probably be mostly for test methods and this is 
             // the easiest shortcut for getting access to all kinds of stuff

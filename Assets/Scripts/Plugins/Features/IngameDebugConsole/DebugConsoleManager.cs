@@ -41,14 +41,6 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
                 .interactable;
         }
 
-        public void Toggle()
-        {
-            _logger.Debug("Toggling debug console...");
-            var singleInstance = GetSingleInstanceOfConsole();
-            singleInstance.SetActive(!singleInstance.activeSelf);
-            _logger.Debug("Toggled debug console.");
-        }
-
         private GameObject GetSingleInstanceOfConsole()
         {
             if (_debugConsole != null)

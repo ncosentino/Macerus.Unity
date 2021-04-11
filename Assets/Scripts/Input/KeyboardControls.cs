@@ -36,9 +36,6 @@ namespace Assets.Scripts.Input
         /// <inheritdoc />
         public KeyCode GuiClose { get; } = KeyCode.Escape;
 
-        /// <inheritdoc />
-        public KeyCode DebugConsole { get; } = KeyCode.BackQuote;
-
         public KeyCode Summon { get; } = KeyCode.Semicolon;
     }
 }

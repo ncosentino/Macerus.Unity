@@ -4,7 +4,6 @@ namespace Assets.Scripts.Input.Api
 {
     public interface IKeyboardControls
     {
-        #region Properties
         KeyCode QuickSlot1 { get; }
 
         KeyCode QuickSlot2 { get; }
@@ -25,9 +24,6 @@ namespace Assets.Scripts.Input.Api
 
         KeyCode GuiClose { get; }
 
-        KeyCode DebugConsole { get; }
-
         KeyCode Summon { get; }
-        #endregion
     }
 }

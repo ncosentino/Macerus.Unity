@@ -3,10 +3,8 @@
 using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
-using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using ILogger = ProjectXyz.Api.Logging.ILogger;
@@ -34,12 +32,6 @@ namespace Assets.Scripts.Scenes.Explore.Input
 
         public void Update(float deltaTime)
         {
-            if (UnityEngine.Input.GetKeyUp(_keyboardControls.DebugConsole))
-            {
-                _debugConsoleManager.Toggle();
-                return;
-            }
-
             if (_debugConsoleManager.GetConsoleWindowVisible())
             {
                 return;
