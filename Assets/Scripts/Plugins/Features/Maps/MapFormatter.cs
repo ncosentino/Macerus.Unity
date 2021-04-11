@@ -6,7 +6,6 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
-using Assets.Scripts.Unity.Resources.Prefabs;
 
 using Macerus.Plugins.Features.Mapping;
 
@@ -27,6 +26,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
         private readonly ILogger _logger;
 
+        private bool _gridLinesEnabled;
         private IMapPrefab _mapPrefab;
         private int _maxWidth;
         private int _maxHeight;
@@ -92,23 +92,16 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 z++;
             }
 
-            for (int i = _minWidth; i <= _maxWidth; i++)
-            {
-                for (int j = _minHeight; j <= _maxHeight; j++)
-                {
-                    var unityTile = _tileLoader.LoadTile(
-                        "mapping/tilesets/",
-                        "tile-border-overlay");
-                    mapPrefab.Tilemap.SetTile(
-                        new Vector3Int(i, j, z),
-                        unityTile);
-                }
-            }
-
+            // set these back (if needed) because we just obliterated all the
+            // tiles by formatting the tile map
+            ToggleGridLines(_gridLinesEnabled, false);
+            
             mapPrefab.Tilemap.RefreshAllTiles();
-
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
         }
+
+        public void ToggleGridLines(bool enabled) =>
+            ToggleGridLines(enabled, true);
 
         public void RemoveGameObjects(
             GameObject mapObject,
@@ -152,6 +145,34 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 // add the game object to the correct parent
                 unityGameObject.transform.parent = gameObjectLayerObject.transform;
                 _logger.Debug($"Adding unity game object '{unityGameObject}' to '{gameObjectLayerObject}'...");
+            }
+        }
+
+        private void ToggleGridLines(
+            bool enabled,
+            bool forceRefresh)
+        {
+            _gridLinesEnabled = enabled;
+            const int HIGHLIGHT_Z_ORDER = int.MaxValue;
+
+            for (int i = _minWidth; i <= _maxWidth; i++)
+            {
+                for (int j = _minHeight; j <= _maxHeight; j++)
+                {
+                    var unityTile = enabled
+                        ? _tileLoader.LoadTile(
+                            "mapping/tilesets/",
+                            "tile-border-overlay")
+                        : null;
+                    _mapPrefab.Tilemap.SetTile(
+                        new Vector3Int(i, j, HIGHLIGHT_Z_ORDER),
+                        unityTile);
+                }
+            }
+
+            if (forceRefresh)
+            {
+                _mapPrefab.Tilemap.RefreshAllTiles();
             }
         }
     }

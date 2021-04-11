@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
-    public interface IMapFormatter
+    public interface IMapFormatter : IMapGridLineFormatter
     {
         void FormatMap(
             IMapPrefab mapPrefab,
