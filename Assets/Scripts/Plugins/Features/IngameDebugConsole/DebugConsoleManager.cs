@@ -8,24 +8,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
 {
-    using ILogger = ProjectXyz.Api.Logging.ILogger;
-
     public sealed class DebugConsoleManager : IDebugConsoleManager
     {
         private readonly IUnityGameObjectManager _gameObjectManager;
-        private readonly IObjectDestroyer _objectDestroyer;
-        private readonly ILogger _logger;
         
         private GameObject _debugConsole;
 
-        public DebugConsoleManager(
-            IUnityGameObjectManager gameObjectManager,
-            IObjectDestroyer objectDestroyer,
-            ILogger logger)
+        public DebugConsoleManager(IUnityGameObjectManager gameObjectManager)
         {
             _gameObjectManager = gameObjectManager;
-            _objectDestroyer = objectDestroyer;
-            _logger = logger;
         }
 
         public bool GetConsoleWindowVisible()
