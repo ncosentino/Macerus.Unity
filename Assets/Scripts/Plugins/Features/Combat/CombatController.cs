@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Plugins.Features.Maps.Api;
+﻿using Assets.Scripts.Plugins.Features.Controls;
+using Assets.Scripts.Plugins.Features.Maps.Api;
 
 using ProjectXyz.Plugins.Features.Combat.Api;
 
@@ -8,13 +9,16 @@ namespace Assets.Scripts.Plugins.Features.Combat
     {
         private readonly IObservableCombatTurnManager _combatTurnManager;
         private readonly IMapGridLineFormatter _mapGridLineFormatter;
+        private readonly IPlayerControlConfiguration _playerControlsConfiguration;
 
         public CombatController(
             IObservableCombatTurnManager combatTurnManager,
-            IMapGridLineFormatter mapGridLineFormatter)
+            IMapGridLineFormatter mapGridLineFormatter,
+            IPlayerControlConfiguration playerControlsConfiguration)
         {
             _combatTurnManager = combatTurnManager;
             _mapGridLineFormatter = mapGridLineFormatter;
+            _playerControlsConfiguration = playerControlsConfiguration;
             _combatTurnManager.CombatStarted += CombatTurnManager_CombatStarted;
             _combatTurnManager.CombatEnded += CombatTurnManager_CombatEnded;
         }
@@ -24,6 +28,7 @@ namespace Assets.Scripts.Plugins.Features.Combat
             CombatEndedEventArgs e)
         {
             _mapGridLineFormatter.ToggleGridLines(false);
+            _playerControlsConfiguration.TileRestrictedMovement = false;
         }
 
         private void CombatTurnManager_CombatStarted(
@@ -31,6 +36,7 @@ namespace Assets.Scripts.Plugins.Features.Combat
             CombatStartedEventArgs e)
         {
             _mapGridLineFormatter.ToggleGridLines(true);
+            _playerControlsConfiguration.TileRestrictedMovement = true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Input.Api;
+using Assets.Scripts.Plugins.Features.Controls;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 
 using Macerus.Api.Behaviors;
@@ -14,5 +15,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         ProjectXyz.Api.Logging.ILogger Logger { get; }
 
         IDebugConsoleManager DebugConsoleManager { get; }
+
+        IPlayerControlConfiguration PlayerControlConfiguration { get; }
     }
 }

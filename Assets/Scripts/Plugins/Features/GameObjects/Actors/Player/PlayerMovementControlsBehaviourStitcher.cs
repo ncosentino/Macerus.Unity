@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
+using Assets.Scripts.Plugins.Features.Controls;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
@@ -26,6 +27,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly ILogger _logger;
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IScreenPointToMapCellConverter _screenPointToMapCellConverter;
+        private readonly IPlayerControlConfiguration _playerControlConfiguration;
 
         public PlayerMovementControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
@@ -34,7 +36,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             IGuiHitTester guiHitTester,
             ILogger logger,
             IDebugConsoleManager debugConsoleManager,
-            IScreenPointToMapCellConverter screenPointToMapCellConverter)
+            IScreenPointToMapCellConverter screenPointToMapCellConverter,
+            IPlayerControlConfiguration playerControlConfiguration)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
@@ -43,6 +46,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _logger = logger;
             _debugConsoleManager = debugConsoleManager;
             _screenPointToMapCellConverter = screenPointToMapCellConverter;
+            _playerControlConfiguration = playerControlConfiguration;
         }
 
         public void Attach(GameObject gameObject)
@@ -55,6 +59,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInputControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerInputControlsBehaviour.GuiHitTester = _guiHitTester;
             playerInputControlsBehaviour.ScreenPointToMapCellConverter = _screenPointToMapCellConverter;
+            playerInputControlsBehaviour.PlayerControlConfiguration = _playerControlConfiguration;
             playerInputControlsBehaviour.MovementBehavior = gameObject
                 .GetRequiredComponent<IReadOnlyHasGameObject>()
                 .GameObject

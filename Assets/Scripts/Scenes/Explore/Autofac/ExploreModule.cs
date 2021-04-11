@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Input;
+using Assets.Scripts.Plugins.Features.Controls;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.Input;

@@ -2,6 +2,7 @@
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
+using Assets.Scripts.Plugins.Features.Controls;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.Input;
@@ -37,6 +38,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public IScreenPointToMapCellConverter ScreenPointToMapCellConverter { get; set; }
 
+        public IPlayerControlConfiguration PlayerControlConfiguration { get; set; }
+
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
@@ -47,6 +50,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
             UnityContracts.RequiresNotNull(this, GuiHitTester, nameof(GuiHitTester));
             UnityContracts.RequiresNotNull(this, ScreenPointToMapCellConverter, nameof(ScreenPointToMapCellConverter));
+            UnityContracts.RequiresNotNull(this, PlayerControlConfiguration, nameof(PlayerControlConfiguration));
         }
 
         private void Update()
@@ -61,13 +65,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 return;
             }
 
-            if (MouseInput.GetMouseButtonDown(0))
+            if (PlayerControlConfiguration.MouseMovementEnabled && MouseInput.GetMouseButtonDown(0))
             {
                 if (!GuiHitTester.HitTest(MouseInput.Position).Any())
                 {
-                    var tileAligned = true;
                     Vector3 worldLocation;
-                    if (tileAligned)
+                    if (PlayerControlConfiguration.TileRestrictedMovement)
                     {
                         var cellLocation = ScreenPointToMapCellConverter.Convert(MouseInput.Position);
                         worldLocation = new Vector3(
@@ -88,43 +91,46 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 }
             }
 
-            double throttleY;
-            if (KeyboardInput.GetKey(KeyboardControls.MoveDown))
+            if (PlayerControlConfiguration.KeyboardMovementEnabled)
             {
-                throttleY = -1;
-            }
-            else if (KeyboardInput.GetKey(KeyboardControls.MoveUp))
-            {
-                throttleY = 1;
-            }
-            else if(MovementBehavior.PointsToWalk.Count < 1)
-            {
-                throttleY = 0;
-            }
-            else
-            {
-                throttleY = MovementBehavior.ThrottleY;
-            }
+                double throttleY;
+                if (KeyboardInput.GetKey(KeyboardControls.MoveDown))
+                {
+                    throttleY = -1;
+                }
+                else if (KeyboardInput.GetKey(KeyboardControls.MoveUp))
+                {
+                    throttleY = 1;
+                }
+                else if (MovementBehavior.PointsToWalk.Count < 1)
+                {
+                    throttleY = 0;
+                }
+                else
+                {
+                    throttleY = MovementBehavior.ThrottleY;
+                }
 
-            double throttleX;
-            if (KeyboardInput.GetKey(KeyboardControls.MoveLeft))
-            {
-                throttleX = -1;
-            }
-            else if (KeyboardInput.GetKey(KeyboardControls.MoveRight))
-            {
-                throttleX = 1;
-            }
-            else if (MovementBehavior.PointsToWalk.Count < 1)
-            {
-                throttleX = 0;
-            }
-            else
-            {
-                throttleX = MovementBehavior.ThrottleX;
-            }
+                double throttleX;
+                if (KeyboardInput.GetKey(KeyboardControls.MoveLeft))
+                {
+                    throttleX = -1;
+                }
+                else if (KeyboardInput.GetKey(KeyboardControls.MoveRight))
+                {
+                    throttleX = 1;
+                }
+                else if (MovementBehavior.PointsToWalk.Count < 1)
+                {
+                    throttleX = 0;
+                }
+                else
+                {
+                    throttleX = MovementBehavior.ThrottleX;
+                }
 
-            MovementBehavior.SetThrottle(throttleX, throttleY);
+                MovementBehavior.SetThrottle(throttleX, throttleY);
+            }
         }
 
 
