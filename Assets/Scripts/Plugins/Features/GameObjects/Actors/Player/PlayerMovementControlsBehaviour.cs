@@ -54,6 +54,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private void HandleMovementControls()
         {
+            if (DebugConsoleManager.GetConsoleWindowVisible())
+            {
+                return;
+            }
+
             if (MouseInput.GetMouseButtonDown(0))
             {
                 if (!GuiHitTester.HitTest(MouseInput.Position).Any())
@@ -65,11 +70,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                         new System.Numerics.Vector2(worldLocation.x, worldLocation.y)
                     });
                 }
-            }
-
-            if (DebugConsoleManager.GetConsoleWindowVisible())
-            {
-                return;
             }
 
             double throttleY;
