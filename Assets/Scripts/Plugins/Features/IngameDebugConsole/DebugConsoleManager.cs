@@ -2,9 +2,7 @@
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 
-using NexusLabs.Contracts;
-
-using UnityEngine;
+using IngameDebugConsole;
 
 namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
 {
@@ -12,7 +10,7 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
     {
         private readonly IUnityGameObjectManager _gameObjectManager;
         
-        private GameObject _debugConsole;
+        private DebugLogManager _debugConsole;
 
         public DebugConsoleManager(IUnityGameObjectManager gameObjectManager)
         {
@@ -22,19 +20,10 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
         public bool GetConsoleWindowVisible()
         {
             var consoleWindow = GetSingleInstanceOfConsole();
-            if (!consoleWindow.activeSelf)
-            {
-                return false;
-            }
-
-            return consoleWindow
-                .GetChildGameObjects()
-                .First(x => x.name == "DebugLogWindow")
-                .GetComponent<CanvasGroup>()
-                .interactable;
+            return consoleWindow.IsLogWindowVisible;
         }
 
-        private GameObject GetSingleInstanceOfConsole()
+        private DebugLogManager GetSingleInstanceOfConsole()
         {
             if (_debugConsole != null)
             {
@@ -42,15 +31,10 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
             }
 
             var allDebugConsoleObjects = _gameObjectManager
-                .FindAll(x => x.name == "DebugConsole")
+                .FindAll(x => x.name == "DebugConsole" && x.activeSelf)
+                .Select(x => x.GetComponent<DebugLogManager>())
                 .ToList();
-            Contract.Requires(
-                allDebugConsoleObjects.Count == 1,
-                $"Expecting to find only one DebugConsole but there were " +
-                $"{allDebugConsoleObjects.Count}. Perhaps check the singleton " +
-                $"behavior of this component.");
-
-            var singleInstance = allDebugConsoleObjects.Single();
+            var singleInstance = allDebugConsoleObjects.First();
             _debugConsole = singleInstance;
             return singleInstance;
         }
