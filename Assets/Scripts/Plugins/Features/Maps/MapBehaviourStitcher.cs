@@ -5,12 +5,8 @@ using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Plugins.Features.Weather.Api;
 
-using UnityEngine;
-
 namespace Assets.Scripts.Plugins.Features.Maps
 {
-    using ILogger = ProjectXyz.Api.Logging.ILogger;
-
     public sealed class MapBehaviourStitcher : IMapBehaviourStitcher
     {
         private readonly IMapProvider _mapProvider;

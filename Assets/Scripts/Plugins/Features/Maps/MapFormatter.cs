@@ -21,6 +21,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
     public sealed class MapFormatter : IMapFormatter
     {
+        private const int LAYER_GRID_LINES = 10000;
+        private const int LAYER_HOVER_SELECT = int.MaxValue;
+
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
@@ -32,6 +35,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private int _maxHeight;
         private int _minWidth;
         private int _minHeight;
+        private Vector3Int? _lastHoverSelectTilePosition;
 
         public MapFormatter(
             ITileLoader tileLoader,
@@ -100,6 +104,31 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
         }
 
+        public void HoverSelectTile(Vector2Int? position)
+        {
+            if (_lastHoverSelectTilePosition.HasValue)
+            {
+                _mapPrefab.Tilemap.SetTile(
+                    _lastHoverSelectTilePosition.Value,
+                    null);
+            }
+
+            _lastHoverSelectTilePosition = new Vector3Int(
+                position.Value.x,
+                position.Value.y,
+                LAYER_HOVER_SELECT);
+
+            if (position.HasValue)
+            {
+                var unityTile = _tileLoader.LoadTile(
+                    "mapping/tilesets/",
+                    "tile-hover-select-overlay");
+                _mapPrefab.Tilemap.SetTile(
+                    _lastHoverSelectTilePosition.Value,
+                    unityTile);
+            }
+        }
+
         public void ToggleGridLines(bool enabled) =>
             ToggleGridLines(enabled, true);
 
@@ -153,7 +182,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
             bool forceRefresh)
         {
             _gridLinesEnabled = enabled;
-            const int HIGHLIGHT_Z_ORDER = int.MaxValue;
 
             for (int i = _minWidth; i <= _maxWidth; i++)
             {
@@ -165,7 +193,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                             "tile-border-overlay")
                         : null;
                     _mapPrefab.Tilemap.SetTile(
-                        new Vector3Int(i, j, HIGHLIGHT_Z_ORDER),
+                        new Vector3Int(i, j, LAYER_GRID_LINES),
                         unityTile);
                 }
             }

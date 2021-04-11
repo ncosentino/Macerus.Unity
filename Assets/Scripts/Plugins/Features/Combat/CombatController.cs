@@ -29,6 +29,7 @@ namespace Assets.Scripts.Plugins.Features.Combat
         {
             _mapGridLineFormatter.ToggleGridLines(false);
             _playerControlsConfiguration.TileRestrictedMovement = false;
+            _playerControlsConfiguration.HoverTileSelection = false;
         }
 
         private void CombatTurnManager_CombatStarted(
@@ -37,6 +38,7 @@ namespace Assets.Scripts.Plugins.Features.Combat
         {
             _mapGridLineFormatter.ToggleGridLines(true);
             _playerControlsConfiguration.TileRestrictedMovement = true;
+            _playerControlsConfiguration.HoverTileSelection = true;
         }
     }
 }

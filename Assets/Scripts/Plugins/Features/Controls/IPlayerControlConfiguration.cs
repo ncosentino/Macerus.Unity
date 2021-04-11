@@ -7,5 +7,7 @@
         new bool KeyboardMovementEnabled { get; set; }
 
         new bool TileRestrictedMovement { get; set; }
+
+        new bool HoverTileSelection { get; set; }
     }
 }

@@ -20,9 +20,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
-    public sealed class MapBehaviour :
-        MonoBehaviour,
-        IMapBehaviour
+    public sealed class MapBehaviour : MonoBehaviour
     {
         public IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
 

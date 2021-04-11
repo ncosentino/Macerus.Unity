@@ -19,6 +19,10 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<MapHoverSelectionBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<MapFormatter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
