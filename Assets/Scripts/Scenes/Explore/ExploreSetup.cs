@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Assets.Scripts.Console;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis.Views.Resources;
@@ -12,6 +13,7 @@ using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -29,6 +31,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
         private readonly ISoundPlayingBehaviourStitcher _soundPlayingBehaviourStitcher;
         private readonly IUnityGuiHitTester _unityGuiHitTester;
+        private readonly IExploreGameRootPrefabFactory _exploreGameRootPrefabFactory;
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
@@ -39,7 +42,8 @@ namespace Assets.Scripts.Scenes.Explore
             IMapManager mapManager,
             IGuiBehaviourStitcher guiBehaviourStitcher,
             ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher,
-            IUnityGuiHitTester unityGuiHitTester)
+            IUnityGuiHitTester unityGuiHitTester,
+            IExploreGameRootPrefabFactory exploreGameRootPrefabFactory)
         {
             _gameObjectManager = gameObjectManager;
             _mapPrefabFactory = mapPrefabFactory;
@@ -50,19 +54,19 @@ namespace Assets.Scripts.Scenes.Explore
             _guiBehaviorStitcher = guiBehaviourStitcher;
             _soundPlayingBehaviourStitcher = soundPlayingBehaviourStitcher;
             _unityGuiHitTester = unityGuiHitTester;
+            _exploreGameRootPrefabFactory = exploreGameRootPrefabFactory;
         }
 
         public void Setup()
         {
-            var rootGameObject = _gameObjectManager
-                .FindAll(x => x.name == "Game")
-                .Single();
-            _gameEngineUpdateBehaviourStitcher.Attach(rootGameObject);
-            _soundPlayingBehaviourStitcher.Attach(rootGameObject);
+            var exploreGameRoot = _exploreGameRootPrefabFactory.GetInstance();
+
+            _gameEngineUpdateBehaviourStitcher.Attach(exploreGameRoot.GameObject);
+            _soundPlayingBehaviourStitcher.Attach(exploreGameRoot.GameObject);
 
             var container = new Container(); // FIXME: replace with the actual GUI we want to use here
             _guiBehaviorStitcher.Stitch(
-                rootGameObject,
+                exploreGameRoot.GameObject,
                 x => x.activeInHierarchy && x.name == "FollowCamera",
                 container);
 
@@ -82,14 +86,15 @@ namespace Assets.Scripts.Scenes.Explore
             };
             consoleObject.AddComponent<GlobalConsoleCommandsBehaviour>();
             consoleObject.AddComponent<ConsoleCommandsBehaviour>();
-            consoleObject.transform.parent = rootGameObject.transform;
+            consoleObject.transform.parent = exploreGameRoot.GameObject.transform;
 
-            var mapObject = _mapPrefabFactory.CreateMap();
-            mapObject.transform.parent = rootGameObject.transform;
+            var mapPrefab = _mapPrefabFactory.CreateMap("Map");
+            mapPrefab.GameObject.transform.parent = exploreGameRoot.GameObject.transform;
 
-            _guiInputStitcher.Attach(rootGameObject);
-            _exploreSceneStartupInterceptorFacade.Intercept(rootGameObject);
+            _guiInputStitcher.Attach(exploreGameRoot.GameObject);
+            _exploreSceneStartupInterceptorFacade.Intercept(exploreGameRoot.GameObject);
 
+            // FIXME: this is just for testing
             _mapManager.SwitchMap(new StringIdentifier("swamp"));
         }
     }

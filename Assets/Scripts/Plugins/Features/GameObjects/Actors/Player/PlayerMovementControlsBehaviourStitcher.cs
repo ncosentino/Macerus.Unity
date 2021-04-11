@@ -3,6 +3,7 @@ using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
+using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 
@@ -24,6 +25,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IGuiHitTester _guiHitTester;
         private readonly ILogger _logger;
         private readonly IDebugConsoleManager _debugConsoleManager;
+        private readonly IScreenPointToMapCellConverter _screenPointToMapCellConverter;
 
         public PlayerMovementControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
@@ -31,7 +33,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             IMouseInput mouseInput,
             IGuiHitTester guiHitTester,
             ILogger logger,
-            IDebugConsoleManager debugConsoleManager)
+            IDebugConsoleManager debugConsoleManager,
+            IScreenPointToMapCellConverter screenPointToMapCellConverter)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
@@ -39,6 +42,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _guiHitTester = guiHitTester;
             _logger = logger;
             _debugConsoleManager = debugConsoleManager;
+            _screenPointToMapCellConverter = screenPointToMapCellConverter;
         }
 
         public void Attach(GameObject gameObject)
@@ -50,6 +54,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInputControlsBehaviour.MouseInput = _mouseInput;
             playerInputControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerInputControlsBehaviour.GuiHitTester = _guiHitTester;
+            playerInputControlsBehaviour.ScreenPointToMapCellConverter = _screenPointToMapCellConverter;
             playerInputControlsBehaviour.MovementBehavior = gameObject
                 .GetRequiredComponent<IReadOnlyHasGameObject>()
                 .GameObject

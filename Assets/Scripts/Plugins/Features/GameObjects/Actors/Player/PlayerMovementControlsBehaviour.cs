@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
+using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.Input;
 
 using Macerus.Api.Behaviors;
@@ -12,7 +12,6 @@ using NexusLabs.Contracts;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
@@ -36,6 +35,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
 
+        public IScreenPointToMapCellConverter ScreenPointToMapCellConverter { get; set; }
+
         private void Start()
         {
             UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
@@ -45,6 +46,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
             UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
             UnityContracts.RequiresNotNull(this, GuiHitTester, nameof(GuiHitTester));
+            UnityContracts.RequiresNotNull(this, ScreenPointToMapCellConverter, nameof(ScreenPointToMapCellConverter));
         }
 
         private void Update()
@@ -63,7 +65,21 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             {
                 if (!GuiHitTester.HitTest(MouseInput.Position).Any())
                 {
-                    var worldLocation = Camera.main.ScreenToWorldPoint(MouseInput.Position);
+                    var tileAligned = true;
+                    Vector3 worldLocation;
+                    if (tileAligned)
+                    {
+                        var cellLocation = ScreenPointToMapCellConverter.Convert(MouseInput.Position);
+                        worldLocation = new Vector3(
+                            cellLocation.x + 0.5f,
+                            cellLocation.y + 0.5f,
+                            0);
+                    }
+                    else
+                    {
+                        worldLocation = Camera.main.ScreenToWorldPoint(MouseInput.Position);
+                    }
+
                     // FIXME: actually generate a path here, not just a single point
                     MovementBehavior.SetWalkPath(new[]
                     {

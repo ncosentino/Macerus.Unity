@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-
-namespace Assets.Scripts.Plugins.Features.Maps.Api
+﻿namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
     public interface IMapPrefabFactory
     {
-        GameObject CreateMap();
+        IMapPrefab CreateMap(string mapObjectName);
     }
 }

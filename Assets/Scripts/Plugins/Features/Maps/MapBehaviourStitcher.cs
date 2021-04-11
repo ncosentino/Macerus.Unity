@@ -19,7 +19,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IWeatherManager _weatherManager;
         private readonly IWeatherTableRepositoryFacade _weatherTableRepositoryFacade;
         private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
-        private readonly ILogger _logger;
         private readonly IDispatcher _dispatcher;
 
         public MapBehaviourStitcher(
@@ -29,7 +28,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IFilterContextFactory filterContextFactory,
             IWeatherManager weatherManager,
             IWeatherTableRepositoryFacade weatherTableRepositoryFacade,
-            ILogger logger,
             IDispatcher dispatcher)
         {
             _mapProvider = mapProvider;
@@ -38,15 +36,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _filterContextFactory = filterContextFactory;
             _weatherManager = weatherManager;
             _weatherTableRepositoryFacade = weatherTableRepositoryFacade;
-            _logger = logger;
             _dispatcher = dispatcher;
         }
 
-        public void Attach(GameObject mapGameObject)
-        {
-            _logger.Debug($"Adding '{_mapProvider}' to '{mapGameObject}'...");
-            
-            var mapBehaviour = mapGameObject.AddComponent<MapBehaviour>();
+        public void Attach(IMapPrefab mapPrefab)
+        {           
+            var mapBehaviour = mapPrefab.GameObject.AddComponent<MapBehaviour>();
             mapBehaviour.MapProvider = _mapProvider;
             mapBehaviour.MapFormatter = _exploreMapFormatter;
             mapBehaviour.MapGameObjectManager = _mapGameObjectManager;
@@ -54,8 +49,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             mapBehaviour.WeatherManager = _weatherManager;
             mapBehaviour.WeatherTableRepositoryFacade = _weatherTableRepositoryFacade;
             mapBehaviour.Dispatcher = _dispatcher;
-
-            _logger.Debug($"Added '{mapBehaviour}' to '{mapGameObject}'.");
+            mapBehaviour.MapPrefab = mapPrefab;
         }
     }
 }

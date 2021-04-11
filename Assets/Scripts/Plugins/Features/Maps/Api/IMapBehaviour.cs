@@ -6,6 +6,7 @@ using ProjectXyz.Plugins.Features.Weather.Api;
 
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
+
     public interface IMapBehaviour : IReadonlyMapBehaviour
     {
         new IReadOnlyMapGameObjectManager MapGameObjectManager { get; set; }
@@ -21,5 +22,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
         new IFilterContextFactory FilterContextFactory { get; set; }
 
         IDispatcher Dispatcher { get; set; }
+
+        new IMapPrefab MapPrefab { get; set; }
     }
 }

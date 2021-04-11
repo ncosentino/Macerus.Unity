@@ -17,5 +17,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
         IWeatherTableRepositoryFacade WeatherTableRepositoryFacade { get; }
 
         IFilterContextFactory FilterContextFactory { get; }
+
+        IMapPrefab MapPrefab { get; }
     }
 }

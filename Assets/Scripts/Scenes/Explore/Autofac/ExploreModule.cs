@@ -27,7 +27,15 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .RegisterType<GameEngineUpdateBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            
+            builder
+                .RegisterType<ScreenPointToExploreMapCellConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ExploreGameRootPrefabFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             RegisterCamera(builder);
             RegisterInput(builder);
         }
