@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
-    public sealed class PlayerPrefabStitcher : IDiscoverablePrefabSticher
+    public sealed class PlayerPrefabStitcher : IDiscoverablePrefabStitcher
     {
         private readonly IPlayerMovementControlsBehaviourStitcher _playerInputControlsBehaviourStitcher;
         private readonly IPlayerInteractionControlsBehaviourStitcher _playerInteractionControlsBehaviourStitcher;

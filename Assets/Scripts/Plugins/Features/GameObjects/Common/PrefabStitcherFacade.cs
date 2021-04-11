@@ -12,12 +12,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
     {
         private readonly Dictionary<string, PrefabStitchDelegate> _stitcherMapping;
 
-        public PrefabStitcherFacade(IEnumerable<IDiscoverablePrefabSticher> prefabStichers)
+        public PrefabStitcherFacade(IEnumerable<IDiscoverablePrefabStitcher> prefabStitchers)
         {
             // FIXME: you'll need to consider case sensitivity after switching to identifiers
             _stitcherMapping = new Dictionary<string, PrefabStitchDelegate>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var stitcher in prefabStichers)
+            foreach (var stitcher in prefabStitchers)
             {
                 Register(stitcher.PrefabResourceId, stitcher.Stitch);
             }

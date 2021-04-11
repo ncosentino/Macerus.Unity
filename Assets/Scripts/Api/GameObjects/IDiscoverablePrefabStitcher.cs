@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Api.GameObjects
 {
-    public interface IDiscoverablePrefabSticher : IPrefabStitcher
+    public interface IDiscoverablePrefabStitcher : IPrefabStitcher
     {
         IIdentifier PrefabResourceId { get; }
     }
