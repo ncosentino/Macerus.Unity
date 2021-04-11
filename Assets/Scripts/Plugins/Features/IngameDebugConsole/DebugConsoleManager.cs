@@ -2,6 +2,8 @@
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 
+using NexusLabs.Contracts;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
@@ -51,35 +53,11 @@ namespace Assets.Scripts.Plugins.Features.IngameDebugConsole
             var allDebugConsoleObjects = _gameObjectManager
                 .FindAll(x => x.name == "DebugConsole")
                 .ToList();
-            var enabledInstances = allDebugConsoleObjects
-                .Where(x => x.activeSelf)
-                .ToArray();
-            var disabledInstances = allDebugConsoleObjects
-                .Where(x => !x.activeSelf)
-                .ToArray();
-
-            if (enabledInstances.Any())
-            {
-                foreach (var gameObject in enabledInstances.Skip(1))
-                {
-                    allDebugConsoleObjects.Remove(gameObject);
-                    _objectDestroyer.Destroy(gameObject);
-                }
-
-                foreach (var gameObject in disabledInstances)
-                {
-                    allDebugConsoleObjects.Remove(gameObject);
-                    _objectDestroyer.Destroy(gameObject);
-                }
-            }
-            else
-            {
-                foreach (var gameObject in disabledInstances.Skip(1))
-                {
-                    allDebugConsoleObjects.Remove(gameObject);
-                    _objectDestroyer.Destroy(gameObject);
-                }
-            }
+            Contract.Requires(
+                allDebugConsoleObjects.Count == 1,
+                $"Expecting to find only one DebugConsole but there were " +
+                $"{allDebugConsoleObjects.Count}. Perhaps check the singleton " +
+                $"behavior of this component.");
 
             var singleInstance = allDebugConsoleObjects.Single();
             _debugConsole = singleInstance;
