@@ -47,7 +47,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, GuiHitTester, nameof(GuiHitTester));
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             HandleMovementControls();
         }

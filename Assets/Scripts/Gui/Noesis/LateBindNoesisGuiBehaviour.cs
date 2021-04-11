@@ -31,7 +31,7 @@ namespace Assets.Scripts.Gui.Noesis
             this.RequiresNotNull(ViewToWeld, nameof(ViewToWeld));
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             var cameras = UnityGameObjectManager
                 .FindAll(x => FindCameraCallback(x))
