@@ -10,7 +10,7 @@ using System.Windows.Controls;
 
 namespace Assets.Scripts.Gui.Noesis.Views.Resources
 {
-    public partial class Container : ContentControl
+    public partial class Container : UserControl
     {
         public Container()
         {
