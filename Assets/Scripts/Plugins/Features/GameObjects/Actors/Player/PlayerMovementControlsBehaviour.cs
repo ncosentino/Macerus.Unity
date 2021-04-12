@@ -72,11 +72,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     Vector3 worldLocation;
                     if (PlayerControlConfiguration.TileRestrictedMovement)
                     {
-                        var cellLocation = ScreenPointToMapCellConverter.Convert(MouseInput.Position);
-                        worldLocation = new Vector3(
-                            cellLocation.x + 0.5f,
-                            cellLocation.y + 0.5f,
-                            0);
+                        worldLocation = ScreenPointToMapCellConverter.Convert(MouseInput.Position);
                     }
                     else
                     {

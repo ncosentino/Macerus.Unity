@@ -31,7 +31,10 @@ namespace Assets.Scripts.Plugins.Features.Maps
             if (PlayerControlConfiguration.HoverTileSelection)
             {
                 var mapCell = ScreenPointToMapCellConverter.Convert(MouseInput.Position);
-                var correctedForTileCenter = new Vector2Int((int)(mapCell.x + 0.5f), (int)(mapCell.y + 0.5f));
+                // FIXME: no idea why only x has to be adjusted here... seems
+                // SO wrong but it makes it work. otherwise, the y coordinate
+                // of the hover shows up right but it's off-by-one for x.
+                var correctedForTileCenter = new Vector2Int((int)(mapCell.x - 0.5f), mapCell.y);
                 MapHoverSelectFormatter.HoverSelectTile(correctedForTileCenter);
             }
         }
