@@ -17,6 +17,8 @@ namespace Assets.Scripts.Gui.Noesis
     {
         public Predicate<GameObject> FindCameraCallback { get; set; }
 
+        public Action<MonoBehaviour> GuiWeldedCallback { get; set; }
+
         public IUnityGameObjectManager UnityGameObjectManager { get; set; }
 
         public IViewWelderFactory ViewWelderFactory { get; set; }
@@ -61,6 +63,8 @@ namespace Assets.Scripts.Gui.Noesis
                     container,
                     ViewToWeld)
                 .Weld();
+            GuiWeldedCallback?.Invoke(noesisView);
+
             Destroy(this);
         }
     }

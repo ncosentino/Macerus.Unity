@@ -9,6 +9,7 @@ namespace Assets.Scripts.Gui
         void Stitch(
             GameObject gameObject,
             Predicate<GameObject> findGuiCameraCallback,
-            object viewToWeld);
+            object viewToWeld,
+            Action<MonoBehaviour> guiWeldedCallback);
     }
 }

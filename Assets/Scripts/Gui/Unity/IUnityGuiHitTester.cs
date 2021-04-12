@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui.Unity
 {
-    public interface IUnityGuiHitTester : IGuiHitTester
+    public interface IUnityGuiHitTester : IDiscoverableGuiHitTester
     {
         void Setup(
             GraphicRaycaster graphicRaycaster,

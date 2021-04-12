@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Assets.Scripts.Gui;
+using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Noesis.Views.Resources;
 using Assets.Scripts.Gui.Unity;
 using Assets.Scripts.Plugins.Features.Audio.Api;
@@ -31,6 +32,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
         private readonly ISoundPlayingBehaviourStitcher _soundPlayingBehaviourStitcher;
         private readonly IUnityGuiHitTester _unityGuiHitTester;
+        private readonly INoesisGuiHitTester _noesisGuiHitTester;
         private readonly IExploreGameRootPrefabFactory _exploreGameRootPrefabFactory;
 
         public ExploreSetup(
@@ -43,6 +45,7 @@ namespace Assets.Scripts.Scenes.Explore
             IGuiBehaviourStitcher guiBehaviourStitcher,
             ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher,
             IUnityGuiHitTester unityGuiHitTester,
+            INoesisGuiHitTester noesisGuiHitTester,
             IExploreGameRootPrefabFactory exploreGameRootPrefabFactory)
         {
             _gameObjectManager = gameObjectManager;
@@ -54,6 +57,7 @@ namespace Assets.Scripts.Scenes.Explore
             _guiBehaviorStitcher = guiBehaviourStitcher;
             _soundPlayingBehaviourStitcher = soundPlayingBehaviourStitcher;
             _unityGuiHitTester = unityGuiHitTester;
+            _noesisGuiHitTester = noesisGuiHitTester;
             _exploreGameRootPrefabFactory = exploreGameRootPrefabFactory;
         }
 
@@ -64,12 +68,12 @@ namespace Assets.Scripts.Scenes.Explore
             _gameEngineUpdateBehaviourStitcher.Attach(exploreGameRoot.GameObject);
             _soundPlayingBehaviourStitcher.Attach(exploreGameRoot.GameObject);
 
-            var container = new Container(); // FIXME: replace with the actual GUI we want to use here
+            var view = new Container(); // FIXME: replace with the actual GUI we want to use here;
             _guiBehaviorStitcher.Stitch(
                 exploreGameRoot.GameObject,
                 x => x.activeInHierarchy && x.name == "FollowCamera",
-                container);
-
+                view,
+                x => _noesisGuiHitTester.Setup((NoesisView)x)); 
             _unityGuiHitTester.Setup(
                 _gameObjectManager
                     .FindAll(x => x.name == "Canvas")

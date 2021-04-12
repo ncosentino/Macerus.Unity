@@ -44,7 +44,8 @@ namespace Assets.Scripts.Scenes.MainMenu
             _guiBehaviourStitcher.Stitch(
                 camera,
                 x => x == camera,
-                _mainMenuView);
+                _mainMenuView,
+                null);
             _guiInputStitcher.Attach(camera);
         }
     }

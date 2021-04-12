@@ -24,12 +24,14 @@ namespace Assets.Scripts.Gui.Noesis
         public void Stitch(
             GameObject gameObject,
             Predicate<GameObject> findCameraCallback,
-            object viewToWeld)
+            object viewToWeld,
+            Action<MonoBehaviour> guiWeldedCallback)
         {
             var noesisguistitchbehaviour = gameObject.AddComponent<LateBindNoesisGuiBehaviour>();
             noesisguistitchbehaviour.ViewWelderFactory = _viewWelderFactory;
             noesisguistitchbehaviour.UnityGameObjectManager = _unityGameObjectManager;
             noesisguistitchbehaviour.FindCameraCallback = findCameraCallback;
+            noesisguistitchbehaviour.GuiWeldedCallback = guiWeldedCallback;
             noesisguistitchbehaviour.ViewToWeld = viewToWeld;
         }
     }

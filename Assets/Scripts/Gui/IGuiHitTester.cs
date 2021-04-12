@@ -6,6 +6,6 @@ namespace Assets.Scripts.Gui
 {
     public interface IGuiHitTester
     {
-        IReadOnlyCollection<GameObject> HitTest(Vector3 position);
+        IReadOnlyCollection<object> HitTest(Vector3 position);
     }
 }

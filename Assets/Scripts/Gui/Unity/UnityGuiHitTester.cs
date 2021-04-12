@@ -20,7 +20,7 @@ namespace Assets.Scripts.Gui.Unity
             _eventSystem = eventSystem;
         }
 
-        public IReadOnlyCollection<GameObject> HitTest(Vector3 position)
+        public IReadOnlyCollection<object> HitTest(Vector3 position)
         {
             var pointerEventData = new PointerEventData(_eventSystem);
             pointerEventData.position = position;
