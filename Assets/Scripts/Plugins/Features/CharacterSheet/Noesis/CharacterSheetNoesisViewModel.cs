@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-
-using Assets.Scripts.Gui.Noesis;
+﻿using Assets.Scripts.Gui.Noesis;
 
 using Noesis;
 

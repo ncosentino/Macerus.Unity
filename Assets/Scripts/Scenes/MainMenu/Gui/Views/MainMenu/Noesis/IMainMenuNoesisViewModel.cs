@@ -1,6 +1,10 @@
-﻿using System.Windows.Input;
-
+﻿#if UNITY_5_3_OR_NEWER
+#define NOESIS
 using Noesis;
+#else
+using System.Windows.Media;
+#endif
+using System.Windows.Input;
 
 namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis
 {
