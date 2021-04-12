@@ -9,15 +9,18 @@ namespace Assets.Scripts.Plugins.Features.Combat
     {
         private readonly IObservableCombatTurnManager _combatTurnManager;
         private readonly IMapGridLineFormatter _mapGridLineFormatter;
+        private readonly IMapHoverSelectFormatter _mapHoverSelectFormatter;
         private readonly IPlayerControlConfiguration _playerControlsConfiguration;
 
         public CombatController(
             IObservableCombatTurnManager combatTurnManager,
             IMapGridLineFormatter mapGridLineFormatter,
+            IMapHoverSelectFormatter mapHoverSelectFormatter,
             IPlayerControlConfiguration playerControlsConfiguration)
         {
             _combatTurnManager = combatTurnManager;
             _mapGridLineFormatter = mapGridLineFormatter;
+            _mapHoverSelectFormatter = mapHoverSelectFormatter;
             _playerControlsConfiguration = playerControlsConfiguration;
             _combatTurnManager.CombatStarted += CombatTurnManager_CombatStarted;
             _combatTurnManager.CombatEnded += CombatTurnManager_CombatEnded;
@@ -28,6 +31,7 @@ namespace Assets.Scripts.Plugins.Features.Combat
             CombatEndedEventArgs e)
         {
             _mapGridLineFormatter.ToggleGridLines(false);
+            _mapHoverSelectFormatter.HoverSelectTile(null);
             _playerControlsConfiguration.TileRestrictedMovement = false;
             _playerControlsConfiguration.HoverTileSelection = false;
         }
@@ -37,6 +41,7 @@ namespace Assets.Scripts.Plugins.Features.Combat
             CombatStartedEventArgs e)
         {
             _mapGridLineFormatter.ToggleGridLines(true);
+            _mapHoverSelectFormatter.HoverSelectTile(null);
             _playerControlsConfiguration.TileRestrictedMovement = true;
             _playerControlsConfiguration.HoverTileSelection = true;
         }

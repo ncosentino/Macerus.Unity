@@ -113,10 +113,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     null);
             }
 
-            _lastHoverSelectTilePosition = new Vector3Int(
-                position.Value.x,
-                position.Value.y,
-                LAYER_HOVER_SELECT);
+            _lastHoverSelectTilePosition = position == null
+                ? (Vector3Int?)null
+                : new Vector3Int(
+                    position.Value.x,
+                    position.Value.y,
+                    LAYER_HOVER_SELECT);
 
             if (position.HasValue)
             {
