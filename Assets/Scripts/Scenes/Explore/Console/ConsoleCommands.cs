@@ -46,6 +46,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IMapFormatter _mapFormatter;
         private IEncounterManager _encounterManager;
         private IFilterContextProvider _filterContextProvider;
+        private IMapProvider _mapProvider;
 
         private void Start()
         {
@@ -68,10 +69,26 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _mapFormatter = container.Resolve<IMapFormatter>();
             _encounterManager = container.Resolve<IEncounterManager>();
             _filterContextProvider = container.Resolve<IFilterContextProvider>();
+            _mapProvider = container.Resolve<IMapProvider>();
 
             container
                 .Resolve<IConsoleCommandRegistrar>()
                 .RegisterDiscoverableCommandsFromInstance(this);
+        }
+
+        [DiscoverableConsoleCommand("Prints the path between two points.")]
+        private void PathBetweenPoints(double startX, double startY, double endX, double endY)
+        {
+            var path = _mapProvider
+                .PathFinder
+                .FindPath(
+                    new System.Numerics.Vector2((float)startX, (float)startY),
+                    new System.Numerics.Vector2((float)endX, (float)endY),
+                    new System.Numerics.Vector2(1, 1))
+                .ToArray();
+            _logger.Info(
+                $"Path between ({startX},{startY}) and ({endX},{endY}):\r\n" +
+                $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
         }
 
         [DiscoverableConsoleCommand("Starts an encounter with the specified ID.")]
