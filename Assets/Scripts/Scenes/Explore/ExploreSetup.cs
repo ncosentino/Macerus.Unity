@@ -8,6 +8,7 @@ using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Scenes.Explore.Api;
+using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.Console;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Unity.GameObjects;
@@ -34,6 +35,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IUnityGuiHitTester _unityGuiHitTester;
         private readonly INoesisGuiHitTester _noesisGuiHitTester;
         private readonly IExploreGameRootPrefabFactory _exploreGameRootPrefabFactory;
+        private readonly IHasFollowCameraBehaviourStitcher _hasFollowCameraBehaviourStitcher;
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
@@ -46,7 +48,8 @@ namespace Assets.Scripts.Scenes.Explore
             ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher,
             IUnityGuiHitTester unityGuiHitTester,
             INoesisGuiHitTester noesisGuiHitTester,
-            IExploreGameRootPrefabFactory exploreGameRootPrefabFactory)
+            IExploreGameRootPrefabFactory exploreGameRootPrefabFactory,
+            IHasFollowCameraBehaviourStitcher hasFollowCameraBehaviourStitcher)
         {
             _gameObjectManager = gameObjectManager;
             _mapPrefabFactory = mapPrefabFactory;
@@ -59,6 +62,7 @@ namespace Assets.Scripts.Scenes.Explore
             _unityGuiHitTester = unityGuiHitTester;
             _noesisGuiHitTester = noesisGuiHitTester;
             _exploreGameRootPrefabFactory = exploreGameRootPrefabFactory;
+            _hasFollowCameraBehaviourStitcher = hasFollowCameraBehaviourStitcher;
         }
 
         public void Setup()
@@ -97,6 +101,8 @@ namespace Assets.Scripts.Scenes.Explore
 
             _guiInputStitcher.Attach(exploreGameRoot.GameObject);
             _exploreSceneStartupInterceptorFacade.Intercept(exploreGameRoot.GameObject);
+
+            _hasFollowCameraBehaviourStitcher.Attach(exploreGameRoot.GameObject);
 
             // FIXME: this is just for testing
             _mapManager.SwitchMap(new StringIdentifier("swamp"));

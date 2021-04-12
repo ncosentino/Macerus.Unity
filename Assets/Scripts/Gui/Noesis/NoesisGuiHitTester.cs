@@ -22,11 +22,10 @@ namespace Assets.Scripts.Gui.Noesis
             Contract.RequiresNotNull(
                 _noesisView,
                 $"'{nameof(_noesisView)}' is not set. Did you call '{nameof(Setup)}'?");
-
-            if (_noesisView.Content == null)
-            {
-                return new object[] { };
-            }
+            Contract.RequiresNotNull(
+                _noesisView.Content,
+                $"'{nameof(_noesisView)}' does not have assigned content. Did " +
+                $"your owning camera object get destroyed?");
 
             var point = new Point(
                 position.x,

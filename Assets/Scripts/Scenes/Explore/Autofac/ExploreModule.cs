@@ -67,6 +67,10 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .RegisterType<CameraAutoTargetBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<HasFollowCameraBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
