@@ -59,7 +59,8 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
             if (!CanEquipBehavior.CanEquip(
                 TargetEquipSlotId,
-                canBeEquippedBehavior))
+                canBeEquippedBehavior,
+                false))
             {
                 return;
             }
@@ -73,7 +74,8 @@ namespace Assets.Scripts.Plugins.Features.Hud.Equipment
 
             var equipResult = CanEquipBehavior.TryEquip(
                 TargetEquipSlotId,
-                canBeEquippedBehavior);
+                canBeEquippedBehavior,
+                false);
             if (equipResult)
             {
                 gameObject.RemoveComponents<IHasGameObject>();

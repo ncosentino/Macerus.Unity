@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_5_3_OR_NEWER
+#define NOESIS
+using System;
 
 using Assets.Scripts.Unity.Resources;
 
@@ -33,3 +35,4 @@ namespace Assets.Scripts.Gui.Noesis.ViewWelding
         }
     }
 }
+#endif

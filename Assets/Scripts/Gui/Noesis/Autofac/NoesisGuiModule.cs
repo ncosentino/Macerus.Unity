@@ -13,10 +13,6 @@ namespace Assets.Scripts.Gui.Noesis.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<ResourceImageSourceFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<NoesisGuiHitTester>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

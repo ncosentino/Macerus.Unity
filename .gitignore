@@ -12,8 +12,10 @@ Assets/AssetStoreTools*
 ExportedObj/
 .consulo/
 *.csproj
+!*blend.csproj
 *.unityproj
 *.sln
+!*blend.sln
 *.suo
 *.tmp
 *.user

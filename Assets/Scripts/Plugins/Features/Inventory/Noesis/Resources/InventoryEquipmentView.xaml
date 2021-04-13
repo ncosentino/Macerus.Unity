@@ -1,0 +1,105 @@
+<UserControl x:Class="Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources.InventoryEquipmentView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
+        xmlns:resources="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources"
+        mc:Ignorable="d"
+        x:Name="Root"
+        FontFamily="Fonts/#Gidole"
+        Foreground="White"
+        Background="Black"
+        d:DataContext="{d:DesignInstance {x:Type resources:TestEquipmentItemSlotCollectionNoesisViewModel}, IsDesignTimeCreatable=True}"
+        d:DesignWidth="196"
+        d:DesignHeight="320">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border
+            x:Name="BackgroundFade"
+            Grid.RowSpan="1"
+            Grid.ColumnSpan="1">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0">
+                    <GradientStop Color="#BF4C4F38" Offset="0"/>
+                    <GradientStop Color="#CC4F3A17" Offset="0.45"/>
+                    <GradientStop Color="#CC4A4516" Offset="0.8"/>
+                    <GradientStop Color="#E52B2A13" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Border
+            x:Name="VignetteBorder"
+            Grid.RowSpan="1"
+            Grid.ColumnSpan="1">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#7F23231D"/>
+                    <GradientStop Color="#00322F25" Offset="0.2"/>
+                    <GradientStop Color="#00323125" Offset="0.7"/>
+                    <GradientStop Color="#D823231D" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <ItemsControl ItemsSource="{Binding ItemSlots}">
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding GridRow}" />
+                    <Setter Property="Grid.RowSpan" Value="{Binding GridRowSpan}" />
+                    <Setter Property="Grid.Column" Value="{Binding GridColumn}" />
+                    <Setter Property="Grid.ColumnSpan" Value="{Binding GridColumnSpan}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid
+                        KeyboardNavigation.DirectionalNavigation="Contained">
+
+                        <Grid.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#66171612" Offset="1"/>
+                                <GradientStop Color="#0C171612"/>
+                            </LinearGradientBrush>
+                        </Grid.Background>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentControl
+                        Content="{Binding}"
+                        Style="{StaticResource Style.EquipSlot}"
+                        Tag="{x:Static PlacementMode.Right}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

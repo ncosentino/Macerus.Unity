@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Autofac;
 using ProjectXyz.Game.Core.Autofac;
+#if UNITY_5_3_OR_NEWER
 using UnityEngine;
+#endif
 
 namespace Assets.Scripts.Autofac
 {
@@ -11,9 +14,11 @@ namespace Assets.Scripts.Autofac
     {
         public IContainer CreateContainer()
         {
-            Debug.Log($"Creating dependency container...");
-            
-#if UNITY_EDITOR
+            LogDebug($"Creating dependency container...");
+
+#if BLEND
+            var moduleDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+#elif UNITY_EDITOR
             var moduleDirectory = Path.Combine(Application.dataPath, "MacerusPlugins");
 #else
             var moduleDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin_Data\\Managed");
@@ -22,7 +27,7 @@ namespace Assets.Scripts.Autofac
             var moduleDiscoverer = new ModuleDiscoverer();
             moduleDiscoverer.AssemblyLoadFailed += (_, e) =>
             {
-                Debug.LogWarning(
+                LogWarning(
                     $"Failed to load '{e.AssemblyFilePath}'.\r\n" +
                     $"{e.Exception.GetType().FullName}\r\n" +
                     $"{e.Exception.Message}");
@@ -30,10 +35,10 @@ namespace Assets.Scripts.Autofac
             };
             moduleDiscoverer.AssemblyLoaded += (_, e) =>
             {
-                Debug.Log($"Loaded '{e.Assembly.FullName}'.");
+                LogDebug($"Loaded '{e.Assembly.FullName}'.");
             };
 
-            Debug.Log($"Loading modules from '{moduleDirectory}'...");
+            LogDebug($"Loading modules from '{moduleDirectory}'...");
             var modules = moduleDiscoverer
                 .Discover(Assembly.GetExecutingAssembly())
                 .Concat(moduleDiscoverer
@@ -41,16 +46,34 @@ namespace Assets.Scripts.Autofac
                 .ToArray();
             foreach (var module in modules)
             {
-                Debug.Log($"\tLoading module '{module}'.");
+                LogDebug($"\tLoading module '{module}'.");
             }
 
-            Debug.Log($"Modules loaded.");
+            LogDebug($"Modules loaded.");
 
             var dependencyContainerBuilder = new DependencyContainerBuilder();
             var dependencyContainer = dependencyContainerBuilder.Create(modules);
 
-            Debug.Log($"Dependency container created.");
+            LogDebug($"Dependency container created.");
             return dependencyContainer;
+        }
+
+        private void LogDebug(string message)
+        {
+#if UNITY_5_3_OR_NEWER
+            Debug.Log(message);
+#else
+            Console.WriteLine(message);
+#endif
+        }
+
+        private void LogWarning(string message)
+        {
+#if UNITY_5_3_OR_NEWER
+            Debug.LogWarning(message);
+#else
+            Console.WriteLine("WARNING" + message);
+#endif
         }
     }
 }

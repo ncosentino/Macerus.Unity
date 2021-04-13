@@ -20102,7 +20102,7 @@
     <property name="EncounterInterval" value="5000"/>
     <property name="MustBeMoving" value="true"/>
   </object>
-  <object id="12" name="tiled specific name" type="tiled specific type" x="1280" y="-512" width="32" height="32">
+  <object id="12" name="tiled specific name" type="tiled specific type" x="1216" y="-512" width="32" height="32">
     <property name="$typeId" value="static"/>
     <property name="$templateId" value="encounterspawn"/>
   </object>
