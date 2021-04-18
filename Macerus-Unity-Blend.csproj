@@ -90,9 +90,12 @@
     <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs">
       <DependentUpon>CharacterSheetView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Autofac\InventoryModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EquipmentSlotNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EquipmentSlotToNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IBagSlotToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IEquipGridItemSlotNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IEquipmentSlotToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IItemDragNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IItemSlotToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\ItemDragNoesisViewModel.cs" />

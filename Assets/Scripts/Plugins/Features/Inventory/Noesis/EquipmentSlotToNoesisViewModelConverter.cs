@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
-    public sealed class EquipmentSlotToNoesisViewModelConverter : IItemSlotToNoesisViewModelConverter
+    public sealed class EquipmentSlotToNoesisViewModelConverter : IEquipmentSlotToNoesisViewModelConverter
     {
         private readonly IResourceImageSourceFactory _resourceImageSourceFactory;
 

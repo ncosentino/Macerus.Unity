@@ -19,6 +19,7 @@ using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Logging;
 using ProjectXyz.Framework.ViewWelding.Api;
+using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using ProjectXyz.Plugins.Features.Behaviors.Filtering.Default;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -40,32 +41,14 @@ namespace Assets.Blend
             var macerusContainerBuilder = new MacerusContainerBuilder();
             var container = macerusContainerBuilder.CreateContainer();
 
-            var resourceImageSourceFactory = container.Resolve<IResourceImageSourceFactory>();
-            var equipmentSlotToNoesisConverter = new EquipmentSlotToNoesisViewModelConverter(resourceImageSourceFactory);
-            var noesisEquipmentViewModel = new ItemSlotCollectionNoesisViewModel(
-                equipmentSlotToNoesisConverter,
-                container.ResolveNamed<IItemSlotCollectionViewModel>("player equipment"),
-                null);
+            var playerInventoryWindow = container.Resolve<IPlayerInventoryWindow>();
+            var viewWelderFactory = container.Resolve<IViewWelderFactory>();
 
-            var bagSlotToNoesisConverter = new BagSlotToNoesisViewModelConverter(resourceImageSourceFactory);
-            var equipment = new InventoryEquipmentView(noesisEquipmentViewModel);
-            var noesisBagViewModel = new ItemSlotCollectionNoesisViewModel(
-                bagSlotToNoesisConverter,
-                container.ResolveNamed<IItemSlotCollectionViewModel>("player bag"),
-                null);
-            var bag = new InventoryBagView(noesisBagViewModel);
-
-            var itemDragViewModel = container.Resolve<IItemDragViewModel>();
-            var noesisItemDragViewModel = new ItemDragNoesisViewModel(
-                bagSlotToNoesisConverter,
-                itemDragViewModel);
-            var playerInventoryWindow = new PlayerInventoryWindow(
-                container.Resolve<IViewWelderFactory>(),
-                noesisItemDragViewModel,
-                equipment,
-                bag);
-
-            Content.Children.Add(playerInventoryWindow);
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    Content,
+                    playerInventoryWindow)
+                .Weld();
 
             var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
             var filterContext = filterContextAmenity.CreateNoneFilterContext();

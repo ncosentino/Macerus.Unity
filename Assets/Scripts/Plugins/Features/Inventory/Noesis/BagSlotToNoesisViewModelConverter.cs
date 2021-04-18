@@ -11,7 +11,7 @@ using Assets.Scripts.Gui.Noesis;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
-    public sealed class BagSlotToNoesisViewModelConverter : IItemSlotToNoesisViewModelConverter
+    public sealed class BagSlotToNoesisViewModelConverter : IBagSlotToNoesisViewModelConverter
     {
         private readonly IResourceImageSourceFactory _resourceImageSourceFactory;
 
