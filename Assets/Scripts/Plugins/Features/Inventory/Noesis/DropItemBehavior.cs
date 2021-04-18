@@ -43,17 +43,17 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             base.OnAttached();
 
             AssociatedObject.AllowDrop = true;
-            AssociatedObject.PreviewDragEnter += OnDragEnter;
-            AssociatedObject.PreviewDragLeave += OnDragLeave;
-            AssociatedObject.PreviewDrop += OnDrop;
+            AssociatedObject.DragEnter += OnDragEnter;
+            AssociatedObject.DragLeave += OnDragLeave;
+            AssociatedObject.Drop += OnDrop;
         }
 
         protected override void OnDetaching()
         {
             AssociatedObject.AllowDrop = false;
-            AssociatedObject.PreviewDragEnter -= OnDragEnter;
-            AssociatedObject.PreviewDragLeave -= OnDragLeave;
-            AssociatedObject.PreviewDrop -= OnDrop;
+            AssociatedObject.DragEnter -= OnDragEnter;
+            AssociatedObject.DragLeave -= OnDragLeave;
+            AssociatedObject.Drop -= OnDrop;
 
             base.OnDetaching();
         }
