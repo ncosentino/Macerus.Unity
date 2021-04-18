@@ -1,0 +1,76 @@
+﻿<UserControl
+    x:Class="Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources.HudView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:inventory="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    mc:Ignorable="d"
+    Background="Cyan">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <i:Interaction.Behaviors>
+        <inventory:DragAdornerBehavior x:Name="DragAdorner"/>
+    </i:Interaction.Behaviors>
+
+    <Grid x:Name="Gui">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <Grid
+            x:Name="MainContent"
+            Grid.Row="0">
+            <Grid.RowDefinitions>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid 
+                x:Name="LeftContent"
+                Grid.Column="0"
+                Background="Yellow"/>
+            
+            <Grid 
+                x:Name="EmptySpace"
+                Grid.Column="1"/>
+            
+            <Grid 
+                x:Name="RightContent"
+                Grid.Column="2"/>
+        </Grid>
+
+        <Grid x:Name="DragPanel" Grid.ColumnSpan="3" Grid.RowSpan="1" d:IsHidden="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="100*"/>
+            </Grid.ColumnDefinitions>
+            <Decorator x:Name="DragItemRef" Grid.Column="0"/>
+            <ContentControl
+                Content="{Binding DraggedItemSlot}"
+                Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Width="{Binding ActualWidth, ElementName=DragItemRef}"
+                Height="{Binding ActualWidth, ElementName=DragItemRef}"
+                BorderThickness="{Binding ActualWidth, ElementName=DragItemBorderRef}"
+                Style="{StaticResource Style.DraggedItem}">
+                <ContentControl.RenderTransform>
+                    <TranslateTransform
+                        X="{Binding DraggedItemX, ElementName=DragAdorner}"
+                        Y="{Binding DraggedItemY, ElementName=DragAdorner}"/>
+                </ContentControl.RenderTransform>
+            </ContentControl>
+        </Grid>
+    </Grid>
+</UserControl>

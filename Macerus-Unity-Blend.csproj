@@ -119,6 +119,12 @@
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\PlayerInventoryWindow.xaml.cs">
       <DependentUpon>PlayerInventoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Autofac\HudModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\HudNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\IHudNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml.cs">
+      <DependentUpon>HudView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\IMainMenuView.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\IMainMenuNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.xaml.cs">
@@ -191,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -198,6 +208,10 @@
     <Page Include="Blend\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup />

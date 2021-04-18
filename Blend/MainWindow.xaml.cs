@@ -7,6 +7,7 @@ using Assets.Scripts.Autofac;
 using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources;
+using Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources;
 using Autofac;
 using Macerus.Api.Behaviors;
 using Macerus.Api.Behaviors.Filtering;
@@ -41,14 +42,7 @@ namespace Assets.Blend
             var macerusContainerBuilder = new MacerusContainerBuilder();
             var container = macerusContainerBuilder.CreateContainer();
 
-            var playerInventoryWindow = container.Resolve<IPlayerInventoryWindow>();
-            var viewWelderFactory = container.Resolve<IViewWelderFactory>();
-
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    Content,
-                    playerInventoryWindow)
-                .Weld();
+            Content = container.Resolve<HudView>();
 
             var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
             var filterContext = filterContextAmenity.CreateNoneFilterContext();

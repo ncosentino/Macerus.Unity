@@ -871,47 +871,6 @@
         </Setter>
     </Style>
 
-    <!--Dragged Item-->
-    <ControlTemplate x:Key="Template.DraggedItem" TargetType="{x:Type ContentControl}">
-        <Grid>
-            <Viewbox>
-                <Border x:Name="Bd" CornerRadius="4" BorderBrush="#80EBA147" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
-                    <Border.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform X="-48" Y="-48"/>
-                        </TransformGroup>
-                    </Border.RenderTransform>
-                    <Border.Background>
-                        <RadialGradientBrush>
-                            <GradientStop Color="#00DA9858" Offset="0"/>
-                            <GradientStop Color="#1FDA9858" Offset="1"/>
-                        </RadialGradientBrush>
-                    </Border.Background>
-                    <Rectangle Width="60" Height="60" Margin="15">
-                        <Rectangle.Fill>
-                            <ImageBrush
-                                ImageSource="{Binding Content.IconImageSource, RelativeSource={RelativeSource TemplatedParent}}" 
-                                Stretch="Fill"
-                                ViewboxUnits="Absolute"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Border>
-            </Viewbox>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="Content" Value="{x:Null}">
-                <Setter Property="Visibility" Value="Collapsed"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <Style x:Key="Style.DraggedItem" TargetType="{x:Type ContentControl}">
-        <Setter Property="IsHitTestVisible" Value="False"/>
-        <Setter Property="Template" Value="{StaticResource Template.DraggedItem}"/>
-    </Style>
-    
     <!--ScrollBar-->
     <Style x:Key="Style.ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="IsTabStop" Value="False"/>

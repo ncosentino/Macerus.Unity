@@ -20,12 +20,10 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
     {
         public PlayerInventoryWindow(
             IViewWelderFactory viewWelderFactory,
-            IItemDragNoesisViewModel viewModel,
             IInventoryEquipmentView inventoryEquipmentView,
             IInventoryBagView inventoryBagView)
         {
             InitializeComponent();
-            DataContext = viewModel;
 
 #if NOESIS
             viewWelderFactory

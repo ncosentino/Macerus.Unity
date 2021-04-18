@@ -25,10 +25,6 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <i:Interaction.Behaviors>
-        <local:DragAdornerBehavior x:Name="DragAdorner"/>
-    </i:Interaction.Behaviors>
-
     <Grid>
         <Grid.Background>
             <ImageBrush
@@ -151,26 +147,6 @@
                     <SolidColorBrush Color="#FF171612" Opacity="0"/>
                 </Border.Background>
             </Border>
-        </Grid>
-        <Grid x:Name="DragPanel" Grid.ColumnSpan="4" Grid.RowSpan="3" d:IsHidden="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*"/>
-                <ColumnDefinition Width="100*"/>
-            </Grid.ColumnDefinitions>
-            <Decorator x:Name="DragItemRef" Grid.Column="0"/>
-            <ContentControl
-                Content="{Binding DraggedItemSlot}"
-                Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top"
-                Width="{Binding ActualWidth, ElementName=DragItemRef}"
-                Height="{Binding ActualWidth, ElementName=DragItemRef}"
-                BorderThickness="{Binding ActualWidth, ElementName=DragItemBorderRef}"
-                Style="{StaticResource Style.DraggedItem}">
-                <ContentControl.RenderTransform>
-                    <TranslateTransform
-                        X="{Binding DraggedItemX, ElementName=DragAdorner}"
-                        Y="{Binding DraggedItemY, ElementName=DragAdorner}"/>
-                </ContentControl.RenderTransform>
-            </ContentControl>
         </Grid>
     </Grid>
 </UserControl>
