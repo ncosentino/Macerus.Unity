@@ -35,8 +35,6 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
 #if !NOESIS
     internal sealed class TestEquipmentItemSlotCollectionNoesisViewModel : IItemSlotCollectionNoesisViewModel
     {
-        public IItemSlotNoesisViewModel this[object id] => null;
-
         public IEnumerable<IItemSlotNoesisViewModel> ItemSlots => new IItemSlotNoesisViewModel[0];
 
         public ImageSource BackgroundImageSource => null;
@@ -46,6 +44,8 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
         public ICommand EndDragItem => null;
 
         public ICommand DropItem => null;
+
+        public bool IsDragOver { get; set; }
     }
 #endif
 }

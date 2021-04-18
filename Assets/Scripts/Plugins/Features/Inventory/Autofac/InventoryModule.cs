@@ -49,6 +49,15 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Autofac
             builder
                 .Register(x =>
                 {
+                    var itemSlotCollectionNoesisViewModel = new EmptyDropZoneNoesisViewModel(
+                        x.ResolveNamed<IItemSlotCollectionViewModel>("drop to map"));
+                    return itemSlotCollectionNoesisViewModel;
+                })
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .Register(x =>
+                {
                     var itemDragNoesisViewModel = new ItemDragNoesisViewModel(
                         x.Resolve<IBagSlotToNoesisViewModelConverter>(),
                         x.Resolve<IItemDragViewModel>());

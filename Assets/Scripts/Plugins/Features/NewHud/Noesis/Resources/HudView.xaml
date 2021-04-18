@@ -7,7 +7,9 @@
     xmlns:inventory="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     mc:Ignorable="d"
-    Background="Cyan">
+    Background="Cyan"
+    d:DesignWidth="800"
+    d:DesignHeight="600">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -24,7 +26,7 @@
     <Grid x:Name="Gui">
         <Grid.RowDefinitions>
             <RowDefinition Height="10*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*" MaxHeight="200"/>
         </Grid.RowDefinitions>
 
         <Grid
@@ -42,10 +44,13 @@
                 x:Name="LeftContent"
                 Grid.Column="0"
                 Background="Yellow"/>
-            
+
+            <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
             <Grid 
                 x:Name="EmptySpace"
-                Grid.Column="1"/>
+                Grid.Column="1"
+                Background="#00000001"
+                Style="{StaticResource Style.EmptyDropZone}"/>
             
             <Grid 
                 x:Name="RightContent"

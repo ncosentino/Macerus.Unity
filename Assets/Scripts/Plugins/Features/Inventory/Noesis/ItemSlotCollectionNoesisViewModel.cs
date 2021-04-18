@@ -10,7 +10,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 using Assets.Scripts.Gui.Noesis;
@@ -33,11 +32,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 
         static ItemSlotCollectionNoesisViewModel()
         {
-            _lazyNotifierMapping = LazyNotifierMappingBuilder.BuildMapping<ItemSlotCollectionNoesisViewModel>(new Dictionary<string, string>()
-            {
-                ["Item[]"] = "Item[]", // NOTE: this is needed for the indexer to work in WPF bindings
-                //["Items"] = "Items",
-            });
+            _lazyNotifierMapping = LazyNotifierMappingBuilder.BuildMapping<ItemSlotCollectionNoesisViewModel>();
         }
 
         public ItemSlotCollectionNoesisViewModel(
@@ -75,21 +70,6 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             get { return _viewModelToWrap.IsDragOver; }
             set => _viewModelToWrap.IsDragOver = value;
         }
-
-        [NotifyForWrappedProperty(nameof(IItemSlotCollectionViewModel.IsDropAllowed))]
-        public bool IsDropAllowed
-        {
-            get { return _viewModelToWrap.IsDropAllowed; }
-            set => _viewModelToWrap.IsDropAllowed = value;
-        }
-
-        // FIXME: this indexer sucks but it allows for the equipment-slot key/
-        // value binding in xaml... Can this go away once those are programmatic?
-        [IndexerName("Item")]
-        public IItemSlotNoesisViewModel this[object id] =>
-            _itemSlotViewModels.TryGetValue(id, out var item)
-            ? item
-            : null;
 
         private bool OnCanStartDragItem(object param)
         {

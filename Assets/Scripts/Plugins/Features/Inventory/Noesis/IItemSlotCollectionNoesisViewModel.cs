@@ -22,6 +22,6 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 
         ICommand DropItem { get; }
 
-        IItemSlotNoesisViewModel this[object id] { get; }
+        bool IsDragOver { get; set; }
     }
 }
