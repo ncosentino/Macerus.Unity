@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Gui\DelegateCommand.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\Autofac\SharedBlendNoesisModule.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\IResourceImageSourceFactory.cs" />
+    <Compile Include="Assets\Scripts\Gui\Noesis\NoesisLogicalTreeHelper.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\ResourceImageSourceFactory.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\ViewModels\LazyNotifierMappingBuilder.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\ViewModels\NotifyForWrappedPropertyAttribute.cs" />

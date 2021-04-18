@@ -1,13 +1,12 @@
 ﻿#if UNITY_5_3_OR_NEWER
 #define NOESIS
 using Noesis;
-
-using Assets.Scripts.Gui.Noesis;
 #else
 using System.Windows.Controls;
 #endif
 
 using Assets.Scripts.Plugins.Features.Inventory.Noesis;
+using Assets.Scripts.Gui.Noesis;
 
 using Macerus.Plugins.Features.Inventory.Api;
 
@@ -28,23 +27,15 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             InitializeComponent();
             DataContext = viewModel;
 
-#if NOESIS
-            ((FrameworkElement)FindName("EmptySpace")).DataContext = emptyDropZoneNoesisViewModel;
+            NoesisLogicalTreeHelper
+                .FindChildWithName(this, "EmptySpace")
+                .DataContext = emptyDropZoneNoesisViewModel;
 
             viewWelderFactory
                 .Create<ISimpleWelder>(
-                    FindName("RightContent"),
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "RightContent"),
                     playerInventoryWindow)
                 .Weld();
-#else
-            EmptySpace.DataContext = emptyDropZoneNoesisViewModel;
-
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    RightContent,
-                    playerInventoryWindow)
-                .Weld();
-#endif
         }
 
 #if NOESIS
