@@ -1,14 +1,14 @@
 ﻿#if UNITY_5_3_OR_NEWER
 #define NOESIS
-using Assets.Scripts.Gui.Noesis;
-using Assets.Scripts.Plugins.Features.Inventory.Noesis;
-
 using Noesis;
 #else
 using System.Windows.Controls;
 #endif
 
+using Assets.Scripts.Gui.Noesis;
+
 using Macerus.Plugins.Features.Inventory.Api;
+
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
@@ -25,29 +25,16 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
         {
             InitializeComponent();
 
-#if NOESIS
             viewWelderFactory
                 .Create<ISimpleWelder>(
-                    FindName("EquipmentPlaceholder"),
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "EquipmentPlaceholder"),
                     inventoryEquipmentView)
                 .Weld();
             viewWelderFactory
                 .Create<ISimpleWelder>(
-                    FindName("BagPlaceholder"),
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "BagPlaceholder"),
                     inventoryBagView)
                 .Weld();
-#else
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    EquipmentPlaceholder,
-                    inventoryEquipmentView)
-                .Weld();
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    BagPlaceholder,
-                    inventoryBagView)
-                .Weld();
-#endif
         }
 
 #if NOESIS
