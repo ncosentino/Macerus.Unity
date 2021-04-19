@@ -19,6 +19,7 @@
         <GradientStop Color="#7F000000" Offset="0.9"/>
         <GradientStop Color="#33000000" Offset="1"/>
     </LinearGradientBrush>
+    <Color x:Key="Color.InvalidBorder" A="#66" R="#F0" G="#40" B="#29"/>
 
     <!--Title Bar-->
     <Style x:Key="Style.TitleBarText" TargetType="{x:Type TextBlock}">
@@ -482,7 +483,7 @@
                     <Border x:Name="InvalidDropBorder" Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
                             CornerRadius="7" VerticalAlignment="Bottom">
                         <Border.Background>
-                            <SolidColorBrush Color="#66F04029" Opacity="0"/>
+                            <SolidColorBrush Color="{StaticResource Color.InvalidBorder}" Opacity="0"/>
                         </Border.Background>
                     </Border>
                     <Viewbox
@@ -773,7 +774,7 @@
                     </Border>
                     <Border x:Name="InvalidDropBorder" Grid.RowSpan="3" Grid.ColumnSpan="3" CornerRadius="4">
                         <Border.Background>
-                            <SolidColorBrush Color="#66F04029" Opacity="0"/>
+                            <SolidColorBrush Color="{StaticResource Color.InvalidBorder}" Opacity="0"/>
                         </Border.Background>
                     </Border>
                     <Viewbox x:Name="Icon" Grid.Row="1" Grid.Column="1" RenderTransformOrigin="0.5,0.5">
