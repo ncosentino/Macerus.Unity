@@ -27,233 +27,9 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.TitleBarText}"/>
         <Setter Property="Margin" Value="0,2"/>
     </Style>
-
     
     <!--Item ToolTip-->
     <ControlTemplate x:Key="Template.ItemToolTip" TargetType="{x:Type ContentControl}">
-        <ControlTemplate.Resources>
-            <Storyboard x:Key="Anim.Show">
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" Storyboard.TargetName="ItemInfo">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(Brush.Opacity)" Storyboard.TargetName="ItemInfo">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="Name">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="Desc">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="LifeLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="LifeLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="Life">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.55" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.85" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="Life">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.55" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.85" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="ManaLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.55" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.85" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="ManaLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.55" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.85" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="Mana">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="Mana">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="DpsLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="DpsLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="Dps">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.65" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.95" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="Dps">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.65" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.95" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="ArmorLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.65" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.95" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="ArmorLabel">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.65" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.95" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(Brush.Opacity)" Storyboard.TargetName="Armor">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="Armor">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="-10"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <CircleEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="FadeIn">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <SineEase EasingMode="EaseIn"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.35" Value="1"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <SineEase EasingMode="EaseIn"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="FadeIn">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <SineEase EasingMode="EaseIn"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.35" Value="1"/>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
-                        <EasingDoubleKeyFrame.EasingFunction>
-                            <SineEase EasingMode="EaseOut"/>
-                        </EasingDoubleKeyFrame.EasingFunction>
-                    </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
-                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="FadeIn">
-                    <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#CC554222"/>
-                    <EasingColorKeyFrame KeyTime="0:0:0.325" Value="#E5554222"/>
-                    <EasingColorKeyFrame KeyTime="0:0:0.35" Value="#CC554222"/>
-                </ColorAnimationUsingKeyFrames>
-                <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="FadeIn">
-                    <DiscretePointKeyFrame KeyTime="0" Value="0,0"/>
-                    <DiscretePointKeyFrame KeyTime="0:0:0.3" Value="1,1"/>
-                </PointAnimationUsingKeyFrames>
-            </Storyboard>
-        </ControlTemplate.Resources>
         <Grid x:Name="Root" Width="{Binding ActualWidth, ElementName=ToolTipRef}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
@@ -280,57 +56,35 @@
                             </LinearGradientBrush>
                         </Border.BorderBrush>
                         <StackPanel>
-                            <noesis:Element.Transform3D>
-                                <noesis:CompositeTransform3D TranslateZ="5"/>
-                            </noesis:Element.Transform3D>
-                            <TextBlock x:Name="Name" Text="{Binding Name}" Foreground="#FFF3CF54" FontSize="11">
-                                <noesis:Element.Transform3D>
-                                    <noesis:CompositeTransform3D TranslateZ="5"/>
-                                </noesis:Element.Transform3D>
-                            </TextBlock>
-                            <TextBlock x:Name="Desc" Text="{Binding Description}" FontSize="8" Width="100" TextWrapping="Wrap" Foreground="#CCF9E7B9"/>
-                            <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
-                                <TextBlock x:Name="LifeLabel" Width="30" Text="Life:" Foreground="#F2C6C4B9" RenderTransformOrigin="0.5,0.5"/>
-                                <TextBlock x:Name="Life" Width="50" Foreground="#FFBCEE52" TextAlignment="Right" RenderTransformOrigin="0.5,0.5">
-                                    <Run Text="+"/><Run Text="{Binding Life}"/>
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <TextBlock x:Name="ManaLabel" Width="30" Text="Mana:" Foreground="#F2C6C4B9" RenderTransformOrigin="0.5,0.5"/>
-                                <TextBlock x:Name="Mana" Width="50" Foreground="#FFBCEE52" TextAlignment="Right" RenderTransformOrigin="0.5,0.5">
-                                    <Run Text="+"/><Run Text="{Binding Mana}"/>
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <TextBlock x:Name="DpsLabel" Width="30" Text="Dps:" Foreground="#F2C6C4B9" RenderTransformOrigin="0.5,0.5"/>
-                                <TextBlock x:Name="Dps" Width="50" Foreground="#FFBCEE52" TextAlignment="Right" RenderTransformOrigin="0.5,0.5">
-                                    <Run Text="+"/><Run Text="{Binding Dps}"/>
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <TextBlock x:Name="ArmorLabel" Width="30" Text="Armor:" Foreground="#F2C6C4B9" RenderTransformOrigin="0.5,0.5"/>
-                                <TextBlock x:Name="Armor" Width="50" Foreground="#FFBCEE52" TextAlignment="Right" RenderTransformOrigin="0.5,0.5">
-                                    <Run Text="+"/><Run Text="{Binding Armor}"/>
-                                </TextBlock>
-                            </StackPanel>
+                            <Viewbox
+                                x:Name="Icon" 
+                                RenderTransformOrigin="0.5,0.5"
+                                VerticalAlignment="Bottom">
+                                <!--FIXME: this icon layout is used MULTIPLE times... refactor but double check the bindings (i.e. background on this one)-->
+                                <Grid Width="60" Height="60" Background="{Binding BackgroundBrush}">
+                                    <Rectangle Opacity="{Binding IconOpacity}">
+                                        <Rectangle.Fill>
+                                            <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle>
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding IconColor}"/>
+                                        </Rectangle.Fill>
+                                        <Rectangle.OpacityMask>
+                                            <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Grid>
+                            </Viewbox>
                         </StackPanel>
-                    </Border>
-                    <Border x:Name="FadeIn" CornerRadius="2" Background="#CC554222" RenderTransformOrigin="0,0" d:IsHidden="True">
-                        <Border.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Border.RenderTransform>
                     </Border>
                 </Grid>
             </Viewbox>
         </Grid>
         <ControlTemplate.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="Root">
-                <BeginStoryboard Storyboard="{StaticResource Anim.Show}"/>
+                <!--<BeginStoryboard Storyboard="{StaticResource Anim.Show}"/>-->
             </EventTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -525,7 +279,7 @@
             <Popup
                 x:Name="ToolTip"
                 AllowsTransparency="True" 
-                Placement="{TemplateBinding Tag}"
+                PlacementTarget="{Binding ElementName=Root}"
                 VerticalOffset="{Binding ActualHeight, ElementName=SlotCornerRef}"
                 DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}">
                 <ContentControl x:Name="ToolTipContent" Grid.ColumnSpan="2" Style="{StaticResource Style.ItemToolTip}"/>
@@ -535,14 +289,17 @@
             <Trigger Property="DataContext" Value="{x:Null}" SourceName="ToolTipContent">
                 <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTipContent"/>
             </Trigger>
-            <Trigger Property="IsKeyboardFocused" Value="True">
+            <DataTrigger Binding="{Binding HasItem}" Value="True">
                 <Setter Property="IsOpen" Value="True" TargetName="ToolTip"/>
-                <Trigger.EnterActions>
+                <DataTrigger.EnterActions>
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOn}"/>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOff}"/>
-                </Trigger.ExitActions>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="IsOpen" Value="False" TargetName="ToolTip"/>
             </Trigger>
             <DataTrigger Binding="{Binding IsDropAllowed}" Value="False">
                 <Setter Property="IsEnabled" Value="False"/>
@@ -745,7 +502,7 @@
                         <Popup
                             x:Name="ToolTip"
                             AllowsTransparency="True" 
-                            Placement="Left"
+                            PlacementTarget="{Binding ElementName=Root}"
                             DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}">
                             <ContentControl
                                 x:Name="ToolTipContent"
@@ -787,7 +544,7 @@
             <Trigger Property="DataContext" Value="{x:Null}" SourceName="ToolTipContent">
                 <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTipContent"/>
             </Trigger>
-            <Trigger Property="IsKeyboardFocused" Value="True">
+            <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="IsOpen" Value="True" TargetName="ToolTip"/>
                 <Trigger.EnterActions>
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOn}"/>
@@ -795,6 +552,9 @@
                 <Trigger.ExitActions>
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOff}"/>
                 </Trigger.ExitActions>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="IsOpen" Value="False" TargetName="ToolTip"/>
             </Trigger>
             <DataTrigger Binding="{Binding IsDropAllowed}" Value="False">
                 <Setter Property="IsEnabled" Value="False"/>
