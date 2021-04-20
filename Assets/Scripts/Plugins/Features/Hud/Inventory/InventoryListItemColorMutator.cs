@@ -17,7 +17,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
             IGameObject item)
         {
             var hasInventoryDisplayColor = item
-                .Get<IHasInventoryDisplayColor>()
+                .Get<IHasInventoryBackgroundColor>()
                 .SingleOrDefault();
             if (hasInventoryDisplayColor == null)
             {
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Plugins.Features.Hud.Inventory
                 hasInventoryDisplayColor.R / 255f,
                 hasInventoryDisplayColor.G / 255f,
                 hasInventoryDisplayColor.B / 255f,
-                hasInventoryDisplayColor.A / 255f);
+                1);
             inventoryListItemPrefab.Name.color = color;
         }
     }

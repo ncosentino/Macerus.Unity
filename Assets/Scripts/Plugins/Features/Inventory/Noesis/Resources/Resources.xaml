@@ -459,7 +459,7 @@
             <Viewbox Grid.RowSpan="3">
                 <Grid>
                     <Border
-                        Background="#3FDA9858"
+                        Background="{Binding BackgroundBrush}"
                         Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
                         CornerRadius="7"
                         VerticalAlignment="Bottom">
@@ -497,11 +497,21 @@
                         <Viewbox.RenderTransform>
                             <ScaleTransform/>
                         </Viewbox.RenderTransform>
-                        <Rectangle Width="60" Height="60">
-                            <Rectangle.Fill>
-                                <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
-                            </Rectangle.Fill>
-                        </Rectangle>
+                        <Grid Width="60" Height="60">
+                            <Rectangle Opacity="{Binding IconOpacity}">
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle>
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding IconColor}"/>
+                                </Rectangle.Fill>
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Grid>
                     </Viewbox>
                 </Grid>
             </Viewbox>
@@ -631,20 +641,6 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Bg">
-                    <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#0CDA9858">
-                        <EasingColorKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingColorKeyFrame.EasingFunction>
-                    </EasingColorKeyFrame>
-                </ColorAnimationUsingKeyFrames>
-                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="Bg">
-                    <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#59D19233">
-                        <EasingColorKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingColorKeyFrame.EasingFunction>
-                    </EasingColorKeyFrame>
-                </ColorAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(Brush.Opacity)" Storyboard.TargetName="Bd">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.5">
                         <EasingDoubleKeyFrame.EasingFunction>
@@ -682,20 +678,6 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="Bg">
-                    <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#3FDA9858">
-                        <EasingColorKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingColorKeyFrame.EasingFunction>
-                    </EasingColorKeyFrame>
-                </ColorAnimationUsingKeyFrames>
-                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Bg">
-                    <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#3FDA9858">
-                        <EasingColorKeyFrame.EasingFunction>
-                            <CubicEase EasingMode="EaseInOut"/>
-                        </EasingColorKeyFrame.EasingFunction>
-                    </EasingColorKeyFrame>
-                </ColorAnimationUsingKeyFrames>
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(Brush.Opacity)" Storyboard.TargetName="Bd">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
                         <EasingDoubleKeyFrame.EasingFunction>
@@ -740,13 +722,11 @@
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
             <Decorator x:Name="SlotBorderRef"/>
-            <Border x:Name="Bg" Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}" CornerRadius="4" Grid.ColumnSpan="2">
-                <Border.Background>
-                    <RadialGradientBrush>
-                        <GradientStop Color="#3FDA9858" Offset="0"/>
-                        <GradientStop Color="#3FDA9858" Offset="1"/>
-                    </RadialGradientBrush>
-                </Border.Background>
+            <Border 
+                x:Name="Bg" 
+                Background="{Binding BackgroundBrush}"
+                Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}" 
+                CornerRadius="4" Grid.ColumnSpan="2">                
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*"/>
@@ -784,11 +764,21 @@
                         <Viewbox.RenderTransform>
                             <ScaleTransform/>
                         </Viewbox.RenderTransform>
-                        <Rectangle Width="60" Height="60">
-                            <Rectangle.Fill>
-                                <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
-                            </Rectangle.Fill>
-                        </Rectangle>
+                        <Grid Width="60" Height="60">
+                            <Rectangle Opacity="{Binding IconOpacity}">
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle>
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding IconColor}"/>
+                                </Rectangle.Fill>
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Grid>
                     </Viewbox>
                 </Grid>
             </Border>

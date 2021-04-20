@@ -12,10 +12,11 @@ using System.Collections.Generic;
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
 using Macerus.Plugins.Features.Inventory.Default;
-using Macerus.Plugins.Features.Inventory.Api;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
+    using IItemSlotViewModel = Macerus.Plugins.Features.Inventory.Api.IItemSlotViewModel;
+
     public sealed class EquipmentSlotNoesisViewModel :
         NotifierBase,
         IEquipGridItemSlotNoesisViewModel
@@ -30,6 +31,9 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         public EquipmentSlotNoesisViewModel(
             IItemSlotViewModel viewModelToWrap,
             ImageSource iconImageSource,
+            Brush backgroundBrush,
+            float iconOpacity,
+            Color iconColor,
             int gridRow,
             int gridRowSpan,
             int gridColumn,
@@ -41,6 +45,9 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             GridRowSpan = gridRowSpan;
             GridColumn = gridColumn;
             GridColumnSpan = gridColumnSpan;
+            BackgroundBrush = backgroundBrush;
+            IconColor = iconColor;
+            IconOpacity = iconOpacity;
 
             ViewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
         }
@@ -50,6 +57,12 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         public bool HasItem => ViewModelToWrap.HasItem;
 
         public ImageSource IconImageSource { get; }
+
+        public Brush BackgroundBrush { get; }
+
+        public Color IconColor { get; }
+
+        public float IconOpacity { get; }
 
         public string SlotLabel => ViewModelToWrap.SlotLabel;
 

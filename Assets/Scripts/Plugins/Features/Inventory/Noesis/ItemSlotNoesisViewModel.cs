@@ -12,10 +12,11 @@ using System.Collections.Generic;
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
 using Macerus.Plugins.Features.Inventory.Default;
-using Macerus.Plugins.Features.Inventory.Api;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
+    using IItemSlotViewModel = Macerus.Plugins.Features.Inventory.Api.IItemSlotViewModel;
+
     public sealed class ItemSlotNoesisViewModel :
         NotifierBase,
         IItemSlotNoesisViewModel
@@ -29,10 +30,16 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 
         public ItemSlotNoesisViewModel(
             IItemSlotViewModel viewModelToWrap,
-            ImageSource iconImageSource)
+            ImageSource iconImageSource,
+            Brush backgroundBrush,
+            float iconOpacity,
+            Color iconColor)
         {
             ViewModelToWrap = viewModelToWrap;
             IconImageSource = iconImageSource;
+            BackgroundBrush = backgroundBrush;
+            IconColor = iconColor;
+            IconOpacity = iconOpacity;
 
             ViewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
         }
@@ -42,6 +49,12 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         public bool HasItem => ViewModelToWrap.HasItem;
 
         public ImageSource IconImageSource { get; }
+
+        public Brush BackgroundBrush { get; }
+
+        public Color IconColor { get; }
+
+        public float IconOpacity { get; }
 
         public string SlotLabel => ViewModelToWrap.SlotLabel;
 

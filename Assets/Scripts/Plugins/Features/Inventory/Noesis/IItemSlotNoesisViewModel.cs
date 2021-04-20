@@ -13,6 +13,8 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 
         ImageSource IconImageSource { get; }
 
+        Brush BackgroundBrush { get; }
+
         bool ShowLabel { get; }
 
         object Id { get; }
