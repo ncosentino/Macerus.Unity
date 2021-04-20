@@ -12,7 +12,9 @@
         Background="Black"
         d:DataContext="{d:DesignInstance {x:Type resources:TestEquipmentItemSlotCollectionNoesisViewModel}, IsDesignTimeCreatable=True}"
         d:DesignWidth="196"
-        d:DesignHeight="320">
+        d:DesignHeight="320"
+        MaxWidth="196"
+        MaxHeight="320">
 
     <UserControl.Resources>
         <ResourceDictionary>

@@ -3,10 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
-        xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
         xmlns:resources="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources"
         mc:Ignorable="d"
         x:Name="Root"
@@ -66,9 +63,9 @@
                 <noesis:CompositeTransform3D RotationY="0" CenterX="0"/>
             </noesis:Element.Transform3D>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100*"/>
-                <RowDefinition Height="800*"/>
-                <RowDefinition Height="800*"/>
+                <RowDefinition Height="48"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
