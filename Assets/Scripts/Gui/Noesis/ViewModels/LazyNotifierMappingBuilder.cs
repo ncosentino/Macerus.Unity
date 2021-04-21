@@ -15,13 +15,13 @@ namespace Assets.Scripts.Gui.Noesis.ViewModels
             return new Lazy<IReadOnlyDictionary<string, string>>(() => typeof(T)
                 .GetProperties(BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance)
                 .Select(x => new KeyValuePair<string, string>(
-                    x.Name,
                     ((NotifyForWrappedPropertyAttribute)x
                         .GetCustomAttributes(typeof(NotifyForWrappedPropertyAttribute))
                         .SingleOrDefault())
-                    ?.PropertyName))
+                    ?.PropertyName,
+                    x.Name))
                 .Concat(additional)
-                .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                .Where(x => !string.IsNullOrWhiteSpace(x.Key))
                 .ToDictionary(x => x.Key, x => x.Value));
         }
     }
