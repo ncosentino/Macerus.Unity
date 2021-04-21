@@ -23,7 +23,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IKeyboardControls _keyboardControls;
         private readonly IKeyboardInput _keyboardInput;
         private readonly IMouseInput _mouseInput;
-        private readonly IGuiHitTester _guiHitTester;
+        private readonly IGuiHitTesterFacade _guiHitTester;
         private readonly ILogger _logger;
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IScreenPointToMapCellConverter _screenPointToMapCellConverter;
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             IKeyboardControls keyboardControls,
             IKeyboardInput keyboardInput,
             IMouseInput mouseInput,
-            IGuiHitTester guiHitTester,
+            IGuiHitTesterFacade guiHitTester,
             ILogger logger,
             IDebugConsoleManager debugConsoleManager,
             IScreenPointToMapCellConverter screenPointToMapCellConverter,
