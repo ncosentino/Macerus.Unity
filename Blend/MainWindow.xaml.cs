@@ -10,15 +10,14 @@ using Macerus.Api.Behaviors;
 using Macerus.Api.Behaviors.Filtering;
 using Macerus.Plugins.Features.Animations.Lpc;
 using Macerus.Plugins.Features.Encounters;
+using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Mapping.TiledNet;
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Logging;
-using ProjectXyz.Plugins.Features.Behaviors.Filtering.Default;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using ProjectXyz.Plugins.Features.GameObjects.Items.Api.Generation.DropTables;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
 
@@ -45,23 +44,9 @@ namespace Assets.Blend
                 filterContext,
                 new StringIdentifier("test-encounter"));
 
-            var dropTableRepository = container.Resolve<IDropTableRepositoryFacade>();
-            var dropTableIdentifiers = container.Resolve<IDropTableIdentifiers>();
             var dropTableId = new StringIdentifier("any_normal_magic_10x_lvl10");
-            var dropTable = dropTableRepository.GetForDropTableId(dropTableId);
-            var dropTableAttribute = filterContextAmenity.CreateRequiredAttribute(
-                dropTableIdentifiers.FilterContextDropTableIdentifier,
-                dropTable.DropTableId);
-
-            var lootFilterContext = filterContextAmenity
-                .CreateNoneFilterContext()
-                .WithAdditionalAttributes(new[] { dropTableAttribute })
-                .WithRange(
-                    dropTable.MinimumGenerateCount,
-                    dropTable.MaximumGenerateCount);
-
-            var lootGenerator = container.Resolve<ILootGenerator>();
-            var generatedItems = lootGenerator.GenerateLoot(lootFilterContext);
+            var lootGeneratorAmenity = container.Resolve<ILootGeneratorAmenity>();
+            var generatedItems = lootGeneratorAmenity.GenerateLoot(dropTableId);
 
             var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
             var playerInventory = mapGameObjectManager
