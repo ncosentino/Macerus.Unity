@@ -7,7 +7,7 @@
         xmlns:resources="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources"
         mc:Ignorable="d"
         x:Name="Root"
-        FontFamily="Fonts/#Gidole"
+        FontFamily="Arial"
         Foreground="White"
         Background="Black"
         d:DataContext="{d:DesignInstance {x:Type resources:TestEquipmentItemSlotCollectionNoesisViewModel}, IsDesignTimeCreatable=True}"

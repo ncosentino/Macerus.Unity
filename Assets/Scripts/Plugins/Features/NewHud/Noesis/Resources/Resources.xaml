@@ -22,6 +22,8 @@
 
     <!--EmptyDropZone-->
     <Style x:Key="Style.EmptyDropZone" TargetType="{x:Type Grid}">
+        <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
+        <Setter Property="Background" Value="#00000001"/>
         <Setter Property="noesis:StyleInteraction.Behaviors">
             <Setter.Value>
                 <noesis:StyleBehaviorCollection>

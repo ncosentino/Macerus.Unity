@@ -7,7 +7,6 @@
     xmlns:inventory="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     mc:Ignorable="d"
-    Background="Cyan"
     d:DesignWidth="800"
     d:DesignHeight="600">
 
@@ -43,18 +42,17 @@
             <Grid 
                 x:Name="LeftContent"
                 Grid.Column="0"
-                Background="Yellow"/>
+                Style="{StaticResource Style.EmptyDropZone}"/>
 
-            <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
             <Grid 
                 x:Name="EmptySpace"
                 Grid.Column="1"
-                Background="#00000001"
                 Style="{StaticResource Style.EmptyDropZone}"/>
             
             <Grid 
                 x:Name="RightContent"
-                Grid.Column="2"/>
+                Grid.Column="2"
+                Style="{StaticResource Style.EmptyDropZone}"/>
         </Grid>
 
         <Grid x:Name="DragPanel" Grid.ColumnSpan="3" Grid.RowSpan="1" d:IsHidden="True">

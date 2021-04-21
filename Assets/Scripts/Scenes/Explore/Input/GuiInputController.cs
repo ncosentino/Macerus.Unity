@@ -6,6 +6,7 @@ using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using Macerus.Game.Api;
+using Macerus.Plugins.Features.Inventory.Api;
 
 using ProjectXyz.Shared.Framework;
 
@@ -20,6 +21,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IKeyboardControls _keyboardControls;
         private readonly ILogger _logger;
+        private readonly IPlayerInventoryController _playerInventoryController;
         private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly ISceneManager _sceneManager;
 
@@ -28,13 +30,15 @@ namespace Assets.Scripts.Scenes.Explore.Input
             IKeyboardControls keyboardControls,
             IUnityGameObjectManager gameObjectManager,
             ISceneManager sceneManager,
-            ILogger logger)
+            ILogger logger,
+            IPlayerInventoryController playerInventoryController)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
             _gameObjectManager = gameObjectManager;
             _sceneManager = sceneManager;
             _logger = logger;
+            _playerInventoryController = playerInventoryController;
         }
 
         public void Update(float deltaTime)
@@ -50,12 +54,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
             }
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleInventory))
             {
-                _logger.Debug("Toggling inventory...");
-                var inventoryUi = _gameObjectManager
-                    .FindAll(x => x.name == "Inventory")
-                    .First();
-                inventoryUi.ToggleEnabled();
-                _logger.Debug("Toggled inventory.");
+                _playerInventoryController.ToggleInventory();
             }
         }
     }

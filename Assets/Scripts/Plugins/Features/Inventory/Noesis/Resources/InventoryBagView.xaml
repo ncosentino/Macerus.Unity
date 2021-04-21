@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources"
         mc:Ignorable="d"
         x:Name="Root"
-        FontFamily="Fonts/#Gidole"
+        FontFamily="Arial"
         Foreground="White"
         Background="Black"
         d:DesignWidth="1000"

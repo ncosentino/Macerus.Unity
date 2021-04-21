@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
         xmlns:resources="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources"
+        xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
         mc:Ignorable="d"
         x:Name="Root"
-        FontFamily="Fonts/#Gidole"
+        FontFamily="Arial"
         Foreground="White"
         Background="Black"
+        Visibility="{Binding Visibility}"
         d:DesignWidth="1000"
         d:DesignHeight="600"
-        d:DataContext="{d:DesignInstance {x:Type resources:TestItemDragNoesisViewModel}, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance {x:Type local:TestPlayerInventoryWindow}, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
         <ResourceDictionary>

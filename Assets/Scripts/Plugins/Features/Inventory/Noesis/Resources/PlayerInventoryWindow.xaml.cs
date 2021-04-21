@@ -2,12 +2,14 @@
 #define NOESIS
 using Noesis;
 #else
+using System.Windows;
 using System.Windows.Controls;
 #endif
 
 using Assets.Scripts.Gui.Noesis;
 
 using Macerus.Plugins.Features.Inventory.Api;
+using Macerus.Plugins.Features.Gui.Default;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
@@ -20,10 +22,12 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
     {
         public PlayerInventoryWindow(
             IViewWelderFactory viewWelderFactory,
+            IPlayerInventoryWindowNoesisViewModel viewModel,
             IInventoryEquipmentView inventoryEquipmentView,
             IInventoryBagView inventoryBagView)
         {
             InitializeComponent();
+            DataContext = viewModel;
 
             viewWelderFactory
                 .Create<ISimpleWelder>(
@@ -46,9 +50,11 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
     }
 
 #if !NOESIS
-    internal sealed class TestItemDragNoesisViewModel : IItemDragNoesisViewModel
+    internal sealed class TestPlayerInventoryWindow :
+        NotifierBase,
+        IPlayerInventoryWindowNoesisViewModel
     {
-        public IItemSlotNoesisViewModel DraggedItemSlot => null;
+        public Visibility Visibility => Visibility.Visible;
     }
 #endif
 }

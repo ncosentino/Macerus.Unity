@@ -16,7 +16,8 @@ using ProjectXyz.Framework.ViewWelding.Api.Welders;
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 {
     public partial class HudView :
-        UserControl
+        UserControl,
+        IHudView
     {
         public HudView(
             IViewWelderFactory viewWelderFactory,
@@ -29,6 +30,12 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 
             NoesisLogicalTreeHelper
                 .FindChildWithName(this, "EmptySpace")
+                .DataContext = emptyDropZoneNoesisViewModel;
+            NoesisLogicalTreeHelper
+                .FindChildWithName(this, "LeftContent")
+                .DataContext = emptyDropZoneNoesisViewModel;
+            NoesisLogicalTreeHelper
+                .FindChildWithName(this, "RightContent")
                 .DataContext = emptyDropZoneNoesisViewModel;
 
             viewWelderFactory

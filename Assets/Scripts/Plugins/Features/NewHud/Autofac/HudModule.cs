@@ -14,7 +14,7 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<HudView>()
-                //.AsImplementedInterfaces()
+                .AsImplementedInterfaces()
                 .SingleInstance();
         }
     }

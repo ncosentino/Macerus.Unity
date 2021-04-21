@@ -51,6 +51,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         private void OnDropItem(object param)
         {
             _viewModelToWrap.DropItem(null);
+            _viewModelToWrap.EndDragItem(true);
         }
 
         private void ViewModelToWrap_PropertyChanged(

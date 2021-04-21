@@ -19,11 +19,10 @@
         <GradientStop Color="#7F000000" Offset="0.9"/>
         <GradientStop Color="#33000000" Offset="1"/>
     </LinearGradientBrush>
-    <Color x:Key="Color.InvalidBorder" A="#66" R="#F0" G="#40" B="#29"/>
 
     <!--Title Bar-->
     <Style x:Key="Style.TitleBarText" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="Fonts/#Sequel"/>
+        <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="Foreground" Value="{StaticResource Brush.TitleBarText}"/>
         <Setter Property="Margin" Value="0,2"/>
     </Style>
@@ -31,56 +30,42 @@
     <!--Item ToolTip-->
     <ControlTemplate x:Key="Template.ItemToolTip" TargetType="{x:Type ContentControl}">
         <Grid x:Name="Root" Width="{Binding ActualWidth, ElementName=ToolTipRef}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="970*"/>
-                <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="3*"/>
-            </Grid.ColumnDefinitions>
-            <Decorator x:Name="BorderRef" Grid.Column="0"/>
-            <Decorator x:Name="MarginRef" Grid.Column="1"/>
-            <Viewbox Grid.Column="2">
-                <noesis:Element.Transform3D>
-                    <noesis:CompositeTransform3D TranslateZ="10"/>
-                </noesis:Element.Transform3D>
-                <Grid>
-                    <Border x:Name="ItemInfo" CornerRadius="2"
-                        BorderThickness="{Binding ActualWidth, ElementName=BorderRef}"
-                        Padding="{Binding ActualWidth, ElementName=MarginRef}" Background="#E532280F">
-                        <Border.BorderBrush>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#66554222" Offset="0"/>
-                                <GradientStop Color="#FF554222" Offset="0.6"/>
-                                <GradientStop Color="#26554222" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.BorderBrush>
-                        <StackPanel>
-                            <Viewbox
-                                x:Name="Icon" 
-                                RenderTransformOrigin="0.5,0.5"
-                                VerticalAlignment="Bottom">
-                                <!--FIXME: this icon layout is used MULTIPLE times... refactor but double check the bindings (i.e. background on this one)-->
-                                <Grid Width="60" Height="60" Background="{Binding BackgroundBrush}">
-                                    <Rectangle Opacity="{Binding IconOpacity}">
-                                        <Rectangle.Fill>
-                                            <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <Rectangle>
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="{Binding IconColor}"/>
-                                        </Rectangle.Fill>
-                                        <Rectangle.OpacityMask>
-                                            <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
-                                        </Rectangle.OpacityMask>
-                                    </Rectangle>
-                                </Grid>
-                            </Viewbox>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </Viewbox>
+            <Grid>
+                <Border
+                    x:Name="ItemInfo"
+                    CornerRadius="2"
+                    BorderThickness="1"
+                    Background="#E532280F">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#66554222" Offset="0"/>
+                            <GradientStop Color="#FF554222" Offset="0.6"/>
+                            <GradientStop Color="#26554222" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <StackPanel
+                        x:Name="Icon" 
+                        RenderTransformOrigin="0.5,0.5"
+                        VerticalAlignment="Bottom">
+                        <!--FIXME: this icon layout is used MULTIPLE times... refactor but double check the bindings (i.e. background on this one)-->
+                        <Grid Width="60" Height="60" Background="{Binding BackgroundBrush}">
+                            <Rectangle Opacity="{Binding IconOpacity}">
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle>
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding IconColor}"/>
+                                </Rectangle.Fill>
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
         <ControlTemplate.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="Root">
@@ -102,7 +87,7 @@
         <ControlTemplate.Resources>
             <Geometry x:Key="Geometry.SlotBorder">M8.9999981,50.893192 L4.7217236,50.893192 C2.5125842,50.893188 0.72172329,49.102325 0.72172329,46.893188 L0.72172329,4.7217235 C0.72172329,2.512588 2.5125842,0.72172704 4.7217236,0.72172329 L8.9999981,0.72172329</Geometry>
             <Storyboard x:Key="Anim.OverOn">
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
+                <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="10">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -122,7 +107,7 @@
                             <CircleEase EasingMode="EaseOut"/>
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
+                </DoubleAnimationUsingKeyFrames>-->
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" Storyboard.TargetName="Icon">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1.2">
                         <EasingDoubleKeyFrame.EasingFunction>
@@ -137,16 +122,16 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="ContentHost">
+                <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="ContentHost">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="30">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
+                </DoubleAnimationUsingKeyFrames>-->
             </Storyboard>
             <Storyboard x:Key="Anim.OverOff">
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
+                <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -173,7 +158,7 @@
                             <CircleEase EasingMode="EaseOut"/>
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
+                </DoubleAnimationUsingKeyFrames>-->
             </Storyboard>
             <Storyboard x:Key="Anim.InvalidDropOn">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" Storyboard.TargetName="InvalidDropBorder">
@@ -183,7 +168,7 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Opacity)" Storyboard.TargetName="BackgroundBorder">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" Storyboard.TargetName="BackgroundBorder">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -199,7 +184,7 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Opacity)" Storyboard.TargetName="BackgroundBorder">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" Storyboard.TargetName="BackgroundBorder">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -213,9 +198,9 @@
             Margin="5"
             MaxWidth="64"
             MaxHeight="64">
-            <noesis:Element.Transform3D>
+            <!--<noesis:Element.Transform3D>
                 <noesis:CompositeTransform3D TranslateZ="0"/>
-            </noesis:Element.Transform3D>
+            </noesis:Element.Transform3D>-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="12*"/>
@@ -227,6 +212,8 @@
             <Viewbox Grid.RowSpan="3">
                 <Grid>
                     <Border
+                        noesis:Element.PPAAIn="1"
+                        noesis:Element.PPAAOut="1"
                         x:Name="BackgroundBorder"
                         Background="{Binding BackgroundBrush}"
                         Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
@@ -234,13 +221,15 @@
                         VerticalAlignment="Bottom">
                     </Border>
                     <Border
+                        noesis:Element.PPAAIn="1"
+                        noesis:Element.PPAAOut="1"
                         Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
                         CornerRadius="7"
                         VerticalAlignment="Bottom">
                         <Grid x:Name="SlotBorder">
-                            <noesis:Element.Transform3D>
+                            <!--<noesis:Element.Transform3D>
                                 <noesis:CompositeTransform3D TranslateZ="5"/>
-                            </noesis:Element.Transform3D>
+                            </noesis:Element.Transform3D>-->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="4*"/>
@@ -254,10 +243,11 @@
                             </Path>
                         </Grid>
                     </Border>
-                    <Border x:Name="InvalidDropBorder" Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
-                            CornerRadius="7" VerticalAlignment="Bottom">
+                    <Border x:Name="InvalidDropBorder" noesis:Element.PPAAIn="1"
+                        noesis:Element.PPAAOut="1" Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                            CornerRadius="7" VerticalAlignment="Bottom" >
                         <Border.Background>
-                            <SolidColorBrush Color="{StaticResource Color.InvalidBorder}" Opacity="0"/>
+                            <SolidColorBrush Color="#66F04029" Opacity="0"/>
                         </Border.Background>
                     </Border>
                     <Viewbox
@@ -265,9 +255,9 @@
                         RenderTransformOrigin="0.5,0.5"
                         VerticalAlignment="Bottom"
                         Margin="{Binding ActualHeight, ElementName=ContentHost}">
-                        <noesis:Element.Transform3D>
+                        <!--<noesis:Element.Transform3D>
                             <noesis:CompositeTransform3D TranslateZ="10"/>
-                        </noesis:Element.Transform3D>
+                        </noesis:Element.Transform3D>-->
                         <Viewbox.RenderTransform>
                             <ScaleTransform/>
                         </Viewbox.RenderTransform>
@@ -291,9 +281,9 @@
             </Viewbox>
             <Viewbox Grid.Row="3">
                 <TextBlock x:Name="ContentHost" Text="{Binding SlotLabel}">
-                    <noesis:Element.Transform3D>
+                    <!--<noesis:Element.Transform3D>
                         <noesis:CompositeTransform3D TranslateZ="5"/>
-                    </noesis:Element.Transform3D>
+                    </noesis:Element.Transform3D>-->
                 </TextBlock>
             </Viewbox>
             <Popup
@@ -381,6 +371,7 @@
                     <ei:PropertyChangedTrigger Binding="{Binding IsFocused}">
                         <noesis:SetFocusAction/>
                     </ei:PropertyChangedTrigger>
+                    
                 </noesis:StyleTriggerCollection>
             </Setter.Value>
         </Setter>
@@ -390,7 +381,7 @@
     <ControlTemplate x:Key="Template.InventorySlot" TargetType="{x:Type ContentControl}">
         <ControlTemplate.Resources>
             <Storyboard x:Key="Anim.OverOn">
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
+                <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="10">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -403,7 +394,7 @@
                             <CircleEase EasingMode="EaseOut"/>
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
+                </DoubleAnimationUsingKeyFrames>-->
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" Storyboard.TargetName="Icon">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.2">
                         <EasingDoubleKeyFrame.EasingFunction>
@@ -427,7 +418,7 @@
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
             <Storyboard x:Key="Anim.OverOff">
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
+                <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(noesis:Element.Transform3D).(noesis:CompositeTransform3D.TranslateZ)" Storyboard.TargetName="Root">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -440,7 +431,7 @@
                             <CircleEase EasingMode="EaseOut"/>
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
-                </DoubleAnimationUsingKeyFrames>
+                </DoubleAnimationUsingKeyFrames>-->
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" Storyboard.TargetName="Icon">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
                         <EasingDoubleKeyFrame.EasingFunction>
@@ -471,7 +462,7 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Opacity)" Storyboard.TargetName="BackgroundBorder">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" Storyboard.TargetName="BackgroundBorder">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -487,7 +478,7 @@
                         </EasingDoubleKeyFrame.EasingFunction>
                     </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Opacity)" Storyboard.TargetName="BackgroundBorder">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(Brush.Opacity)" Storyboard.TargetName="BackgroundBorder">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
                         <EasingDoubleKeyFrame.EasingFunction>
                             <CircleEase EasingMode="EaseOut"/>
@@ -502,9 +493,9 @@
             RenderTransformOrigin="0.5,0.5"
             MaxWidth="64"
             MaxHeight="64">
-            <noesis:Element.Transform3D>
+            <!--<noesis:Element.Transform3D>
                 <noesis:CompositeTransform3D TranslateZ="0"/>
-            </noesis:Element.Transform3D>
+            </noesis:Element.Transform3D>-->
             <Grid.RenderTransform>
                 <ScaleTransform/>
             </Grid.RenderTransform>
@@ -514,13 +505,17 @@
             </Grid.ColumnDefinitions>
             <Decorator x:Name="SlotBorderRef"/>
             <Border
+                noesis:Element.PPAAIn="1"
+                noesis:Element.PPAAOut="1"
                 x:Name="BackgroundBorder"
                 Background="{Binding BackgroundBrush}"
                 Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
                 CornerRadius="4"
                 VerticalAlignment="Bottom">
             </Border>
-            <Border 
+            <Border
+                noesis:Element.PPAAIn="1"
+                noesis:Element.PPAAOut="1"
                 x:Name="Bg" 
                 Background="{Binding BackgroundBrush}"
                 Height="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}" 
@@ -536,7 +531,7 @@
                         <ColumnDefinition Width="6*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Border x:Name="Bd" Grid.RowSpan="3" Grid.ColumnSpan="3" BorderThickness="{Binding ActualWidth, ElementName=SlotBorderRef, Mode=OneWay}" CornerRadius="4">
+                    <Border x:Name="Bd" Grid.RowSpan="3" Grid.ColumnSpan="3" BorderThickness="{Binding ActualWidth, ElementName=SlotBorderRef, Mode=OneWay}" CornerRadius="4" noesis:Element.PPAAIn="1" noesis:Element.PPAAOut="1">
                         <Border.BorderBrush>
                             <SolidColorBrush Color="#FFEBA147" Opacity="0"/>
                         </Border.BorderBrush>
@@ -550,15 +545,15 @@
                                 Style="{StaticResource Style.ItemToolTip}"/>
                         </Popup>
                     </Border>
-                    <Border x:Name="InvalidDropBorder" Grid.RowSpan="3" Grid.ColumnSpan="3" CornerRadius="4">
+                    <Border x:Name="InvalidDropBorder" Grid.RowSpan="3" Grid.ColumnSpan="3" CornerRadius="4" noesis:Element.PPAAIn="1" noesis:Element.PPAAOut="1">
                         <Border.Background>
-                            <SolidColorBrush Color="{StaticResource Color.InvalidBorder}" Opacity="0"/>
+                            <SolidColorBrush Color="#66F04029" Opacity="0"/>
                         </Border.Background>
                     </Border>
                     <Viewbox x:Name="Icon" Grid.Row="1" Grid.Column="1" RenderTransformOrigin="0.5,0.5">
-                        <noesis:Element.Transform3D>
+                        <!--<noesis:Element.Transform3D>
                             <noesis:CompositeTransform3D TranslateZ="5"/>
-                        </noesis:Element.Transform3D>
+                        </noesis:Element.Transform3D>-->
                         <Viewbox.RenderTransform>
                             <ScaleTransform/>
                         </Viewbox.RenderTransform>

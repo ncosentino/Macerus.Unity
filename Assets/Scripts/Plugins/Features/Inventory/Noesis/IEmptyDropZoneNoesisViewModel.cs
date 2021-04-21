@@ -6,10 +6,11 @@
 #endif
 
 using System.Windows.Input;
+using Assets.Assets.Scripts.Gui.Noesis;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
-    public interface IEmptyDropZoneNoesisViewModel
+    public interface IEmptyDropZoneNoesisViewModel : ITransparentToGameInteraction
     {
         bool IsDragOver { get; }
 

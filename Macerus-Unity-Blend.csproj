@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Gui\DelegateCommand.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\Autofac\SharedBlendNoesisModule.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\IResourceImageSourceFactory.cs" />
+    <Compile Include="Assets\Scripts\Gui\Noesis\ITransparentToGameInteraction.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\NoesisLogicalTreeHelper.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\ResourceImageSourceFactory.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\ViewModels\LazyNotifierMappingBuilder.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IEquipmentSlotToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IItemDragNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IItemSlotToNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IPlayerInventoryWindowNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\ItemDragNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\BagSlotToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\DragAdornerBehavior.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IItemSlotCollectionNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IItemSlotNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\ItemSlotNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\PlayerInventoryWindowNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\AnimatedNumber.xaml.cs">
       <DependentUpon>AnimatedNumber.xaml</DependentUpon>
     </Compile>
@@ -125,6 +128,7 @@
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\HudNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\IHudNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EmptyDropZoneNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\IHudView.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml.cs">
       <DependentUpon>HudView.xaml</DependentUpon>
     </Compile>

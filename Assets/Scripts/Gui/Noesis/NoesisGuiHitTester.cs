@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Assets.Assets.Scripts.Gui.Noesis;
+
 using NexusLabs.Contracts;
 
 using Noesis;
@@ -33,7 +35,8 @@ namespace Assets.Scripts.Gui.Noesis
             var hit = VisualTreeHelper.HitTest(
                 _noesisView.Content,
                 point);
-            if (hit.VisualHit != null)
+            if (hit.VisualHit != null &&
+                !((hit.VisualHit as FrameworkElement).DataContext is ITransparentToGameInteraction))
             {
                 return new[] { hit.VisualHit };
             }

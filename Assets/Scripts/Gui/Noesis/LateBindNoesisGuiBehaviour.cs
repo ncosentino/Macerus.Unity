@@ -5,7 +5,7 @@ using Assets.Scripts.Gui.Noesis.Views.Resources;
 using Assets.Scripts.Unity.GameObjects;
 
 using NexusLabs.Contracts;
-
+using Noesis;
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
@@ -52,6 +52,7 @@ namespace Assets.Scripts.Gui.Noesis
 
             var camera = cameras.Single();
             var noesisView = camera.AddComponent<NoesisView>();
+            noesisView.RenderFlags |= RenderFlags.PPAA;
             var container = ViewWelderFactory
                 .Create<ISimpleWelder>(
                     noesisView,

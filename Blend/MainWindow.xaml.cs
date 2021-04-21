@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Assets.Scripts.Autofac;
-using Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources;
+using Assets.Scripts.Plugins.Features.NewHud.Noesis;
 using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu;
 using Autofac;
 using Macerus.Api.Behaviors;
@@ -42,7 +42,7 @@ namespace Assets.Blend
             }
             else
             {
-                Content = container.Resolve<HudView>();
+                Content = container.Resolve<IHudView>();
 
                 var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
                 var filterContext = filterContextAmenity.CreateNoneFilterContext();

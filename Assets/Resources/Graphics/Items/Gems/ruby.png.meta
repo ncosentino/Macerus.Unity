@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 3dca6a9ca93403c409a30d875e1a601a
+labels:
+- Noesis
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -20,7 +22,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0

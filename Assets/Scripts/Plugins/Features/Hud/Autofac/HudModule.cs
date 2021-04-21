@@ -7,10 +7,6 @@ namespace Assets.Scripts.Plugins.Features.Hud.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<DropItemHandler>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<HudStartupInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

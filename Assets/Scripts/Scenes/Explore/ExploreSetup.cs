@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis;
@@ -7,6 +8,7 @@ using Assets.Scripts.Gui.Unity;
 using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
+using Assets.Scripts.Plugins.Features.NewHud.Noesis;
 using Assets.Scripts.Scenes.Explore.Api;
 using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.Console;
@@ -36,6 +38,7 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly INoesisGuiHitTester _noesisGuiHitTester;
         private readonly IExploreGameRootPrefabFactory _exploreGameRootPrefabFactory;
         private readonly IHasFollowCameraBehaviourStitcher _hasFollowCameraBehaviourStitcher;
+        private readonly Lazy<IHudView> _lazyHudView;
 
         public ExploreSetup(
             IUnityGameObjectManager gameObjectManager,
@@ -49,7 +52,8 @@ namespace Assets.Scripts.Scenes.Explore
             IUnityGuiHitTester unityGuiHitTester,
             INoesisGuiHitTester noesisGuiHitTester,
             IExploreGameRootPrefabFactory exploreGameRootPrefabFactory,
-            IHasFollowCameraBehaviourStitcher hasFollowCameraBehaviourStitcher)
+            IHasFollowCameraBehaviourStitcher hasFollowCameraBehaviourStitcher,
+            Lazy<IHudView> lazyHudView)
         {
             _gameObjectManager = gameObjectManager;
             _mapPrefabFactory = mapPrefabFactory;
@@ -63,6 +67,7 @@ namespace Assets.Scripts.Scenes.Explore
             _noesisGuiHitTester = noesisGuiHitTester;
             _exploreGameRootPrefabFactory = exploreGameRootPrefabFactory;
             _hasFollowCameraBehaviourStitcher = hasFollowCameraBehaviourStitcher;
+            _lazyHudView = lazyHudView;
         }
 
         public void Setup()
@@ -72,11 +77,10 @@ namespace Assets.Scripts.Scenes.Explore
             _gameEngineUpdateBehaviourStitcher.Attach(exploreGameRoot.GameObject);
             _soundPlayingBehaviourStitcher.Attach(exploreGameRoot.GameObject);
 
-            var view = new Container(); // FIXME: replace with the actual GUI we want to use here;
             _guiBehaviorStitcher.Stitch(
                 exploreGameRoot.GameObject,
                 x => x.activeInHierarchy && x.name == "FollowCamera",
-                view,
+                _lazyHudView.Value,
                 x => _noesisGuiHitTester.Setup((NoesisView)x)); 
             _unityGuiHitTester.Setup(
                 _gameObjectManager

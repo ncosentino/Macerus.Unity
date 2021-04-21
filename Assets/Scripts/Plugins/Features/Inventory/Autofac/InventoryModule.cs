@@ -11,6 +11,10 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
+                .RegisterType<PlayerInventoryWindowNoesisViewModel>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<PlayerInventoryWindow>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

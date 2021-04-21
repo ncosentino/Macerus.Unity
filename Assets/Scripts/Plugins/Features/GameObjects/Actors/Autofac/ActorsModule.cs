@@ -57,23 +57,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .RegisterType<PlayerPrefabStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder
-                .RegisterType<HasGuiEquipmentBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<HasGuiEquipmentBehaviorInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<HasGuiInventoryBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<HasGuiInventoryBehaviorInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
     }
 }

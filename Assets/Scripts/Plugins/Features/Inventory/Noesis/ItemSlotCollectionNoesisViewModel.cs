@@ -101,6 +101,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             var slot = param as IItemSlotNoesisViewModel; // allowed to be null! param can be this control
             var wrappedSlot = _itemSlotToNoesisViewModelConverter.ConvertBack(slot);
             _viewModelToWrap.DropItem(wrappedSlot);
+            _viewModelToWrap.EndDragItem(true);
         }
 
         private void ViewModelToWrap_PropertyChanged(
