@@ -48,12 +48,13 @@ namespace Assets.Blend
             var lootGeneratorAmenity = container.Resolve<ILootGeneratorAmenity>();
             var generatedItems = lootGeneratorAmenity.GenerateLoot(dropTableId);
 
+            var actorIdentifiers = container.Resolve<IMacerusActorIdentifiers>();
             var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
             var playerInventory = mapGameObjectManager
                 .GameObjects
                 .First(x => x.Has<IPlayerControlledBehavior>())
                 .Get<IItemContainerBehavior>()
-                .First(x => x.ContainerId.Equals(new StringIdentifier("Inventory")));
+                .First(x => x.ContainerId.Equals(actorIdentifiers.InventoryIdentifier));
             foreach (var item in generatedItems)
             {
                 playerInventory.TryAddItem(item);
