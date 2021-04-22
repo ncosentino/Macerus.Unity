@@ -1,31 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using Macerus.Api.Behaviors;
-using ProjectXyz.Api.Behaviors;
+using Macerus.Plugins.Features.Interactions.Api;
+
+using NexusLabs.Contracts;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
-    public sealed class PlayerInteractionDetectionBehavior :
+    public sealed class PlayerInteractionDetectionBehaviour :
         MonoBehaviour,
         IObservablePlayerInteractionDetectionBehavior
     {
         private readonly List<GameObject> _interactables;
 
-        public PlayerInteractionDetectionBehavior()
+        public PlayerInteractionDetectionBehaviour()
         {
             _interactables = new List<GameObject>();
         }
 
         public event EventHandler<EventArgs> NewInteractable;
 
+        public IInteractionHandlerFacade InteractionHandler { get; set; }
+
         public IReadOnlyCollection<IInteractableBehavior> Interactables => _interactables
             .SelectMany(x => x.Get<IInteractableBehavior>())
             .ToArray();
+
+        private void Start()
+        {
+            UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
+        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -43,7 +54,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 var actor = gameObject
                     .GetComponent<IReadOnlyHasGameObject>()
                     .GameObject;
-                interactionBehavior.Interact(actor);
+                InteractionHandler.Interact(actor, interactionBehavior);
                 return;
             }
 

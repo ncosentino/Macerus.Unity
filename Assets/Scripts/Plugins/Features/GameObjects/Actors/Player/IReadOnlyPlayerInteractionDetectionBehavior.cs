@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.Interactions.Api;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {

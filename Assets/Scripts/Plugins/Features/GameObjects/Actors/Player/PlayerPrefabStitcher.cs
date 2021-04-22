@@ -13,15 +13,18 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IPlayerMovementControlsBehaviourStitcher _playerInputControlsBehaviourStitcher;
         private readonly IPlayerInteractionControlsBehaviourStitcher _playerInteractionControlsBehaviourStitcher;
         private readonly IPlayerQuickSlotControlsBehaviourStitcher _playerQuickSlotControlsBehaviourStitcher;
+        private readonly IPlayerInteractionDetectionBehaviourStitcher _playerInteractionDetectionBehaviourStitcher;
 
         public PlayerPrefabStitcher(
             IPlayerMovementControlsBehaviourStitcher playerInputControlsBehaviourStitcher,
             IPlayerInteractionControlsBehaviourStitcher playerInteractionControlsBehaviourStitcher,
-            IPlayerQuickSlotControlsBehaviourStitcher playerQuickSlotControlsBehaviourStitcher)
+            IPlayerQuickSlotControlsBehaviourStitcher playerQuickSlotControlsBehaviourStitcher,
+            IPlayerInteractionDetectionBehaviourStitcher playerInteractionDetectionBehaviourStitcher)
         {
             _playerInputControlsBehaviourStitcher = playerInputControlsBehaviourStitcher;
             _playerInteractionControlsBehaviourStitcher = playerInteractionControlsBehaviourStitcher;
             _playerQuickSlotControlsBehaviourStitcher = playerQuickSlotControlsBehaviourStitcher;
+            _playerInteractionDetectionBehaviourStitcher = playerInteractionDetectionBehaviourStitcher;
         }
 
         public IIdentifier PrefabResourceId { get; } = new StringIdentifier(@"Mapping/Prefabs/Actors/PlayerPlaceholder");
@@ -31,7 +34,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             IIdentifier prefabResourceId)
         {
             gameObject.AddComponent<CameraTargetBehaviour>();
-            gameObject.AddComponent<PlayerInteractionDetectionBehavior>();
+            _playerInteractionDetectionBehaviourStitcher.Stitch(gameObject);
             _playerInputControlsBehaviourStitcher.Attach(gameObject);
             _playerInteractionControlsBehaviourStitcher.Attach(gameObject);
             _playerQuickSlotControlsBehaviourStitcher.Attach(gameObject);

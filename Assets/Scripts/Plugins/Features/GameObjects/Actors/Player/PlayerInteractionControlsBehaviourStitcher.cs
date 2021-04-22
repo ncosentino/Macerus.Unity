@@ -3,6 +3,8 @@ using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
 
+using Macerus.Plugins.Features.Interactions.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
@@ -15,17 +17,20 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IKeyboardInput _keyboardInput;
         private readonly ILogger _logger;
         private readonly IDebugConsoleManager _debugConsoleManager;
+        private readonly IInteractionHandlerFacade _interactionHandlerFacade;
 
         public PlayerInteractionControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
             IKeyboardInput keyboardInput,
             ILogger logger,
-            IDebugConsoleManager debugConsoleManager)
+            IDebugConsoleManager debugConsoleManager,
+            IInteractionHandlerFacade interactionHandlerFacade)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
             _logger = logger;
             _debugConsoleManager = debugConsoleManager;
+            _interactionHandlerFacade = interactionHandlerFacade;
         }
 
         public void Attach(GameObject gameObject)
@@ -35,6 +40,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInteractionControlsBehaviour.KeyboardControls = _keyboardControls;
             playerInteractionControlsBehaviour.KeyboardInput = _keyboardInput;
             playerInteractionControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
+            playerInteractionControlsBehaviour.InteractionHandler = _interactionHandlerFacade;
             playerInteractionControlsBehaviour.PlayerInteractionDetectionBehavior = gameObject
                 .GetRequiredComponent<IReadOnlyPlayerInteractionDetectionBehavior>();
         }

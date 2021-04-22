@@ -4,6 +4,8 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 
+using Macerus.Plugins.Features.Interactions.Api;
+
 using NexusLabs.Contracts;
 
 using UnityEngine;
@@ -12,7 +14,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerInteractionControlsBehaviour :
         MonoBehaviour,
-        IPlayerInteractionControlsBehaviour
+        IReadOnlyPlayerInteractionControlsBehaviour
     {
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 
@@ -21,6 +23,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         public IKeyboardInput KeyboardInput { get; set; }
 
         public IReadOnlyPlayerInteractionDetectionBehavior PlayerInteractionDetectionBehavior { get; set; }
+
+        public IInteractionHandlerFacade InteractionHandler { get; set; }
 
         public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
 
@@ -31,6 +35,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, PlayerInteractionDetectionBehavior, nameof(PlayerInteractionDetectionBehavior));
             UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
             UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
+            UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
         }
 
         private void FixedUpdate()
@@ -55,7 +60,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     var actor = gameObject
                         .GetComponent<IReadOnlyHasGameObject>()
                         .GameObject;
-                    interactable.Interact(actor);
+                    InteractionHandler.Interact(actor, interactable);
                 }
             }
         }
