@@ -37,8 +37,28 @@ namespace Assets.Scripts.Gui.Noesis
         public ImageSource CreateForResourceId(IIdentifier resourceId)
         {
             var relativePath = resourceId.ToString(); // FIXME: this is still a hack
-            var fullPath = Path.Combine(@"..\..\..\Assets\Resources", relativePath + ".png");
-            var fileInfo = new FileInfo(fullPath);
+            var fullPathWithoutExtension = Path.Combine(@"..\..\..\Assets\Resources", relativePath);
+            var fileInfo = new FileInfo(fullPathWithoutExtension + ".png");
+            if (!fileInfo.Exists)
+            {
+                fileInfo = new FileInfo(fullPathWithoutExtension + ".jpg");
+                if (!fileInfo.Exists)
+                {
+                    fileInfo = new FileInfo(fullPathWithoutExtension + ".jpeg");
+                    if (!fileInfo.Exists)
+                    {
+                        throw new FileNotFoundException(
+                            $"Cannot find resource '{resourceId}'. Trying to " +
+                            $"look for it at '{fullPathWithoutExtension}' but " +
+                            $"the attempted file extensions cannot find a match. " +
+                            $"Please check the code in " +
+                            $"'{GetType()}.{nameof(CreateForResourceId)}' to " +
+                            $"see if there's additional support that should be " +
+                            $"added.");
+                    }
+                }
+            }
+
             var uri = new Uri(fileInfo.FullName);
             var imageSource = new BitmapImage(uri);
             return imageSource;

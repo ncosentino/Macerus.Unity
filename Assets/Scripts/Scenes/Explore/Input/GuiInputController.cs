@@ -5,6 +5,10 @@ using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 
+using Macerus.Game.Api;
+
+using ProjectXyz.Shared.Framework;
+
 using UnityEngine.SceneManagement;
 
 using ILogger = ProjectXyz.Api.Logging.ILogger;
@@ -17,16 +21,19 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly IKeyboardControls _keyboardControls;
         private readonly ILogger _logger;
         private readonly IUnityGameObjectManager _gameObjectManager;
+        private readonly ISceneManager _sceneManager;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
             IKeyboardControls keyboardControls,
             IUnityGameObjectManager gameObjectManager,
+            ISceneManager sceneManager,
             ILogger logger)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
             _gameObjectManager = gameObjectManager;
+            _sceneManager = sceneManager;
             _logger = logger;
         }
 
@@ -39,9 +46,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
 
             if (UnityEngine.Input.GetKeyUp(_keyboardControls.GuiClose))
             {
-                _logger.Debug("Opening main menu...");
-                SceneManager.LoadScene("MainMenu");
-                _logger.Debug("Opened main menu.");
+                _sceneManager.GoToScene(new StringIdentifier("MainMenu"));
             }
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleInventory))
             {

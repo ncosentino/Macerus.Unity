@@ -1,19 +1,20 @@
 ﻿#if UNITY_5_3_OR_NEWER
 #define NOESIS
 using Noesis;
+using Color = Noesis.Color;
 #else
 using System.Windows.Media;
+using Color = System.Windows.Media.Color;
 #endif
 
 using System;
 using System.Collections.Generic;
 
 using Assets.Scripts.Gui.Noesis;
+using Macerus.Plugins.Features.Inventory.Api;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
-    using IItemSlotViewModel = Macerus.Plugins.Features.Inventory.Api.IItemSlotViewModel;
-
     public sealed class EquipmentSlotToNoesisViewModelConverter : IEquipmentSlotToNoesisViewModelConverter
     {
         private readonly IResourceImageSourceFactory _resourceImageSourceFactory;

@@ -1,7 +1,4 @@
-﻿using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
-using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis;
-using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis.Resources;
-using Assets.Scripts.Scenes.MainMenu.Input;
+﻿using Assets.Scripts.Scenes.MainMenu.Input;
 
 using Autofac;
 
@@ -27,23 +24,6 @@ namespace Assets.Scripts.Scenes.MainMenu.Autofac
                 .RegisterType<MainMenuSetup>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            builder
-                .RegisterType<MainMenuView>()
-                .AsImplementedInterfaces()
-                .SingleInstance()
-                .UsingConstructor(typeof(IMainMenuNoesisViewModel));
-            builder
-                .RegisterType<MainMenuNoesisViewModel>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<MainMenuViewModel>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<MainMenuController>()
-                .AutoActivate()
-                .AsSelf();
         }
     }
 }

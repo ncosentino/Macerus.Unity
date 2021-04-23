@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+
 using Assets.Scripts.Gui.Noesis.ViewModels;
+
+using Macerus.Plugins.Features.Gui.Default;
 using Macerus.Plugins.Features.Inventory.Api;
-using Macerus.Plugins.Features.Inventory.Default;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {

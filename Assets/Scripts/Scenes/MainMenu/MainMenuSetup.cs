@@ -2,9 +2,11 @@
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Plugins.Features.Console;
-using Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu;
+using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu;
 using Assets.Scripts.Scenes.MainMenu.Input;
 using Assets.Scripts.Unity.GameObjects;
+
+using Macerus.Plugins.Features.MainMenu.Api;
 
 using UnityEngine;
 
@@ -15,17 +17,20 @@ namespace Assets.Scripts.Scenes.MainMenu
         private readonly IUnityGameObjectManager _unityGameObjectManager;
         private readonly IGuiBehaviourStitcher _guiBehaviourStitcher;
         private readonly IMainMenuView _mainMenuView;
+        private readonly IMainMenuController _mainMenuController;
         private readonly IGuiInputStitcher _guiInputStitcher;
 
         public MainMenuSetup(
             IUnityGameObjectManager unityGameObjectManager,
             IGuiBehaviourStitcher guiBehaviourStitcher,
             IMainMenuView mainMenuView,
+            IMainMenuController mainMenuController,
             IGuiInputStitcher guiInputStitcher)
         {
             _unityGameObjectManager = unityGameObjectManager;
             _guiBehaviourStitcher = guiBehaviourStitcher;
             _mainMenuView = mainMenuView;
+            _mainMenuController = mainMenuController;
             _guiInputStitcher = guiInputStitcher;
         }
 
@@ -47,6 +52,8 @@ namespace Assets.Scripts.Scenes.MainMenu
                 _mainMenuView,
                 null);
             _guiInputStitcher.Attach(camera);
+            
+            _mainMenuController.OpenMenu();
         }
     }
 }

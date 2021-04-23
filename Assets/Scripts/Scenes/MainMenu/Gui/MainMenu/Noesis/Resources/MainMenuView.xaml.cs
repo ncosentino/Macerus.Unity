@@ -4,14 +4,10 @@ using Assets.Scripts.Gui.Noesis;
 
 using Noesis;
 #else
-using System;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 #endif
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis.Resources
+namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources
 {
     public partial class MainMenuView :
         UserControl,

@@ -4,9 +4,10 @@ using Noesis;
 #else
 using System.Windows.Media;
 #endif
+
 using System.Windows.Input;
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.Views.MainMenu.Noesis
+namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis
 {
     public interface IMainMenuNoesisViewModel
     {

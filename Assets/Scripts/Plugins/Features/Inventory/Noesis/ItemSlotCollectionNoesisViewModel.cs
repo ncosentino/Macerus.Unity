@@ -16,7 +16,7 @@ using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
 using Macerus.Plugins.Features.Inventory.Api;
-using Macerus.Plugins.Features.Inventory.Default;
+using Macerus.Plugins.Features.Gui.Default;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {

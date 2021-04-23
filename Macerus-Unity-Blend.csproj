@@ -128,15 +128,18 @@
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml.cs">
       <DependentUpon>HudView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\IMainMenuView.cs" />
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\IMainMenuNoesisViewModel.cs" />
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.xaml.cs">
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Autofac\MainMenuModule.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\IMainMenuView.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\IMainMenuNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\MainMenuNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\Resources\MainMenuView.xaml.cs">
       <DependentUpon>MainMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Blend\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Blend\BlendModule.cs" />
     <Compile Include="Blend\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -163,12 +166,6 @@
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.asset.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.meta" />
-    <None Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\IMainMenuView.cs.meta" />
-    <None Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\IMainMenuNoesisViewModel.cs.meta" />
-    <None Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.asset" />
-    <None Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.asset.meta" />
-    <None Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.xaml.cs.meta" />
-    <None Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.xaml.meta" />
     <None Include="Blend\App.config" />
   </ItemGroup>
   <ItemGroup>
@@ -204,9 +201,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\Views\MainMenu\Noesis\Resources\MainMenuView.xaml">
+    <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\Resources\MainMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Blend\MainWindow.xaml">
       <SubType>Designer</SubType>
