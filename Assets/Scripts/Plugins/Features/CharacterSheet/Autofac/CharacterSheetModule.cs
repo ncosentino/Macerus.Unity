@@ -18,14 +18,6 @@ namespace Assets.Scripts.Plugins.Features.CharacterSheet.Autofac
                 .RegisterType<CharacterSheetNoesisViewModel>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            builder
-                .RegisterType<CharacterSheetViewModel>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<CharacterSheetController>()
-                .AutoActivate()
-                .AsSelf();
         }
     }
 }

@@ -42,7 +42,7 @@
     <PackageReference Include="System.Windows.Interactivity" Version="1.0.1" />
     <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Jace" Version="0.8.7" />
-    <PackageReference Include="Macerus" Version="1.0.*" />
+    <PackageReference Include="Macerus" Version="1.0.7785.3977" />
     <PackageReference Include="MySql.Data" Version="8.0.23" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NexusLabs.Collections.Generic" Version="0.0.5" />
@@ -87,7 +87,8 @@
     <Compile Include="Assets\Scripts\Gui\Noesis\ViewWelding\NoesisViewTypeWelder.cs" />
     <Compile Include="Assets\Scripts\Gui\Noesis\ViewWelding\ViewboxWelder.cs" />
     <Compile Include="Assets\Scripts\Gui\WeldResult.cs" />
-    <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\ICharacterSheetView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Autofac\CharacterSheetModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\CharacterSheetNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\ICharacterSheetNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs">
       <DependentUpon>CharacterSheetView.xaml</DependentUpon>
@@ -163,7 +164,6 @@
     <None Include="Assets\Scripts\Gui\Noesis\ViewWelding\ContentControlWelder.cs.meta" />
     <None Include="Assets\Scripts\Gui\Noesis\ViewWelding\NoesisViewTypeWelder.cs.meta" />
     <None Include="Assets\Scripts\Gui\Noesis\ViewWelding\ViewboxWelder.cs.meta" />
-    <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\ICharacterSheetView.cs.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\ICharacterSheetNoesisViewModel.cs.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.asset" />

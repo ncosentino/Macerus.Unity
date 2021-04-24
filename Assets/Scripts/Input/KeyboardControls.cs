@@ -34,8 +34,9 @@ namespace Assets.Scripts.Input
         public KeyCode ToggleInventory { get; } = KeyCode.I;
 
         /// <inheritdoc />
-        public KeyCode GuiClose { get; } = KeyCode.Escape;
+        public KeyCode ToggleCharacterSheet { get; } = KeyCode.C;
 
-        public KeyCode Summon { get; } = KeyCode.Semicolon;
+        /// <inheritdoc />
+        public KeyCode GuiClose { get; } = KeyCode.Escape;
     }
 }

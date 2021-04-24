@@ -9,6 +9,7 @@ using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Gui.Noesis;
 
 using Macerus.Plugins.Features.Inventory.Api;
+using Macerus.Plugins.Features.CharacterSheet.Api;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
@@ -23,7 +24,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IViewWelderFactory viewWelderFactory,
             IItemDragNoesisViewModel viewModel,
             IEmptyDropZoneNoesisViewModel emptyDropZoneNoesisViewModel,
-            IPlayerInventoryWindow playerInventoryWindow)
+            IPlayerInventoryWindow playerInventoryWindow,
+            ICharacterSheetView characterSheetView)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -42,6 +44,12 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "RightContent"),
                     playerInventoryWindow)
+                .Weld();
+
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent"),
+                    characterSheetView)
                 .Weld();
         }
 

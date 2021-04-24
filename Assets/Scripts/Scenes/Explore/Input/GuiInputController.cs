@@ -6,6 +6,7 @@ using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using Macerus.Game.Api;
+using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 
 using ProjectXyz.Shared.Framework;
@@ -22,6 +23,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly IKeyboardControls _keyboardControls;
         private readonly ILogger _logger;
         private readonly IPlayerInventoryController _playerInventoryController;
+        private readonly ICharacterSheetController _characterSheetController;
         private readonly IUnityGameObjectManager _gameObjectManager;
         private readonly ISceneManager _sceneManager;
 
@@ -31,7 +33,8 @@ namespace Assets.Scripts.Scenes.Explore.Input
             IUnityGameObjectManager gameObjectManager,
             ISceneManager sceneManager,
             ILogger logger,
-            IPlayerInventoryController playerInventoryController)
+            IPlayerInventoryController playerInventoryController,
+            ICharacterSheetController characterSheetController)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
@@ -39,6 +42,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
             _sceneManager = sceneManager;
             _logger = logger;
             _playerInventoryController = playerInventoryController;
+            _characterSheetController = characterSheetController;
         }
 
         public void Update(float deltaTime)
@@ -55,6 +59,10 @@ namespace Assets.Scripts.Scenes.Explore.Input
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleInventory))
             {
                 _playerInventoryController.ToggleInventory();
+            }
+            else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleCharacterSheet))
+            {
+                _characterSheetController.ToggleCharacterSheet();
             }
         }
     }

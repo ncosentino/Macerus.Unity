@@ -8,6 +8,7 @@ using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu;
 using Autofac;
 using Macerus.Api.Behaviors;
 using Macerus.Api.Behaviors.Filtering;
+using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
@@ -69,6 +70,9 @@ namespace Assets.Blend
 
                 var controller = container.Resolve<IPlayerInventoryController>();
                 controller.OpenInventory();
+
+                var characterSheetController = container.Resolve<ICharacterSheetController>();
+                characterSheetController.OpenCharacterSheet();
             }
         }
     }

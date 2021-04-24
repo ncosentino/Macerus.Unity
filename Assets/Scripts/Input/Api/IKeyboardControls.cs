@@ -22,8 +22,8 @@ namespace Assets.Scripts.Input.Api
 
         KeyCode ToggleInventory { get; }
 
-        KeyCode GuiClose { get; }
+        KeyCode ToggleCharacterSheet { get; }
 
-        KeyCode Summon { get; }
+        KeyCode GuiClose { get; }
     }
 }

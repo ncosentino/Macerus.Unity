@@ -44,9 +44,11 @@
                 Grid.Column="0"
                 Style="{StaticResource Style.EmptyDropZone}"/>
 
+            <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
             <Grid 
                 x:Name="EmptySpace"
                 Grid.Column="1"
+                Background="#00000001"
                 Style="{StaticResource Style.EmptyDropZone}"/>
             
             <Grid 
