@@ -116,6 +116,8 @@
       <DependentUpon>AnimatedNumber.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\ItemSlotCollectionNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\DropItemBehavior.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\GreaterThanZeroConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\InventoryEquipmentView.xaml.cs">
       <DependentUpon>InventoryEquipmentView.xaml</DependentUpon>
     </Compile>

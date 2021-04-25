@@ -3,11 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
-        xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources"
-        xmlns:localNoesis="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
+        xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.NewHud.Noesis"
         mc:Ignorable="d">
 
     <!--Brushes-->
@@ -20,6 +17,8 @@
         <GradientStop Color="#33000000" Offset="1"/>
     </LinearGradientBrush>
 
+    <local:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter"/>
+
     <!--EmptyDropZone-->
     <Style x:Key="Style.EmptyDropZone" TargetType="{x:Type Grid}">
         <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
@@ -27,9 +26,21 @@
         <Setter Property="noesis:StyleInteraction.Behaviors">
             <Setter.Value>
                 <noesis:StyleBehaviorCollection>
-                    <localNoesis:DropItemBehavior
+                    <local:DropItemBehavior
                         IsDragOver="{Binding IsDragOver, Mode=OneWayToSource}"
                         DropCommand="{Binding DataContext.DropItem, ElementName=EmptySpace}"/>
+                </noesis:StyleBehaviorCollection>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--EmptyDropZone-->
+    <Style x:Key="Style.EmptyDropZoneNone" TargetType="{x:Type Grid}">
+        <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
+        <Setter Property="Background" Value="#00000001"/>
+        <Setter Property="noesis:StyleInteraction.Behaviors">
+            <Setter.Value>
+                <noesis:StyleBehaviorCollection>
                 </noesis:StyleBehaviorCollection>
             </Setter.Value>
         </Setter>

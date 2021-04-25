@@ -4,7 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
     xmlns:inventory="clr-namespace:Assets.Scripts.Plugins.Features.Inventory.Noesis"
+    xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.NewHud.Noesis"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     mc:Ignorable="d"
     d:DesignWidth="800"
@@ -41,8 +43,35 @@
 
             <Grid 
                 x:Name="LeftContent"
-                Grid.Column="0"
-                Style="{StaticResource Style.EmptyDropZone}"/>
+                Grid.Column="0">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ActualHeight,RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanZeroConverter}}">
+                                <DataTrigger.Value>true</DataTrigger.Value>
+                                <Setter Property="noesis:StyleInteraction.Behaviors">
+                                    <Setter.Value>
+                                        <noesis:StyleBehaviorCollection>
+                                            <local:DropItemBehavior
+                                                IsDragOver="{Binding IsDragOver, Mode=OneWayToSource}"
+                                                DropCommand="{Binding DataContext.DropItem, ElementName=EmptySpace}"/>
+                                        </noesis:StyleBehaviorCollection>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ActualHeight,RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanZeroConverter}}">
+                                <DataTrigger.Value>false</DataTrigger.Value>
+                                <Setter Property="noesis:StyleInteraction.Behaviors">
+                                    <Setter.Value>
+                                        <noesis:StyleBehaviorCollection>
+                                        </noesis:StyleBehaviorCollection>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+            </Grid>
 
             <!--NOTE: small hack for background color to allow drop onto "transparent" control-->
             <Grid 
@@ -50,11 +79,38 @@
                 Grid.Column="1"
                 Background="#00000001"
                 Style="{StaticResource Style.EmptyDropZone}"/>
-            
+
             <Grid 
                 x:Name="RightContent"
-                Grid.Column="2"
-                Style="{StaticResource Style.EmptyDropZone}"/>
+                Grid.Column="2">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ActualHeight,RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanZeroConverter}}">
+                                <DataTrigger.Value>true</DataTrigger.Value>
+                                <Setter Property="noesis:StyleInteraction.Behaviors">
+                                    <Setter.Value>
+                                        <noesis:StyleBehaviorCollection>
+                                            <local:DropItemBehavior
+                                                IsDragOver="{Binding IsDragOver, Mode=OneWayToSource}"
+                                                DropCommand="{Binding DataContext.DropItem, ElementName=EmptySpace}"/>
+                                        </noesis:StyleBehaviorCollection>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ActualHeight,RelativeSource={RelativeSource Self}, Converter={StaticResource GreaterThanZeroConverter}}">
+                                <DataTrigger.Value>false</DataTrigger.Value>
+                                <Setter Property="noesis:StyleInteraction.Behaviors">
+                                    <Setter.Value>
+                                        <noesis:StyleBehaviorCollection>
+                                        </noesis:StyleBehaviorCollection>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+            </Grid>
         </Grid>
 
         <Grid x:Name="DragPanel" Grid.ColumnSpan="3" Grid.RowSpan="1" d:IsHidden="True">
