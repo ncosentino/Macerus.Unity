@@ -1,4 +1,4 @@
-﻿namespace Assets.Assets.Scripts.Gui.Noesis
+﻿namespace Assets.Scripts.Gui.Noesis
 {
     public interface ITransparentToGameInteraction
     {

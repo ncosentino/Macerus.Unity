@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Assets.Assets.Scripts.Gui.Noesis;
-
 using NexusLabs.Contracts;
 
 using Noesis;

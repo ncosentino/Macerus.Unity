@@ -6,7 +6,7 @@
 #endif
 
 using System.Windows.Input;
-using Assets.Assets.Scripts.Gui.Noesis;
+using Assets.Scripts.Gui.Noesis;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
