@@ -135,6 +135,12 @@
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml.cs">
       <DependentUpon>HudView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Autofac\StatusBarModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\StatusBarNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\IStatusBarNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\Resources\StatusBarView.xaml.cs">
+      <DependentUpon>StatusBarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Autofac\MainMenuModule.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\IMainMenuView.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\IMainMenuNoesisViewModel.cs" />
@@ -204,6 +210,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\Resources\StatusBarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using Assets.Scripts.Autofac;
 using Assets.Scripts.Plugins.Features.NewHud.Noesis;
@@ -14,8 +15,10 @@ using Macerus.Plugins.Features.GameObjects.Actors.Api;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.MainMenu.Api;
+using Macerus.Plugins.Features.StatusBar.Api;
 using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
@@ -74,6 +77,8 @@ namespace Assets.Blend
                 var characterSheetController = container.Resolve<ICharacterSheetController>();
                 characterSheetController.OpenCharacterSheet();
             }
+
+            container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
         }
     }
 

@@ -39,6 +39,12 @@ namespace Assets.Blend
                 .RegisterType<Application>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .Register(c => new LpcAnimationDiscovererSettings(
+                    $@"..\..\..\assets\resources",
+                    @"graphics\actors\LpcUniversal/"))
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
 
         private sealed class ConsoleLogger : ILogger

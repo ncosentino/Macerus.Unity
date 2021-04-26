@@ -9,6 +9,7 @@ using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Gui.Noesis;
 
 using Macerus.Plugins.Features.Inventory.Api;
+using Macerus.Plugins.Features.StatusBar.Api;
 using Macerus.Plugins.Features.CharacterSheet.Api;
 
 using ProjectXyz.Framework.ViewWelding.Api;
@@ -25,7 +26,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IItemDragNoesisViewModel viewModel,
             IEmptyDropZoneNoesisViewModel emptyDropZoneNoesisViewModel,
             IPlayerInventoryWindow playerInventoryWindow,
-            ICharacterSheetView characterSheetView)
+            ICharacterSheetView characterSheetView,
+            IStatusBarView statusBarView)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -39,7 +41,7 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             NoesisLogicalTreeHelper
                 .FindChildWithName(this, "RightContent")
                 .DataContext = emptyDropZoneNoesisViewModel;
-
+            
             viewWelderFactory
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "RightContent"),
@@ -50,6 +52,12 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent"),
                     characterSheetView)
+                .Weld();
+
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "StatusBarContent"),
+                    statusBarView)
                 .Weld();
         }
 

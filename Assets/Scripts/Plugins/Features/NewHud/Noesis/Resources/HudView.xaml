@@ -113,6 +113,14 @@
             </Grid>
         </Grid>
 
+        <Grid
+            x:Name="StatusBar"
+            Grid.Row="1"
+            Grid.ColumnSpan="3">
+
+            <Grid x:Name="StatusBarContent"/>
+        </Grid>
+
         <Grid x:Name="DragPanel" Grid.ColumnSpan="3" Grid.RowSpan="1" d:IsHidden="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="6*"/>
