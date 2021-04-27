@@ -52,21 +52,17 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" 
-                    Height="{Binding LeftResource.Item2}" 
-                    Background="DarkSlateGray" 
-                    BorderBrush="Black" 
-                    BorderThickness="2">
-                <Border Height="{Binding LeftResource.Item1}" Background="Red" VerticalAlignment="Bottom"/>
-            </Border>
+            <Viewbox Grid.Column="0" Stretch="Fill">
+                <Border Width="10" Height="{Binding LeftResource.Item2}" Background="DarkGray" Opacity="0.75">
+                    <Border Height="{Binding LeftResource.Item1}" Background="DarkRed" VerticalAlignment="Bottom"/>
+                </Border>
+            </Viewbox>
 
-            <Border Grid.Column="3" 
-                    Height="{Binding RightResource.Item2}" 
-                    Background="DarkSlateGray"
-                    BorderBrush="Black" 
-                    BorderThickness="2">
-                <Border Height="{Binding RightResource.Item1}" Background="Blue" VerticalAlignment="Bottom"/>
-            </Border>
+            <Viewbox Grid.Column="3" Stretch="Fill">
+                <Border Width="10" Height="{Binding RightResource.Item2}" Background="DarkGray" Opacity="0.75">
+                    <Border Height="{Binding RightResource.Item1}" Background="DarkBlue" VerticalAlignment="Bottom"/>
+                </Border>
+            </Viewbox>
         </Grid>
     </Grid>
 </UserControl>
