@@ -11,13 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Collections.Concurrent;
 
+using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
 using Macerus.Plugins.Features.Gui.Default;
 using Macerus.Plugins.Features.StatusBar.Api;
-using System.Collections.ObjectModel;
-using System.Collections.Concurrent;
 
 namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 {
@@ -27,6 +27,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
     {
         private static readonly Lazy<IReadOnlyDictionary<string, string>> _lazyNotifierMapping;
 
+        private readonly IUiDispatcher _uiDispatcher;
         private readonly IStatusBarViewModel _viewModelToWrap;
         private readonly IAbilityToNoesisViewModelConverter _abilityToNoesisViewModelConverter;
 
@@ -40,6 +41,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         }
 
         public StatusBarNoesisViewModel(
+            IUiDispatcher uiDispatcher,
             IStatusBarViewModel viewModelToWrap,
             IAbilityToNoesisViewModelConverter abilityToNoesisViewModelConverter)
         {
@@ -47,6 +49,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
             _translatedRightResource = null;
             _translatedAbilities = new ConcurrentDictionary<string, Tuple<double, string, ImageSource>>();
 
+            _uiDispatcher = uiDispatcher;
             _viewModelToWrap = viewModelToWrap;
             _abilityToNoesisViewModelConverter = abilityToNoesisViewModelConverter;
 
@@ -84,15 +87,8 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
             if (e.PropertyName.Equals(nameof(_viewModelToWrap.Abilities)))
             {
-#if NOESIS
-                var sc = Dispatcher.CurrentDispatcher;
-                if (sc == null)
-                {
-                    return;
-                }
-
-                sc.BeginInvoke(() =>
-                {
+                _uiDispatcher.ExecuteAsync(() => 
+                { 
                     _translatedAbilities.Clear();
 
                     foreach (var translated in _viewModelToWrap
@@ -104,27 +100,6 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
                     OnPropertyChanged(nameof(Abilities));
                 });
-#else
-                var sc = Application.Current.Dispatcher;
-                if (sc == null)
-                {
-                    return;
-                }
-
-                sc.InvokeAsync(() =>
-                {
-                    _translatedAbilities.Clear();
-
-                    foreach (var translated in _viewModelToWrap
-                       .Abilities
-                       .Select(_abilityToNoesisViewModelConverter.Convert))
-                    {
-                        _translatedAbilities[translated.Item2] = translated;
-                    }
-
-                    OnPropertyChanged(nameof(Abilities));
-                });
-#endif
 
                 return;
             }
