@@ -50,6 +50,10 @@ namespace Assets.Blend
             {
                 Content = container.Resolve<IHudView>();
 
+                // FIXME: just a hack to generate a player
+                var mapManager = container.Resolve<IMapManager>();
+                mapManager.SwitchMap(new StringIdentifier("swamp"));
+
                 var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
                 var filterContext = filterContextAmenity.CreateNoneFilterContext();
                 var encounterManager = container.Resolve<IEncounterManager>();
