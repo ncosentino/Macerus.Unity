@@ -2,9 +2,11 @@
 #define NOESIS
 using Noesis;
 #else
+using System.Windows.Media;
 #endif
 
 using System;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 {

@@ -13,6 +13,7 @@ using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
+using Macerus.Plugins.Features.GameObjects.Skills.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.MainMenu.Api;
 using Macerus.Plugins.Features.StatusBar.Api;
@@ -21,6 +22,7 @@ using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Shared.Framework;
 
@@ -70,6 +72,18 @@ namespace Assets.Blend
                 {
                     playerInventory.TryAddItem(item);
                 }
+
+                var skillAmenity = container.Resolve<ISkillAmenity>();
+                var skillsBehavior = mapGameObjectManager
+                    .GameObjects
+                    .First(x => x.Has<IPlayerControlledBehavior>())
+                    .GetOnly<IHasSkillsBehavior>();
+
+                skillsBehavior.Add(new[]
+                {
+                    skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
+                    skillAmenity.GetSkillById(new StringIdentifier("test-fireball")),
+                });
 
                 var controller = container.Resolve<IPlayerInventoryController>();
                 controller.OpenInventory();

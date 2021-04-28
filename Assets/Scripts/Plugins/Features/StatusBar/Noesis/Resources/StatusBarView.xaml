@@ -48,7 +48,9 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -58,7 +60,72 @@
                 </Border>
             </Viewbox>
 
-            <Viewbox Grid.Column="3" Stretch="Fill">
+            <!--<ItemsControl
+                Grid.Column="2"
+                Background="#00000001"
+                ItemsSource="{Binding Abilities, UpdateSourceTrigger=PropertyChanged}"
+                Focusable="False">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" Rows="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Text="{Binding Item1}"/>
+                            <Grid Grid.Row="1"/>
+                            <Image
+                                Grid.Row="2"
+                                Source="{Binding Item2}"
+                                Width="60"
+                                Height="60"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>-->
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="1" Grid.Column="0" BorderThickness="2" BorderBrush="Black" Width="60" Height="80">
+                    <Grid>
+                        <Label Content="{Binding Name}" HorizontalAlignment="Center"/>
+                        <Image Source="{Binding Source}" Width="60" Height="60"  VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" BorderThickness="2" BorderBrush="Black" Width="60" Height="80">
+                    <Grid>
+                        <Label Content="{Binding NameTwo}" HorizontalAlignment="Center"/>
+                        <Image Source="{Binding SourceTwo}" Width="60" Height="60"  VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="2" BorderThickness="2" BorderBrush="Black" Width="60" Height="80">
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="3" BorderThickness="2" BorderBrush="Black" Width="60" Height="80">
+                </Border>
+            </Grid>
+
+            <Viewbox Grid.Column="5" Stretch="Fill">
                 <Border Width="10" Height="{Binding RightResource.Item2}" Background="DarkGray" Opacity="0.75">
                     <Border Height="{Binding RightResource.Item1}" Background="DarkBlue" VerticalAlignment="Bottom"/>
                 </Border>
