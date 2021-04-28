@@ -4,6 +4,7 @@ using Noesis;
 #else
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 #endif
 
 using System;
@@ -15,10 +16,8 @@ using Assets.Scripts.Gui.Noesis.ViewModels;
 
 using Macerus.Plugins.Features.Gui.Default;
 using Macerus.Plugins.Features.StatusBar.Api;
-using Assets.Scripts.Gui.Noesis;
 using System.Collections.ObjectModel;
-using System.Threading;
-using ProjectXyz.Api.Framework;
+using System.Collections.Concurrent;
 
 namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 {
@@ -29,11 +28,11 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         private static readonly Lazy<IReadOnlyDictionary<string, string>> _lazyNotifierMapping;
 
         private readonly IStatusBarViewModel _viewModelToWrap;
-        private readonly IResourceImageSourceFactory _resourceImageSourceFactory;
+        private readonly IAbilityToNoesisViewModelConverter _abilityToNoesisViewModelConverter;
 
         private Tuple<double, double> _translatedLeftResource;
         private Tuple<double, double> _translatedRightResource;
-        private List<Tuple<double, string, IIdentifier>> _translatedAbilities;
+        private ConcurrentDictionary<string, Tuple<double, string, ImageSource>> _translatedAbilities;
 
         static StatusBarNoesisViewModel()
         {
@@ -42,22 +41,22 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
         public StatusBarNoesisViewModel(
             IStatusBarViewModel viewModelToWrap,
-            IResourceImageSourceFactory resourceImageSourceFactory)
+            IAbilityToNoesisViewModelConverter abilityToNoesisViewModelConverter)
         {
             _translatedLeftResource = null;
             _translatedRightResource = null;
-            _translatedAbilities = new List<Tuple<double, string, IIdentifier>>();
+            _translatedAbilities = new ConcurrentDictionary<string, Tuple<double, string, ImageSource>>();
 
             _viewModelToWrap = viewModelToWrap;
-            _resourceImageSourceFactory = resourceImageSourceFactory;
+            _abilityToNoesisViewModelConverter = abilityToNoesisViewModelConverter;
+
             _viewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
         }
 
         // TODO: This has to happen here because the ImageSources need to be made on the UI thread
         // Find a better way to do this!
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.Abilities))]
-        public IEnumerable<Tuple<double, string, ImageSource>> Abilities => _translatedAbilities
-            .Select(x => Tuple.Create(x.Item1, x.Item2, _resourceImageSourceFactory.CreateForResourceId(x.Item3)));
+        public IEnumerable<Tuple<double, string, ImageSource>> Abilities => _translatedAbilities.Values;
 
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.LeftResource))]
         public Tuple<double, double> LeftResource => _translatedLeftResource;
@@ -85,17 +84,49 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
             if (e.PropertyName.Equals(nameof(_viewModelToWrap.Abilities)))
             {
-                var n = new List<Tuple<double, string, IIdentifier>>();
-                foreach (var ability in _viewModelToWrap.Abilities)
+#if NOESIS
+                var sc = Dispatcher.CurrentDispatcher;
+                if (sc == null)
                 {
-                    n.Add(
-                        Tuple.Create(
-                            ability.IsEnabled ? 1.0d : 0.3d,
-                            ability.AbilityName,
-                            ability.IconResourceId));
+                    return;
                 }
 
-                _translatedAbilities = n;
+                sc.BeginInvoke(() =>
+                {
+                    _translatedAbilities.Clear();
+
+                    foreach (var translated in _viewModelToWrap
+                       .Abilities
+                       .Select(_abilityToNoesisViewModelConverter.Convert))
+                    {
+                        _translatedAbilities[translated.Item2] = translated;
+                    }
+
+                    OnPropertyChanged(nameof(Abilities));
+                });
+#else
+                var sc = Application.Current.Dispatcher;
+                if (sc == null)
+                {
+                    return;
+                }
+
+                sc.InvokeAsync(() =>
+                {
+                    _translatedAbilities.Clear();
+
+                    foreach (var translated in _viewModelToWrap
+                       .Abilities
+                       .Select(_abilityToNoesisViewModelConverter.Convert))
+                    {
+                        _translatedAbilities[translated.Item2] = translated;
+                    }
+
+                    OnPropertyChanged(nameof(Abilities));
+                });
+#endif
+
+                return;
             }
 
             if (!_lazyNotifierMapping.Value.TryGetValue(

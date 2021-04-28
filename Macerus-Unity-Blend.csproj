@@ -136,6 +136,8 @@
       <DependentUpon>HudView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Autofac\StatusBarModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\AbilityToNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\IAbilityToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\StatusBarNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\IStatusBarNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\Resources\StatusBarView.xaml.cs">

@@ -18,6 +18,10 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Autofac
                 .RegisterType<StatusBarNoesisViewModel>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<AbilityToNoesisViewModelConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
