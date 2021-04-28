@@ -33,10 +33,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
         private Tuple<double, double> _translatedLeftResource;
         private Tuple<double, double> _translatedRightResource;
-        private IIdentifier _source;
-        private IIdentifier _sourceTwo;
-        private string _name;
-        private string _nameTwo;
+        private List<Tuple<double, string, IIdentifier>> _translatedAbilities;
 
         static StatusBarNoesisViewModel()
         {
@@ -49,23 +46,18 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         {
             _translatedLeftResource = null;
             _translatedRightResource = null;
-            _source = null;
-            _sourceTwo = null;
-            _name = "";
-            _nameTwo = "";
+            _translatedAbilities = new List<Tuple<double, string, IIdentifier>>();
 
             _viewModelToWrap = viewModelToWrap;
             _resourceImageSourceFactory = resourceImageSourceFactory;
             _viewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
         }
 
-        public ImageSource Source => _resourceImageSourceFactory.CreateForResourceId(_source);
-
-        public string Name => _name;
-
-        public ImageSource SourceTwo => _resourceImageSourceFactory.CreateForResourceId(_sourceTwo);
-
-        public string NameTwo => _nameTwo;
+        // TODO: This has to happen here because the ImageSources need to be made on the UI thread
+        // Find a better way to do this!
+        [NotifyForWrappedProperty(nameof(IStatusBarViewModel.Abilities))]
+        public IEnumerable<Tuple<double, string, ImageSource>> Abilities => _translatedAbilities
+            .Select(x => Tuple.Create(x.Item1, x.Item2, _resourceImageSourceFactory.CreateForResourceId(x.Item3)));
 
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.LeftResource))]
         public Tuple<double, double> LeftResource => _translatedLeftResource;
@@ -93,29 +85,17 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
             if (e.PropertyName.Equals(nameof(_viewModelToWrap.Abilities)))
             {
-                var x = _viewModelToWrap.Abilities.FirstOrDefault();
-                if (x == null)
+                var n = new List<Tuple<double, string, IIdentifier>>();
+                foreach (var ability in _viewModelToWrap.Abilities)
                 {
-                    return;
+                    n.Add(
+                        Tuple.Create(
+                            ability.IsEnabled ? 1.0d : 0.3d,
+                            ability.AbilityName,
+                            ability.IconResourceId));
                 }
 
-                _name = x.AbilityName;
-                _source = x.IconResourceId;
-
-                var y = _viewModelToWrap.Abilities.LastOrDefault();
-                if (y == null)
-                {
-                    return;
-                }
-
-                _nameTwo = y.AbilityName;
-                _sourceTwo = y.IconResourceId;
-
-                OnPropertyChanged(nameof(Name));
-                OnPropertyChanged(nameof(Source));
-                OnPropertyChanged(nameof(NameTwo));
-                OnPropertyChanged(nameof(SourceTwo));
-                return;
+                _translatedAbilities = n;
             }
 
             if (!_lazyNotifierMapping.Value.TryGetValue(
