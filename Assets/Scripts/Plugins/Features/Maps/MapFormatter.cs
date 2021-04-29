@@ -58,15 +58,15 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
             var parentMapObjectTransform = mapPrefab.GameObject.transform;
 
-            foreach (Transform child in _mapPrefab.GameObjectLayer.transform)
-            {
-                // NOTE: we *MUST* remove the parent reference because
-                // destruction doesn't actually occur until the next engine
-                // tick. as a result, people can accidentally lookup these
-                // objects before the next tick.
-                child.transform.parent = null;
-                _objectDestroyer.Destroy(child.gameObject);
-            }
+            //foreach (Transform child in _mapPrefab.GameObjectLayer.transform)
+            //{
+            //    // NOTE: we *MUST* remove the parent reference because
+            //    // destruction doesn't actually occur until the next engine
+            //    // tick. as a result, people can accidentally lookup these
+            //    // objects before the next tick.
+            //    child.transform.parent = null;
+            //    _objectDestroyer.Destroy(child.gameObject);
+            //}
             
             int z = 0;
             _minWidth = int.MaxValue;
@@ -167,6 +167,13 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IEnumerable<IGameObject> gameObjects)
         {
             var gameObjectLayerObject = _mapPrefab.GameObjectLayer;
+
+
+            // FIXME: need to handle the fact that back-end uses a hashset and can get away with multi-adds
+
+
+
+
 
             foreach (var gameObject in gameObjects)
             {
