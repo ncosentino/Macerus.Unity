@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
@@ -110,6 +111,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 var skills = player
                     .GetOnly<IHasSkillsBehavior>()
                     .Skills;
+
                 // FIXME: this should actually pull this information from an assigned slot
                 var firstUsableSkill = skills.FirstOrDefault(x => x.Has<IInflictDamageBehavior>());
                 if (firstUsableSkill == null)
@@ -130,16 +132,39 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     player,
                     firstUsableSkill);
 
-                var target = MapGameObjectManager
+                if(!firstUsableSkill.TryGetFirst<ISkillTargetBehavior>(out var targetBehavior))
+                {
+                    return;
+                }
+
+                var playerLocation = player.GetOnly<IWorldLocationBehavior>();
+                var skillOriginX = (int)playerLocation.X + targetBehavior.OriginOffset.Item1;
+                var skillOriginY = (int)playerLocation.Y + targetBehavior.OriginOffset.Item2;
+
+                var affectedLocations = targetBehavior
+                    .PatternFromOrigin
+                    .Select(x => Tuple.Create(skillOriginX + x.Item1, skillOriginY + x.Item2))
+                    .ToArray();
+
+                var targets = MapGameObjectManager
                     .GameObjects
-                    .First(x =>
-                        !x.Has<IPlayerControlledBehavior>() &&
-                        x.Get<ITypeIdentifierBehavior>()
-                            .Any(x => x.TypeId.Equals(new StringIdentifier("actor"))));
+                    .Where(x => x.Get<ITypeIdentifierBehavior>().Any(x => x.TypeId.Equals(new StringIdentifier("actor"))))
+                    .Where(x => targetBehavior
+                        .TeamIds
+                        .Contains((int)x
+                            .GetOnly<IHasMutableStatsBehavior>()
+                            .BaseStats[new StringIdentifier("CombatTeam")]))
+                    .Where(x => affectedLocations.Contains(
+                        Tuple.Create(
+                            (int)x.GetOnly<IWorldLocationBehavior>().X,
+                            (int)x.GetOnly<IWorldLocationBehavior>().Y)))
+                    .ToArray();
+
                 SkillHandlerFacade.Handle(
                     player,
                     firstUsableSkill,
-                    new[] { target });
+                    targets);
+
                 TurnBasedManager.SetApplicableObjects(new[] { player });
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot3))
