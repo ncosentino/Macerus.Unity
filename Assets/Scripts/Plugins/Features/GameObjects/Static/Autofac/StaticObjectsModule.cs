@@ -7,11 +7,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-
-            builder
-                .RegisterType<StaticGameObjectBehaviorsProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
     }
 }

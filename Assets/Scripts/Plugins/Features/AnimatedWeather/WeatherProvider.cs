@@ -1,7 +1,6 @@
 ﻿using System;
 
-using Assets.Scripts.Api.GameObjects;
-
+using Macerus.Api.Behaviors;
 using Macerus.Plugins.Content.Weather;
 
 using ProjectXyz.Api.Behaviors;
@@ -40,7 +39,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 Duration = TurnsToTimespan(nextWeather.DurationInTurns),
                 TransitionInDuration = IntervalToTimespan(nextWeather.TransitionInDuration),
                 TransitionOutDuration = IntervalToTimespan(nextWeather.TransitionOutDuration),
-                WeatherResourceId = nextWeather.GetOnly<IPrefabResourceBehavior>().PrefabResourceId,
+                WeatherResourceId = nextWeather.GetOnly<IReadOnlyPrefabResourceIdBehavior>().PrefabResourceId,
                 //
                 // FIXME: just a total hack for testing until values are loaded from backend
                 //

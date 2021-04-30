@@ -10,10 +10,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Containers.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<ContainersBehaviorsProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<ContainerInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

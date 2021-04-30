@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
+
 using Autofac;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Autofac
@@ -25,10 +27,6 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<WeatherProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<WeatherBehaviorsProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

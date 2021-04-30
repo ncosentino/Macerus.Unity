@@ -1,6 +1,7 @@
-using Assets.Scripts.Api.GameObjects;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Unity.Resources.Prefabs;
+
+using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.GameObjects;
 
@@ -25,7 +26,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
         {
             // get the prefab id
             var prefabResourceId = gameObject
-                .GetOnly<IReadOnlyPrefabResourceBehavior>()
+                .GetOnly<IReadOnlyPrefabResourceIdBehavior>()
                 .PrefabResourceId;
             
             // FIXME: this is a hack. we probably could use some resource ID to path mapping here

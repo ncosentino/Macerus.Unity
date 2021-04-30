@@ -12,10 +12,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
             base.Load(builder);
 
             builder
-                .RegisterType<ActorBehaviorsProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<LightRadiusBehaviorInterceptor>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

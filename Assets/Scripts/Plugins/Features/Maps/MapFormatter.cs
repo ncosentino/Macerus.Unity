@@ -167,14 +167,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IEnumerable<IGameObject> gameObjects)
         {
             var gameObjectLayerObject = _mapPrefab.GameObjectLayer;
-
-
-            // FIXME: need to handle the fact that back-end uses a hashset and can get away with multi-adds
-
-
-
-
-
             foreach (var gameObject in gameObjects)
             {
                 _logger.Debug($"Transforming game object '{gameObject}'...");
