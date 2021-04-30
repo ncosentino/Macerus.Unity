@@ -104,6 +104,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 SkillHandlerFacade.Handle(
                     player,
                     firstUsableSkill);
+
+                TurnBasedManager.SetApplicableObjects(new[] { player });
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot2))
             {
@@ -113,7 +115,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     .Skills;
 
                 // FIXME: this should actually pull this information from an assigned slot
-                var firstUsableSkill = skills.FirstOrDefault(x => x.Has<IInflictDamageBehavior>());
+                var firstUsableSkill = skills.FirstOrDefault(x => x.Has<ICombinationSkillBehavior>());
                 if (firstUsableSkill == null)
                 {
                     return;
