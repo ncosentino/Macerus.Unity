@@ -100,10 +100,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 SkillUsage.UseRequiredResources(
                     player,
                     firstUsableSkill);
+
                 SkillHandlerFacade.Handle(
                     player,
-                    firstUsableSkill,
-                    new[] { player });
+                    firstUsableSkill);
             }
             else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot2))
             {
@@ -132,38 +132,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     player,
                     firstUsableSkill);
 
-                if(!firstUsableSkill.TryGetFirst<ISkillTargetBehavior>(out var targetBehavior))
-                {
-                    return;
-                }
-
-                var playerLocation = player.GetOnly<IWorldLocationBehavior>();
-                var skillOriginX = (int)playerLocation.X + targetBehavior.OriginOffset.Item1;
-                var skillOriginY = (int)playerLocation.Y + targetBehavior.OriginOffset.Item2;
-
-                var affectedLocations = targetBehavior
-                    .PatternFromOrigin
-                    .Select(x => Tuple.Create(skillOriginX + x.Item1, skillOriginY + x.Item2))
-                    .ToArray();
-
-                var targets = MapGameObjectManager
-                    .GameObjects
-                    .Where(x => x.Get<ITypeIdentifierBehavior>().Any(x => x.TypeId.Equals(new StringIdentifier("actor"))))
-                    .Where(x => targetBehavior
-                        .TeamIds
-                        .Contains((int)x
-                            .GetOnly<IHasMutableStatsBehavior>()
-                            .BaseStats[new StringIdentifier("CombatTeam")]))
-                    .Where(x => affectedLocations.Contains(
-                        Tuple.Create(
-                            (int)x.GetOnly<IWorldLocationBehavior>().X,
-                            (int)x.GetOnly<IWorldLocationBehavior>().Y)))
-                    .ToArray();
-
                 SkillHandlerFacade.Handle(
                     player,
-                    firstUsableSkill,
-                    targets);
+                    firstUsableSkill);
 
                 TurnBasedManager.SetApplicableObjects(new[] { player });
             }
