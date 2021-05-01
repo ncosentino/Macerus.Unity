@@ -34,7 +34,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             // sync macerus (source of truth) to unity
             MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
                 gameObject,
-                WorldLocationBehavior);
+                WorldLocationBehavior.X,
+                WorldLocationBehavior.Y);
         }
 
         private void Update()

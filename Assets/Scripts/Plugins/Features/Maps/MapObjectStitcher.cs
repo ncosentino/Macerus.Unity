@@ -1,4 +1,5 @@
 using Assets.Scripts.Api.GameObjects;
+using Assets.Scripts.Plugins.Features.GameObjects.Common;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using ProjectXyz.Api.Framework;
@@ -13,6 +14,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IPrefabStitcherFacade _prefabStitcherFacade;
         private readonly IIdentityBehaviourStitcher _identityBehaviourStitcher;
         private readonly ISyncUnityToMacerusWorldLocationBehaviourStitcher _syncUnityToMacerusWorldLocationBehaviourStitcher;
+        private readonly ISyncMacerusToUnityWorldLocationBehaviourStitcher _syncMacerusToUnityWorldLocationBehaviourStitcher;
         private readonly IHasGameObjectBehaviourStitcher _hasGameObjectBehaviourStitcher;
         private readonly IGameObjectBehaviorInterceptorFacade _gameObjectBehaviorInterceptorFacade;
 
@@ -20,12 +22,14 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IPrefabStitcherFacade prefabStitcherFacade,
             IIdentityBehaviourStitcher identityBehaviourStitcher,
             ISyncUnityToMacerusWorldLocationBehaviourStitcher syncUnityToMacerusWorldLocationBehaviourStitcher,
+            ISyncMacerusToUnityWorldLocationBehaviourStitcher syncMacerusToUnityWorldLocationBehaviourStitcher,
             IHasGameObjectBehaviourStitcher hasGameObjectBehaviourStitcher,
             IGameObjectBehaviorInterceptorFacade gameObjectBehaviorInterceptorFacade)
         {
             _prefabStitcherFacade = prefabStitcherFacade;
             _identityBehaviourStitcher = identityBehaviourStitcher;
             _syncUnityToMacerusWorldLocationBehaviourStitcher = syncUnityToMacerusWorldLocationBehaviourStitcher;
+            _syncMacerusToUnityWorldLocationBehaviourStitcher = syncMacerusToUnityWorldLocationBehaviourStitcher;
             _hasGameObjectBehaviourStitcher = hasGameObjectBehaviourStitcher;
             _gameObjectBehaviorInterceptorFacade = gameObjectBehaviorInterceptorFacade;
         }
@@ -56,6 +60,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 unityGameObject);
 
             // synchronize world location between unity and the backend
+            _syncMacerusToUnityWorldLocationBehaviourStitcher.Stitch(
+               gameObject,
+               unityGameObject);
             _syncUnityToMacerusWorldLocationBehaviourStitcher.Stitch(
                 gameObject,
                 unityGameObject);

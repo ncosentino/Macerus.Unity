@@ -1,6 +1,4 @@
-﻿using Macerus.Api.Behaviors;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 {
@@ -8,6 +6,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
     {
         void SynchronizeMacerusToUnityWorldLocation(
             GameObject unityGameObject,
-            IReadOnlyWorldLocationBehavior worldLocationBehavior);
+            double worldLocationX,
+            double worldLocationY);
+
+        void SynchronizeMacerusToUnitySize(
+            GameObject unityGameObject,
+            double width,
+            double height);
     }
 }

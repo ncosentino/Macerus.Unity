@@ -23,6 +23,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<SyncMacerusToUnityWorldLocationBehaviourStitcher>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<MacerusToUnityWorldLocationSynchronizer>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

@@ -35,7 +35,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             // sync macerus (source of truth) to unity
             MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
                 gameObject,
-                ObservableWorldLocationBehavior);
+                ObservableWorldLocationBehavior.X,
+                ObservableWorldLocationBehavior.Y);
+            MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnitySize(
+                gameObject,
+                ObservableWorldLocationBehavior.Width,
+                ObservableWorldLocationBehavior.Height);
         }
 
         private void OnDestroy()
@@ -48,8 +53,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 
         private void WorldLocationBehavior_WorldLocationChanged(
             object sender,
-            EventArgs e) => MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
+            EventArgs e)
+        {
+            MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnityWorldLocation(
                 gameObject,
-                ObservableWorldLocationBehavior);
+                ObservableWorldLocationBehavior.X,
+                ObservableWorldLocationBehavior.Y);
+            MacerusToUnityWorldLocationSynchronizer.SynchronizeMacerusToUnitySize(
+                gameObject,
+                ObservableWorldLocationBehavior.Width,
+                ObservableWorldLocationBehavior.Height);
+        }
     }
 }

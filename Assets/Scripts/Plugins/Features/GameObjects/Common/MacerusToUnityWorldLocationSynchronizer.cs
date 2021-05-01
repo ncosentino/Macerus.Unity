@@ -8,16 +8,23 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
     {
         public void SynchronizeMacerusToUnityWorldLocation(
             GameObject unityGameObject,
-            IReadOnlyWorldLocationBehavior worldLocationBehavior)
+            double worldLocationX,
+            double worldLocationY)
         {
             unityGameObject.transform.position = new Vector3(
-                (float)worldLocationBehavior.X,
-                (float)worldLocationBehavior.Y,
+                (float)worldLocationX,
+                (float)worldLocationY,
                 unityGameObject.transform.position.z);
+        }
 
+        public void SynchronizeMacerusToUnitySize(
+            GameObject unityGameObject,
+            double width,
+            double height)
+        {
             var newLocalScale = new Vector3(
-                (float)worldLocationBehavior.Width,
-                (float)worldLocationBehavior.Height,
+                (float)width,
+                (float)height,
                 unityGameObject.transform.localScale.z);
             if (unityGameObject.transform.localScale == newLocalScale)
             {
