@@ -35,10 +35,6 @@ namespace Assets.Scripts.Plugins.Features.Wip
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<PlayerTestingBehaviorsInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<CombatTurnLogger>()
                 .AutoActivate()
                 .AsSelf();
@@ -65,51 +61,6 @@ namespace Assets.Scripts.Plugins.Features.Wip
                     $"Last Turn: {e.ActorTurnProgression.Single()}\r\n" + 
                     $"Next Turn: {e.ActorWithNextTurn}");
             };
-        }
-    }
-
-    public sealed class PlayerTestingBehaviorsInterceptor : IDiscoverableActorBehaviorsInterceptor
-    {
-        private readonly IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
-        private readonly IFilterContextFactory _filterContextFactory;
-        private readonly ISkillAmenity _skillAmenity;
-
-        public PlayerTestingBehaviorsInterceptor(
-            IReadOnlyStatDefinitionToTermMappingRepository statDefinitionToTermMappingRepository,
-            IFilterContextFactory filterContextFactory,
-            ISkillAmenity skillAmenity)
-        {
-            _statDefinitionToTermMappingRepository = statDefinitionToTermMappingRepository;
-            _filterContextFactory = filterContextFactory;
-            _skillAmenity = skillAmenity;
-        }
-
-        public int Priority { get; } = 11000;
-
-        public IEnumerable<IBehavior> Intercept(IReadOnlyCollection<IBehavior> behaviors)
-        {
-            if (!behaviors.Has<IPlayerControlledBehavior>())
-            {
-                return behaviors;
-            }
-
-            var mutableStats = behaviors.GetOnly<IHasMutableStatsBehavior>();
-            mutableStats.MutateStats(stats =>
-            {
-                stats[_statDefinitionToTermMappingRepository.GetStatDefinitionToTermMappingByTerm("LIFE_MAXIMUM").StatDefinitionId] = 100;
-                stats[_statDefinitionToTermMappingRepository.GetStatDefinitionToTermMappingByTerm("LIFE_CURRENT").StatDefinitionId] = 10;
-                stats[_statDefinitionToTermMappingRepository.GetStatDefinitionToTermMappingByTerm("MANA_MAXIMUM").StatDefinitionId] = 100;
-                stats[_statDefinitionToTermMappingRepository.GetStatDefinitionToTermMappingByTerm("MANA_CURRENT").StatDefinitionId] = 100;
-            });
-
-            var skillsBehavior = behaviors.GetOnly<IHasSkillsBehavior>();
-            skillsBehavior.Add(new[]
-            {
-                _skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
-                _skillAmenity.GetSkillById(new StringIdentifier("fireball")),
-            });
-
-            return behaviors;
         }
     }
 }

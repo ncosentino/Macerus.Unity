@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NoesisSettings
   m_EditorClassIdentifier: 
   licenseName: Nexus Labs
-  licenseKey: hWnRSLkg0UhufXeL7ma2ss9QsE3VI90sAcLk96CqHAINg3hs
+  licenseKey: U4ZqbAjPamzmh01XoyPzeFPHyWJECOvadeQq4rGaA4w4wM6f
   applicationResources: {fileID: 11400000, guid: 9288dd36a3813e04a8a073467dc8d22f,
     type: 2}
   defaultFont: {fileID: 11400000, guid: b3ab3e4919f1b524381735ffc56c8632, type: 2}
