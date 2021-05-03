@@ -3,7 +3,7 @@
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Content.Weather;
 
-using ProjectXyz.Api.Behaviors;
+using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -15,7 +15,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
     {
         private readonly IReadOnlyWeatherManager _weatherManager;
 
-        private IWeather _currentWeather;
+        private IGameObject _currentWeather;
         private IAnimatedWeather _currentAnimatedWeather;
 
         public WeatherProvider(IReadOnlyWeatherManager weatherManager)
@@ -34,11 +34,12 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             var weatherId = nextWeather
                 .GetOnly<IIdentifierBehavior>()
                 .Id;
+            var weatherDuration = nextWeather.GetOnly<IWeatherDuration>();
             _currentAnimatedWeather = new AnimatedWeather()
             {
-                Duration = TurnsToTimespan(nextWeather.DurationInTurns),
-                TransitionInDuration = IntervalToTimespan(nextWeather.TransitionInDuration),
-                TransitionOutDuration = IntervalToTimespan(nextWeather.TransitionOutDuration),
+                Duration = TurnsToTimespan(weatherDuration.DurationInTurns),
+                TransitionInDuration = IntervalToTimespan(weatherDuration.TransitionInDuration),
+                TransitionOutDuration = IntervalToTimespan(weatherDuration.TransitionOutDuration),
                 WeatherResourceId = nextWeather.GetOnly<IReadOnlyPrefabResourceIdBehavior>().PrefabResourceId,
                 //
                 // FIXME: just a total hack for testing until values are loaded from backend

@@ -7,7 +7,7 @@ using Assets.Scripts.Unity.Threading;
 
 using NexusLabs.Contracts;
 
-using ProjectXyz.Api.Behaviors;
+using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.Behaviors.Filtering.Default.Attributes;
@@ -103,7 +103,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             object sender,
             EventArgs e) => Dispatcher.RunOnMainThread(() => SwitchMap(MapProvider.ActiveMap));
 
-        private void SwitchMap(IMap map)
+        private void SwitchMap(IGameObject map)
         {
             MapFormatter.FormatMap(
                 MapPrefab,

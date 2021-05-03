@@ -51,7 +51,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         public void FormatMap(
             IMapPrefab mapPrefab,
-            IMap map)
+            IGameObject map)
         {
             _mapPrefab = mapPrefab;
             _logger.Debug($"Formatting map object '{mapPrefab}' for '{map}'...");
@@ -75,7 +75,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _maxHeight = int.MinValue;
 
             mapPrefab.Tilemap.ClearAllTiles();
-            foreach (var mapLayer in map.Layers)
+            foreach (var mapLayer in map.GetOnly<IMapLayersBehavior>().Layers)
             {
                 foreach (var tile in mapLayer.Tiles)
                 {

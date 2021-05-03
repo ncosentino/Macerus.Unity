@@ -8,8 +8,8 @@ using Macerus.Api.Behaviors;
 
 using NexusLabs.Contracts;
 
-using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Api.GameObjects.Behaviors;
 
 using UnityEngine;
 

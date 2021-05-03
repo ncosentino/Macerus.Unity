@@ -6,7 +6,7 @@ using Autofac;
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
-using ProjectXyz.Api.Behaviors;
+using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Behaviors.Filtering.Attributes;
 using ProjectXyz.Api.Enchantments;

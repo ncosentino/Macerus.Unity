@@ -2,7 +2,6 @@
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
@@ -14,7 +13,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
     {
         void FormatMap(
             IMapPrefab mapPrefab,
-            IMap map);
+            IGameObject map);
 
         void RemoveGameObjects(
             GameObject mapObject,

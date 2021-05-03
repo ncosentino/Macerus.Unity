@@ -11,7 +11,7 @@ using Macerus.Plugins.Features.GameObjects.Skills.Api;
 
 using NexusLabs.Contracts;
 
-using ProjectXyz.Api.Behaviors;
+using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;

@@ -11,18 +11,16 @@ using Autofac;
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
+using Macerus.Plugins.Features.Stats;
 using Macerus.Plugins.Features.Weather;
 
 using ProjectXyz.Api.Behaviors.Filtering;
-using ProjectXyz.Api.Enchantments;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Stats;
-using ProjectXyz.Plugins.Enchantments.Stats;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
-using ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 using ProjectXyz.Plugins.Features.TurnBased.Api;
 using ProjectXyz.Plugins.Features.Weather.Api;
@@ -39,7 +37,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private ISkillAmenity _skillAmenity;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
-        private IStatCalculationService _statCalculationService;
+        private IStatCalculationServiceAmenity _statCalculationServiceAmenity;
         private IWeatherAmenity _weatherAmenity;
         private IWeatherManager _weatherManager;
         private ITurnBasedManager _turnBasedManager;
@@ -62,7 +60,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _unityGameObjectManager = container.Resolve<IUnityGameObjectManager>();
             _skillAmenity = container.Resolve<ISkillAmenity>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
-            _statCalculationService = container.Resolve<IStatCalculationService>();
+            _statCalculationServiceAmenity = container.Resolve<IStatCalculationServiceAmenity>();
             _weatherAmenity = container.Resolve<IWeatherAmenity>();
             _weatherManager = container.Resolve<IWeatherManager>();
             _turnBasedManager = container.Resolve<ITurnBasedManager>();
@@ -217,13 +215,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 }
             }
 
-            var context = new StatCalculationContext(
-                new IComponent[] { },
-                new IEnchantment[] { });
-            var value = _statCalculationService.GetStatValue(
+            var value = _statCalculationServiceAmenity.GetStatValue(
                 player,
-                statDefinitionId,
-                context);
+                statDefinitionId);
             _logger.Info($"{value}");
         }
 
