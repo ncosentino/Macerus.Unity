@@ -81,7 +81,7 @@ namespace Assets.Blend
                 skillsBehavior.Add(new[]
                 {
                     skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
-                    skillAmenity.GetSkillById(new StringIdentifier("test-fireball")),
+                    skillAmenity.GetSkillById(new StringIdentifier("fireball")),
                 });
 
                 var controller = container.Resolve<IPlayerInventoryController>();
