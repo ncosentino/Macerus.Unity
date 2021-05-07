@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Windows;
 using Assets.Scripts.Autofac;
@@ -16,11 +14,8 @@ using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.MainMenu.Api;
-using Macerus.Plugins.Features.StatusBar.Api;
-using ProjectXyz.Api.Behaviors;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Game.Interface.Engine;
-using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping.Api;
@@ -98,13 +93,5 @@ namespace Assets.Blend
 
             container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
         }
-    }
-
-    public sealed class Item : ProjectXyz.Api.GameObjects.IGameObject
-    {
-        public IReadOnlyCollection<IBehavior> Behaviors { get; } = new IBehavior[] 
-        {
-            new IdentifierBehavior(new StringIdentifier(Guid.NewGuid().ToString())),
-        };
     }
 }
