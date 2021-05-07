@@ -4,6 +4,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public interface IPlayerQuickSlotControlsBehaviourStitcher
     {
-        IReadOnlyPlayerQuickSlotControlsBehaviour Attach(GameObject gameObject);
+        void Attach(GameObject gameObject);
     }
 }

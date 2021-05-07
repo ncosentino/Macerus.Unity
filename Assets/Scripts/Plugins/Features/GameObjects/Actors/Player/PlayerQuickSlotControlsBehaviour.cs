@@ -1,33 +1,27 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Scripts.Input.Api;
-using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 
-using Macerus.Api.Behaviors;
-using Macerus.Plugins.Features.GameObjects.Skills.Api;
+using Macerus.Plugins.Features.StatusBar.Api;
 
 using NexusLabs.Contracts;
-
-using ProjectXyz.Api.GameObjects.Behaviors;
-using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using ProjectXyz.Plugins.Features.GameObjects.Skills;
-using ProjectXyz.Plugins.Features.Mapping.Api;
-using ProjectXyz.Plugins.Features.TurnBased.Api;
-using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
-
-    public sealed class PlayerQuickSlotControlsBehaviour :
-        MonoBehaviour,
-        IPlayerQuickSlotControlsBehaviour
+    public sealed class PlayerQuickSlotControlsBehaviour : MonoBehaviour
     {
+        private readonly Dictionary<KeyCode, int> _keyToSlotIndex;
+
+        public PlayerQuickSlotControlsBehaviour()
+        {
+            _keyToSlotIndex = new Dictionary<KeyCode, int>();
+        }
+
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 
         public IKeyboardControls KeyboardControls { get; set; }
@@ -36,15 +30,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
 
-        public ISkillUsage SkillUsage { get; set; }
-
-        public ISkillHandlerFacade SkillHandlerFacade { get; set; }
-
-        // FIXME: delete this, just for testing
-        public IMapGameObjectManager MapGameObjectManager { get; set; }
-
-        // FIXME: delete this, just for testing
-        public ITurnBasedManager TurnBasedManager { get; set; }
+        public IStatusBarController StatusBarController { get; set; }
 
         private void Start()
         {
@@ -52,20 +38,23 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
             UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
             UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
-            UnityContracts.RequiresNotNull(this, SkillHandlerFacade, nameof(SkillHandlerFacade));
+            UnityContracts.RequiresNotNull(this, StatusBarController, nameof(StatusBarController));
+
+            _keyToSlotIndex[KeyboardControls.QuickSlot1] = 0;
+            _keyToSlotIndex[KeyboardControls.QuickSlot2] = 1;
+            _keyToSlotIndex[KeyboardControls.QuickSlot3] = 2;
+            _keyToSlotIndex[KeyboardControls.QuickSlot4] = 3;
+            _keyToSlotIndex[KeyboardControls.QuickSlot5] = 4;
+            _keyToSlotIndex[KeyboardControls.QuickSlot6] = 5;
+            _keyToSlotIndex[KeyboardControls.QuickSlot7] = 6;
+            _keyToSlotIndex[KeyboardControls.QuickSlot8] = 7;
+            _keyToSlotIndex[KeyboardControls.QuickSlot9] = 8;
+            _keyToSlotIndex[KeyboardControls.QuickSlot10] = 9;
         }
 
         private void Update()
         {
             HandleQuickSlotControls();
-        }
-
-        private IGameObject GetPlayer()
-        {
-            var player = gameObject
-                .GetComponent<IReadOnlyHasGameObject>()
-                .GameObject;
-            return player;
         }
 
         private void HandleQuickSlotControls()
@@ -75,74 +64,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 return;
             }
 
-            if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot1))
+            foreach (var entry in _keyToSlotIndex.OrderBy(x => x.Value))
             {
-                var player = GetPlayer();
-                var skills = player
-                    .GetOnly<IHasSkillsBehavior>()
-                    .Skills;
-                // FIXME: this should actually pull this information from an assigned slot
-                var firstUsableSkill = skills.FirstOrDefault(x => x.Has<IUseOutOfCombatSkillBehavior>());
-                if (firstUsableSkill == null)
+                if (KeyboardInput.GetKeyUp(entry.Key))
                 {
-                    return;
+                    StatusBarController.ActivateSkillSlot(entry.Value);
+                    break;
                 }
-
-                if (!SkillUsage.CanUseSkill(
-                    player,
-                    firstUsableSkill))
-                {
-                    return;
-                }
-
-                // FIXME: move this logic into the backend into some class?
-                // FIXME: check the targeting?
-                SkillUsage.UseRequiredResources(
-                    player,
-                    firstUsableSkill);
-
-                SkillHandlerFacade.Handle(
-                    player,
-                    firstUsableSkill);
-
-                TurnBasedManager.SetApplicableObjects(new[] { player });
-            }
-            else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot2))
-            {
-                var player = GetPlayer();
-                var skills = player
-                    .GetOnly<IHasSkillsBehavior>()
-                    .Skills;
-
-                // FIXME: this should actually pull this information from an assigned slot
-                var firstUsableSkill = skills.FirstOrDefault(x => x.Has<ICombinationSkillBehavior>());
-                if (firstUsableSkill == null)
-                {
-                    return;
-                }
-
-                if (!SkillUsage.CanUseSkill(
-                    player,
-                    firstUsableSkill))
-                {
-                    return;
-                }
-
-                // FIXME: move this logic into the backend into some class?
-                // FIXME: check the targeting?
-                SkillUsage.UseRequiredResources(
-                    player,
-                    firstUsableSkill);
-
-                SkillHandlerFacade.Handle(
-                    player,
-                    firstUsableSkill);
-
-                TurnBasedManager.SetApplicableObjects(new[] { player });
-            }
-            else if (KeyboardInput.GetKeyUp(KeyboardControls.QuickSlot3))
-            {
-
             }
         }
     }
