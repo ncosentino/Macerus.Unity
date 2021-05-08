@@ -26,7 +26,7 @@ namespace Assets.Scripts.Gui.Noesis
                 dispatcher.BeginInvoke(action);
             });
 #else
-            var dispatcher = Application.Current.Dispatcher;
+            var dispatcher = Application.Current?.Dispatcher;
 
             return dispatcher == null
                 ? Task.CompletedTask
