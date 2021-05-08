@@ -95,6 +95,18 @@
     <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs">
       <DependentUpon>CharacterSheetView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Autofac\CombatTurnOrderModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\ICombatTurnOrderView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\CombatPortraitNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\CombatTurnOrderPortraitNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\ICombatPortraitNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\ICombatTurnOrderNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\ICombatTurnOrderPortraitNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\Resources\CombatTurnOrderView.xaml.cs">
+      <DependentUpon>CombatTurnOrderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\CombatTurnOrderNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\IHeaderBarView.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Autofac\InventoryModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EquipmentSlotNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EquipmentSlotToNoesisViewModelConverter.cs" />
@@ -137,6 +149,12 @@
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml.cs">
       <DependentUpon>HudView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Autofac\HeaderBarModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\IHeaderBarNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\Resources\HeaderBarView.xaml.cs">
+      <DependentUpon>HeaderBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\HeaderBarNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Autofac\StatusBarModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\AbilityToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\IAbilityToNoesisViewModelConverter.cs" />
@@ -185,6 +203,10 @@
     <None Include="Blend\App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\Resources\CombatTurnOrderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\InventoryEquipmentView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -214,6 +236,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\Resources\HudView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\Resources\HeaderBarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

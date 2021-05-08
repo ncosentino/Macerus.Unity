@@ -14,6 +14,7 @@ using Macerus.Plugins.Features.CharacterSheet.Api;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
+using Assets.Scripts.Plugins.Features.HeaderBar.Noesis;
 
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 {
@@ -27,7 +28,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IEmptyDropZoneNoesisViewModel emptyDropZoneNoesisViewModel,
             IPlayerInventoryWindow playerInventoryWindow,
             ICharacterSheetView characterSheetView,
-            IStatusBarView statusBarView)
+            IStatusBarView statusBarView,
+            IHeaderBarView headerBarView)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -59,6 +61,11 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                     NoesisLogicalTreeHelper.FindChildWithName(this, "StatusBarContent"),
                     statusBarView)
                 .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "HeaderBarContent"),
+                    headerBarView)
+                .Weld(); 
         }
 
 #if NOESIS
