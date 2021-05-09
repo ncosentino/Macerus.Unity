@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Assets.Scripts.Plugins.Features.FogOfWar;
 using Assets.Scripts.Plugins.Features.GameObjects.Common;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Resources.Prefabs;
 
 using Macerus.Plugins.Features.Mapping;
 
@@ -27,25 +29,28 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
+        private readonly IPrefabCreator _prefabCreator;
         private readonly ILogger _logger;
 
         private bool _gridLinesEnabled;
         private IMapPrefab _mapPrefab;
-        private int _maxWidth;
-        private int _maxHeight;
-        private int _minWidth;
-        private int _minHeight;
+        private int _maximumTileX;
+        private int _maximumTileY;
+        private int _minimumTileX;
+        private int _minimumTileY;
         private Vector3Int? _lastHoverSelectTilePosition;
 
         public MapFormatter(
             ITileLoader tileLoader,
             IObjectDestroyer objectDestroyer,
             IUnityGameObjectRepository unityGameObjectRepository,
+            IPrefabCreator prefabCreator,
             ILogger logger)
         {
             _tileLoader = tileLoader;
             _objectDestroyer = objectDestroyer;
             _unityGameObjectRepository = unityGameObjectRepository;
+            _prefabCreator = prefabCreator;
             _logger = logger;
         }
 
@@ -58,21 +63,11 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
             var parentMapObjectTransform = mapPrefab.GameObject.transform;
 
-            //foreach (Transform child in _mapPrefab.GameObjectLayer.transform)
-            //{
-            //    // NOTE: we *MUST* remove the parent reference because
-            //    // destruction doesn't actually occur until the next engine
-            //    // tick. as a result, people can accidentally lookup these
-            //    // objects before the next tick.
-            //    child.transform.parent = null;
-            //    _objectDestroyer.Destroy(child.gameObject);
-            //}
-            
             int z = 0;
-            _minWidth = int.MaxValue;
-            _maxWidth = int.MinValue;
-            _minHeight = int.MaxValue;
-            _maxHeight = int.MinValue;
+            _minimumTileX = int.MaxValue;
+            _maximumTileX = int.MinValue;
+            _minimumTileY = int.MaxValue;
+            _maximumTileY = int.MinValue;
 
             mapPrefab.Tilemap.ClearAllTiles();
             foreach (var mapLayer in map.GetOnly<IMapLayersBehavior>().Layers)
@@ -87,13 +82,45 @@ namespace Assets.Scripts.Plugins.Features.Maps
                         new Vector3Int(tile.X, tile.Y, z),
                         unityTile);
 
-                    _maxWidth = Math.Max(_maxWidth, tile.X);
-                    _minWidth = Math.Min(_minWidth, tile.X);
-                    _maxHeight = Math.Max(_maxHeight, tile.Y);
-                    _minHeight = Math.Min(_minHeight, tile.Y);
+                    _maximumTileX = Math.Max(_maximumTileX, tile.X);
+                    _minimumTileX = Math.Min(_minimumTileX, tile.X);
+                    _maximumTileY = Math.Max(_maximumTileY, tile.Y);
+                    _minimumTileY = Math.Min(_minimumTileY, tile.Y);
                 }
                 
                 z++;
+            }
+
+            var existingFogOfWar = parentMapObjectTransform.Find("FogOfWar");
+            if (map.TryGetFirst<IHasFogOfWarBehavior>(out var fogOfWarBehavior))
+            {
+                var fogOfWarGameObject = _prefabCreator.Create<GameObject>("FogOfWar/FogOfWar");
+                fogOfWarGameObject.name = "FogOfWar";
+                fogOfWarGameObject.transform.SetParent(parentMapObjectTransform);
+
+                var fogOfWarPrefab = new FogOfWarPrefab(fogOfWarGameObject);
+
+                var fogWidthInterim = (int)Math.Max(
+                    (int)Math.Abs(_minimumTileX),
+                    (int)Math.Abs(_maximumTileX));
+                var fogHeightInterim = (int)Math.Max(
+                    (int)Math.Abs(_minimumTileY),
+                    (int)Math.Abs(_maximumTileY));
+                const float ROUND_UP_HALF_TILES = 1.5f;
+                var fogSize = 2 * (Math.Max(fogWidthInterim, fogHeightInterim) + ROUND_UP_HALF_TILES);
+
+                fogOfWarPrefab.FogMainTextureTransform.sizeDelta = new Vector2(fogSize, fogSize);
+                fogOfWarPrefab.FogCameraMain.orthographicSize = fogSize / 2;
+            }
+
+            if (existingFogOfWar != null)
+            {
+                // NOTE: we *MUST* remove the parent reference because
+                // destruction doesn't actually occur until the next engine
+                // tick. as a result, people can accidentally lookup these
+                // objects before the next tick.
+                existingFogOfWar.parent = null;
+                _objectDestroyer.Destroy(existingFogOfWar.gameObject);
             }
 
             // set these back (if needed) because we just obliterated all the
@@ -184,9 +211,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
         {
             _gridLinesEnabled = enabled;
 
-            for (int i = _minWidth; i <= _maxWidth; i++)
+            for (int i = _minimumTileX; i <= _maximumTileX; i++)
             {
-                for (int j = _minHeight; j <= _maxHeight; j++)
+                for (int j = _minimumTileY; j <= _maximumTileY; j++)
                 {
                     var unityTile = enabled
                         ? _tileLoader.LoadTile(

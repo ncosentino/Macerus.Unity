@@ -42,10 +42,18 @@ namespace Assets.Scripts.Unity.GameObjects
 
         public static TComponent GetRequiredComponentInChild<TComponent>(
             this GameObject gameObject,
-            string name)
+            string name) => GetRequiredComponentInChild<TComponent>(
+                gameObject,
+                name,
+                true);
+
+        public static TComponent GetRequiredComponentInChild<TComponent>(
+            this GameObject gameObject,
+            string name,
+            bool immediateChildrenOnly)
         {
             var matchingChildGameObject = gameObject
-                .GetChildGameObjects()
+                .GetChildGameObjects(immediateChildrenOnly)
                 .SingleOrDefault(x => x.name == name);
             if (matchingChildGameObject == null)
             {
