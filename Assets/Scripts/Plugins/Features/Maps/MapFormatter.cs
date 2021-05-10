@@ -211,6 +211,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
         {
             _gridLinesEnabled = enabled;
 
+            // may not have been loaded yet
+            if (_mapPrefab == null || _mapPrefab.Tilemap == null)
+            {
+                return;
+            }
+
             for (int i = _minimumTileX; i <= _maximumTileX; i++)
             {
                 for (int j = _minimumTileY; j <= _maximumTileY; j++)
