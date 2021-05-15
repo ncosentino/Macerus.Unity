@@ -1,7 +1,6 @@
-﻿
-using Assets.Scripts.Unity;
+﻿using Assets.Scripts.Unity;
 
-using Macerus.Plugins.Features.Mapping.TiledNet;
+using Macerus.Plugins.Features.Mapping;
 
 namespace Assets.Scripts.Plugins.Features.Maps.TiledNet.Autofac
 {

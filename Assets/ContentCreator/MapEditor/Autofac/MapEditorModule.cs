@@ -55,11 +55,35 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<TriggerOnCombatEndBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<DoorInteractableBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<SpawnTemplatePropertiesBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<EditorNameBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<SceneToMapConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
                 .RegisterType<BehaviorConverterFacade>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<GameObjectToBehaviorConverterFacade>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<GameObjectConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

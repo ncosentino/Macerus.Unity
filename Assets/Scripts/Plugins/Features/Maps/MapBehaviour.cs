@@ -17,6 +17,7 @@ using ProjectXyz.Plugins.Features.Weather.Api;
 using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
+using Assets.ContentCreator.MapEditor;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
@@ -37,6 +38,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
         public IDispatcher Dispatcher { get; set; }
 
         public IMapPrefab MapPrefab { get; set; }
+
+        public ISceneToMapConverter SceneToMapConverter { get; set; }
 
         private void Start()
         {
@@ -97,6 +100,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 gameObject,
                 added);
             Debug.Log($"Synchronized game objects for map '{gameObject}'.");
+
+            SceneToMapConverter.XXX(MapPrefab.GameObject);
         }
 
         private void MapProvider_MapChanged(

@@ -12,16 +12,18 @@ namespace Assets.ContentCreator.MapEditor
 {
     public sealed class BehaviorConverterFacade : IBehaviorConverterFacade
     {
-        private readonly IReadOnlyCollection<IDiscoverableBehaviorConverter> _converters;
+        private readonly Lazy<IReadOnlyCollection<IDiscoverableBehaviorConverter>> _converters;
 
-        public BehaviorConverterFacade(IEnumerable<IDiscoverableBehaviorConverter> converters)
+        public BehaviorConverterFacade(Lazy<IEnumerable<IDiscoverableBehaviorConverter>> converters)
         {
-            _converters = converters.ToArray();
+            _converters = new Lazy<IReadOnlyCollection<IDiscoverableBehaviorConverter>>(() => converters.Value.ToArray());
         }
+
+        private IReadOnlyCollection<IDiscoverableBehaviorConverter> Converters => _converters.Value;
 
         public IBehavior Convert(Component component)
         {
-            var converter = _converters.FirstOrDefault(x => x.CanConvert(component));
+            var converter = Converters.FirstOrDefault(x => x.CanConvert(component));
             if (converter == null)
             {
                 return null;
@@ -35,11 +37,10 @@ namespace Assets.ContentCreator.MapEditor
             GameObject target,
             IBehavior behavior)
         {
-            var converter = _converters.FirstOrDefault(x => x.CanConvert(behavior));
+            var converter = Converters.FirstOrDefault(x => x.CanConvert(behavior));
             if (converter == null)
             {
-                throw new InvalidOperationException(
-                    $"No converter found for '{behavior}'.");
+                return null;
             }
 
             var converted = converter.Convert(
