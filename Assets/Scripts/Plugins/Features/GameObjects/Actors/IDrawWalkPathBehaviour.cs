@@ -1,7 +1,8 @@
-﻿
-using Assets.Scripts.Unity;
+﻿using Assets.Scripts.Unity;
 
 using Macerus.Api.Behaviors;
+
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;
 
@@ -15,6 +16,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
 
         ITimeProvider TimeProvider { get; set; }
 
-        IReadOnlyWorldLocationBehavior WorldLocationBehavior { get; set; }
+        IReadOnlyPositionBehavior ReadOnlyPositionBehavior { get; set; }
     }
 }

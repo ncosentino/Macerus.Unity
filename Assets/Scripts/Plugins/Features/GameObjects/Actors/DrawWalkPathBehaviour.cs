@@ -6,6 +6,8 @@ using Macerus.Api.Behaviors;
 
 using NexusLabs.Contracts;
 
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
@@ -18,7 +20,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
 
         public IReadOnlyMovementBehavior MovementBehavior { get; set; }
 
-        public IReadOnlyWorldLocationBehavior WorldLocationBehavior { get; set; }
+        public IReadOnlyPositionBehavior ReadOnlyPositionBehavior { get; set; }
 
         public ITimeProvider TimeProvider { get; set; }
 
@@ -27,7 +29,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
         private void Start()
         {
             this.RequiresNotNull(MovementBehavior, nameof(MovementBehavior));
-            this.RequiresNotNull(WorldLocationBehavior, nameof(WorldLocationBehavior));
+            this.RequiresNotNull(ReadOnlyPositionBehavior, nameof(ReadOnlyPositionBehavior));
             this.RequiresNotNull(LineRenderer, nameof(LineRenderer));
             this.RequiresNotNull(TimeProvider, nameof(TimeProvider));
         }
@@ -43,8 +45,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
 
             var points = MovementBehavior.PointsToWalk.Any()
                 ? new Vector3(
-                    (float)WorldLocationBehavior.X,
-                    (float)WorldLocationBehavior.Y,
+                    (float)ReadOnlyPositionBehavior.X,
+                    (float)ReadOnlyPositionBehavior.Y,
                     -1)
                     .Yield()
                     .Concat(MovementBehavior

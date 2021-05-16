@@ -13,23 +13,23 @@ namespace Assets.Scripts.Plugins.Features.Maps
     {
         private readonly IPrefabStitcherFacade _prefabStitcherFacade;
         private readonly IIdentityBehaviourStitcher _identityBehaviourStitcher;
-        private readonly ISyncUnityToMacerusWorldLocationBehaviourStitcher _syncUnityToMacerusWorldLocationBehaviourStitcher;
-        private readonly ISyncMacerusToUnityWorldLocationBehaviourStitcher _syncMacerusToUnityWorldLocationBehaviourStitcher;
+        private readonly ISyncUnityToMacerusPositionBehaviourStitcher _syncUnityToMacerusPositionBehaviourStitcher;
+        private readonly ISyncMacerusToUnityPositionBehaviourStitcher _syncMacerusToUnityPositionBehaviourStitcher;
         private readonly IHasGameObjectBehaviourStitcher _hasGameObjectBehaviourStitcher;
         private readonly IGameObjectBehaviorInterceptorFacade _gameObjectBehaviorInterceptorFacade;
 
         public MapObjectStitcher(
             IPrefabStitcherFacade prefabStitcherFacade,
             IIdentityBehaviourStitcher identityBehaviourStitcher,
-            ISyncUnityToMacerusWorldLocationBehaviourStitcher syncUnityToMacerusWorldLocationBehaviourStitcher,
-            ISyncMacerusToUnityWorldLocationBehaviourStitcher syncMacerusToUnityWorldLocationBehaviourStitcher,
+            ISyncUnityToMacerusPositionBehaviourStitcher syncUnityToMacerusPositionBehaviourStitcher,
+            ISyncMacerusToUnityPositionBehaviourStitcher syncMacerusToUnityPositionBehaviourStitcher,
             IHasGameObjectBehaviourStitcher hasGameObjectBehaviourStitcher,
             IGameObjectBehaviorInterceptorFacade gameObjectBehaviorInterceptorFacade)
         {
             _prefabStitcherFacade = prefabStitcherFacade;
             _identityBehaviourStitcher = identityBehaviourStitcher;
-            _syncUnityToMacerusWorldLocationBehaviourStitcher = syncUnityToMacerusWorldLocationBehaviourStitcher;
-            _syncMacerusToUnityWorldLocationBehaviourStitcher = syncMacerusToUnityWorldLocationBehaviourStitcher;
+            _syncUnityToMacerusPositionBehaviourStitcher = syncUnityToMacerusPositionBehaviourStitcher;
+            _syncMacerusToUnityPositionBehaviourStitcher = syncMacerusToUnityPositionBehaviourStitcher;
             _hasGameObjectBehaviourStitcher = hasGameObjectBehaviourStitcher;
             _gameObjectBehaviorInterceptorFacade = gameObjectBehaviorInterceptorFacade;
         }
@@ -60,10 +60,10 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 unityGameObject);
 
             // synchronize world location between unity and the backend
-            _syncMacerusToUnityWorldLocationBehaviourStitcher.Stitch(
+            _syncMacerusToUnityPositionBehaviourStitcher.Stitch(
                gameObject,
                unityGameObject);
-            _syncUnityToMacerusWorldLocationBehaviourStitcher.Stitch(
+            _syncUnityToMacerusPositionBehaviourStitcher.Stitch(
                 gameObject,
                 unityGameObject);
         }

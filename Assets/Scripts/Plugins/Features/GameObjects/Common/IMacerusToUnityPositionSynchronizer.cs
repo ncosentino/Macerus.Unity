@@ -2,12 +2,12 @@
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 {
-    public interface IMacerusToUnityWorldLocationSynchronizer
+    public interface IMacerusToUnityPositionSynchronizer
     {
-        void SynchronizeMacerusToUnityWorldLocation(
+        void SynchronizeMacerusToUnityPosition(
             GameObject unityGameObject,
-            double worldLocationX,
-            double worldLocationY);
+            double positionX,
+            double positionY);
 
         void SynchronizeMacerusToUnitySize(
             GameObject unityGameObject,

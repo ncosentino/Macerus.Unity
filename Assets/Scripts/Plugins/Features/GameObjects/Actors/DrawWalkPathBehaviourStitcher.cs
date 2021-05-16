@@ -3,6 +3,7 @@
 using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
             var drawWalkPathBehaviour = unityGameObject.AddComponent<DrawWalkPathBehaviour>();
             drawWalkPathBehaviour.TimeProvider = _timeProvider;
             drawWalkPathBehaviour.MovementBehavior = gameObject.GetOnly<IReadOnlyMovementBehavior>();
-            drawWalkPathBehaviour.WorldLocationBehavior = gameObject.GetOnly<IReadOnlyWorldLocationBehavior>();
+            drawWalkPathBehaviour.ReadOnlyPositionBehavior = gameObject.GetOnly<IReadOnlyPositionBehavior>();
 
             drawWalkPathBehaviour.LineRenderer = unityGameObject.AddComponent<LineRenderer>();
             drawWalkPathBehaviour.LineRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));

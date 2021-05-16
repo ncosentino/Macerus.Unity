@@ -51,7 +51,11 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<WorldLocationBehaviorConverter>()
+                .RegisterType<PositionBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<SizeBehaviorConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
@@ -62,10 +66,11 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .RegisterType<DoorInteractableBehaviorConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            builder
-                .RegisterType<SpawnTemplatePropertiesBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            // FIXME: re-enable this!
+            //builder
+            //    .RegisterType<SpawnTemplatePropertiesBehaviorConverter>()
+            //    .AsImplementedInterfaces()
+            //    .SingleInstance();
             builder
                 .RegisterType<EditorNameBehaviorConverter>()
                 .AsImplementedInterfaces()

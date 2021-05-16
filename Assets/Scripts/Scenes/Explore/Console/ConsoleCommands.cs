@@ -104,46 +104,46 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _mapFormatter.ToggleGridLines(enabled);
         }
 
-        [DiscoverableConsoleCommand("Gets the location of the player.")]
-        private void PlayerGetLocation()
+        [DiscoverableConsoleCommand("Gets the position of the player.")]
+        private void PlayerGetPosition()
         {
-            var worldLocationBehavior = _mapGameObjectManager
+            var positionBehavior = _mapGameObjectManager
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>())
-                .GetOnly<IWorldLocationBehavior>();
+                .GetOnly<IReadOnlyPositionBehavior>();
             _logger.Info(
-                $"({worldLocationBehavior.X},{worldLocationBehavior.Y})");
+                $"({positionBehavior.X},{positionBehavior.Y})");
         }
 
         [DiscoverableConsoleCommand("Sets the location of the player.")]
-        private void PlayerSetLocation(double x, double y)
+        private void PlayerSetPosition(double x, double y)
         {
-            var worldLocationBehavior = _mapGameObjectManager
+            var positionBehavior = _mapGameObjectManager
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>())
-                .GetOnly<IWorldLocationBehavior>();
+                .GetOnly<IPositionBehavior>();
             var unityPlayerObject = _unityGameObjectManager
                 .FindAll(x => x.IsPlayerControlled())
                 .Single();
 
-            worldLocationBehavior.SetLocation(x, y);
+            positionBehavior.SetPosition(x, y);
             unityPlayerObject.transform.position = new Vector3(
                 (float)x,
                 (float)y,
                 unityPlayerObject.transform.position.z);
             _logger.Info(
-                $"Set player location to ({worldLocationBehavior.X},{worldLocationBehavior.Y}).");
+                $"Set player location to ({positionBehavior.X},{positionBehavior.Y}).");
         }
 
         [DiscoverableConsoleCommand("Gets the size of the player.")]
         private void PlayerGetSize()
         {
-            var worldLocationBehavior = _mapGameObjectManager
+            var sizeBehavior = _mapGameObjectManager
                 .GameObjects
                 .Single(x => x.Has<IPlayerControlledBehavior>())
-                .GetOnly<IWorldLocationBehavior>();
+                .GetOnly<IReadOnlySizeBehavior>();
             _logger.Info(
-                $"({worldLocationBehavior.Width},{worldLocationBehavior.Height})");
+                $"({sizeBehavior.Width},{sizeBehavior.Height})");
         }
 
         [DiscoverableConsoleCommand("Sets whether or not to use global syncing for the turn based manager.")]

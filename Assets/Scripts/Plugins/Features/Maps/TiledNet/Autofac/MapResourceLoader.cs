@@ -3,10 +3,11 @@
 using Assets.Scripts.Unity.Resources;
 
 using Macerus.Plugins.Features.Mapping;
+using Macerus.Plugins.Features.Mapping.TiledNet;
 
 namespace Assets.Scripts.Plugins.Features.Maps.TiledNet.Autofac
 {
-    public sealed class MapResourceLoader : IMapResourceLoader
+    public sealed class MapResourceLoader : ITiledMapResourceLoader
     {
         private readonly IResourceLoader _resourceLoader;
 

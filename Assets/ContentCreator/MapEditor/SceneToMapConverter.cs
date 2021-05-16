@@ -4,18 +4,19 @@ using System.Linq;
 
 using Assets.ContentCreator.MapEditor.Behaviours;
 using Assets.Scripts.Unity.GameObjects;
+using Assets.Scripts.Unity.Tilemaps;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
+using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.Mapping.Default;
+
+using UnityEditor;
 
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Assets.ContentCreator.MapEditor
 {
-    public interface ISceneToMapConverter
-    {
-        void XXX(GameObject mapGameObject);
-    }
-
     public sealed class SceneToMapConverter : ISceneToMapConverter
     {
         private Lazy<IGameObjectConverter> _gameObjectConverter;
@@ -27,63 +28,56 @@ namespace Assets.ContentCreator.MapEditor
 
         private IGameObjectConverter GameObjectConverter => _gameObjectConverter.Value;
 
-        public void XXX(GameObject mapGameObject)
+        public void Convert(GameObject mapGameObject)
         {
-            mapGameObject = new GameObject(); // FIXME: just for testing
-            mapGameObject.name = "Fake Map";
-            var firstGameObjectLayer = new GameObject();
-            firstGameObjectLayer.name = "First Game Object Layer";
-            firstGameObjectLayer.transform.parent = mapGameObject.transform;
+            //mapGameObject = new GameObject(); // FIXME: just for testing
+            //mapGameObject.name = "Fake Map";
+            //var firstGameObjectLayer = new GameObject();
+            //firstGameObjectLayer.name = "First Game Object Layer";
+            //firstGameObjectLayer.transform.parent = mapGameObject.transform;
 
-            var templateSpawner = new GameObject();
-            templateSpawner.name = "Template Spawner";
-            templateSpawner.transform.parent = firstGameObjectLayer.transform;
-            templateSpawner.AddComponent<IdentifierBehaviour>();
-            templateSpawner.AddComponent<TypeIdentifierBehaviour>().TypeId = "Static";
-            //testyboi.AddComponent<TemplateIdentifierBehaviour>().TemplateId = "Skeleton";
-            //testyboi.AddComponent<PrefabResourceBehaviour>().Prefab = Resources.Load<GameObject>("mapping/prefabs/actors/actor");
-            //testyboi.AddComponent<DynamicAnimationBehaviour>();
-            templateSpawner.AddComponent<TriggerOnCombatEndBehaviour>();
+            //var templateSpawner = new GameObject();
+            //templateSpawner.name = "Template Spawner";
+            //templateSpawner.transform.parent = firstGameObjectLayer.transform;
+            //templateSpawner.AddComponent<IdentifierBehaviour>();
+            //templateSpawner.AddComponent<TypeIdentifierBehaviour>().TypeId = "Static";
+            ////testyboi.AddComponent<TemplateIdentifierBehaviour>().TemplateId = "Skeleton";
+            ////testyboi.AddComponent<PrefabResourceBehaviour>().Prefab = Resources.Load<GameObject>("mapping/prefabs/actors/actor");
+            ////testyboi.AddComponent<DynamicAnimationBehaviour>();
+            //templateSpawner.AddComponent<TriggerOnCombatEndBehaviour>();
 
-            var spawnTemplateProperties = new GameObject();
-            spawnTemplateProperties.name = "SpawnTemplatePropertiesBehavior";
-            spawnTemplateProperties.transform.parent = templateSpawner.transform;
-            spawnTemplateProperties.AddComponent<IdentifierBehaviour>();
-            spawnTemplateProperties.AddComponent<TypeIdentifierBehaviour>().TypeId = "Static";
-            // FIXME: how to set x,y,width,height to = parent?
-            var doorBehaviour = spawnTemplateProperties.AddComponent<DoorBehaviour>();
-            doorBehaviour.AutomaticInteraction = false;
-            doorBehaviour.TransitionToMapId = null; // "swamp";
-            doorBehaviour.HasPositionTransition = false;
-            doorBehaviour.TransitionToX = 0; //40;
-            doorBehaviour.TransitionToY = 0;// -16;
-
-            //<object id="18" name="tiled specific name" type="tiled specific type" x="1600" y="-600" width="32" height="32">
-            //    <property name="typeId" value="static"/>
-            //    <property name="templateId" value=""/>
-            //    <property name="prefabId" value="static/rectangulartrigger"/>
-            //    <property name="TriggerOnCombatEnd" />
-            //    <property name="SpawnTemplateProperties">
-            //      <property name="typeId" value="static"/>
-            //      <property name="templateId" value="??this is a door but proof we don't require this??"/>
-            //      <property name="prefabId" value="static/encounterspawn"/>
-            //      <property name="x" value="50"/>
-            //      <property name="y" value="-20"/>
-            //      <property name="width" value="1"/>
-            //      <property name="height" value="1"/>
-            //      <property name="DoorBehavior">
-            //        <property name="AutomaticInteraction" value="False"/>
-            //        <property name="TransitionToMapId" value="swamp"/>
-            //        <property name="TransitionToX" value="40"/>
-            //        <property name="TransitionToY" value="-16"/>
-            //      </property>
-            //    </property>
-            //  </object>
-
-            // FIXME: we want to go through designated object layers but not
-            // into the objects themselves on this outer loop
+            //var spawnTemplateProperties = new GameObject();
+            //spawnTemplateProperties.name = "SpawnTemplatePropertiesBehavior";
+            //spawnTemplateProperties.transform.parent = templateSpawner.transform;
+            //spawnTemplateProperties.AddComponent<IdentifierBehaviour>();
+            //spawnTemplateProperties.AddComponent<TypeIdentifierBehaviour>().TypeId = "Static";
+            //// FIXME: how to set x,y,width,height to = parent?
+            //var doorBehaviour = spawnTemplateProperties.AddComponent<DoorBehaviour>();
+            //doorBehaviour.AutomaticInteraction = false;
+            //doorBehaviour.TransitionToMapId = null; // "swamp";
+            //doorBehaviour.HasPositionTransition = false;
+            //doorBehaviour.TransitionToX = 0; //40;
+            //doorBehaviour.TransitionToY = 0;// -16;
             foreach (var gameObjectLayer in mapGameObject.GetChildGameObjects(true))
             {
+                var tileMap = gameObjectLayer.GetComponent<Tilemap>();
+                if (tileMap != null)
+                {
+                    var tiles = tileMap.GetAllTiles();
+                    foreach (var tile in tiles)
+                    {
+                        var spriteAssetPath = AssetDatabase.GetAssetPath(tile.Sprite);
+                        spriteAssetPath = spriteAssetPath
+                            .Substring("Assets/Resources/".Length) // we need a relative path
+                            .Replace(".png", string.Empty) // we don't want the extension
+                            + "/" + tile.Sprite.name;
+                        var mapTile = new MapTile(
+                            tile.X,
+                            tile.Y,
+                            new IBehavior[0]);
+                    }
+                }
+
                 foreach (var unityGameObject in gameObjectLayer.GetChildGameObjects(true))
                 {
                     var gameObject = GameObjectConverter.Convert(unityGameObject).ToArray();

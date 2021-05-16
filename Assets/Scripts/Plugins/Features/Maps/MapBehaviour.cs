@@ -101,7 +101,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 added);
             Debug.Log($"Synchronized game objects for map '{gameObject}'.");
 
-            SceneToMapConverter.XXX(MapPrefab.GameObject);
+            // FIXME: remove this... just for testing the map editor
+            //SceneToMapConverter.Convert(MapPrefab.GameObject);
         }
 
         private void MapProvider_MapChanged(

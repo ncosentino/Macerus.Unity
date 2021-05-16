@@ -1,19 +1,17 @@
-﻿using Macerus.Api.Behaviors;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 {
-    public sealed class MacerusToUnityWorldLocationSynchronizer : IMacerusToUnityWorldLocationSynchronizer
+    public sealed class MacerusToUnityPositionSynchronizer : IMacerusToUnityPositionSynchronizer
     {
-        public void SynchronizeMacerusToUnityWorldLocation(
+        public void SynchronizeMacerusToUnityPosition(
             GameObject unityGameObject,
-            double worldLocationX,
-            double worldLocationY)
+            double positionX,
+            double positionY)
         {
             unityGameObject.transform.position = new Vector3(
-                (float)worldLocationX,
-                (float)worldLocationY,
+                (float)positionX,
+                (float)positionY,
                 unityGameObject.transform.position.z);
         }
 

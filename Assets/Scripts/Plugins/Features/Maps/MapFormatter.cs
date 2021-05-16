@@ -74,7 +74,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             {
                 foreach (var tile in mapLayer.Tiles)
                 {
-                    var tileResource = (ITileResourceComponent)tile.Components.First(x => x is ITileResourceComponent);
+                    var tileResource = (ITileResourceBehavior)tile.Behaviors.First(x => x is ITileResourceBehavior);
                     var unityTile = _tileLoader.LoadTile(
                         tileResource.TilesetResourcePath,
                         tileResource.SpriteResourceName);

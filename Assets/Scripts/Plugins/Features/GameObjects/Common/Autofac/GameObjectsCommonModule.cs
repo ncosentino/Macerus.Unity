@@ -19,15 +19,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<SyncUnityToMacerusWorldLocationBehaviourStitcher>()
+                .RegisterType<SyncUnityToMacerusPositionBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<SyncMacerusToUnityWorldLocationBehaviourStitcher>()
+                .RegisterType<SyncMacerusToUnityPositionBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<MacerusToUnityWorldLocationSynchronizer>()
+                .RegisterType<MacerusToUnityPositionSynchronizer>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
