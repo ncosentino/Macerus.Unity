@@ -89,7 +89,22 @@ namespace Assets.Scripts.UnityEditor
                 ProcessDependencies(
                     destinationPluginsDirectory,
                     destinationResourcesDirectory);
+                UpdateTestAssemblyReferences(destinationPluginsDirectory);
             }));
+        }
+
+        private void UpdateTestAssemblyReferences(string destinationPluginsDirectory)
+        {
+            var asmDefPath = "Assets/Tests/EditorModeTests/EditorModeTests.asmdef";
+            var asmDefContents = File.ReadAllText(asmDefPath);
+            var dependencyRegex = new Regex("(\"precompiledReferences\": \\[)(.+)(\\],)", RegexOptions.Singleline);
+            var dlls = Directory.GetFiles(destinationPluginsDirectory, "*.dll");
+            var replacement =
+                "\"nunit.framework.dll\",\r\n" +
+                "\"Autofac.dll\",\r\n";
+            replacement += string.Join(",\r\n", dlls.Select(x => $"\"{new FileInfo(x).Name}\""));
+            var replacedAsmDefContents = dependencyRegex.Replace(asmDefContents, $"$1{replacement}$3");
+            File.WriteAllText(asmDefPath, replacedAsmDefContents);
         }
 
         private void BuildDependency(

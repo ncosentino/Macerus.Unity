@@ -1,5 +1,4 @@
 ﻿using Assets.ContentCreator.MapEditor.Behaviours;
-using Assets.Scripts.Scenes.Explore.Api;
 
 using Autofac;
 
@@ -10,32 +9,23 @@ namespace Assets.ContentCreator.MapEditor.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<ExploreSceneStartupInterceptorFacade>()
-                .As<IExploreSceneStartupInterceptorFacade>() // force facade interface to avoid circular dependencies
-                .SingleInstance();
-            builder
-                .RegisterType<ExploreSceneLoadHook>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ExploreSetup>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<GameEngineUpdateBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ExploreGameRootPrefabFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder
                 .RegisterType<DynamicAnimationBehaviorConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
                 .RegisterType<PrefabResourceIdConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<EditorPrefabResourceIdConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ImplicitEditorPrefabResourceIdConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<ImplicitIdentifierBehaviorConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
@@ -59,6 +49,14 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<BoxColliderBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<CircleColliderBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<TriggerOnCombatEndBehaviorConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -66,11 +64,10 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .RegisterType<DoorInteractableBehaviorConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            // FIXME: re-enable this!
-            //builder
-            //    .RegisterType<SpawnTemplatePropertiesBehaviorConverter>()
-            //    .AsImplementedInterfaces()
-            //    .SingleInstance();
+            builder
+                .RegisterType<SpawnTemplatePropertiesBehaviorConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
             builder
                 .RegisterType<EditorNameBehaviorConverter>()
                 .AsImplementedInterfaces()
@@ -85,6 +82,10 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<GameObjectToBehaviorConverterFacade>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<BehaviorToBaseGameObjectConverterFacade>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder

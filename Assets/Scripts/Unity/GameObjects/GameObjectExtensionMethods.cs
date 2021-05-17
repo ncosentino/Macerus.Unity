@@ -104,6 +104,19 @@ namespace Assets.Scripts.Unity.GameObjects
             }
         }
 
+        public static IEnumerable<T> GetChildComponents<T>(
+            this GameObject gameObject,
+            bool immediateChildrenOnly)
+        {
+            foreach (var child in gameObject.GetChildGameObjects(immediateChildrenOnly))
+            {
+                foreach (var childComponent in child.GetComponents<T>())
+                {
+                    yield return childComponent;
+                }
+            }
+        }
+
         public static void RemoveComponents<TComponent>(this GameObject gameObject)
         {
             foreach (var component in gameObject.GetComponents<TComponent>())

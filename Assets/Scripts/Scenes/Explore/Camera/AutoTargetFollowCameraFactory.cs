@@ -27,7 +27,7 @@ namespace Assets.Scripts.Scenes.Explore.Camera
             followCamera.name = "FollowCamera";
 
             var weatherSystem = _weatherSystemFactory.Create();
-            weatherSystem.transform.parent = followCamera.transform;
+            weatherSystem.transform.SetParent(followCamera.transform);
 
             _cameraAutoTargetStitcher.Attach(followCamera);
 

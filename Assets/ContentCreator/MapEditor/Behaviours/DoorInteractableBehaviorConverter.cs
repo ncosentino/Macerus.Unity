@@ -1,4 +1,6 @@
-﻿using Macerus.Plugins.Features.GameObjects.Static.Doors;
+﻿using System.Collections.Generic;
+
+using Macerus.Plugins.Features.GameObjects.Static.Doors;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Shared.Framework;
@@ -13,7 +15,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is DoorBehaviour;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
@@ -30,10 +32,10 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
             component.TransitionToY = castedBehavior.TransitionToY.HasValue
                 ? (float)castedBehavior.TransitionToY.Value
                 : 0f;
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var castedBehaviour = (DoorBehaviour)component;
             var behavior = new DoorInteractableBehavior(
@@ -43,7 +45,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
                     : new StringIdentifier(castedBehaviour.TransitionToMapId),
                 castedBehaviour.HasPositionTransition ? castedBehaviour.TransitionToX : 0f,
                 castedBehaviour.HasPositionTransition ? castedBehaviour.TransitionToY : 0f);
-            return behavior;
+            yield return behavior;
         }
     }
 }

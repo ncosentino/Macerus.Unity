@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 using Macerus.Api.Behaviors;
 using Macerus.Shared.Behaviors;
 
@@ -14,18 +15,18 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is TriggerOnCombatEndBehaviour;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
             var component = target.AddComponent<TriggerOnCombatEndBehaviour>();
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var behavior = new TriggerOnCombatEndBehavior();
-            return behavior;
+            yield return behavior;
         }
     }
 }

@@ -2,12 +2,11 @@
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
-using Macerus.Plugins.Features.Encounters.Triggers.GamObjects.Static;
-
 using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;
+using Macerus.Plugins.Features.Encounters.Triggers;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
 {

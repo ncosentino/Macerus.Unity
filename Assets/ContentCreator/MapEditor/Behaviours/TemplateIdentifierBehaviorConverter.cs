@@ -1,4 +1,4 @@
-﻿using Macerus.Plugins.Features.GameObjects.Actors;
+﻿using System.Collections.Generic;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
@@ -15,22 +15,22 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is TemplateIdentifierBehaviour;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
             var castedBehavior = (ITemplateIdentifierBehavior)behavior;
             var component = target.AddComponent<TemplateIdentifierBehaviour>();
             component.TemplateId = castedBehavior.TemplateId.ToString();
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var castedBehaviour = (TemplateIdentifierBehaviour)component;
             var id = new StringIdentifier(castedBehaviour.TemplateId);
             var behavior = new TemplateIdentifierBehavior(id);
-            return behavior;
+            yield return behavior;
         }
     }
 }

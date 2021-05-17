@@ -1,4 +1,6 @@
-﻿using ProjectXyz.Api.GameObjects.Behaviors;
+﻿using System.Collections.Generic;
+
+using ProjectXyz.Api.GameObjects.Behaviors;
 
 using UnityEngine;
 
@@ -6,10 +8,10 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 {
     public interface IBehaviorConverter
     {
-        Component Convert(
+        IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior);
-        
-        IBehavior Convert(Component component);
+
+        IEnumerable<IBehavior> Convert(Component component);
     }
 }

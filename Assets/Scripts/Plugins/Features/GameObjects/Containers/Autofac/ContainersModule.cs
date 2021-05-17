@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Plugins.Features.GameObjects.Static;
-using Assets.Scripts.Unity.Resources.Prefabs;
+﻿using Assets.Scripts.Unity.Resources.Prefabs;
 
 using Autofac;
 
@@ -9,11 +8,6 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Containers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder
-                .RegisterType<ContainerInterceptor>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder
                 .RegisterBuildCallback(c =>
                 {

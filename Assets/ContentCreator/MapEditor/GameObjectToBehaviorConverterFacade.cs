@@ -21,16 +21,11 @@ namespace Assets.ContentCreator.MapEditor
 
         private IReadOnlyCollection<IDiscoverableGameObjectToBehaviorConverter> Converters => _converters.Value;
 
-        public IBehavior Convert(GameObject unityGameObject)
+        public IEnumerable<IBehavior> Convert(GameObject unityGameObject)
         {
-            var converter = Converters.FirstOrDefault(x => x.CanConvert(unityGameObject));
-            if (converter == null)
-            {
-                return null;
-            }
-
-            var converted = converter.Convert(unityGameObject);
-            return converted;
+            return Converters
+                .Where(x => x.CanConvert(unityGameObject))
+                .SelectMany(x => x.Convert(unityGameObject));
         }
 
         public GameObject Convert(IBehavior behavior)

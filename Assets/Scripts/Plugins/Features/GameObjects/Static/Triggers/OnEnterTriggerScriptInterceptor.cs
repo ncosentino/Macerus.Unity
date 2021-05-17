@@ -1,13 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
-using Macerus.Plugins.Features.GameObjects.Static.Api;
+using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 
@@ -26,23 +23,20 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
             IGameObject gameObject,
             GameObject unityGameObject)
         {
-            var properties = gameObject
-                .Get<IReadOnlyStaticGameObjectPropertiesBehavior>()
-                .SingleOrDefault()
-                ?.Properties;
-            if (properties == null)
+            var triggerScriptBehavior = gameObject
+                .Get<ITriggerScriptBehavior>()
+                .SingleOrDefault();
+            if (triggerScriptBehavior == null)
             {
                 return;
             }
 
-            if (!properties.TryGetValue(
-                "OnEnterTriggerScriptId",
-                out var rawTriggerScriptId))
+            var scriptId = triggerScriptBehavior.OnEnterTriggerScriptId;
+            if (scriptId == null)
             {
                 return;
             }
 
-            var scriptId = new StringIdentifier(Convert.ToString(rawTriggerScriptId, CultureInfo.InvariantCulture));
             _onEnterTriggerScriptBehaviourStitcher.Stitch(
                 gameObject,
                 unityGameObject,

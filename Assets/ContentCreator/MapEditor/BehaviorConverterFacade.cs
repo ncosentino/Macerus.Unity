@@ -21,32 +21,20 @@ namespace Assets.ContentCreator.MapEditor
 
         private IReadOnlyCollection<IDiscoverableBehaviorConverter> Converters => _converters.Value;
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
-            var converter = Converters.FirstOrDefault(x => x.CanConvert(component));
-            if (converter == null)
-            {
-                return null;
-            }
-
-            var converted = converter.Convert(component);
-            return converted;
+            return Converters
+                .Where(x => x.CanConvert(component))
+                .SelectMany(x => x.Convert(component));
         }
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
-            var converter = Converters.FirstOrDefault(x => x.CanConvert(behavior));
-            if (converter == null)
-            {
-                return null;
-            }
-
-            var converted = converter.Convert(
-                target,
-                behavior);
-            return converted;
+            return Converters
+                .Where(x => x.CanConvert(behavior))
+                .SelectMany(x => x.Convert(target, behavior));
         }
     }
 }

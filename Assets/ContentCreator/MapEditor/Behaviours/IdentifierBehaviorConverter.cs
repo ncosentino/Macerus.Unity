@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -14,22 +15,22 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is IdentifierBehaviour;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
             var castedBehavior = (IIdentifierBehavior)behavior;
             var component = target.AddComponent<IdentifierBehaviour>();
             component.Id = castedBehavior.Id.ToString();
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var castedBehaviour = (IdentifierBehaviour)component;
             var id = new StringIdentifier(castedBehaviour.Id);
             var behavior = new IdentifierBehavior(id);
-            return behavior;
+            yield return behavior;
         }
     }
 }

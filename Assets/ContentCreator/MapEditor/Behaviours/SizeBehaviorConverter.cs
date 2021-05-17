@@ -1,4 +1,6 @@
-﻿using ProjectXyz.Api.GameObjects.Behaviors;
+﻿using System.Collections.Generic;
+
+using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 
@@ -12,23 +14,23 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is Transform;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
             var castedBehavior = (IReadOnlySizeBehavior)behavior;
             var component = target.transform;
             component.localScale = new Vector3((float)castedBehavior.Width, (float)castedBehavior.Height);
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var castedComponent = (Transform)component;
             var behavior = new SizeBehavior(
                 castedComponent.localScale.x,
                 castedComponent.localScale.y);
-            return behavior;
+            yield return behavior;
         }
     }
 }

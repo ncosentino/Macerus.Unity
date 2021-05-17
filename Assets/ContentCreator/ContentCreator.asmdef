@@ -1,0 +1,16 @@
+{
+    "name": "ContentCreator",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ce401eacbbf49164f8da0ebe22bd4a2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

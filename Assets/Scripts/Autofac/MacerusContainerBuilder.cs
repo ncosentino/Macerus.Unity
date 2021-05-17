@@ -4,6 +4,11 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using ProjectXyz.Game.Core.Autofac;
+
+#if UNITY_EDITOR
+using UnityEditor.Compilation;
+#endif
+
 #if UNITY_5_3_OR_NEWER
 using UnityEngine;
 #endif
@@ -39,8 +44,26 @@ namespace Assets.Scripts.Autofac
             };
 
             LogDebug($"Loading modules from '{moduleDirectory}'...");
-            var modules = moduleDiscoverer
-                .Discover(Assembly.GetExecutingAssembly())
+
+            var assemblyModules =
+#if UNITY_EDITOR
+                CompilationPipeline
+                    .GetAssemblies(AssembliesType.Editor)
+                    .Where(unityAsm => 
+                        unityAsm.name.StartsWith("Assembly-CSharp", StringComparison.OrdinalIgnoreCase) ||
+                        unityAsm.name.StartsWith("Main", StringComparison.OrdinalIgnoreCase) ||
+                        unityAsm.name.StartsWith("EditorModeTests", StringComparison.OrdinalIgnoreCase) ||
+                        unityAsm.name.StartsWith("ContentCreator", StringComparison.OrdinalIgnoreCase))
+                    .Select(unityAsm => System.Reflection.Assembly.LoadFile(Path.Combine(
+                        Environment.CurrentDirectory,
+                        unityAsm.outputPath)))
+                    .SelectMany(asm => moduleDiscoverer
+                        .Discover(asm));
+#else
+                moduleDiscoverer.Discover(System.Reflection.Assembly.GetExecutingAssembly());
+#endif
+
+            var modules = assemblyModules
                 .Concat(moduleDiscoverer
                     .Discover(moduleDirectory, "*.dll"))
                 .ToArray();

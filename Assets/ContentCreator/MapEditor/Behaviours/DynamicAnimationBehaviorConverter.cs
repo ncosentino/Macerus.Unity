@@ -1,4 +1,6 @@
-﻿using Macerus.Api.Behaviors;
+﻿using System.Collections.Generic;
+
+using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
@@ -21,7 +23,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is DynamicAnimationBehaviour;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
@@ -30,10 +32,10 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
             component.AnimationId = castedBehavior.CurrentAnimationId?.ToString();
             component.Visible = castedBehavior.Visible;
             component.SourcePattern = castedBehavior.SourcePattern;
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var castedBehaviour = (DynamicAnimationBehaviour)component;
             var behavior = _dynamicAnimationBehaviorFactory.Create(
@@ -41,7 +43,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
                 new StringIdentifier(castedBehaviour.AnimationId ?? string.Empty),
                 castedBehaviour.Visible,
                 0);
-            return behavior;
+            yield return behavior;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Macerus.Plugins.Features.Encounters.Triggers.GamObjects.Static;
+﻿using Macerus.Plugins.Features.Encounters.Triggers;
 
 using UnityEngine;
 

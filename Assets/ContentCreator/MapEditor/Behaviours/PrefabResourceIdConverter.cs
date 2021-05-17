@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Unity.Resources;
+﻿using System.Collections.Generic;
+
+using Assets.Scripts.Unity.Resources;
 
 using Macerus.Api.Behaviors;
 using Macerus.Shared.Behaviors;
@@ -27,17 +29,17 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         public bool CanConvert(Component component) => component is PrefabResourceBehaviour;
 
-        public Component Convert(
+        public IEnumerable<Component> Convert(
             GameObject target,
             IBehavior behavior)
         {
             var castedBehavior = (IReadOnlyPrefabResourceIdBehavior)behavior;
             var component = target.AddComponent<PrefabResourceBehaviour>();
             component.Prefab = _resourceLoader.Load<GameObject>(castedBehavior.PrefabResourceId.ToString());
-            return component;
+            yield return component;
         }
 
-        public IBehavior Convert(Component component)
+        public IEnumerable<IBehavior> Convert(Component component)
         {
             var castedBehaviour = (PrefabResourceBehaviour)component;
             UnityContracts.RequiresNotNull(
@@ -56,11 +58,11 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
                 nameof(AssetDatabase.GetAssetPath));
 
             resourcePath = resourcePath
-                .Substring("Assets/Resources/".Length) // we need a relative path
+                .Substring(resourcePath.IndexOf("/Resources/") + "/Resources/".Length) // we need a relative path
                 .Replace(".prefab", string.Empty); // we don't want the extension
             var resourceId = new StringIdentifier(resourcePath);
             var behavior = new HasPrefabResourceIdBehavior(resourceId);
-            return behavior;
+            yield return behavior;
         }
     }
 }

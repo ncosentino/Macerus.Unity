@@ -13,6 +13,7 @@ using Macerus.Plugins.Features.Mapping;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
@@ -78,14 +79,15 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     var unityTile = _tileLoader.LoadTile(
                         tileResource.TilesetResourcePath,
                         tileResource.SpriteResourceName);
+                    var tilePosition = tile.GetOnly<IPositionBehavior>();
                     mapPrefab.Tilemap.SetTile(
-                        new Vector3Int(tile.X, tile.Y, z),
+                        new Vector3Int((int)tilePosition.X, (int)tilePosition.Y, z),
                         unityTile);
 
-                    _maximumTileX = Math.Max(_maximumTileX, tile.X);
-                    _minimumTileX = Math.Min(_minimumTileX, tile.X);
-                    _maximumTileY = Math.Max(_maximumTileY, tile.Y);
-                    _minimumTileY = Math.Min(_minimumTileY, tile.Y);
+                    _maximumTileX = Math.Max(_maximumTileX, (int)tilePosition.X);
+                    _minimumTileX = Math.Min(_minimumTileX, (int)tilePosition.X);
+                    _maximumTileY = Math.Max(_maximumTileY, (int)tilePosition.Y);
+                    _minimumTileY = Math.Min(_minimumTileY, (int)tilePosition.Y);
                 }
                 
                 z++;

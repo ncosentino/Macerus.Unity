@@ -1,5 +1,4 @@
-﻿using Assets.ContentCreator.MapEditor;
-using Assets.Scripts.Plugins.Features.Maps.Api;
+﻿using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.Threading;
 
 using ProjectXyz.Api.Behaviors.Filtering;
@@ -17,7 +16,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IWeatherTableRepositoryFacade _weatherTableRepositoryFacade;
         private readonly IReadOnlyMapGameObjectManager _mapGameObjectManager;
         private readonly IDispatcher _dispatcher;
-        private readonly ISceneToMapConverter _sceneToMapConverter;
 
         public MapBehaviourStitcher(
             IMapProvider mapProvider,
@@ -26,8 +24,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IFilterContextFactory filterContextFactory,
             IWeatherManager weatherManager,
             IWeatherTableRepositoryFacade weatherTableRepositoryFacade,
-            IDispatcher dispatcher,
-            ISceneToMapConverter sceneToMapConverter)
+            IDispatcher dispatcher)
         {
             _mapProvider = mapProvider;
             _mapGameObjectManager = mapGameObjectManager;
@@ -36,7 +33,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _weatherManager = weatherManager;
             _weatherTableRepositoryFacade = weatherTableRepositoryFacade;
             _dispatcher = dispatcher;
-            _sceneToMapConverter = sceneToMapConverter;
         }
 
         public void Attach(IMapPrefab mapPrefab)
@@ -50,7 +46,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
             mapBehaviour.WeatherTableRepositoryFacade = _weatherTableRepositoryFacade;
             mapBehaviour.Dispatcher = _dispatcher;
             mapBehaviour.MapPrefab = mapPrefab;
-            mapBehaviour.SceneToMapConverter = _sceneToMapConverter;
         }
     }
 }

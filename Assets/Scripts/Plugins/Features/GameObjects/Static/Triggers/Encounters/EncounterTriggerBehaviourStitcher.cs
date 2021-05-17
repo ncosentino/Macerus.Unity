@@ -2,7 +2,6 @@
 
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.Encounters.Triggers;
-using Macerus.Plugins.Features.Encounters.Triggers.GamObjects.Static;
 
 using NexusLabs.Framework;
 
