@@ -18,10 +18,6 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
-                .RegisterType<WeatherSystemGuiWelder>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .RegisterType<WeatherSystemFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

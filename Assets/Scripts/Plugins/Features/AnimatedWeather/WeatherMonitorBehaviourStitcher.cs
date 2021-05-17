@@ -1,5 +1,5 @@
 ﻿using System;
-using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.AnimatedWeather
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             _logger = logger;
         }
 
-        public IReadOnlyWeatherMonitorBehaviour Attach(GameObject weatherSystemGameObject)
+        public void Attach(GameObject weatherSystemGameObject)
         {
             var weatherMonitorBehaviour = weatherSystemGameObject.AddComponent<WeatherMonitorBehaviour>();
             weatherMonitorBehaviour.FadeInBehaviourStitcher = _fadeInBehaviourStitcher;
@@ -39,8 +39,6 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 
             weatherMonitorBehaviour.UpdateDelay = TimeSpan.FromSeconds(0.25);
             weatherMonitorBehaviour.WeatherSystemGameObject = weatherSystemGameObject;
-
-            return weatherMonitorBehaviour;
         }
     }
 }

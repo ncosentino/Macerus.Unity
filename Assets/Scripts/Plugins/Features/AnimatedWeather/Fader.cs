@@ -18,7 +18,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             Action callback)
         {
             // Cache the current color of the material, and its initiql opacity.
-            Color color = image.color;
+            Color color = image?.color ?? Color.black;
 
             // Track how many seconds we've been fading.
             float t = 0;
@@ -34,7 +34,10 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 color.a = Mathf.Lerp(startOpacity, targetOpacity, blend);
 
                 // Apply the resulting color to the material.
-                image.color = color;
+                if (image != null)
+                {
+                    image.color = color;
+                }
 
                 // Wait one frame, and repeat.
                 yield return null;

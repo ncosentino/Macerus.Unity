@@ -21,7 +21,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedRain
 
         public GameObject Create()
         {
-            var weatherGameObject = _prefabCreator.Create<GameObject>("Weather/Prefabs/AnimatedRain");
+            var weatherGameObject = _prefabCreator.Create<GameObject>("Weather/Prefabs/RainParticles");
             return weatherGameObject;
         }
     }

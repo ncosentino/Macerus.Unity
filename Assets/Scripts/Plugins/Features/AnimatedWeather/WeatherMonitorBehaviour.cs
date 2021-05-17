@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Assets.Scripts.Plugins.Features.AnimatedWeather.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using NexusLabs.Contracts;
@@ -11,9 +10,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
 {
     using ILogger = ProjectXyz.Api.Logging.ILogger;
 
-    public sealed class WeatherMonitorBehaviour :
-        MonoBehaviour,
-        IWeatherMonitorBehaviour
+    public sealed class WeatherMonitorBehaviour : MonoBehaviour
     {
         public IWeatherProvider WeatherProvider { get; set; }
 
@@ -89,7 +86,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 // create the new weather and add it to our object
                 var animatedWeatherObject = AnimatedWeatherFactory.Create(nextWeather.WeatherResourceId);
                 animatedWeatherObject.transform.SetParent(
-                    gameObject.transform,
+                    WeatherSystemGameObject.transform,
                     false);
                 FadeInBehaviourStitcher.Attach(
                     animatedWeatherObject,

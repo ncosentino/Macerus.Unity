@@ -32,8 +32,7 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 FadeInDuration >= TimeSpan.Zero,
                 $"{nameof(FadeInDuration)} was not greater than or equal to zero on '{gameObject}.{this}'.");
 
-            var image = gameObject.GetRequiredComponent<Image>();
-
+            var image = gameObject.GetComponent<Image>();
             StartCoroutine(Fader.FadeTo(
                 image,
                 (float)StartOpacity,
