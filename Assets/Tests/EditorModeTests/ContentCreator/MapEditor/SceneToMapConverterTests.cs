@@ -1,10 +1,12 @@
 using System.Linq;
 
 using Assets.ContentCreator.MapEditor;
-using Assets.ContentCreator.MapEditor.Behaviours;
 using Assets.Scripts.Autofac;
+using Assets.Scripts.Plugins.Features.Maps;
 
 using Autofac;
+
+using Macerus.ContentCreator.MapEditor.Behaviors.Shared;
 
 using NUnit.Framework;
 
@@ -26,27 +28,18 @@ namespace Assets.Tests.EditorModeTests.ContentCreator.MapEditor
         }
 
         [Test]
-        public void ConvertGameObjects_EmptyMap_NoGameObjects()
-        {
-            var mapGameObject = new GameObject();
-
-            var gameObjects = _sceneToMapConverter
-                .ConvertGameObjects(mapGameObject)
-                .ToArray();
-
-            Assert.IsEmpty(gameObjects);
-        }
-
-        [Test]
         public void ConvertGameObjects_EmptyMapGameObjectLayer_NoGameObjects()
         {
             var mapGameObject = new GameObject();
 
             var mapGameObjectLayer = new GameObject();
+            mapGameObjectLayer.name = "GameObjectLayer";
             mapGameObjectLayer.transform.parent = mapGameObject.transform;
 
+            var mapPrefab = new MapPrefab(mapGameObject);
+
             var gameObjects = _sceneToMapConverter
-                .ConvertGameObjects(mapGameObject)
+                .ConvertGameObjects(mapPrefab)
                 .ToArray();
 
             Assert.IsEmpty(gameObjects);
@@ -58,14 +51,17 @@ namespace Assets.Tests.EditorModeTests.ContentCreator.MapEditor
             var mapGameObject = new GameObject();
 
             var mapGameObjectLayer = new GameObject();
+            mapGameObjectLayer.name = "GameObjectLayer";
             mapGameObjectLayer.transform.parent = mapGameObject.transform;
 
             var unityGameObject = new GameObject();
             unityGameObject.transform.parent = mapGameObjectLayer.transform;
             unityGameObject.name = "UnityGameObject";
 
+            var mapPrefab = new MapPrefab(mapGameObject);
+
             var gameObjects = _sceneToMapConverter
-                .ConvertGameObjects(mapGameObject)
+                .ConvertGameObjects(mapPrefab)
                 .ToArray();
 
             Assert.AreEqual(1, gameObjects.Length);

@@ -89,12 +89,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
         {
             Debug.Log($"Synchronizing game objects for map '{gameObject}'...");
             MapFormatter.RemoveGameObjects(
-                gameObject,
+                MapPrefab,
                 removed
                  .Select(x => x.Behaviors.Get<IIdentifierBehavior>().First())
                  .Select(x => x.Id));
             MapFormatter.AddGameObjects(
-                gameObject,
+                MapPrefab,
                 added);
             Debug.Log($"Synchronized game objects for map '{gameObject}'.");
         }

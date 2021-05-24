@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
 
-using ProjectXyz.Api.GameObjects;
+using Assets.Scripts.Plugins.Features.Maps;
 
-using UnityEngine;
+using ProjectXyz.Api.GameObjects;
 
 namespace Assets.ContentCreator.MapEditor
 {
     public interface ISceneToMapConverter
     {
-        IEnumerable<IGameObject> ConvertTiles(GameObject mapGameObject);
+        IEnumerable<IGameObject> ConvertTiles(IMapPrefab mapPrefab);
 
-        IEnumerable<IGameObject> ConvertGameObjects(GameObject mapGameObject);
+        IEnumerable<IGameObject> ConvertGameObjects(IMapPrefab mapPrefab);
+
+        void ConvertGameObjects(
+            IMapPrefab mapPrefab,
+            IEnumerable<IGameObject> gameObjects);
     }
 }

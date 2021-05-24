@@ -17,6 +17,7 @@
 "Autofac.dll",
 "Macerus.Api.Behaviors.dll",
 "Macerus.Api.GameObjects.dll",
+"Macerus.ContentCreator.MapEditor.Behaviors.Shared.dll",
 "Macerus.dll",
 "Macerus.Game.Api.dll",
 "Macerus.Game.dll",

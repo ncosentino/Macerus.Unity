@@ -1,6 +1,11 @@
-﻿using Assets.ContentCreator.MapEditor.Behaviours;
+﻿using System;
+using System.Collections.Generic;
+
+using Assets.ContentCreator.MapEditor.Behaviours;
 
 using Autofac;
+
+using ProjectXyz.Shared.Data.Serialization;
 
 namespace Assets.ContentCreator.MapEditor.Autofac
 {

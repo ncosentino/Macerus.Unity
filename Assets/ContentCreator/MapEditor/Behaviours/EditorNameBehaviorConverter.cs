@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Macerus.ContentCreator.MapEditor.Behaviors.Shared;
+
 using ProjectXyz.Api.GameObjects.Behaviors;
 
 using UnityEngine;

@@ -3,8 +3,6 @@
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 
-using UnityEngine;
-
 namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
     public interface IMapFormatter :
@@ -16,19 +14,21 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
             IGameObject map);
 
         void RemoveGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             params IIdentifier[] gameObjectIds);
 
         void RemoveGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             IEnumerable<IIdentifier> gameObjectIds);
 
+        void RemoveGameObjects(IMapPrefab mapPrefab);
+
         void AddGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             params IGameObject[] gameObjects);
 
         void AddGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             IEnumerable<IGameObject> gameObjects);
     }
 }

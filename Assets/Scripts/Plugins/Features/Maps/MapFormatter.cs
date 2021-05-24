@@ -164,17 +164,17 @@ namespace Assets.Scripts.Plugins.Features.Maps
             ToggleGridLines(enabled, true);
 
         public void RemoveGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             params IIdentifier[] gameObjectIds) => RemoveGameObjects(
-                mapObject,
-                (IEnumerable<IIdentifier>) gameObjectIds);
+                mapPrefab,
+                (IEnumerable<IIdentifier>)gameObjectIds);
 
         public void RemoveGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             IEnumerable<IIdentifier> gameObjectIds)
         {
             var set = new HashSet<IIdentifier>(gameObjectIds);
-            var gameObjectLayerObject = _mapPrefab.GameObjectLayer;
+            var gameObjectLayerObject = mapPrefab.GameObjectLayer;
 
             foreach (var toRemove in gameObjectLayerObject
                 .GetComponentsInChildren<IdentifierBehaviour>() // FIXME: this is a hack to require concrete type
@@ -185,17 +185,25 @@ namespace Assets.Scripts.Plugins.Features.Maps
             }
         }
 
+        public void RemoveGameObjects(IMapPrefab mapPrefab)
+        {
+            foreach (var toRemove in mapPrefab.GameObjectLayer.GetChildGameObjects().ToArray())
+            {
+                _objectDestroyer.Destroy(toRemove);
+            }
+        }
+
         public void AddGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             params IGameObject[] gameObjects) => AddGameObjects(
-            mapObject,
+            mapPrefab,
             (IEnumerable<IGameObject>)gameObjects);
 
         public void AddGameObjects(
-            GameObject mapObject,
+            IMapPrefab mapPrefab,
             IEnumerable<IGameObject> gameObjects)
         {
-            var gameObjectLayerObject = _mapPrefab.GameObjectLayer;
+            var gameObjectLayerObject = mapPrefab.GameObjectLayer;
             foreach (var gameObject in gameObjects)
             {
                 _logger.Debug($"Transforming game object '{gameObject}'...");

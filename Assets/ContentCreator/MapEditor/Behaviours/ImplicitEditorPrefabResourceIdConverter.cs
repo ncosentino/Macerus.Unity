@@ -2,6 +2,8 @@
 
 using Assets.Scripts.Unity.Resources.Prefabs;
 
+using Macerus.ContentCreator.MapEditor.Behaviors.Shared;
+
 using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Shared.Framework;
 
@@ -23,7 +25,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
         }
 
         public bool CanConvert(IBehavior behavior) => 
-            behavior is IReadOnlyEditorPrefabResourceIdBehavior;
+            behavior is EditorPrefabResourceIdBehavior;
 
         public bool CanConvert(GameObject unityGameObject)
         {
@@ -39,7 +41,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
 
         GameObject IBehaviorToBaseGameObjectConverter.Convert(IBehavior behavior)
         {
-            var castedBehavior = (IReadOnlyEditorPrefabResourceIdBehavior)behavior;
+            var castedBehavior = (EditorPrefabResourceIdBehavior)behavior;
             var gameObject = _prefabCreator.Create<GameObject>(castedBehavior.PrefabResourceId.ToString());
             return gameObject;
         }

@@ -2,6 +2,8 @@
 
 using Assets.Scripts.Unity.Resources;
 
+using Macerus.ContentCreator.MapEditor.Behaviors.Shared;
+
 using NexusLabs.Contracts;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
@@ -23,7 +25,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
         }
 
         public bool CanConvert(IBehavior behavior) =>
-            behavior is IReadOnlyEditorPrefabResourceIdBehavior;
+            behavior is EditorPrefabResourceIdBehavior;
 
         public bool CanConvert(Component component) =>
             component is EditorPrefabResourceBehaviour;
@@ -37,7 +39,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
                 yield break;
             }
 
-            var castedBehavior = (IReadOnlyEditorPrefabResourceIdBehavior)behavior;
+            var castedBehavior = (EditorPrefabResourceIdBehavior)behavior;
             var component = target.AddComponent<EditorPrefabResourceBehaviour>();
             // NOTE: we don't want to instantiate a prefab here
             component.Prefab = _resourceLoader.Load<GameObject>(castedBehavior.PrefabResourceId.ToString());

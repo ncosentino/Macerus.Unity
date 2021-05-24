@@ -24,10 +24,10 @@ namespace Assets.Scripts.Plugins.Features.Maps
             });
             _lazyGameObjectLayer = new Lazy<GameObject>(() =>
             {
-                var tilemap = gameObject
+                var gameObjectLayer = gameObject
                     .GetChildGameObjects(true)
                     .FirstOrDefault(x => x.name == "GameObjectLayer");
-                return tilemap;
+                return gameObjectLayer;
             });
         }
 
