@@ -35,6 +35,7 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
         {
             var castedBehavior = (IReadOnlyPrefabResourceIdBehavior)behavior;
             var component = target.AddComponent<PrefabResourceBehaviour>();
+            // NOTE: we don't want to instantiate a prefab here
             component.Prefab = _resourceLoader.Load<GameObject>(castedBehavior.PrefabResourceId.ToString());
             yield return component;
         }
