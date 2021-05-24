@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 using Assets.Scripts.Autofac;
 using Assets.Scripts.Plugins.Features.Maps;
@@ -73,6 +74,14 @@ namespace Assets.ContentCreator.MapEditor.Editor
                 return;
             }
 
+            if (mapPathToSave.EndsWith(".objects.json", StringComparison.OrdinalIgnoreCase))
+            {
+                var trimmed = mapPathToSave.Replace(".objects.json", ".json");
+                Debug.LogWarning(
+                    $"Selected map object file '{mapPathToSave}' so attempting to save '{trimmed}'...");
+                mapPathToSave = trimmed;
+            }
+
             var mapUnityGameObject = GameObject.Find("Map");
             var mapPrefab = new MapPrefab(mapUnityGameObject);
             var gameObjects = SceneToMapConverter
@@ -82,7 +91,13 @@ namespace Assets.ContentCreator.MapEditor.Editor
                 .ConvertTiles(mapPrefab)
                 .ToArray();
 
-            // FIXME: save the stuff out!
+            var mapGameOBjectsPath = mapPathToSave.Replace(".json", ".objects.json");
+            using (var outputStream = new FileStream(mapGameOBjectsPath, FileMode.CreateNew, FileAccess.Write, FileShare.ReadWrite))
+            {
+                Serializer.Serialize(outputStream, gameObjects, Encoding.UTF8);
+            }
+
+            // FIXME: save the MAP out! (its more than just the tiles)
         }
 
         [MenuItem(SaveAsMenuPath, true)]
