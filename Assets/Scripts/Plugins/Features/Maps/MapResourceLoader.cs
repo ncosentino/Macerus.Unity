@@ -4,7 +4,7 @@ using Assets.Scripts.Unity.Resources;
 
 using Macerus.Plugins.Features.Mapping;
 
-namespace Assets.Scripts.Plugins.Features.Maps.TiledNet.Autofac
+namespace Assets.Scripts.Plugins.Features.Maps
 {
     public sealed class MapResourceLoader : IMapResourceLoader
     {

@@ -30,6 +30,14 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
                 .RegisterType<MapObjectStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<MappingAssetPaths>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<MapResourceLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

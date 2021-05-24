@@ -2,6 +2,8 @@
 using System.Linq;
 
 using Assets.Scripts.Autofac;
+using Assets.Scripts.Plugins.Features.Maps;
+using Assets.Scripts.Unity.GameObjects;
 
 using Autofac;
 
@@ -22,22 +24,44 @@ namespace Assets.ContentCreator.MapEditor.Editor
             Lazy<IContainer>(() => new MacerusContainerBuilder().CreateContainer());
         private static IContainer Container => _lazyContainer.Value;
 
-        private const string SaveAsMenu = "Map Editor/Save As...";
-        [MenuItem(SaveAsMenu, false)]
-        public static async void SaveAsMenuAsync()
+        private const string SaveAsMenuPath = "Map Editor/Save As...";
+        [MenuItem(SaveAsMenuPath, false)]
+        public static void SaveAsMenu()
         {
             var sceneToMapConverter = Container.Resolve<ISceneToMapConverter>();
 
             var mapUnityGameObject = GameObject.Find("Map");
+            var mapPrefab = new MapPrefab(mapUnityGameObject);
             var gameObjects = sceneToMapConverter
-                .ConvertGameObjects(mapUnityGameObject)
+                .ConvertGameObjects(mapPrefab.GameObject)
                 .ToArray();
             var mapTiles = sceneToMapConverter
-                .ConvertTiles(mapUnityGameObject)
+                .ConvertTiles(mapPrefab.GameObject)
                 .ToArray();
         }
 
-        //[MenuItem(SaveAsMenu, true)]
+        //[MenuItem(SaveAsMenuPath, true)]
         //public static bool SaveAsValidateAsync() => EditorApplication.isPlaying;
+
+        private const string LoadMenuPath = "Map Editor/Load...";
+        [MenuItem(LoadMenuPath, false)]
+        public static void LoadMenu()
+        {
+            var sceneToMapConverter = Container.Resolve<ISceneToMapConverter>();
+
+            var mapPathToLoad = EditorUtility.OpenFilePanel("Load Map", "", "json");
+
+            var mapUnityGameObject = GameObject.Find("Map");
+            var mapPrefab = new MapPrefab(mapUnityGameObject);
+            
+            mapPrefab.Tilemap.ClearAllTiles();
+            mapPrefab.Tilemap.ResizeBounds();
+            foreach (var child in mapPrefab.GameObjectLayer.GetChildGameObjects())
+            {
+                UnityEngine.Object.DestroyImmediate(child);
+            }
+
+            // FIXME: load the map!
+        }
     }
 }
