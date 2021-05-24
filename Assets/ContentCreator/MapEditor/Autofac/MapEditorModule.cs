@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 
 using Assets.ContentCreator.MapEditor.Behaviours;
 
 using Autofac;
-
-using ProjectXyz.Shared.Data.Serialization;
 
 namespace Assets.ContentCreator.MapEditor.Autofac
 {
@@ -13,70 +11,18 @@ namespace Assets.ContentCreator.MapEditor.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder
-                .RegisterType<DynamicAnimationBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<PrefabResourceIdConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<EditorPrefabResourceIdConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ImplicitEditorPrefabResourceIdConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<ImplicitIdentifierBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<TemplateIdentifierBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<TypeIdentifierBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<IdentifierBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<PositionBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<SizeBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<BoxColliderBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<CircleColliderBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<TriggerOnCombatEndBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<DoorInteractableBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<SpawnTemplatePropertiesBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<EditorNameBehaviorConverter>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            foreach (var type in AppDomain
+                .CurrentDomain
+                .GetAssemblies()
+                .SelectMany(asm => asm.GetTypes())
+                .Where(x => x.IsClass && !x.IsAbstract &&
+                    (typeof(IDiscoverableBehaviorConverter).IsAssignableFrom(x) ||
+                    typeof(IDiscoverableGameObjectToBehaviorConverter).IsAssignableFrom(x) ||
+                    typeof(IDiscoverableBehaviorToBaseGameObjectConverter).IsAssignableFrom(x))))
+            {
+                builder.RegisterType(type).AsImplementedInterfaces().SingleInstance();
+            }
+
             builder
                 .RegisterType<SceneToMapConverter>()
                 .AsImplementedInterfaces()
