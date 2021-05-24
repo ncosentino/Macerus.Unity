@@ -10,6 +10,7 @@ using Autofac;
 using UnityEditor;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.ContentCreator.MapEditor.Editor
 {
@@ -24,7 +25,9 @@ namespace Assets.ContentCreator.MapEditor.Editor
             Lazy<IContainer>(() => new MacerusContainerBuilder().CreateContainer());
         private static IContainer Container => _lazyContainer.Value;
 
-        private const string SaveAsMenuPath = "Map Editor/Save As...";
+        private const string MapEditorMenuPath = "Macerus/Map Editor";
+
+        private const string SaveAsMenuPath = MapEditorMenuPath + "/Save As...";
         [MenuItem(SaveAsMenuPath, false)]
         public static void SaveAsMenu()
         {
@@ -40,10 +43,12 @@ namespace Assets.ContentCreator.MapEditor.Editor
                 .ToArray();
         }
 
-        //[MenuItem(SaveAsMenuPath, true)]
-        //public static bool SaveAsValidateAsync() => EditorApplication.isPlaying;
+        [MenuItem(SaveAsMenuPath, true)]
+        public static bool SaveAsValidate() => "MapEditor".Equals(
+            SceneManager.GetActiveScene().name,
+            StringComparison.OrdinalIgnoreCase);
 
-        private const string LoadMenuPath = "Map Editor/Load...";
+        private const string LoadMenuPath = MapEditorMenuPath + "/Load...";
         [MenuItem(LoadMenuPath, false)]
         public static void LoadMenu()
         {
@@ -63,5 +68,10 @@ namespace Assets.ContentCreator.MapEditor.Editor
 
             // FIXME: load the map!
         }
+
+        [MenuItem(LoadMenuPath, true)]
+        public static bool LoadValidate() => "MapEditor".Equals(
+            SceneManager.GetActiveScene().name,
+            StringComparison.OrdinalIgnoreCase);
     }
 }

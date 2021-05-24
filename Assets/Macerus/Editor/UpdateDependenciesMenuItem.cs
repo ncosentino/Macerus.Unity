@@ -10,7 +10,9 @@ namespace Assets.Scripts.UnityEditor
     {
         private static bool _isUpdateDependenciesDisabled;
 
-        private const string UpdateAndBuildMenu = "Macerus Tools/Build+Copy Dependencies";
+        private const string DependenciesMenuPath = "Macerus/Dependencies";
+
+        private const string UpdateAndBuildMenu = DependenciesMenuPath + "/Build+Copy Dependencies";
         [MenuItem(UpdateAndBuildMenu)]
         public static async void UpdateAndBuildDependencies()
         {
@@ -18,9 +20,11 @@ namespace Assets.Scripts.UnityEditor
         }
 
         [MenuItem(UpdateAndBuildMenu, true)]
-        public static bool IsUpdateAndBuildDependenciesEnabled() => !_isUpdateDependenciesDisabled;
+        public static bool IsUpdateAndBuildDependenciesEnabled() =>
+            !_isUpdateDependenciesDisabled &&
+            !EditorApplication.isPlaying;
 
-        private const string OnlyUpdateMenu = "Macerus Tools/Only Copy Dependencies";
+        private const string OnlyUpdateMenu = DependenciesMenuPath + "/Only Copy Dependencies";
         [MenuItem(OnlyUpdateMenu)]
         public static async void OnlyUpdateDependencies()
         {
@@ -28,7 +32,9 @@ namespace Assets.Scripts.UnityEditor
         }
 
         [MenuItem(OnlyUpdateMenu, true)]
-        public static bool IsOnlyUpdateDependenciesEnabled() => !_isUpdateDependenciesDisabled;
+        public static bool IsOnlyUpdateDependenciesEnabled() =>
+            !_isUpdateDependenciesDisabled &&
+            !EditorApplication.isPlaying;
 
         private static async Task UpdateDependencies(bool buildDependencies)
         {
