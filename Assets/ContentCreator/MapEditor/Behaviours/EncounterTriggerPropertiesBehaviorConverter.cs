@@ -3,6 +3,7 @@
 using Macerus.Plugins.Features.Encounters.Triggers;
 
 using ProjectXyz.Api.Framework;
+using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.GameObjects.Behaviors;
 using ProjectXyz.Shared.Framework;
 
