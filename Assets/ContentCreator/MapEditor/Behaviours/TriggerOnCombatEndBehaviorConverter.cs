@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.Encounters.Triggers;
 using Macerus.Shared.Behaviors;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
