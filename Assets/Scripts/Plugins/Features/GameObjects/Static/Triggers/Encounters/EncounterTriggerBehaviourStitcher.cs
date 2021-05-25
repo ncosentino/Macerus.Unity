@@ -5,8 +5,8 @@ using Macerus.Plugins.Features.Encounters.Triggers;
 
 using NexusLabs.Framework;
 
-using ProjectXyz.Api.Behaviors.Filtering;
 using ProjectXyz.Api.Framework;
+using ProjectXyz.Plugins.Features.Filtering.Api;
 
 using UnityEngine;
 
