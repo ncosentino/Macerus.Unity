@@ -43,6 +43,10 @@ namespace Assets.ContentCreator.MapEditor.Autofac
                 .RegisterType<GameObjectConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<Editor.MapEditor>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
