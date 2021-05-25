@@ -10,34 +10,46 @@ using Assets.Scripts.Unity.GameObjects;
 
 using ProjectXyz.Api.Data.Serialization;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Api.GameObjects.Behaviors;
+using ProjectXyz.Plugins.Features.Mapping.Default;
 
 using UnityEngine;
 
 namespace Assets.ContentCreator.MapEditor.Editor
 {
+    using ILogger = ProjectXyz.Api.Logging.ILogger;
+
     public sealed class MapEditor : IMapEditor
     {
-        private Lazy<ISceneToMapConverter> _lazySceneToMapConverter;
-        private Lazy<ISerializer> _lazySerializer;
-        private Lazy<IDeserializer> _lazyDeserializer;
-        private Lazy<IMapFormatter> _lazyMapFormatter;
+        private readonly Lazy<ISceneToMapConverter> _lazySceneToMapConverter;
+        private readonly Lazy<ISerializer> _lazySerializer;
+        private readonly Lazy<IDeserializer> _lazyDeserializer;
+        private readonly Lazy<IMapFormatter> _lazyMapFormatter;
+        private readonly Lazy<IGameObjectFactory> _lazyGameObjectFactory;
+        private readonly Lazy<ILogger> _lazyLogger;
 
         public MapEditor(
             Lazy<ISceneToMapConverter> lazySceneToMapConverter,
             Lazy<ISerializer> lazySerializer,
             Lazy<IDeserializer> lazyDeserializer,
-            Lazy<IMapFormatter> lazyMapFormatter)
+            Lazy<IMapFormatter> lazyMapFormatter,
+            Lazy<IGameObjectFactory> lazyGameObjectFactory,
+            Lazy<ILogger> lazyLogger)
         {
             _lazySceneToMapConverter = lazySceneToMapConverter;
             _lazySerializer = lazySerializer;
             _lazyDeserializer = lazyDeserializer;
             _lazyMapFormatter = lazyMapFormatter;
+            _lazyGameObjectFactory = lazyGameObjectFactory;
+            _lazyLogger = lazyLogger;
         }
 
         private ISceneToMapConverter SceneToMapConverter => _lazySceneToMapConverter.Value;
         private ISerializer Serializer => _lazySerializer.Value;
         private IDeserializer Deserializer => _lazyDeserializer.Value;
         private IMapFormatter MapFormatter => _lazyMapFormatter.Value;
+        private IGameObjectFactory GameObjectFactory => _lazyGameObjectFactory.Value;
+        private ILogger Logger => _lazyLogger.Value;
 
         public void ClearCurrentMap() => ClearCurrentMap(GetMapPrefab());
 
@@ -48,12 +60,12 @@ namespace Assets.ContentCreator.MapEditor.Editor
             if (mapPathToSave.EndsWith(".objects.json", StringComparison.OrdinalIgnoreCase))
             {
                 var trimmed = mapPathToSave.Replace(".objects.json", ".json");
-                Debug.LogWarning(
+                Logger.Warn(
                     $"Selected map object file '{mapPathToSave}' so attempting to save '{trimmed}'...");
                 mapPathToSave = trimmed;
             }
 
-            Debug.Log($"Converting Unity->Macerus...");
+            Logger.Debug($"Converting Unity->Macerus...");
             var mapUnityGameObject = GameObject.Find("Map");
             var mapPrefab = new MapPrefab(mapUnityGameObject);
             var gameObjects = SceneToMapConverter
@@ -62,18 +74,32 @@ namespace Assets.ContentCreator.MapEditor.Editor
             var mapTiles = SceneToMapConverter
                 .ConvertTiles(mapPrefab)
                 .ToArray();
-            Debug.Log($"Converted Unity->Macerus.");
+            var map = GameObjectFactory.Create(new IBehavior[]
+            {
+                // FIXME: also write out the map properties behaviors!!!
+                new MapLayersBehavior(new[]
+                {
+                    new MapLayer("Tiles", mapTiles),
+                }),
+            });
+            Logger.Debug($"Converted Unity->Macerus.");
+
+            Logger.Debug($"Writing map to '{mapPathToSave}'...");
+            using (var outputStream = openNewWriteableStreamCallback.Invoke(mapPathToSave))
+            {
+                Serializer.Serialize(outputStream, map, Encoding.UTF8);
+            }
+
+            Logger.Debug($"Wrote map to '{mapPathToSave}'.");
 
             var mapGameObjectsPath = mapPathToSave.Replace(".json", ".objects.json");
-            Debug.Log($"Writing map game objects to '{mapGameObjectsPath}'...");
+            Logger.Debug($"Writing map game objects to '{mapGameObjectsPath}'...");
             using (var outputStream = openNewWriteableStreamCallback.Invoke(mapGameObjectsPath))
             {
                 Serializer.Serialize(outputStream, gameObjects, Encoding.UTF8);
             }
 
-            Debug.Log($"Wrote map game objects to '{mapGameObjectsPath}'.");
-
-            Debug.LogError($"// FIXME: save the MAP out! (its more than just the tiles)");
+            Logger.Debug($"Wrote map game objects to '{mapGameObjectsPath}'.");
         }
 
         public void LoadMap(
@@ -83,38 +109,39 @@ namespace Assets.ContentCreator.MapEditor.Editor
             if (mapPathToLoad.EndsWith(".objects.json", StringComparison.OrdinalIgnoreCase))
             {
                 var trimmed = mapPathToLoad.Replace(".objects.json", ".json");
-                Debug.LogWarning(
+                Logger.Warn(
                     $"Selected map object file '{mapPathToLoad}' so attempting to load '{trimmed}'...");
                 mapPathToLoad = trimmed;
             }
 
-            Debug.Log($"Loading map '{mapPathToLoad}'...");
+            Logger.Debug($"Loading map '{mapPathToLoad}'...");
             IGameObject map;
             using (var inputStream = openNewReadableStreamCallback.Invoke(mapPathToLoad))
             {
                 map = Deserializer.Deserialize<IGameObject>(inputStream);
             }
 
-            Debug.Log($"Loaded map '{mapPathToLoad}'.");
+            Logger.Debug($"Loaded map '{mapPathToLoad}'.");
 
             var mapObjectsPathToLoad = mapPathToLoad.Replace(".json", ".objects.json");
-            Debug.Log($"Loading map objects from '{mapObjectsPathToLoad}'...");
+            Logger.Debug($"Loading map objects from '{mapObjectsPathToLoad}'...");
             IReadOnlyCollection<IGameObject> mapObjects;
             using (var inputStream = openNewReadableStreamCallback.Invoke(mapObjectsPathToLoad))
             {
                 mapObjects = Deserializer.Deserialize<IReadOnlyCollection<IGameObject>>(inputStream);
             }
 
-            Debug.Log($"Loaded map objects from '{mapObjectsPathToLoad}'.");
+            Logger.Debug($"Loaded map objects from '{mapObjectsPathToLoad}'.");
 
             var mapPrefab = GetMapPrefab();
             ClearCurrentMap(mapPrefab);
 
-            Debug.Log("Populating map...");
+            Logger.Debug("Populating map...");
+            // FIXME: also put the map properties behaviors somewhere in the editor!
             MapFormatter.FormatMap(mapPrefab, map);
             MapFormatter.RemoveGameObjects(mapPrefab);
             SceneToMapConverter.ConvertGameObjects(mapPrefab, mapObjects);
-            Debug.Log("Populated map.");
+            Logger.Debug("Populated map.");
         }
 
         private IMapPrefab GetMapPrefab()
@@ -126,7 +153,7 @@ namespace Assets.ContentCreator.MapEditor.Editor
 
         private void ClearCurrentMap(IMapPrefab mapPrefab)
         {
-            Debug.Log("Resetting current map...");
+            Logger.Debug("Resetting current map...");
             mapPrefab.Tilemap.ClearAllTiles();
             mapPrefab.Tilemap.ResizeBounds();
 
@@ -137,7 +164,7 @@ namespace Assets.ContentCreator.MapEditor.Editor
                 UnityEngine.Object.DestroyImmediate(child);
             }
 
-            Debug.Log("Reset current map.");
+            Logger.Debug("Reset current map.");
         }
     }
 }
