@@ -10,11 +10,13 @@ using Macerus.Api.Behaviors.Filtering;
 using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
+using Macerus.Plugins.Features.GameObjects.Actors.Generation;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.MainMenu.Api;
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Api.GameObjects.Generation;
 using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
@@ -45,7 +47,6 @@ namespace Assets.Blend
             {
                 Content = container.Resolve<IHudView>();
 
-                // FIXME: just a hack to generate a player
                 var mapManager = container.Resolve<IMapManager>();
                 mapManager.SwitchMap(new StringIdentifier("swamp"));
 
@@ -62,6 +63,8 @@ namespace Assets.Blend
 
                 var actorIdentifiers = container.Resolve<IMacerusActorIdentifiers>();
                 var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
+                mapGameObjectManager.MarkForAddition(CreatePlayerInstance(container));
+                mapGameObjectManager.Synchronize();
                 var playerInventory = mapGameObjectManager
                     .GameObjects
                     .First(x => x.Has<IPlayerControlledBehavior>())
@@ -80,7 +83,7 @@ namespace Assets.Blend
 
                 skillsBehavior.Add(new[]
                 {
-                    skillAmenity.GetSkillById(new StringIdentifier("heal-self")),
+                    skillAmenity.GetSkillById(new StringIdentifier("heal")),
                     skillAmenity.GetSkillById(new StringIdentifier("fireball")),
                 });
 
@@ -92,6 +95,28 @@ namespace Assets.Blend
             }
 
             container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
+        }
+
+        // FIXME: this is just a hack to force player creation
+        private IGameObject CreatePlayerInstance(IContainer container)
+        {
+            var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
+            var gameObjectIdentifiers = container.Resolve<IGameObjectIdentifiers>();
+            var actorIdentifiers = container.Resolve<IMacerusActorIdentifiers>();
+            var actorGeneratorFacade = container.Resolve<IActorGeneratorFacade>();
+            var context = filterContextAmenity.CreateFilterContextForSingle(
+                filterContextAmenity.CreateRequiredAttribute(
+                    gameObjectIdentifiers.FilterContextTypeId,
+                    actorIdentifiers.ActorTypeIdentifier),
+                filterContextAmenity.CreateRequiredAttribute(
+                    actorIdentifiers.ActorDefinitionIdentifier,
+                    new StringIdentifier("player")));
+            var player = actorGeneratorFacade
+                .GenerateActors(
+                    context,
+                    new IGeneratorComponent[] { })
+                .Single();
+            return player;
         }
     }
 }

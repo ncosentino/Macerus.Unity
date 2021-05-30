@@ -3,7 +3,7 @@ using System.IO;
 using Autofac;
 using Macerus.Game.Api;
 using Macerus.Plugins.Features.Animations.Lpc;
-using Macerus.Plugins.Features.Mapping.TiledNet;
+using Macerus.Plugins.Features.Mapping;
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.Logging;
 
@@ -117,7 +117,7 @@ namespace Assets.Blend
             public string ResourcesRoot => _lazyResourceRoot.Value.FullName;
         }
 
-        public sealed class MapResourceLoader : ITiledMapResourceLoader
+        public sealed class MapResourceLoader : IMapResourceLoader
         {
             private readonly IMappingAssetPaths _mappingAssetPaths;
 
@@ -130,7 +130,7 @@ namespace Assets.Blend
             {
                 var fullPath = Path.Combine(
                     _mappingAssetPaths.ResourcesRoot,
-                    $"{pathToResource}.txt");
+                    $"{pathToResource}.json");
                 return File.OpenRead(fullPath);
             }
         }
