@@ -48,7 +48,10 @@ namespace Assets.Blend
                 Content = container.Resolve<IHudView>();
 
                 var mapManager = container.Resolve<IMapManager>();
-                mapManager.SwitchMap(new StringIdentifier("swamp"));
+
+                var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
+                mapGameObjectManager.MarkForAddition(CreatePlayerInstance(container));
+                mapGameObjectManager.Synchronize();
 
                 var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
                 var filterContext = filterContextAmenity.CreateNoneFilterContext();
@@ -62,9 +65,6 @@ namespace Assets.Blend
                 var generatedItems = lootGeneratorAmenity.GenerateLoot(dropTableId);
 
                 var actorIdentifiers = container.Resolve<IMacerusActorIdentifiers>();
-                var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
-                mapGameObjectManager.MarkForAddition(CreatePlayerInstance(container));
-                mapGameObjectManager.Synchronize();
                 var playerInventory = mapGameObjectManager
                     .GameObjects
                     .First(x => x.Has<IPlayerControlledBehavior>())
