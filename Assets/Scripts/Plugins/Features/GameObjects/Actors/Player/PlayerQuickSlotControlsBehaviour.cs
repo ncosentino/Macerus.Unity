@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
@@ -52,12 +53,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _keyToSlotIndex[KeyboardControls.QuickSlot10] = 9;
         }
 
-        private void Update()
+        private async Task Update()
         {
-            HandleQuickSlotControls();
+            await HandleQuickSlotControlsAsync();
         }
 
-        private void HandleQuickSlotControls()
+        private async Task HandleQuickSlotControlsAsync()
         {
             if (DebugConsoleManager.GetConsoleWindowVisible())
             {
@@ -68,7 +69,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             {
                 if (KeyboardInput.GetKeyUp(entry.Key))
                 {
-                    StatusBarController.ActivateSkillSlot(entry.Value);
+                    await StatusBarController.ActivateSkillSlotAsync(entry.Value);
                     break;
                 }
             }
