@@ -11,6 +11,8 @@ using Assets.Scripts.Unity.Input;
 using Macerus.Api.Behaviors;
 
 using ProjectXyz.Api.GameObjects;
+using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
 
@@ -28,6 +30,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IScreenPointToMapCellConverter _screenPointToMapCellConverter;
         private readonly IPlayerControlConfiguration _playerControlConfiguration;
+        private readonly IMapManager _mapManager;
 
         public PlayerMovementControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
@@ -37,7 +40,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             ILogger logger,
             IDebugConsoleManager debugConsoleManager,
             IScreenPointToMapCellConverter screenPointToMapCellConverter,
-            IPlayerControlConfiguration playerControlConfiguration)
+            IPlayerControlConfiguration playerControlConfiguration,
+            IMapManager mapManager)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
@@ -47,6 +51,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _debugConsoleManager = debugConsoleManager;
             _screenPointToMapCellConverter = screenPointToMapCellConverter;
             _playerControlConfiguration = playerControlConfiguration;
+            _mapManager = mapManager;
         }
 
         public void Attach(GameObject gameObject)
@@ -60,10 +65,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInputControlsBehaviour.GuiHitTester = _guiHitTester;
             playerInputControlsBehaviour.ScreenPointToMapCellConverter = _screenPointToMapCellConverter;
             playerInputControlsBehaviour.PlayerControlConfiguration = _playerControlConfiguration;
-            playerInputControlsBehaviour.MovementBehavior = gameObject
-                .GetRequiredComponent<IReadOnlyHasGameObject>()
-                .GameObject
-                .GetOnly<IMovementBehavior>();            
+            playerInputControlsBehaviour.MapManager = _mapManager;
+            playerInputControlsBehaviour.MovementBehavior = gameObject.GetOnly<IMovementBehavior>();
+            playerInputControlsBehaviour.SizeBehavior = gameObject.GetOnly<IReadOnlySizeBehavior>();
+            playerInputControlsBehaviour.PositionBehavior = gameObject.GetOnly<IReadOnlyPositionBehavior>();
         }
     }
 }
