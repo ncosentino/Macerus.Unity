@@ -55,8 +55,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors
                     .ToArray()
                 : new Vector3[0];
 
-            LineRenderer.SetPositions(points);
             LineRenderer.positionCount = points.Length;
+            LineRenderer.SetPositions(points);
         }
 
         private void ResetTriggerTime()

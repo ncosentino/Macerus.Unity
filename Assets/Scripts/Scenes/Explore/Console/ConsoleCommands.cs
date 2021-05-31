@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Assets.Scripts;
 using Assets.Scripts.Behaviours;
 using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
+using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 
 using Autofac;
@@ -34,7 +36,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
     {
         private ProjectXyz.Api.Logging.ILogger _logger;
         private IUnityGameObjectManager _unityGameObjectManager;
-        private IReadOnlyMapGameObjectManager _mapGameObjectManager;
+        private IMapGameObjectManager _mapGameObjectManager;
         private ISkillAmenity _skillAmenity;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
         private IStatCalculationServiceAmenity _statCalculationServiceAmenity;
@@ -45,6 +47,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IEncounterManager _encounterManager;
         private IFilterContextProvider _filterContextProvider;
         private IMapProvider _mapProvider;
+        private ITimeProvider _timeProvider;
+        private IObjectDestroyer _objectDestroyer;
 
         private void Start()
         {
@@ -56,7 +60,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             var container = GameDependencyBehaviour.Container;
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
-            _mapGameObjectManager = container.Resolve<IReadOnlyMapGameObjectManager>();
+            _mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
             _unityGameObjectManager = container.Resolve<IUnityGameObjectManager>();
             _skillAmenity = container.Resolve<ISkillAmenity>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
@@ -68,6 +72,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _encounterManager = container.Resolve<IEncounterManager>();
             _filterContextProvider = container.Resolve<IFilterContextProvider>();
             _mapProvider = container.Resolve<IMapProvider>();
+            _objectDestroyer = container.Resolve<IObjectDestroyer>();
+            _timeProvider = container.Resolve<ITimeProvider>();
 
             container
                 .Resolve<IConsoleCommandRegistrar>()
@@ -84,6 +90,15 @@ namespace Assets.Scripts.Scenes.Explore.Console
                     new System.Numerics.Vector2((float)endX, (float)endY),
                     new System.Numerics.Vector2(1, 1))
                 .ToArray();
+
+            var debugVisualPath = new GameObject();
+            debugVisualPath.name = $"Path from ({startX},{startY}) to ({endX},{endY})";
+            var debugVisualPathBehaviour = debugVisualPath.AddComponent<DebugVisualPathBehaviour>();
+            debugVisualPathBehaviour.ObjectDestroyer = _objectDestroyer;
+            debugVisualPathBehaviour.TimeProvider = _timeProvider;
+            debugVisualPathBehaviour.Points = path;
+            debugVisualPathBehaviour.Duration = TimeSpan.FromSeconds(10);
+
             _logger.Info(
                 $"Path between ({startX},{startY}) and ({endX},{endY}):\r\n" +
                 $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
@@ -102,6 +117,30 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private void MapGridLinesToggle(bool enabled)
         {
             _mapFormatter.ToggleGridLines(enabled);
+        }
+
+        [DiscoverableConsoleCommand("Clears the map game objects.")]
+        private void MapGameObjectsClear()
+        {
+            _mapGameObjectManager.MarkForRemoval(_mapGameObjectManager.GameObjects.ToArray());
+            _mapGameObjectManager.Synchronize();
+        }
+
+        [DiscoverableConsoleCommand("Removes the map game object with the specified id.")]
+        private void MapGameObjectsRemoveById(string idAsString)
+        {
+            var objId = new StringIdentifier(idAsString);
+            var matchingObj = _mapGameObjectManager
+                .GameObjects
+                .FirstOrDefault(x => x.GetOnly<IIdentifierBehavior>().Id.Equals(objId));
+            if (matchingObj == null)
+            {
+                _logger.Warn($"No object found with ID '{objId}'.");
+                return;
+            }
+
+            _mapGameObjectManager.MarkForRemoval(matchingObj);
+            _mapGameObjectManager.Synchronize();
         }
 
         [DiscoverableConsoleCommand("Gets the position of the player.")]
