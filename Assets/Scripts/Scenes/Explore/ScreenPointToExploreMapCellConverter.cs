@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Assets.Scripts.Plugins.Features.Maps;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 
 using UnityEngine;

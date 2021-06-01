@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Assets.Scripts.Plugins.Features.Maps;
+using Assets.Scripts.Plugins.Features.Maps.Api;
 
 using ProjectXyz.Api.GameObjects;
 

@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.Maps;
+using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 
 using NexusLabs.Contracts;

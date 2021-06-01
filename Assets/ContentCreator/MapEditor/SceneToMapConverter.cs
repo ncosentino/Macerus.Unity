@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.ContentCreator.MapEditor.Behaviours;
-using Assets.Scripts.Plugins.Features.Maps;
+using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Tilemaps;
 

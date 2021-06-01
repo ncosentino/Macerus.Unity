@@ -3,6 +3,7 @@ using System.Linq;
 
 using Assets.Scripts;
 using Assets.Scripts.Behaviours;
+using Assets.Scripts.Behaviours.Generic;
 using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity;
@@ -49,6 +50,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private IMapProvider _mapProvider;
         private ITimeProvider _timeProvider;
         private IObjectDestroyer _objectDestroyer;
+        private ITileMarkerFactory _tileMarkerFactory;
 
         private void Start()
         {
@@ -74,6 +76,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _mapProvider = container.Resolve<IMapProvider>();
             _objectDestroyer = container.Resolve<IObjectDestroyer>();
             _timeProvider = container.Resolve<ITimeProvider>();
+            _tileMarkerFactory = container.Resolve<ITileMarkerFactory>();
 
             container
                 .Resolve<IConsoleCommandRegistrar>()
@@ -94,14 +97,58 @@ namespace Assets.Scripts.Scenes.Explore.Console
             var debugVisualPath = new GameObject();
             debugVisualPath.name = $"Path from ({startX},{startY}) to ({endX},{endY})";
             var debugVisualPathBehaviour = debugVisualPath.AddComponent<DebugVisualPathBehaviour>();
-            debugVisualPathBehaviour.ObjectDestroyer = _objectDestroyer;
-            debugVisualPathBehaviour.TimeProvider = _timeProvider;
             debugVisualPathBehaviour.Points = path;
-            debugVisualPathBehaviour.Duration = TimeSpan.FromSeconds(10);
+            var selfDestructBehavior = debugVisualPath.AddComponent<SelfDestructBehaviour>();
+            selfDestructBehavior.ObjectDestroyer = _objectDestroyer;
+            selfDestructBehavior.TimeProvider = _timeProvider;
+            selfDestructBehavior.Duration = TimeSpan.FromSeconds(10);
 
             _logger.Info(
                 $"Path between ({startX},{startY}) and ({endX},{endY}):\r\n" +
                 $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
+        }
+
+        [DiscoverableConsoleCommand("Prints adjacent points to an object with the specified ID.")]
+        private void AdjacentPointsToGameObject(string idAsString)
+        {
+            var objId = new StringIdentifier(idAsString);
+            var matchingObj = _mapGameObjectManager
+                .GameObjects
+                .FirstOrDefault(x => x.GetOnly<IIdentifierBehavior>().Id.Equals(objId));
+            if (matchingObj == null)
+            {
+                _logger.Warn($"No object found with ID '{objId}'.");
+                return;
+            }
+
+            var positionBehavior = matchingObj.GetOnly<IReadOnlyPositionBehavior>();
+            var sizeBehavior = matchingObj.GetOnly<IReadOnlySizeBehavior>();
+            var size = new System.Numerics.Vector2(
+                (float)sizeBehavior.Width,
+                (float)sizeBehavior.Height);
+            var position = new System.Numerics.Vector2(
+                (float)positionBehavior.X,
+                (float)positionBehavior.Y);
+            var intPosition = new System.Numerics.Vector2((int)position.X, (int)position.Y);
+            
+            var adjacentPositions = _mapProvider.PathFinder.GetAdjacentPositionsToObject(
+                position,
+                size,
+                true);
+            _logger.Info(
+                $"'{objId}' at position ({position.X},{position.Y}) rounded to " +
+                $"integer position ({intPosition.X},{intPosition.Y}) has " +
+                $"adjacent points:\r\n" +
+                $"{string.Join("\r\n", adjacentPositions.Select(p => $"\t({p.X},{p.Y})"))}");
+
+            foreach (var adjacentPosition in adjacentPositions)
+            {
+                _tileMarkerFactory.CreateTileMarker(
+                    $"Adjacent Position Marker ({adjacentPosition.X},{adjacentPosition.Y})",
+                    new Vector3(adjacentPosition.X, adjacentPosition.Y),
+                    new Color(1, 0, 0, 0.5f),
+                    TimeSpan.FromSeconds(3));
+            }
         }
 
         [DiscoverableConsoleCommand("Starts an encounter with the specified ID.")]

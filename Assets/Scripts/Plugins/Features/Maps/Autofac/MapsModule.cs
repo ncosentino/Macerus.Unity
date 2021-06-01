@@ -38,6 +38,10 @@ namespace Assets.Scripts.Plugins.Features.Maps.Autofac
                 .RegisterType<MapResourceLoader>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<TileMarkerFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
