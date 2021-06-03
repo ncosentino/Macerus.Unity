@@ -108,8 +108,18 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
         }
 
-        [DiscoverableConsoleCommand("Prints adjacent points to an object with the specified ID.")]
-        private void AdjacentPointsToGameObject(string idAsString)
+        [DiscoverableConsoleCommand("Prints the path between two points.")]
+        private void MapMarkerCreate(float x, float y, float r, float g, float b, float a, string name, double seconds)
+        {
+            _tileMarkerFactory.CreateTileMarker(
+                name,
+                new Vector3(x, y),
+                new Color(r, g, b, a),
+                seconds <= 0 ? (TimeSpan?)null : TimeSpan.FromSeconds(seconds));
+        }
+
+        [DiscoverableConsoleCommand("Prints free adjacent points to an object with the specified ID.")]
+        private void AdjacentPointsToGameObjectFree(string idAsString)
         {
             var objId = new StringIdentifier(idAsString);
             var matchingObj = _mapGameObjectManager
@@ -129,15 +139,54 @@ namespace Assets.Scripts.Scenes.Explore.Console
             var position = new System.Numerics.Vector2(
                 (float)positionBehavior.X,
                 (float)positionBehavior.Y);
-            var intPosition = new System.Numerics.Vector2((int)position.X, (int)position.Y);
             
-            var adjacentPositions = _mapProvider.PathFinder.GetAdjacentPositionsToObject(
+            var adjacentPositions = _mapProvider.PathFinder.GetFreeAdjacentPositionsToObject(
                 position,
                 size,
                 true);
             _logger.Info(
-                $"'{objId}' at position ({position.X},{position.Y}) rounded to " +
-                $"integer position ({intPosition.X},{intPosition.Y}) has " +
+                $"'{objId}' at position ({position.X},{position.Y}) has " +
+                $"adjacent points:\r\n" +
+                $"{string.Join("\r\n", adjacentPositions.Select(p => $"\t({p.X},{p.Y})"))}");
+
+            foreach (var adjacentPosition in adjacentPositions)
+            {
+                _tileMarkerFactory.CreateTileMarker(
+                    $"Adjacent Position Marker ({adjacentPosition.X},{adjacentPosition.Y})",
+                    new Vector3(adjacentPosition.X, adjacentPosition.Y),
+                    new Color(1, 0, 0, 0.5f),
+                    TimeSpan.FromSeconds(3));
+            }
+        }
+
+        [DiscoverableConsoleCommand("Prints all adjacent points to an object with the specified ID.")]
+        private void AdjacentPointsToGameObjectAll(string idAsString)
+        {
+            var objId = new StringIdentifier(idAsString);
+            var matchingObj = _mapGameObjectManager
+                .GameObjects
+                .FirstOrDefault(x => x.GetOnly<IIdentifierBehavior>().Id.Equals(objId));
+            if (matchingObj == null)
+            {
+                _logger.Warn($"No object found with ID '{objId}'.");
+                return;
+            }
+
+            var positionBehavior = matchingObj.GetOnly<IReadOnlyPositionBehavior>();
+            var sizeBehavior = matchingObj.GetOnly<IReadOnlySizeBehavior>();
+            var size = new System.Numerics.Vector2(
+                (float)sizeBehavior.Width,
+                (float)sizeBehavior.Height);
+            var position = new System.Numerics.Vector2(
+                (float)positionBehavior.X,
+                (float)positionBehavior.Y);
+
+            var adjacentPositions = _mapProvider.PathFinder.GetAllAdjacentPositionsToObject(
+                position,
+                size,
+                true);
+            _logger.Info(
+                $"'{objId}' at position ({position.X},{position.Y}) has " +
                 $"adjacent points:\r\n" +
                 $"{string.Join("\r\n", adjacentPositions.Select(p => $"\t({p.X},{p.Y})"))}");
 

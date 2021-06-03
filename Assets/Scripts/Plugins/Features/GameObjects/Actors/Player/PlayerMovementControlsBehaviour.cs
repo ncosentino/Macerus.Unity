@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Input.Api;
@@ -80,7 +81,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             {
                 if (!GuiHitTester.HitTest(MouseInput.Position).Any())
                 {
-                    System.Numerics.Vector2[] path;
+                    IReadOnlyCollection<System.Numerics.Vector2> path;
                     Vector3 worldLocation;
                     if (PlayerControlConfiguration.TileRestrictedMovement)
                     {
@@ -93,7 +94,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                                 new System.Numerics.Vector2((float)SizeBehavior.Width, (float)SizeBehavior.Height))
                             .ToArray();
 
-                        if (!path.Any())
+                        if (path.Any())
+                        {
+                            Logger.Info(
+                                $"Path between ({PositionBehavior.X},{PositionBehavior.Y}) and ({worldLocation.x},{worldLocation.y}):\r\n" +
+                                $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
+                        }
+                        else
                         {
                             Logger.Warn(
                                 $"Could not find a path from ({PositionBehavior.X}," +
@@ -101,8 +108,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                                 $"{worldLocation.y}). Using the way of the crow.");
                             path = new[]
                             {
-                            new System.Numerics.Vector2(worldLocation.x, worldLocation.y)
-                        };
+                                new System.Numerics.Vector2(worldLocation.x, worldLocation.y)
+                            };
                         }
                     }
                     else
@@ -114,6 +121,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                         };
                     }
 
+                    path = new[] { new System.Numerics.Vector2((float)PositionBehavior.X, (float)PositionBehavior.Y) }
+                        .Concat(path)
+                        .ToArray();
                     MovementBehavior.SetWalkPath(path);
                 }
             }
