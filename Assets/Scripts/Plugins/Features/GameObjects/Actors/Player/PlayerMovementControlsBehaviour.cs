@@ -102,14 +102,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                         }
                         else
                         {
-                            Logger.Warn(
+                            Logger.Debug(
                                 $"Could not find a path from ({PositionBehavior.X}," +
                                 $"{PositionBehavior.Y}) to ({worldLocation.x}," +
-                                $"{worldLocation.y}). Using the way of the crow.");
-                            path = new[]
-                            {
-                                new System.Numerics.Vector2(worldLocation.x, worldLocation.y)
-                            };
+                                $"{worldLocation.y}).");
+                            return;
                         }
                     }
                     else
