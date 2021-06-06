@@ -11,6 +11,7 @@ using Assets.Scripts.Gui.Noesis;
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
+using Macerus.Plugins.Features.Gui.Default;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Crafting.Noesis.Resources
 {
