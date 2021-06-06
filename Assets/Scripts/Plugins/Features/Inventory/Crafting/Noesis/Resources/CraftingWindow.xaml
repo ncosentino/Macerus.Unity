@@ -66,8 +66,8 @@
             </noesis:Element.Transform3D>
             <Grid.RowDefinitions>
                 <RowDefinition Height="48"/>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -119,14 +119,16 @@
             </Border>
 
             <Grid
-                x:Name="EquipmentPlaceholder"
-                Grid.Row="1"
-                Grid.Column="1"/>
-
-            <Grid
                 x:Name="BagPlaceholder"
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.ColumnSpan="3"/>
+
+            <Button
+                x:Name="CraftButton"
+                Grid.Row="2"
+                Grid.Column="1"
+                Content="CRAFT"
+                Command="{Binding CraftCommand}"/>
 
             <Border
                 x:Name="InventoryFade"

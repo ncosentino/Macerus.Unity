@@ -8,11 +8,13 @@ using System.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Input;
 
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
 using Macerus.Plugins.Features.Gui.Default;
 
 using Assets.Scripts.Gui.Noesis.ViewModels;
+using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Crafting.Noesis;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
@@ -34,12 +36,15 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         {
             _viewModelToWrap = viewModelToWrap;
             _viewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
+            CraftCommand = new DelegateCommand(_ => _viewModelToWrap.Craft());
         }
 
         [NotifyForWrappedProperty(nameof(ICraftingWindowViewModel.IsOpen))]
         public Visibility Visibility => _viewModelToWrap.IsOpen
             ? Visibility.Visible
             : Visibility.Collapsed;
+
+        public ICommand CraftCommand { get; }
 
         private void ViewModelToWrap_PropertyChanged(
             object sender,
