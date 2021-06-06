@@ -159,6 +159,27 @@ namespace Assets.Scripts.Scenes.Explore.Console
             }
         }
 
+        [DiscoverableConsoleCommand("Prints free adjacent points to an object with the specified ID.")]
+        private void TilesInRadiusFree(float x, float y, int radius)
+        {
+            var position = new System.Numerics.Vector2(
+                (float)x,
+                (float)y);
+
+            var freeTiles = _mapProvider.PathFinder.GetFreeTilesInRadius(
+                position,
+                radius);
+
+            foreach (var freeTile in freeTiles)
+            {
+                _tileMarkerFactory.CreateTileMarker(
+                    $"Free Tile ({freeTile.X},{freeTile.Y})",
+                    new Vector3(freeTile.X, freeTile.Y),
+                    new Color(0, 1, 0, 0.5f),
+                    TimeSpan.FromSeconds(3));
+            }
+        }
+
         [DiscoverableConsoleCommand("Prints all adjacent points to an object with the specified ID.")]
         private void AdjacentPointsToGameObjectAll(string idAsString)
         {
