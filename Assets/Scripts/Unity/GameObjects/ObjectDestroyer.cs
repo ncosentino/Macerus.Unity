@@ -10,10 +10,6 @@ namespace Assets.Scripts.Unity.GameObjects
             if (Application.isPlaying)
             {
                 Object.Destroy(@object);
-                if (@object is GameObject gameObject)
-                {
-                    gameObject.transform.SetParent(null);
-                }
             }
             else
             {
@@ -21,10 +17,6 @@ namespace Assets.Scripts.Unity.GameObjects
             }
 #else
             Object.Destroy(@object);
-            if (@object is GameObject gameObject)
-            {
-                gameObject.transform.SetParent(null);
-            }
 #endif
         }
     }

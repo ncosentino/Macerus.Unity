@@ -23,7 +23,7 @@ namespace Assets.Scripts.Scenes.Explore.Camera
             this.RequiresNotNull(ExploreGameObject, nameof(ExploreGameObject));
 
             _followCamera = CameraFactory.CreateCamera();
-            _followCamera.transform.parent = ExploreGameObject.transform;
+            _followCamera.transform.SetParent(ExploreGameObject.transform);
         }
 
         private void OnDestroy()

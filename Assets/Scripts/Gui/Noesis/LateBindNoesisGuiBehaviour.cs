@@ -66,6 +66,7 @@ namespace Assets.Scripts.Gui.Noesis
                 .Weld();
             GuiWeldedCallback?.Invoke(noesisView);
 
+            // FIXME: use IObjectDestroyer
             Destroy(this);
         }
     }
