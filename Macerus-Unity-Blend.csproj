@@ -108,6 +108,16 @@
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\CombatTurnOrderNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\IHeaderBarView.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Autofac\InventoryModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Autofac\CraftingModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\ICraftingBagView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\ICraftingWindowNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\CraftingWindowNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\Resources\CraftingWindow.xaml.cs">
+      <DependentUpon>CraftingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\Resources\CraftingBagView.xaml.cs">
+      <DependentUpon>CraftingBagView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EquipmentSlotNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\EquipmentSlotToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\IBagSlotToNoesisViewModelConverter.cs" />
@@ -204,6 +214,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\Resources\CombatTurnOrderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\Resources\CraftingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\Inventory\Crafting\Noesis\Resources\CraftingBagView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

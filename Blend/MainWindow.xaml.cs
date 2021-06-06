@@ -14,6 +14,7 @@ using Macerus.Plugins.Features.GameObjects.Actors.Generation;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 using Macerus.Plugins.Features.Inventory.Api;
+using Macerus.Plugins.Features.Inventory.Api.Crafting;
 using Macerus.Plugins.Features.MainMenu.Api;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.GameObjects.Generation;
@@ -87,11 +88,14 @@ namespace Assets.Blend
                     skillAmenity.GetSkillById(new StringIdentifier("fireball")),
                 });
 
-                var controller = container.Resolve<IPlayerInventoryController>();
-                controller.OpenInventory();
+                var inventoryController = container.Resolve<IPlayerInventoryController>();
+                inventoryController.OpenInventory();
 
-                var characterSheetController = container.Resolve<ICharacterSheetController>();
-                characterSheetController.OpenCharacterSheet();
+                //var characterSheetController = container.Resolve<ICharacterSheetController>();
+                //characterSheetController.OpenCharacterSheet();
+
+                var craftingController = container.Resolve<ICraftingController>();
+                craftingController.OpenCraftingWindow();
             }
 
             container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);

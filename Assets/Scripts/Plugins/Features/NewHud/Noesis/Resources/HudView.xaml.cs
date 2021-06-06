@@ -15,6 +15,7 @@ using Macerus.Plugins.Features.CharacterSheet.Api;
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 using Assets.Scripts.Plugins.Features.HeaderBar.Noesis;
+using Macerus.Plugins.Features.Inventory.Api.Crafting;
 
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 {
@@ -27,6 +28,7 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IItemDragNoesisViewModel viewModel,
             IEmptyDropZoneNoesisViewModel emptyDropZoneNoesisViewModel,
             IPlayerInventoryWindow playerInventoryWindow,
+            ICraftingWindow craftingWindow,
             ICharacterSheetView characterSheetView,
             IStatusBarView statusBarView,
             IHeaderBarView headerBarView)
@@ -49,11 +51,16 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                     NoesisLogicalTreeHelper.FindChildWithName(this, "RightContent"),
                     playerInventoryWindow)
                 .Weld();
-
+            
             viewWelderFactory
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent"),
                     characterSheetView)
+                .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent"),
+                    craftingWindow)
                 .Weld();
 
             viewWelderFactory
