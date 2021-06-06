@@ -7,10 +7,24 @@ namespace Assets.Scripts.Unity.GameObjects
         public void Destroy(Object @object)
         {
 #if UNITY_EDITOR
-            Object.DestroyImmediate(@object);
+            if (Application.isPlaying)
+            {
+                Object.Destroy(@object);
+                if (@object is GameObject gameObject)
+                {
+                    gameObject.transform.SetParent(null);
+                }
+            }
+            else
+            {
+                Object.DestroyImmediate(@object);
+            }
 #else
             Object.Destroy(@object);
-            @object.transform.parent = null;
+            if (@object is GameObject gameObject)
+            {
+                gameObject.transform.SetParent(null);
+            }
 #endif
         }
     }
