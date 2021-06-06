@@ -38,7 +38,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             HandleInteractionControls();
         }
