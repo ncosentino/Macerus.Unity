@@ -10,19 +10,12 @@ using System.Globalization;
 
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis
 {
-    public class GreaterThanZeroConverter : IValueConverter
+    public sealed class GreaterThanZeroConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            try
-            {
-                var i = (int)value;
-                return i > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var converted = System.Convert.ToDouble(value, culture);
+            return converted > 0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
