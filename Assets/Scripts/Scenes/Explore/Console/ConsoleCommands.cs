@@ -84,14 +84,15 @@ namespace Assets.Scripts.Scenes.Explore.Console
         }
 
         [DiscoverableConsoleCommand("Prints the path between two points.")]
-        private void PathBetweenPoints(double startX, double startY, double endX, double endY)
+        private void PathBetweenPoints(double startX, double startY, double endX, double endY, bool includeDiagonals)
         {
             var path = _mapProvider
                 .PathFinder
                 .FindPath(
                     new System.Numerics.Vector2((float)startX, (float)startY),
                     new System.Numerics.Vector2((float)endX, (float)endY),
-                    new System.Numerics.Vector2(1, 1))
+                    new System.Numerics.Vector2(1, 1),
+                    includeDiagonals)
                 .ToArray();
 
             var debugVisualPath = new GameObject();
@@ -159,21 +160,38 @@ namespace Assets.Scripts.Scenes.Explore.Console
             }
         }
 
-        [DiscoverableConsoleCommand("Prints free adjacent points to an object with the specified ID.")]
-        private void TilesInRadiusFree(float x, float y, int radius)
+        [DiscoverableConsoleCommand("Prints allowed destination paths for a game object.")]
+        private void PathPossibleDestinations(string idAsString, int distance, bool includeDiagonals)
         {
-            var position = new System.Numerics.Vector2(
-                (float)x,
-                (float)y);
+            var objId = new StringIdentifier(idAsString);
+            var matchingObj = _mapGameObjectManager
+                .GameObjects
+                .FirstOrDefault(x => x.GetOnly<IIdentifierBehavior>().Id.Equals(objId));
+            if (matchingObj == null)
+            {
+                _logger.Warn($"No object found with ID '{objId}'.");
+                return;
+            }
 
-            var freeTiles = _mapProvider.PathFinder.GetFreeTilesInRadius(
+            var positionBehavior = matchingObj.GetOnly<IReadOnlyPositionBehavior>();
+            var sizeBehavior = matchingObj.GetOnly<IReadOnlySizeBehavior>();
+            var size = new System.Numerics.Vector2(
+                (float)sizeBehavior.Width,
+                (float)sizeBehavior.Height);
+            var position = new System.Numerics.Vector2(
+                (float)positionBehavior.X,
+                (float)positionBehavior.Y);
+
+            var freeTiles = _mapProvider.PathFinder.GetAllowedPathDestinations(
                 position,
-                radius);
+                size,
+                distance,
+                includeDiagonals);
 
             foreach (var freeTile in freeTiles)
             {
                 _tileMarkerFactory.CreateTileMarker(
-                    $"Free Tile ({freeTile.X},{freeTile.Y})",
+                    $"Allowed Destination ({freeTile.X},{freeTile.Y})",
                     new Vector3(freeTile.X, freeTile.Y),
                     new Color(0, 1, 0, 0.5f),
                     TimeSpan.FromSeconds(3));

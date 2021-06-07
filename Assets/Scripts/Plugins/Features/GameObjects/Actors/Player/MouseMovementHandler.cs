@@ -77,17 +77,26 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     return;
                 }
 
+                var allowedWalkDiagonally = _statCalculationServiceAmenity.GetStatValue(
+                    movementBehavior.Owner,
+                    _actorIdentifiers.MoveDiagonallyStatDefinitionId) > 0;
                 var allowedWalkDistance = _statCalculationServiceAmenity.GetStatValue(
                     movementBehavior.Owner,
                     _actorIdentifiers.MoveDistancePerTurnCurrentStatDefinitionId);
                 var actorPosition = new System.Numerics.Vector2(
                     (float)positionBehavior.X,
                     (float)positionBehavior.Y);
+                var actorSize = new System.Numerics.Vector2(
+                    (float)sizeBehavior.Width,
+                    (float)sizeBehavior.Height);
+                
                 var validWalkPoints = _mapManager
                     .PathFinder
-                    .GetFreeTilesInRadius(
+                    .GetAllowedPathDestinations(
                         actorPosition,
-                        allowedWalkDistance);
+                        actorSize,
+                        allowedWalkDistance,
+                        allowedWalkDiagonally);
 
                 destinationPosition = _screenPointToMapCellConverter.Convert(_mouseInput.Position);
                 if (!validWalkPoints.Contains(new System.Numerics.Vector2(
@@ -102,7 +111,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     .FindPath(
                         actorPosition,
                         new System.Numerics.Vector2(destinationPosition.x, destinationPosition.y),
-                        new System.Numerics.Vector2((float)sizeBehavior.Width, (float)sizeBehavior.Height))
+                        actorSize,
+                        allowedWalkDiagonally)
                     .ToArray();
 
                 if (path.Any())
