@@ -52,6 +52,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             // stitch additional behaviours specific to the prefab (i.e. Unity->Unity)
             _prefabStitcherFacade.Stitch(
                 unityGameObject,
+                gameObject,
                 prefabResourceId);
 
             // handle behaviors of the game object (i.e. Backend->Unity)

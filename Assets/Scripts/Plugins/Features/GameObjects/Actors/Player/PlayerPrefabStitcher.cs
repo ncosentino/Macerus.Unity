@@ -2,6 +2,7 @@
 using Assets.Scripts.Scenes.Explore.Camera;
 
 using ProjectXyz.Api.Framework;
+using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
@@ -30,14 +31,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         public IIdentifier PrefabResourceId { get; } = new StringIdentifier(@"Mapping/Prefabs/Actors/PlayerPlaceholder");
 
         public void Stitch(
-            GameObject gameObject,
+            GameObject unityGameObject,
+            IGameObject gameObject,
             IIdentifier prefabResourceId)
         {
-            gameObject.AddComponent<CameraTargetBehaviour>();
-            _playerInteractionDetectionBehaviourStitcher.Stitch(gameObject);
-            _playerInputControlsBehaviourStitcher.Attach(gameObject);
-            _playerInteractionControlsBehaviourStitcher.Attach(gameObject);
-            _playerQuickSlotControlsBehaviourStitcher.Attach(gameObject);
+            unityGameObject.AddComponent<CameraTargetBehaviour>();
+            _playerInteractionDetectionBehaviourStitcher.Stitch(unityGameObject);
+            _playerInputControlsBehaviourStitcher.Attach(unityGameObject, gameObject);
+            _playerInteractionControlsBehaviourStitcher.Attach(unityGameObject);
+            _playerQuickSlotControlsBehaviourStitcher.Attach(unityGameObject);
         }
     }
 }

@@ -50,6 +50,14 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<MouseMovementHandler>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
+                .RegisterType<KeyboardMovementHandler>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<PlayerPrefabStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

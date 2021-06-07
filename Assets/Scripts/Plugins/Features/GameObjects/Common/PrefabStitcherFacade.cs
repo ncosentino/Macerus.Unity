@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Api.GameObjects;
 
 using ProjectXyz.Api.Framework;
+using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;
 
@@ -24,7 +25,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
         }
 
         public void Stitch(
-            GameObject gameObject,
+            GameObject unityGameObject,
+            IGameObject gameObject,
             IIdentifier prefabResourceId)
         {
             // FIXME: proper mapping of strings and identifiers
@@ -36,6 +38,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             }
 
             stitchCallback.Invoke(
+                unityGameObject,
                 gameObject,
                 prefabResourceId);
         }
