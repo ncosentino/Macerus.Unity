@@ -11,6 +11,8 @@ using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
 using Macerus.Plugins.Features.Stats;
 
+using NexusLabs.Contracts;
+
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
@@ -106,22 +108,22 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     return;
                 }
 
-                path = _mapManager
+                var foundPath = _mapManager
                     .PathFinder
                     .FindPath(
                         actorPosition,
                         new System.Numerics.Vector2(destinationPosition.x, destinationPosition.y),
                         actorSize,
-                        allowedWalkDiagonally)
-                    .ToArray();
-
-                if (path.Any())
-                {
-                    _logger.Info(
-                        $"Path between ({positionBehavior.X},{positionBehavior.Y}) and ({destinationPosition.x},{destinationPosition.y}):\r\n" +
-                        $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
-                }
-                else
+                        allowedWalkDiagonally);
+                Contract.Requires(
+                    foundPath.TotalDistance <= allowedWalkDistance,
+                    $"The found path was distance {foundPath.TotalDistance} " +
+                    $"but the maximum allowed distance for the actor to move was " +
+                    $"{allowedWalkDistance}. This may suggest that " +
+                    $"{nameof(IPathFinder.GetAllowedPathDestinations)}() is " +
+                    $"doing the wrong thing.");
+                
+                if (!foundPath.Positions.Any())
                 {
                     _logger.Debug(
                         $"Could not find a path from ({positionBehavior.X}," +
@@ -130,10 +132,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     return;
                 }
 
+                path = foundPath.Positions;
+                _logger.Info(
+                    $"Path between ({positionBehavior.X},{positionBehavior.Y}) and ({destinationPosition.x},{destinationPosition.y}):\r\n" +
+                    $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
+                
                 // FIXME: actually calculate the path distance (i.e. account for things like diagonals)
                 actor
                     .GetOnly<IHasMutableStatsBehavior>()
-                    .MutateStats(stats => stats[_actorIdentifiers.MoveDistancePerTurnCurrentStatDefinitionId] -= path.Count);
+                    .MutateStats(stats => stats[_actorIdentifiers.MoveDistancePerTurnCurrentStatDefinitionId] -= foundPath.TotalDistance);
             }
             else
             {

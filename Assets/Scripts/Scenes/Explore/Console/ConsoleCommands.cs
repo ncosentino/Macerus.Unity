@@ -92,13 +92,12 @@ namespace Assets.Scripts.Scenes.Explore.Console
                     new System.Numerics.Vector2((float)startX, (float)startY),
                     new System.Numerics.Vector2((float)endX, (float)endY),
                     new System.Numerics.Vector2(1, 1),
-                    includeDiagonals)
-                .ToArray();
+                    includeDiagonals);
 
             var debugVisualPath = new GameObject();
             debugVisualPath.name = $"Path from ({startX},{startY}) to ({endX},{endY})";
             var debugVisualPathBehaviour = debugVisualPath.AddComponent<DebugVisualPathBehaviour>();
-            debugVisualPathBehaviour.Points = path;
+            debugVisualPathBehaviour.Points = path.Positions;
             var selfDestructBehavior = debugVisualPath.AddComponent<SelfDestructBehaviour>();
             selfDestructBehavior.ObjectDestroyer = _objectDestroyer;
             selfDestructBehavior.TimeProvider = _timeProvider;
@@ -106,7 +105,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
             _logger.Info(
                 $"Path between ({startX},{startY}) and ({endX},{endY}):\r\n" +
-                $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
+                $"{string.Join("\r\n", path.Positions.Select(p => $"\t({p.X},{p.Y})"))}");
         }
 
         [DiscoverableConsoleCommand("Prints the path between two points.")]
