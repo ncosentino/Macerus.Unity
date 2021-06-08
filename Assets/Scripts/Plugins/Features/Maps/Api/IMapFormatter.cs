@@ -7,7 +7,8 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
 {
     public interface IMapFormatter :
         IMapGridLineFormatter,
-        IMapHoverSelectFormatter
+        IMapHoverSelectFormatter,
+        IMapTraversableHighlighter
     {
         void FormatMap(
             IMapPrefab mapPrefab,

@@ -9,6 +9,7 @@ using Assets.Scripts.Unity.Input;
 
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
+using Macerus.Plugins.Features.Mapping;
 using Macerus.Plugins.Features.Stats.Api;
 
 using NexusLabs.Contracts;
@@ -31,6 +32,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IScreenPointToMapCellConverter _screenPointToMapCellConverter;
         private readonly IMacerusActorIdentifiers _actorIdentifiers;
         private readonly IStatCalculationServiceAmenity _statCalculationServiceAmenity;
+        private readonly IMappingAmenity _mappingAmenity;
 
         public MouseMovementHandler(
             IPlayerControlConfiguration playerControlConfiguration, 
@@ -40,7 +42,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             ProjectXyz.Api.Logging.ILogger logger,
             IScreenPointToMapCellConverter screenPointToMapCellConverter,
             IMacerusActorIdentifiers actorIdentifiers,
-            IStatCalculationServiceAmenity statCalculationServiceAmenity)
+            IStatCalculationServiceAmenity statCalculationServiceAmenity,
+            IMappingAmenity mappingAmenity)
         {
             _playerControlConfiguration = playerControlConfiguration;
             _mouseInput = mouseInput;
@@ -50,6 +53,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _screenPointToMapCellConverter = screenPointToMapCellConverter;
             _actorIdentifiers = actorIdentifiers;
             _statCalculationServiceAmenity = statCalculationServiceAmenity;
+            _mappingAmenity = mappingAmenity;
         }
 
         public void HandleMouseMovement(IGameObject actor)
@@ -91,14 +95,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 var actorSize = new System.Numerics.Vector2(
                     (float)sizeBehavior.Width,
                     (float)sizeBehavior.Height);
-                
-                var validWalkPoints = _mapManager
-                    .PathFinder
-                    .GetAllowedPathDestinations(
-                        actorPosition,
-                        actorSize,
-                        allowedWalkDistance,
-                        allowedWalkDiagonally);
+
+                var validWalkPoints = _mappingAmenity.GetAllowedPathDestinationsForActor(actor);
 
                 destinationPosition = _screenPointToMapCellConverter.Convert(_mouseInput.Position);
                 if (!validWalkPoints.Contains(new System.Numerics.Vector2(

@@ -17,6 +17,7 @@ using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
@@ -26,6 +27,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
     {
         private const int LAYER_GRID_LINES = 10000;
         private const int LAYER_HOVER_SELECT = int.MaxValue;
+        private const int LAYER_TRAVERSABLE = LAYER_HOVER_SELECT - 1;
 
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
@@ -33,6 +35,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IPrefabCreator _prefabCreator;
         private readonly ILogger _logger;
 
+        private HashSet<Vector2Int> _traversableTiles;
         private bool _gridLinesEnabled;
         private IMapPrefab _mapPrefab;
         private int _maximumTileX;
@@ -128,6 +131,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             // set these back (if needed) because we just obliterated all the
             // tiles by formatting the tile map
             ToggleGridLines(_gridLinesEnabled, false);
+            SetTraversableTiles(_traversableTiles ?? Enumerable.Empty<Vector2Int>(), false);
             
             mapPrefab.Tilemap.RefreshAllTiles();
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
@@ -159,6 +163,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
                     unityTile);
             }
         }
+
+        public void SetTraversableTiles(IEnumerable<Vector2Int> traversableTiles) =>
+            SetTraversableTiles(traversableTiles, true);
 
         public void ToggleGridLines(bool enabled) =>
             ToggleGridLines(enabled, true);
@@ -212,6 +219,41 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 // add the game object to the correct parent
                 unityGameObject.transform.parent = gameObjectLayerObject.transform;
                 _logger.Debug($"Adding unity game object '{unityGameObject}' to '{gameObjectLayerObject}'...");
+            }
+        }
+
+        private void SetTraversableTiles(
+            IEnumerable<Vector2Int> traversableTiles,
+            bool forceRefresh)
+        {
+            // may not have been loaded yet
+            if (_mapPrefab == null || _mapPrefab.Tilemap == null)
+            {
+                return;
+            }
+
+            _traversableTiles = new HashSet<Vector2Int>(traversableTiles);
+
+            for (int i = _minimumTileX; i <= _maximumTileX; i++)
+            {
+                for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                {
+                    var traversable = traversableTiles.Contains(new Vector2Int(i, j));
+                    var unityTile = traversable
+                        ? _tileLoader.LoadTile(
+                            "mapping/tilesets/",
+                            "traversable-tile-highlight")
+                        : null;
+                    var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
+                    _mapPrefab.Tilemap.SetTile(
+                        tilePosition,
+                        unityTile);
+                }
+            }
+
+            if (forceRefresh)
+            {
+                _mapPrefab.Tilemap.RefreshAllTiles();
             }
         }
 
