@@ -64,6 +64,7 @@
 "Macerus.Plugins.Features.MainMenu.Default.dll",
 "Macerus.Plugins.Features.Mapping.Default.dll",
 "Macerus.Plugins.Features.Mapping.dll",
+"Macerus.Plugins.Features.Stats.Api.dll",
 "Macerus.Plugins.Features.Stats.dll",
 "Macerus.Plugins.Features.StatusBar.Api.dll",
 "Macerus.Plugins.Features.StatusBar.Default.dll",

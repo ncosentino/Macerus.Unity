@@ -9,7 +9,7 @@ using Assets.Scripts.Unity.Input;
 
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
-using Macerus.Plugins.Features.Stats;
+using Macerus.Plugins.Features.Stats.Api;
 
 using NexusLabs.Contracts;
 

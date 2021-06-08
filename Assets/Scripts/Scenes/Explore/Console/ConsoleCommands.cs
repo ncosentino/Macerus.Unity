@@ -14,7 +14,7 @@ using Autofac;
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
-using Macerus.Plugins.Features.Stats;
+using Macerus.Plugins.Features.Stats.Api;
 using Macerus.Plugins.Features.Weather;
 
 using ProjectXyz.Api.Framework;
