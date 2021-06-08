@@ -17,7 +17,6 @@ using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Mapping.Api;
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.Plugins.Features.Maps
 {
@@ -137,7 +136,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
         }
 
-        public void HoverSelectTile(Vector2Int? position)
+        public void HoverSelectTile(System.Numerics.Vector2? position)
         {
             if (_lastHoverSelectTilePosition.HasValue)
             {
@@ -149,8 +148,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _lastHoverSelectTilePosition = position == null
                 ? (Vector3Int?)null
                 : new Vector3Int(
-                    position.Value.x,
-                    position.Value.y,
+                    (int)position.Value.X,
+                    (int)position.Value.Y,
                     LAYER_HOVER_SELECT);
 
             if (position.HasValue)
@@ -164,8 +163,10 @@ namespace Assets.Scripts.Plugins.Features.Maps
             }
         }
 
-        public void SetTraversableTiles(IEnumerable<Vector2Int> traversableTiles) =>
-            SetTraversableTiles(traversableTiles, true);
+        public void SetTraversableTiles(IEnumerable<System.Numerics.Vector2> traversableTiles) =>
+            SetTraversableTiles(
+                traversableTiles.Select(p => new Vector2Int((int)p.X, (int)p.Y)),
+                true);
 
         public void ToggleGridLines(bool enabled) =>
             ToggleGridLines(enabled, true);
@@ -238,7 +239,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             {
                 for (int j = _minimumTileY; j <= _maximumTileY; j++)
                 {
-                    var traversable = traversableTiles.Contains(new Vector2Int(i, j));
+                    var traversable = _traversableTiles.Contains(new Vector2Int(i, j));
                     var unityTile = traversable
                         ? _tileLoader.LoadTile(
                             "mapping/tilesets/",

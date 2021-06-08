@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Macerus.Plugins.Features.Mapping;
+
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
 

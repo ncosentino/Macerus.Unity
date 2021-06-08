@@ -2,6 +2,8 @@
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.Input;
 
+using Macerus.Plugins.Features.Mapping;
+
 namespace Assets.Scripts.Plugins.Features.Maps
 {
     public sealed class MapHoverSelectionBehaviourStitcher : IMapHoverSelectionBehaviourStitcher
