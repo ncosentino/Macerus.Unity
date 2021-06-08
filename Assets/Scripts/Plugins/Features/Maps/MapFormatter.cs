@@ -24,9 +24,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
     public sealed class MapFormatter : IMapFormatter
     {
+        // base tile map
         private const int LAYER_GRID_LINES = 10000;
         private const int LAYER_HOVER_SELECT = int.MaxValue;
-        private const int LAYER_TRAVERSABLE = LAYER_HOVER_SELECT - 1;
+
+        // traversable tile map
+        private const int LAYER_TRAVERSABLE = 0;
 
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
