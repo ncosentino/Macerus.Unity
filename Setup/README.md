@@ -4,7 +4,9 @@
 2. Next we need to build & copy all of the DLLs for our projects into Unity
    - NOTE: we only need to do this step once initially. After that, we have a 'Macerus Tools' menu in Unity that can do this for you.
    - From the root of your code folder (i.e. direct children should be 'libraries' and 'products' directories) run `build_and_copy.sh`.
-3. You will need to setup the MySQL DB. You'll want it to be called "macerus" with a user/pass as both 'macerus'. Please use 'create-db.sql' for the schema+data.
+3. You will need to setup the MySQL DB.
+   - You'll want it to be called "macerus" with a user/pass as both 'macerus'.
+   - Please use 'create-db.sql' for the schema+data which can be found in 'ROOT\products\macerus\macerus-game\Macerus.Plugins.Content\Data'.
 4. Within Unity, you should see a "Macerus" menu and a "Dependencies" sub menu.
 5. From "Macerus/Dependencies" select "Build+Copy Dependencies"
 6. Summon the glory.
