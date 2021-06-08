@@ -10,5 +10,7 @@ namespace Assets.Scripts.Plugins.Features.Maps.Api
         GameObject GameObjectLayer { get; }
 
         Tilemap Tilemap { get; }
+
+        Tilemap WalkIndicatorTilemap { get; }
     }
 }

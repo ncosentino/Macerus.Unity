@@ -246,7 +246,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                             "traversable-tile-highlight")
                         : null;
                     var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
-                    _mapPrefab.Tilemap.SetTile(
+                    _mapPrefab.WalkIndicatorTilemap.SetTile(
                         tilePosition,
                         unityTile);
                 }

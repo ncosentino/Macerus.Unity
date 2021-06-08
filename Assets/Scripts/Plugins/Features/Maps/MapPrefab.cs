@@ -12,6 +12,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
     public sealed class MapPrefab : IMapPrefab
     {
         private readonly Lazy<Tilemap> _lazyTileMap;
+        private readonly Lazy<Tilemap> _lazyWalkIndicatorTileMap;
         private readonly Lazy<GameObject> _lazyGameObjectLayer;
 
         public MapPrefab(GameObject gameObject)
@@ -20,7 +21,12 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
             _lazyTileMap = new Lazy<Tilemap>(() =>
             {
-                var tilemap = gameObject.GetComponentInChildren<Tilemap>();
+                var tilemap = gameObject.GetComponentsInChildren<Tilemap>().First(x => x.gameObject.name == "TileMap");
+                return tilemap;
+            });
+            _lazyWalkIndicatorTileMap = new Lazy<Tilemap>(() =>
+            {
+                var tilemap = gameObject.GetComponentsInChildren<Tilemap>().First(x => x.gameObject.name == "WalkIndicatorTileMap");
                 return tilemap;
             });
             _lazyGameObjectLayer = new Lazy<GameObject>(() =>
@@ -35,6 +41,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
         public GameObject GameObject { get; }
 
         public Tilemap Tilemap => _lazyTileMap.Value;
+
+        public Tilemap WalkIndicatorTilemap => _lazyWalkIndicatorTileMap.Value;
 
         public GameObject GameObjectLayer => _lazyGameObjectLayer.Value;
     }
