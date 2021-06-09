@@ -55,6 +55,9 @@ namespace Assets.Scripts.Input
         public KeyCode ToggleInventory { get; } = KeyCode.I;
 
         /// <inheritdoc />
+        public KeyCode ToggleCrafting { get; } = KeyCode.K;
+
+        /// <inheritdoc />
         public KeyCode ToggleCharacterSheet { get; } = KeyCode.C;
 
         /// <inheritdoc />

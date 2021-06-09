@@ -1,19 +1,12 @@
-﻿using System.Linq;
-
-using Assets.Scripts.Gui;
-using Assets.Scripts.Input.Api;
+﻿using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
-using Assets.Scripts.Unity.GameObjects;
 
 using Macerus.Game.Api;
 using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Inventory.Api;
+using Macerus.Plugins.Features.Inventory.Api.Crafting;
 
 using ProjectXyz.Shared.Framework;
-
-using UnityEngine.SceneManagement;
-
-using ILogger = ProjectXyz.Api.Logging.ILogger;
 
 namespace Assets.Scripts.Scenes.Explore.Input
 {
@@ -21,28 +14,25 @@ namespace Assets.Scripts.Scenes.Explore.Input
     {
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IKeyboardControls _keyboardControls;
-        private readonly ILogger _logger;
         private readonly IPlayerInventoryController _playerInventoryController;
         private readonly ICharacterSheetController _characterSheetController;
-        private readonly IUnityGameObjectManager _gameObjectManager;
+        private readonly ICraftingController _craftingController;
         private readonly ISceneManager _sceneManager;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
             IKeyboardControls keyboardControls,
-            IUnityGameObjectManager gameObjectManager,
             ISceneManager sceneManager,
-            ILogger logger,
             IPlayerInventoryController playerInventoryController,
-            ICharacterSheetController characterSheetController)
+            ICharacterSheetController characterSheetController,
+            ICraftingController craftingController)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
-            _gameObjectManager = gameObjectManager;
             _sceneManager = sceneManager;
-            _logger = logger;
             _playerInventoryController = playerInventoryController;
             _characterSheetController = characterSheetController;
+            _craftingController = craftingController;
         }
 
         public void Update(float deltaTime)
@@ -59,6 +49,10 @@ namespace Assets.Scripts.Scenes.Explore.Input
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleInventory))
             {
                 _playerInventoryController.ToggleInventory();
+            }
+            else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleCrafting))
+            {
+                _craftingController.ToggleCraftingWindow();
             }
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleCharacterSheet))
             {

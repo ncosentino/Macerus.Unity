@@ -34,6 +34,8 @@ namespace Assets.Scripts.Input.Api
 
         KeyCode Interact { get; }
 
+        KeyCode ToggleCrafting { get; }
+
         KeyCode ToggleInventory { get; }
 
         KeyCode ToggleCharacterSheet { get; }
