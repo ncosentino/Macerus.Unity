@@ -3,6 +3,7 @@ using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 
 using Macerus.Game.Api;
 using Macerus.Plugins.Features.CharacterSheet.Api;
+using Macerus.Plugins.Features.Hud;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
 
@@ -17,6 +18,8 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly IPlayerInventoryController _playerInventoryController;
         private readonly ICharacterSheetController _characterSheetController;
         private readonly ICraftingController _craftingController;
+        private readonly IHudViewModel _hudViewModel;
+        private readonly IHudController _hudController;
         private readonly ISceneManager _sceneManager;
 
         public GuiInputController(
@@ -25,7 +28,9 @@ namespace Assets.Scripts.Scenes.Explore.Input
             ISceneManager sceneManager,
             IPlayerInventoryController playerInventoryController,
             ICharacterSheetController characterSheetController,
-            ICraftingController craftingController)
+            ICraftingController craftingController,
+            IHudViewModel hudViewModel,
+            IHudController hudController)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
@@ -33,6 +38,8 @@ namespace Assets.Scripts.Scenes.Explore.Input
             _playerInventoryController = playerInventoryController;
             _characterSheetController = characterSheetController;
             _craftingController = craftingController;
+            _hudViewModel = hudViewModel;
+            _hudController = hudController;
         }
 
         public void Update(float deltaTime)
@@ -44,7 +51,14 @@ namespace Assets.Scripts.Scenes.Explore.Input
 
             if (UnityEngine.Input.GetKeyUp(_keyboardControls.GuiClose))
             {
-                _sceneManager.GoToScene(new StringIdentifier("MainMenu"));
+                if (_hudViewModel.AnyWindowsOpen())
+                {
+                    _hudController.CloseAllWindows();
+                }
+                else
+                {
+                    _sceneManager.GoToScene(new StringIdentifier("MainMenu"));
+                }
             }
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleInventory))
             {

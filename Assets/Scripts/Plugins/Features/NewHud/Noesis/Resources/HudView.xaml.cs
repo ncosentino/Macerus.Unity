@@ -5,17 +5,17 @@ using Noesis;
 using System.Windows.Controls;
 #endif
 
+using System.Collections.Generic;
+
+using Assets.Scripts.Plugins.Features.HeaderBar.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Gui.Noesis;
 
-using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.StatusBar.Api;
-using Macerus.Plugins.Features.CharacterSheet.Api;
+using Macerus.Plugins.Features.Hud;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
-using Assets.Scripts.Plugins.Features.HeaderBar.Noesis;
-using Macerus.Plugins.Features.Inventory.Api.Crafting;
 
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 {
@@ -27,11 +27,9 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IViewWelderFactory viewWelderFactory,
             IItemDragNoesisViewModel viewModel,
             IEmptyDropZoneNoesisViewModel emptyDropZoneNoesisViewModel,
-            IPlayerInventoryWindow playerInventoryWindow,
-            ICraftingWindow craftingWindow,
-            ICharacterSheetView characterSheetView,
             IStatusBarView statusBarView,
-            IHeaderBarView headerBarView)
+            IHeaderBarView headerBarView,
+            IEnumerable<IHudWindow> hudWindows)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -45,23 +43,20 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             NoesisLogicalTreeHelper
                 .FindChildWithName(this, "RightContent")
                 .DataContext = emptyDropZoneNoesisViewModel;
-            
-            viewWelderFactory
+
+            var rightContent = NoesisLogicalTreeHelper.FindChildWithName(this, "RightContent");
+            var leftContent = NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent");
+
+            foreach (var hudWindow in hudWindows)
+            {
+                viewWelderFactory
                 .Create<ISimpleWelder>(
-                    NoesisLogicalTreeHelper.FindChildWithName(this, "RightContent"),
-                    playerInventoryWindow)
+                    hudWindow.IsLeftDocked
+                        ? leftContent
+                        : rightContent,
+                    hudWindow)
                 .Weld();
-            
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent"),
-                    characterSheetView)
-                .Weld();
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    NoesisLogicalTreeHelper.FindChildWithName(this, "LeftContent"),
-                    craftingWindow)
-                .Weld();
+            }
 
             viewWelderFactory
                 .Create<ISimpleWelder>(

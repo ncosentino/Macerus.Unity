@@ -56,6 +56,8 @@
 "Macerus.Plugins.Features.Gui.Default.dll",
 "Macerus.Plugins.Features.HeaderBar.Api.dll",
 "Macerus.Plugins.Features.HeaderBar.Default.dll",
+"Macerus.Plugins.Features.Hud.Default.dll",
+"Macerus.Plugins.Features.Hud.dll",
 "Macerus.Plugins.Features.Interactions.Api.dll",
 "Macerus.Plugins.Features.Interactions.Default.dll",
 "Macerus.Plugins.Features.Inventory.Api.dll",

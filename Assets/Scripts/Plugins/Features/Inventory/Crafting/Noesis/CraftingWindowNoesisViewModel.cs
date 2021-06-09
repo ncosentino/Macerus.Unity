@@ -44,6 +44,8 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             ? Visibility.Visible
             : Visibility.Collapsed;
 
+        public bool IsLeftDocked => _viewModelToWrap.IsLeftDocked;
+
         public ICommand CraftCommand { get; }
 
         private void ViewModelToWrap_PropertyChanged(

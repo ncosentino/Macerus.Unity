@@ -20,13 +20,15 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
         UserControl,
         IPlayerInventoryWindow
     {
+        private readonly IPlayerInventoryWindowNoesisViewModel _viewModel;
+
         public PlayerInventoryWindow(
             IViewWelderFactory viewWelderFactory,
             IPlayerInventoryWindowNoesisViewModel viewModel,
             IInventoryEquipmentView inventoryEquipmentView,
             IInventoryBagView inventoryBagView)
+            : this()
         {
-            InitializeComponent();
             DataContext = viewModel;
 
             viewWelderFactory
@@ -39,7 +41,15 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
                     NoesisLogicalTreeHelper.FindChildWithName(this, "BagPlaceholder"),
                     inventoryBagView)
                 .Weld();
+            _viewModel = viewModel;
         }
+
+        public PlayerInventoryWindow()
+        {
+            InitializeComponent();
+        }
+
+        public bool IsLeftDocked => _viewModel.IsLeftDocked;
 
 #if NOESIS
         private void InitializeComponent()
@@ -55,6 +65,8 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
         IPlayerInventoryWindowNoesisViewModel
     {
         public Visibility Visibility => Visibility.Visible;
+
+        public bool IsLeftDocked { get; } = true;
     }
 #endif
 }

@@ -19,12 +19,14 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Crafting.Noesis.Resources
         UserControl,
         ICraftingWindow
     {
+        private readonly ICraftingWindowNoesisViewModel _viewModel;
+
         public CraftingWindow(
             IViewWelderFactory viewWelderFactory,
             ICraftingWindowNoesisViewModel viewModel,
             ICraftingBagView craftingBagView)
+            : this()
         {
-            InitializeComponent();
             DataContext = viewModel;
 
             viewWelderFactory
@@ -32,7 +34,15 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Crafting.Noesis.Resources
                     NoesisLogicalTreeHelper.FindChildWithName(this, "BagPlaceholder"),
                     craftingBagView)
                 .Weld();
+            _viewModel = viewModel;
         }
+
+        public CraftingWindow()
+        {
+            InitializeComponent();
+        }
+
+        public bool IsLeftDocked => _viewModel.IsLeftDocked;
 
 #if NOESIS
         private void InitializeComponent()
@@ -48,6 +58,8 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Crafting.Noesis.Resources
         ICraftingWindowNoesisViewModel
     {
         public Visibility Visibility => Visibility.Visible;
+
+        public bool IsLeftDocked { get; } = true;
     }
 #endif
 }

@@ -12,5 +12,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Crafting.Noesis
     public interface ICraftingWindowNoesisViewModel : INotifyPropertyChanged
     {
         Visibility Visibility { get; }
+
+        bool IsLeftDocked { get; }
     }
 }

@@ -12,5 +12,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
     public interface IPlayerInventoryWindowNoesisViewModel : INotifyPropertyChanged
     {
         Visibility Visibility { get; }
+
+        bool IsLeftDocked { get; }
     }
 }

@@ -48,6 +48,8 @@ namespace Assets.Scripts.Plugins.Features.CharacterSheet.Noesis
         [NotifyForWrappedProperty(nameof(ICharacterSheetViewModel.Stats))]
         public IEnumerable<Tuple<string, string>> Stats => _translatedStatViewModels;
 
+        public bool IsLeftDocked => _viewModelToWrap.IsLeftDocked;
+
         private void ViewModelToWrap_PropertyChanged(
             object sender,
             PropertyChangedEventArgs e)
