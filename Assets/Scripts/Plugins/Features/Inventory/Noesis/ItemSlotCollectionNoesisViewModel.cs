@@ -29,6 +29,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         private readonly IItemSlotToNoesisViewModelConverter _itemSlotToNoesisViewModelConverter;
         private readonly IItemSlotCollectionViewModel _viewModelToWrap;
         private readonly ConcurrentDictionary<object, IItemSlotNoesisViewModel> _itemSlotViewModels;
+        private readonly List<object> _itemSlotKeyOrdering;
 
         static ItemSlotCollectionNoesisViewModel()
         {
@@ -45,6 +46,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             BackgroundImageSource = backgroundImageSource;
 
             _itemSlotViewModels = new ConcurrentDictionary<object, IItemSlotNoesisViewModel>();
+            _itemSlotKeyOrdering = new List<object>();
 
             StartDragItem = new DelegateCommand(OnCanStartDragItem, OnStartDragItem);
             EndDragItem = new DelegateCommand(OnEndDragItem);
@@ -54,7 +56,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         }
 
         [NotifyForWrappedProperty(nameof(IItemSlotCollectionViewModel.ItemSlots))]
-        public IEnumerable<IItemSlotNoesisViewModel> ItemSlots => _itemSlotViewModels.Values;
+        public IEnumerable<IItemSlotNoesisViewModel> ItemSlots => _itemSlotKeyOrdering.Select(x => _itemSlotViewModels[x]);
 
         public ImageSource BackgroundImageSource { get; }
 
@@ -111,10 +113,13 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             if (e.PropertyName.Equals(nameof(_viewModelToWrap.ItemSlots)))
             {
                 _itemSlotViewModels.Clear();
+                _itemSlotKeyOrdering.Clear();
+
                 foreach (var slot in _viewModelToWrap
                    .ItemSlots
                    .Select(_itemSlotToNoesisViewModelConverter.Convert))
                 {
+                    _itemSlotKeyOrdering.Add(slot.Id);
                     _itemSlotViewModels[slot.Id] = slot;
                 }
             }
