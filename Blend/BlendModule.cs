@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
+
 using Autofac;
 using Macerus.Game.Api;
 using Macerus.Plugins.Features.Animations.Lpc;
@@ -32,6 +35,10 @@ namespace Assets.Blend
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<NoneMapTraversableHighlighter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<SceneManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -45,6 +52,13 @@ namespace Assets.Blend
                     @"graphics\actors\LpcUniversal/"))
                 .AsImplementedInterfaces()
                 .SingleInstance();
+        }
+
+        private sealed class NoneMapTraversableHighlighter : IMapTraversableHighlighter
+        {
+            public void SetTraversableTiles(IEnumerable<Vector2> traversableTiles)
+            {
+            }
         }
 
         private sealed class ConsoleLogger : ILogger
