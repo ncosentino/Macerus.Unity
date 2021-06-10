@@ -61,7 +61,7 @@ namespace Assets.Blend
                     filterContext,
                     new StringIdentifier("test-encounter"));
 
-                var dropTableId = new StringIdentifier("any_normal_magic_10x_lvl10");
+                var dropTableId = new StringIdentifier("any_normal_magic_rare_10x_lvl10");
                 var lootGeneratorAmenity = container.Resolve<ILootGeneratorAmenity>();
                 var generatedItems = lootGeneratorAmenity.GenerateLoot(dropTableId);
 
