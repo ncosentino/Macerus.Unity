@@ -173,9 +173,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 traversableTiles.Select(p => new Vector2Int((int)p.X, (int)p.Y)),
                 true);
 
-        public void SetTargettedTiles(IEnumerable<System.Numerics.Vector2> targettedTiles) =>
+        public void SetTargettedTiles(Dictionary<int, HashSet<System.Numerics.Vector2>> targettedTiles) =>
             SetTargettedTiles(
-                targettedTiles.Select(p => new Vector2Int((int)p.X, (int)p.Y)),
+                targettedTiles,
                 true);
 
         public void ToggleGridLines(bool enabled) =>
@@ -269,7 +269,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         }
 
         private void SetTargettedTiles(
-            IEnumerable<Vector2Int> targettedTiles,
+            Dictionary<int, HashSet<System.Numerics.Vector2>> targettedTiles,
             bool forceRefresh)
         {
             // may not have been loaded yet
@@ -278,19 +278,19 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 return;
             }
 
-            _targettedTiles = new HashSet<Vector2Int>(targettedTiles);
-
-            for (int i = _minimumTileX; i <= _maximumTileX; i++)
+            _targettedTiles = new HashSet<Vector2Int>();
+            foreach (var set in targettedTiles.Keys)
             {
-                for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                var setTiles = targettedTiles[set].Select(x => new Vector2Int((int)x.X, (int)x.Y));
+                foreach (var t in setTiles)
                 {
-                    var traversable = _targettedTiles.Contains(new Vector2Int(i, j));
-                    var unityTile = traversable
-                        ? _tileLoader.LoadTile(
-                            "mapping/tilesets/",
-                            "targetted-tile-highlight")
-                        : null;
-                    var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
+                    _targettedTiles.Add(t);
+
+                    var unityTile = _tileLoader.LoadTile(
+                        "mapping/tilesets/",
+                        $"targetted-tile-highlight-{set}");
+                    var tilePosition = new Vector3Int(t.x, t.y, LAYER_TRAVERSABLE);
+
                     _mapPrefab.WalkIndicatorTilemap.SetTile(
                         tilePosition,
                         unityTile);
