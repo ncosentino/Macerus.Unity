@@ -72,6 +72,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     await StatusBarController.ActivateSkillSlotAsync(entry.Value);
                     break;
                 }
+
+                if (KeyboardInput.GetKeyDown(entry.Key))
+                {
+                    await StatusBarController.PreviewSkillSlotAsync(entry.Value);
+                    break;
+                }
             }
         }
     }

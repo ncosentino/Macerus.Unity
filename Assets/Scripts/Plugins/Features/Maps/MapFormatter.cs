@@ -38,6 +38,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly ILogger _logger;
 
         private HashSet<Vector2Int> _traversableTiles;
+        private HashSet<Vector2Int> _targettedTiles;
         private bool _gridLinesEnabled;
         private IMapPrefab _mapPrefab;
         private int _maximumTileX;
@@ -134,7 +135,8 @@ namespace Assets.Scripts.Plugins.Features.Maps
             // tiles by formatting the tile map
             ToggleGridLines(_gridLinesEnabled, false);
             SetTraversableTiles(_traversableTiles ?? Enumerable.Empty<Vector2Int>(), false);
-            
+            SetTraversableTiles(_targettedTiles ?? Enumerable.Empty<Vector2Int>(), false);
+
             mapPrefab.Tilemap.RefreshAllTiles();
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
         }
@@ -169,6 +171,11 @@ namespace Assets.Scripts.Plugins.Features.Maps
         public void SetTraversableTiles(IEnumerable<System.Numerics.Vector2> traversableTiles) =>
             SetTraversableTiles(
                 traversableTiles.Select(p => new Vector2Int((int)p.X, (int)p.Y)),
+                true);
+
+        public void SetTargettedTiles(IEnumerable<System.Numerics.Vector2> targettedTiles) =>
+            SetTargettedTiles(
+                targettedTiles.Select(p => new Vector2Int((int)p.X, (int)p.Y)),
                 true);
 
         public void ToggleGridLines(bool enabled) =>
@@ -247,6 +254,41 @@ namespace Assets.Scripts.Plugins.Features.Maps
                         ? _tileLoader.LoadTile(
                             "mapping/tilesets/",
                             "traversable-tile-highlight")
+                        : null;
+                    var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
+                    _mapPrefab.WalkIndicatorTilemap.SetTile(
+                        tilePosition,
+                        unityTile);
+                }
+            }
+
+            if (forceRefresh)
+            {
+                _mapPrefab.Tilemap.RefreshAllTiles();
+            }
+        }
+
+        private void SetTargettedTiles(
+            IEnumerable<Vector2Int> targettedTiles,
+            bool forceRefresh)
+        {
+            // may not have been loaded yet
+            if (_mapPrefab == null || _mapPrefab.Tilemap == null)
+            {
+                return;
+            }
+
+            _targettedTiles = new HashSet<Vector2Int>(targettedTiles);
+
+            for (int i = _minimumTileX; i <= _maximumTileX; i++)
+            {
+                for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                {
+                    var traversable = _targettedTiles.Contains(new Vector2Int(i, j));
+                    var unityTile = traversable
+                        ? _tileLoader.LoadTile(
+                            "mapping/tilesets/",
+                            "targetted-tile-highlight")
                         : null;
                     var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
                     _mapPrefab.WalkIndicatorTilemap.SetTile(

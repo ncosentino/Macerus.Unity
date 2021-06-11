@@ -56,6 +56,10 @@ namespace Assets.Blend
 
         private sealed class NoneMapTraversableHighlighter : IMapTraversableHighlighter
         {
+            public void SetTargettedTiles(IEnumerable<Vector2> traversableTiles)
+            {
+            }
+
             public void SetTraversableTiles(IEnumerable<Vector2> traversableTiles)
             {
             }
