@@ -5,6 +5,8 @@ using Noesis;
 using System.Windows.Media;
 #endif
 
+using System.Windows.Input;
+
 namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
     public interface IItemSlotNoesisViewModel
@@ -26,5 +28,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         bool IsDropAllowed { get; set; }
 
         bool IsFocused { get; set; }
+
+        ICommand PopulateHoverCardCommand { get; }
     }
 }

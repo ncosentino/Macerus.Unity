@@ -26,60 +26,7 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.TitleBarText}"/>
         <Setter Property="Margin" Value="0,2"/>
     </Style>
-    
-    <!--Item ToolTip-->
-    <ControlTemplate x:Key="Template.ItemToolTip" TargetType="{x:Type ContentControl}">
-        <Grid x:Name="Root" Width="{Binding ActualWidth, ElementName=ToolTipRef}">
-            <Grid>
-                <Border
-                    x:Name="ItemInfo"
-                    CornerRadius="2"
-                    BorderThickness="1"
-                    Background="#E532280F">
-                    <Border.BorderBrush>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#66554222" Offset="0"/>
-                            <GradientStop Color="#FF554222" Offset="0.6"/>
-                            <GradientStop Color="#26554222" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Border.BorderBrush>
-                    <StackPanel
-                        x:Name="Icon" 
-                        RenderTransformOrigin="0.5,0.5"
-                        VerticalAlignment="Bottom">
-                        <!--FIXME: this icon layout is used MULTIPLE times... refactor but double check the bindings (i.e. background on this one)-->
-                        <Grid Width="60" Height="60" Background="{Binding BackgroundBrush}">
-                            <Rectangle Opacity="{Binding IconOpacity}">
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <Rectangle>
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="{Binding IconColor}"/>
-                                </Rectangle.Fill>
-                                <Rectangle.OpacityMask>
-                                    <ImageBrush ImageSource="{Binding IconImageSource}" Stretch="Fill"/>
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Grid>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="Root">
-                <!--<BeginStoryboard Storyboard="{StaticResource Anim.Show}"/>-->
-            </EventTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <Style x:Key="Style.ItemToolTip" TargetType="{x:Type ContentControl}">
-        <Setter Property="Focusable" Value="False"/>
-        <Setter Property="IsHitTestVisible" Value="False"/>
-        <Setter Property="FontSize" Value="10"/>
-        <Setter Property="Template" Value="{StaticResource Template.ItemToolTip}"/>
-    </Style>
-    
+
     <!--Equip Slot-->
     <ControlTemplate
         x:Key="Template.EquipSlot"
@@ -292,15 +239,32 @@
                 PlacementTarget="{Binding ElementName=Root}"
                 VerticalOffset="{Binding ActualHeight, ElementName=SlotCornerRef}"
                 DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}">
-                <ContentControl x:Name="ToolTipContent" Grid.ColumnSpan="2" Style="{StaticResource Style.ItemToolTip}"/>
+                <ContentControl
+                    x:Name="ToolTipContent" 
+                    Grid.ColumnSpan="2"/>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Opened">
+                        <i:InvokeCommandAction
+                            Command="{Binding PopulateHoverCardCommand}"
+                            CommandParameter="{Binding Source={x:Reference Name=ToolTipContent}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Popup>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="DataContext" Value="{x:Null}" SourceName="ToolTipContent">
                 <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTipContent"/>
             </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=IsMouseOver, ElementName=Root}" Value="True"/>
+                    <Condition Binding="{Binding Path=HasItem}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="IsOpen" Value="True" TargetName="ToolTip"/>
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
             <DataTrigger Binding="{Binding HasItem}" Value="True">
-                <Setter Property="IsOpen" Value="True" TargetName="ToolTip"/>
                 <DataTrigger.EnterActions>
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOn}"/>
                 </DataTrigger.EnterActions>
@@ -308,9 +272,6 @@
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOff}"/>
                 </DataTrigger.ExitActions>
             </DataTrigger>
-            <Trigger Property="IsMouseOver" Value="False">
-                <Setter Property="IsOpen" Value="False" TargetName="ToolTip"/>
-            </Trigger>
             <DataTrigger Binding="{Binding IsDropAllowed}" Value="False">
                 <Setter Property="IsEnabled" Value="False"/>
                 <DataTrigger.EnterActions>
@@ -541,8 +502,15 @@
                             PlacementTarget="{Binding ElementName=Root}"
                             DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Mode=Self}}">
                             <ContentControl
-                                x:Name="ToolTipContent"
-                                Style="{StaticResource Style.ItemToolTip}"/>
+                                x:Name="ToolTipContent">
+                            </ContentControl>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <i:InvokeCommandAction
+                                            Command="{Binding PopulateHoverCardCommand}"
+                                            CommandParameter="{Binding Source={x:Reference Name=ToolTipContent}}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </Popup>
                     </Border>
                     <Border x:Name="InvalidDropBorder" Grid.RowSpan="3" Grid.ColumnSpan="3" CornerRadius="4" noesis:Element.PPAAIn="1" noesis:Element.PPAAOut="1">
@@ -577,6 +545,15 @@
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=IsMouseOver, ElementName=Root}" Value="True"/>
+                    <Condition Binding="{Binding Path=HasItem}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="IsOpen" Value="True" TargetName="ToolTip"/>
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
             <Trigger Property="DataContext" Value="{x:Null}" SourceName="ToolTipContent">
                 <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTipContent"/>
             </Trigger>
@@ -588,9 +565,6 @@
                 <Trigger.ExitActions>
                     <BeginStoryboard Storyboard="{StaticResource Anim.OverOff}"/>
                 </Trigger.ExitActions>
-            </Trigger>
-            <Trigger Property="IsMouseOver" Value="False">
-                <Setter Property="IsOpen" Value="False" TargetName="ToolTip"/>
             </Trigger>
             <DataTrigger Binding="{Binding IsDropAllowed}" Value="False">
                 <Setter Property="IsEnabled" Value="False"/>

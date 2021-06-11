@@ -1,8 +1,14 @@
-﻿using Assets.Scripts.Plugins.Features.Inventory.Noesis;
+﻿using System.Linq;
+
+using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources;
 
 using Autofac;
 using Macerus.Plugins.Features.Inventory.Api;
+using Macerus.Plugins.Features.Inventory.Api.HoverCards;
+
+using ProjectXyz.Framework.ViewWelding.Api;
+using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.Autofac
 {

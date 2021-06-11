@@ -10,7 +10,9 @@ using Color = System.Windows.Media.Color;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Windows.Input;
 
+using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
 using Macerus.Plugins.Features.Gui.Default;
@@ -51,6 +53,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
             IconOpacity = iconOpacity;
 
             ViewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
+            PopulateHoverCardCommand = new DelegateCommand(obj => ViewModelToWrap.PopulateHoverCard(obj));
         }
 
         public object Id => ViewModelToWrap.Id;
@@ -97,6 +100,8 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         public int GridColumn { get; }
 
         public int GridColumnSpan { get; }
+
+        public ICommand PopulateHoverCardCommand { get; }
 
         internal IItemSlotViewModel ViewModelToWrap { get; }
 

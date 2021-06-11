@@ -47,6 +47,7 @@
 "Macerus.Plugins.Features.GameObjects.Items.Generation.Default.dll",
 "Macerus.Plugins.Features.GameObjects.Items.Generation.Magic.dll",
 "Macerus.Plugins.Features.GameObjects.Items.Generation.Normal.dll",
+"Macerus.Plugins.Features.GameObjects.Items.Generation.Rare.dll",
 "Macerus.Plugins.Features.GameObjects.Items.Generation.Unique.dll",
 "Macerus.Plugins.Features.GameObjects.Items.Socketing.dll",
 "Macerus.Plugins.Features.GameObjects.Skills.Api.dll",

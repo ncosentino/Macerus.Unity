@@ -32,6 +32,9 @@ namespace Assets.Scripts.Gui.Noesis.ViewWelding.Autofac
                         (p, c, t) => p is Grid && c is UIElement && t.IsAssignableFrom(typeof(ISimpleWelder)),
                         (p, c) => new GridControlWelder((Grid)p, (UIElement)c));
                     welderRegistrar.Register(
+                        (p, c, t) => p is StackPanel && c is UIElement && t.IsAssignableFrom(typeof(ISimpleWelder)),
+                        (p, c) => new StackPanelWelder((StackPanel)p, (UIElement)c));
+                    welderRegistrar.Register(
                         (p, c, t) => p is ContentControl && c is object && t.IsAssignableFrom(typeof(ISimpleWelder)),
                         (p, c) => new ContentControlWelder((ContentControl)p, c));
                     welderRegistrar.Register(
