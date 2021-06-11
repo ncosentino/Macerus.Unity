@@ -33,6 +33,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
 
         private Tuple<double, double> _translatedLeftResource;
         private Tuple<double, double> _translatedRightResource;
+        private List<string> _abilitiesKeys;
         private ConcurrentDictionary<string, Tuple<double, string, ImageSource>> _translatedAbilities;
 
         static StatusBarNoesisViewModel()
@@ -47,6 +48,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         {
             _translatedLeftResource = null;
             _translatedRightResource = null;
+            _abilitiesKeys = new List<string>();
             _translatedAbilities = new ConcurrentDictionary<string, Tuple<double, string, ImageSource>>();
 
             _uiDispatcher = uiDispatcher;
@@ -59,7 +61,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         // TODO: This has to happen here because the ImageSources need to be made on the UI thread
         // Find a better way to do this!
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.Abilities))]
-        public IEnumerable<Tuple<double, string, ImageSource>> Abilities => _translatedAbilities.Values;
+        public IEnumerable<Tuple<double, string, ImageSource>> Abilities => _abilitiesKeys.Select(x => _translatedAbilities[x]);
 
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.LeftResource))]
         public Tuple<double, double> LeftResource => _translatedLeftResource;
@@ -88,13 +90,15 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
             if (e.PropertyName.Equals(nameof(_viewModelToWrap.Abilities)))
             {
                 _uiDispatcher.ExecuteAsync(() => 
-                { 
+                {
+                    _abilitiesKeys.Clear();
                     _translatedAbilities.Clear();
 
                     foreach (var translated in _viewModelToWrap
                        .Abilities
                        .Select(_abilityToNoesisViewModelConverter.Convert))
                     {
+                        _abilitiesKeys.Add(translated.Item2);
                         _translatedAbilities[translated.Item2] = translated;
                     }
 

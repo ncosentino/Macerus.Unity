@@ -82,12 +82,6 @@ namespace Assets.Blend
                     .First(x => x.Has<IPlayerControlledBehavior>())
                     .GetOnly<IHasSkillsBehavior>();
 
-                skillsBehavior.Add(new[]
-                {
-                    skillAmenity.GetSkillById(new StringIdentifier("heal")),
-                    skillAmenity.GetSkillById(new StringIdentifier("fireball")),
-                });
-
                 var inventoryController = container.Resolve<IPlayerInventoryController>();
                 inventoryController.OpenInventory();
 
