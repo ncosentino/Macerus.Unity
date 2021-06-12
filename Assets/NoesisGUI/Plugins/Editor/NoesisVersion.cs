@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 public class NoesisVersion
 {
-    private static string Version = "3.0.11";
+    private static string Version = "3.0.12";
     private static string VersionFilename = Application.dataPath + "/NoesisGUI/Plugins/Editor/version.txt";
 
     public static string GetCached()

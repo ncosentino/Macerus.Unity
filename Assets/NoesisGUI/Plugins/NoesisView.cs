@@ -423,6 +423,11 @@ public class NoesisView: MonoBehaviour, ISerializationCallbackReceiver
     /// </summary>
     public void LoadXaml(bool force)
     {
+        if (_commands == null)
+        {
+            throw new System.Exception("Can't load xaml, NoesisView component is not enabled");
+        }
+
         if (force)
         {
             DestroyView();

@@ -149,27 +149,40 @@ public class NoesisViewEditor : Editor
         return Application.isPlaying;
     }
 
-    private GUIStyle _previewStyle;
+    private GUIStyle _previewHeaderStyle;
+    private GUIStyle _previewTextStyle;
 
     public override void OnPreviewGUI(Rect rect_, GUIStyle background)
     {
         NoesisView view = target as NoesisView;
         Noesis.ViewStats stats = view.GetStats();
 
-        if (_previewStyle == null)
+        if (_previewHeaderStyle == null)
         {
-            _previewStyle = new GUIStyle("PreOverlayLabel")
+#if UNITY_2020_1_OR_NEWER
+            _previewHeaderStyle = new GUIStyle(EditorStyles.largeLabel)
+#else
+            _previewHeaderStyle = new GUIStyle(EditorStyles.whiteLargeLabel)
+#endif
+            {
+                alignment = TextAnchor.UpperLeft,
+                fontStyle = FontStyle.Bold
+            };
+        }
+        if (_previewTextStyle == null)
+        {
+#if UNITY_2020_1_OR_NEWER
+            _previewTextStyle = new GUIStyle(EditorStyles.label)
+#else
+            _previewTextStyle = new GUIStyle(EditorStyles.whiteLabel)
+#endif
             {
                 richText = true,
                 fontStyle = FontStyle.Normal
             };
         }
 
-        StringBuilder header = new StringBuilder();
-        header.AppendLine("<color=orange>" + view.Xaml.source + "</color>");
-
-        _previewStyle.alignment = TextAnchor.UpperLeft;
-        GUI.Label(new Rect(rect_.x + 5, rect_.y + 5, rect_.width, rect_.height), header.ToString(), _previewStyle);
+        GUI.Label(new Rect(rect_.x + 5, rect_.y + 5, rect_.width, rect_.height), view.Xaml.source, _previewHeaderStyle);
 
         StringBuilder left = new StringBuilder();
         left.AppendLine("\n\nFrame Time (ms)");
@@ -191,15 +204,15 @@ public class NoesisViewEditor : Editor
         left.AppendLine("Rasterized Glyphs");
         left.AppendLine("Discarded Glyph Tiles");
 
-        _previewStyle.alignment = TextAnchor.UpperLeft;
-        GUI.Label(new Rect(rect_.x + 15, rect_.y + 5, 220, 500), left.ToString(), _previewStyle);
+        _previewTextStyle.alignment = TextAnchor.UpperLeft;
+        GUI.Label(new Rect(rect_.x + 15, rect_.y + 5, 220, 500), left.ToString(), _previewTextStyle);
 
         var format = new System.Globalization.NumberFormatInfo { NumberDecimalSeparator = "." };
 
         StringBuilder right = new StringBuilder();
         right.AppendLine("\n\n<b>" + stats.FrameTime.ToString("#,##0.00", format) + "</b>");
         right.AppendLine("<b>" + stats.UpdateTime.ToString("#,##0.00", format) + "</b>");
-        right.AppendLine("<b>" +stats.RenderTime.ToString("#,##0.00", format) + "</b>");
+        right.AppendLine("<b>" + stats.RenderTime.ToString("#,##0.00", format) + "</b>");
         right.AppendLine();
         right.AppendLine("<b>" + stats.Triangles + "</b>");
         right.AppendLine("<b>" + stats.Draws + "</b>");
@@ -216,7 +229,7 @@ public class NoesisViewEditor : Editor
         right.AppendLine("<b>" + stats.RasterizedGlyphs + "</b>");
         right.AppendLine("<b>" + stats.DiscardedGlyphTiles + "</b>");
 
-        _previewStyle.alignment = TextAnchor.UpperRight;
-        GUI.Label(new Rect(rect_.x + 15, rect_.y + 5, 220, 500), right.ToString(), _previewStyle);
+        _previewTextStyle.alignment = TextAnchor.UpperRight;
+        GUI.Label(new Rect(rect_.x + 15, rect_.y + 5, 220, 500), right.ToString(), _previewTextStyle);
     }
 }
