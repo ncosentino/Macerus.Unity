@@ -56,7 +56,10 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
         }
 
         [NotifyForWrappedProperty(nameof(IItemSlotCollectionViewModel.ItemSlots))]
-        public IEnumerable<IItemSlotNoesisViewModel> ItemSlots => _itemSlotKeyOrdering.Select(x => _itemSlotViewModels[x]);
+        public IReadOnlyCollection<IItemSlotNoesisViewModel> ItemSlots => 
+            _itemSlotKeyOrdering
+                .Select(x => _itemSlotViewModels[x])
+                .ToArray(); // NOTE: we must realize the enumerable before returning to satisfy Noesis
 
         public ImageSource BackgroundImageSource { get; }
 

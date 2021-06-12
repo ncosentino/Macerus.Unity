@@ -61,7 +61,10 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         // TODO: This has to happen here because the ImageSources need to be made on the UI thread
         // Find a better way to do this!
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.Abilities))]
-        public IEnumerable<Tuple<double, string, ImageSource>> Abilities => _abilitiesKeys.Select(x => _translatedAbilities[x]);
+        public IReadOnlyCollection<Tuple<double, string, ImageSource>> Abilities =>
+            _abilitiesKeys
+                .Select(x => _translatedAbilities[x])
+                .ToArray(); // NOTE: we must realize the enumerable before returning to satisfy Noesis
 
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.LeftResource))]
         public Tuple<double, double> LeftResource => _translatedLeftResource;

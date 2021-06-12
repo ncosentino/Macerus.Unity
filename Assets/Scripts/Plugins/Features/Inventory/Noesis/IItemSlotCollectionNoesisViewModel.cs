@@ -12,7 +12,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis
 {
     public interface IItemSlotCollectionNoesisViewModel
     {
-        IEnumerable<IItemSlotNoesisViewModel> ItemSlots { get; }
+        IReadOnlyCollection<IItemSlotNoesisViewModel> ItemSlots { get; }
 
         ImageSource BackgroundImageSource { get; }
 

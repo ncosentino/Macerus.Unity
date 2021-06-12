@@ -15,5 +15,7 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         Tuple<double, double> LeftResource { get; }
 
         Tuple<double, double> RightResource { get; }
+
+        IReadOnlyCollection<Tuple<double, string, ImageSource>> Abilities { get; }
     }
 }
