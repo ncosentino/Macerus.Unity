@@ -246,7 +246,7 @@
                     <i:EventTrigger EventName="Opened">
                         <i:InvokeCommandAction
                             Command="{Binding PopulateHoverCardCommand}"
-                            CommandParameter="{Binding Source={x:Reference Name=ToolTipContent}}"/>
+                            CommandParameter="{Binding Path=., ElementName=ToolTipContent}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Popup>
@@ -507,8 +507,8 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Opened">
                                     <i:InvokeCommandAction
-                                            Command="{Binding PopulateHoverCardCommand}"
-                                            CommandParameter="{Binding Source={x:Reference Name=ToolTipContent}}"/>
+                                        Command="{Binding PopulateHoverCardCommand}"
+                                        CommandParameter="{Binding Path=., ElementName=ToolTipContent}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Popup>
