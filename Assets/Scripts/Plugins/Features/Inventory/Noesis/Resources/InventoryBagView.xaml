@@ -77,8 +77,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Decorator Grid.Row="0" Grid.Column="0" Width="{Binding ActualWidth, ElementName=MarginRef}" Height="{Binding ActualHeight, ElementName=MarginRef}"/>
-            <Decorator Grid.Row="2" Grid.Column="2" Width="{Binding ActualWidth, ElementName=MarginRef}" Height="{Binding ActualHeight, ElementName=MarginRef}"/>
+            <!--<Decorator Grid.Row="0" Grid.Column="0" Width="{Binding ActualWidth, ElementName=MarginRef}" Height="{Binding ActualHeight, ElementName=MarginRef}"/>
+            <Decorator Grid.Row="2" Grid.Column="2" Width="{Binding ActualWidth, ElementName=MarginRef}" Height="{Binding ActualHeight, ElementName=MarginRef}"/>-->
             <ScrollViewer
                 Grid.Row="1"
                 Grid.Column="1"
