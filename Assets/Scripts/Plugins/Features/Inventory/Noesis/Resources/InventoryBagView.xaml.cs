@@ -35,7 +35,7 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
 #if !NOESIS
     internal sealed class TestBagItemSlotCollectionNoesisViewModel : IItemSlotCollectionNoesisViewModel
     {
-        public IEnumerable<IItemSlotNoesisViewModel> ItemSlots => new IItemSlotNoesisViewModel[0];
+        public IReadOnlyCollection<IItemSlotNoesisViewModel> ItemSlots => new IItemSlotNoesisViewModel[0];
 
         public ImageSource BackgroundImageSource => null;
 
