@@ -7,9 +7,10 @@ using System.Windows.Controls;
 
 using System.Collections.Generic;
 
+using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Plugins.Features.HeaderBar.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Noesis;
-using Assets.Scripts.Gui.Noesis;
+using Assets.Scripts.Plugins.Features.InGameMenu;
 
 using Macerus.Plugins.Features.StatusBar.Api;
 using Macerus.Plugins.Features.Hud;
@@ -29,6 +30,7 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IEmptyDropZoneNoesisViewModel emptyDropZoneNoesisViewModel,
             IStatusBarView statusBarView,
             IHeaderBarView headerBarView,
+            IInGameMenuView inGameMenuView,
             IEnumerable<IHudWindow> hudWindows)
         {
             InitializeComponent();
@@ -67,7 +69,12 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "HeaderBarContent"),
                     headerBarView)
-                .Weld(); 
+                .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "InGameMenuContent"),
+                    inGameMenuView)
+                .Weld();
         }
 
 #if NOESIS

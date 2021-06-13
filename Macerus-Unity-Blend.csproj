@@ -146,6 +146,13 @@
       <DependentUpon>AnimatedNumber.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\ItemSlotCollectionNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\InGameMenu\Autofac\InGameMenuModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\InGameMenu\IInGameMenuView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\InGameMenu\Noesis\IInGameMenuNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\InGameMenu\Noesis\InGameMenuNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\InGameMenu\Noesis\Resources\InGameMenuView.xaml.cs">
+      <DependentUpon>InGameMenuView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\DropItemBehavior.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\GreaterThanZeroConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\InventoryEquipmentView.xaml.cs">
@@ -256,6 +263,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\AnimatedNumber.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\InGameMenu\Noesis\Resources\InGameMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

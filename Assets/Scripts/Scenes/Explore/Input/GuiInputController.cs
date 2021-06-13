@@ -1,13 +1,11 @@
 ﻿using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 
-using Macerus.Game.Api;
 using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Hud;
+using Macerus.Plugins.Features.InGameMenu.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
-
-using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Scenes.Explore.Input
 {
@@ -20,26 +18,29 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly ICraftingController _craftingController;
         private readonly IHudViewModel _hudViewModel;
         private readonly IHudController _hudController;
-        private readonly ISceneManager _sceneManager;
+        private readonly IInGameMenuViewModel _inGameMenuViewModel;
+        private readonly IInGameMenuController _inGameMenuController;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
             IKeyboardControls keyboardControls,
-            ISceneManager sceneManager,
             IPlayerInventoryController playerInventoryController,
             ICharacterSheetController characterSheetController,
             ICraftingController craftingController,
             IHudViewModel hudViewModel,
-            IHudController hudController)
+            IHudController hudController,
+            IInGameMenuViewModel inGameMenuViewModel,
+            IInGameMenuController inGameMenuController)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
-            _sceneManager = sceneManager;
             _playerInventoryController = playerInventoryController;
             _characterSheetController = characterSheetController;
             _craftingController = craftingController;
             _hudViewModel = hudViewModel;
             _hudController = hudController;
+            _inGameMenuViewModel = inGameMenuViewModel;
+            _inGameMenuController = inGameMenuController;
         }
 
         public void Update(float deltaTime)
@@ -55,9 +56,13 @@ namespace Assets.Scripts.Scenes.Explore.Input
                 {
                     _hudController.CloseAllWindows();
                 }
+                else if (_inGameMenuViewModel.IsOpen)
+                {
+                    _inGameMenuController.CloseMenu();
+                }
                 else
                 {
-                    _sceneManager.GoToScene(new StringIdentifier("MainMenu"));
+                    _inGameMenuController.OpenMenu();
                 }
             }
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleInventory))
