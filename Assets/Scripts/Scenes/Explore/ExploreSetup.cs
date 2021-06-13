@@ -7,6 +7,7 @@ using Assets.Scripts.Gui.Noesis.Views.Resources;
 using Assets.Scripts.Gui.Unity;
 using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Console;
+using Assets.Scripts.Plugins.Features.GameEngine;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Plugins.Features.NewHud.Noesis;
 using Assets.Scripts.Scenes.Explore.Api;

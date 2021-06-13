@@ -1,7 +1,9 @@
-﻿using ProjectXyz.Game.Interface.Engine;
+﻿
+using ProjectXyz.Game.Interface.Engine;
+
 using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore
+namespace Assets.Scripts.Plugins.Features.GameEngine
 {
     public sealed class GameEngineUpdateBehaviourStitcher : IGameEngineUpdateBehaviourStitcher
     {
@@ -12,11 +14,10 @@ namespace Assets.Scripts.Scenes.Explore
             _gameEngine = gameEngine;
         }
 
-        public IReadOnlyGameEngineUpdateBehaviour Attach(GameObject gameObject)
+        public void Attach(GameObject gameObject)
         {
             var gameEngineUpdateBehaviour = gameObject.AddComponent<GameEngineUpdateBehaviour>();
             gameEngineUpdateBehaviour.GameEngine = _gameEngine;
-            return gameEngineUpdateBehaviour;
         }
     }
 }

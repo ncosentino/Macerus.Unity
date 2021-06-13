@@ -7,16 +7,34 @@ using Noesis;
 using System.Windows.Controls;
 #endif
 
+using Assets.Scripts.Gui.Noesis;
+using Assets.Scripts.Plugins.Features.SceneTransitions;
+
+using ProjectXyz.Framework.ViewWelding.Api;
+using ProjectXyz.Framework.ViewWelding.Api.Welders;
+
 namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources
 {
     public partial class MainMenuView :
         UserControl,
         IMainMenuView
     {
-        public MainMenuView(IMainMenuNoesisViewModel viewModel)
+        public MainMenuView(
+            IViewWelderFactory viewWelderFactory,
+            ISceneTransitionView sceneTransitionView,
+            ITitleScreenView titleScreenView)
             : this()
         {
-            DataContext = viewModel;
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "MainContent"),
+                    titleScreenView)
+                .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "TransitionViewContent"),
+                    sceneTransitionView)
+                .Weld();
         }
 
         public MainMenuView()

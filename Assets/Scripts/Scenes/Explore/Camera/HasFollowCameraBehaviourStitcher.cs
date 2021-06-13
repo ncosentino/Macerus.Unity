@@ -1,7 +1,5 @@
 using Assets.Scripts.Unity.GameObjects;
 
-using NexusLabs.Contracts;
-
 using UnityEngine;
 
 namespace Assets.Scripts.Scenes.Explore.Camera
@@ -21,10 +19,6 @@ namespace Assets.Scripts.Scenes.Explore.Camera
 
         public void Attach(GameObject gameObject)
         {
-            Contract.Requires(
-                gameObject.HasRequiredComponent<IGameEngineUpdateBehaviour>(),
-                $"'{gameObject}' must have component '{typeof(IGameEngineUpdateBehaviour)}'.");
-
             var hasFollowCameraBehaviour = gameObject.AddComponent<HasFollowCameraBehaviour>();
             hasFollowCameraBehaviour.CameraFactory = _cameraFactory;
             hasFollowCameraBehaviour.ObjectDestroyer = _objectDestroyer;

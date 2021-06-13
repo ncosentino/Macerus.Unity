@@ -11,27 +11,27 @@ using Assets.Scripts.Gui.Noesis;
 
 using Macerus.Plugins.Features.MainMenu.Api;
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis
+namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.TitleScreen.Noesis
 {
-    public sealed class MainMenuNoesisViewModel : IMainMenuNoesisViewModel
+    public sealed class TitleScreenNoesisViewModel : IMainMenuNoesisViewModel
     {
         private readonly IMainMenuViewModel _viewModelToWrap;
 
-        public MainMenuNoesisViewModel(
+        public TitleScreenNoesisViewModel(
             IMainMenuViewModel viewModelToWrap,
             IResourceImageSourceFactory resourceImageSourceFactory)
         {
             _viewModelToWrap = viewModelToWrap;
 
             BackgroundImage = resourceImageSourceFactory.CreateForResourceId(viewModelToWrap.BackgroundImageResourceId);
-            CloseCommand = new DelegateCommand(_ => _viewModelToWrap.Close());
+            OptionsCommand = new DelegateCommand(_ => _viewModelToWrap.NavigateOptions());
             ExitCommand = new DelegateCommand(_ => _viewModelToWrap.ExitGame());
             NewGameCommand = new DelegateCommand(_ => _viewModelToWrap.StartNewGame());
         }
 
         public ImageSource BackgroundImage { get; }
 
-        public ICommand CloseCommand { get; }
+        public ICommand OptionsCommand { get; }
 
         public ICommand ExitCommand { get; }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using Assets.Scripts.Autofac;
@@ -13,6 +14,7 @@ using Macerus.Plugins.Features.GameObjects.Actors.Api;
 using Macerus.Plugins.Features.GameObjects.Actors.Generation;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
+using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
 using Macerus.Plugins.Features.MainMenu.Api;
@@ -42,7 +44,12 @@ namespace Assets.Blend
             if (showMainMenu)
             {
                 Content = container.Resolve<IMainMenuView>();
-                container.Resolve<IMainMenuController>().OpenMenu();
+                var mainMenuController = container.Resolve<IMainMenuController>();
+                container.Resolve<ISceneTransitionController>().StartTransition(
+                    TimeSpan.Zero,
+                    TimeSpan.FromSeconds(3),
+                    () => mainMenuController.OpenMenu(),
+                    () => { });
             }
             else
             {

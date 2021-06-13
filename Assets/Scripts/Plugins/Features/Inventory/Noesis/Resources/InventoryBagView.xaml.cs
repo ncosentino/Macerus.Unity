@@ -19,9 +19,14 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
         IInventoryBagView
     {
         public InventoryBagView(IItemSlotCollectionNoesisViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
+        }
+
+        public InventoryBagView()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
 
 #if NOESIS

@@ -178,6 +178,11 @@
       <DependentUpon>HeaderBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\HeaderBarNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Autofac\SceneTransitionsModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\ISceneTransitionView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\Resources\FaderSceneTransitionView.xaml.cs">
+      <DependentUpon>FaderSceneTransitionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Autofac\StatusBarModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\AbilityToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\IAbilityToNoesisViewModelConverter.cs" />
@@ -188,10 +193,15 @@
     </Compile>
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Autofac\MainMenuModule.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\IMainMenuView.cs" />
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\IMainMenuNoesisViewModel.cs" />
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\MainMenuNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Autofac\TitleScreenModule.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\ITitleScreenView.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\Resources\MainMenuView.xaml.cs">
       <DependentUpon>MainMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\ITitleScreenNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\TitleScreenNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\Resources\TitleScreenView.xaml.cs">
+      <DependentUpon>TitleScreenView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Blend\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -278,12 +288,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\Resources\FaderSceneTransitionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\Resources\StatusBarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\Resources\MainMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\Resources\TitleScreenView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Blend\MainWindow.xaml">
       <SubType>Designer</SubType>

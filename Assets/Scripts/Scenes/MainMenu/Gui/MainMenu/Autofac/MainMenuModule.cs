@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis;
-using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources;
+﻿using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources;
 
 using Autofac;
 
@@ -11,10 +10,6 @@ namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Autofac
         {
             builder
                 .RegisterType<MainMenuView>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<MainMenuNoesisViewModel>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

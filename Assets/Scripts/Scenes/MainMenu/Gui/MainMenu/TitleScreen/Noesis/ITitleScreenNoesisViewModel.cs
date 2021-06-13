@@ -7,13 +7,13 @@ using System.Windows.Media;
 
 using System.Windows.Input;
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis
+namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.TitleScreen.Noesis
 {
     public interface IMainMenuNoesisViewModel
     {
         ImageSource BackgroundImage { get; }
 
-        ICommand CloseCommand { get; }
+        ICommand OptionsCommand { get; }
 
         ICommand ExitCommand { get; }
 

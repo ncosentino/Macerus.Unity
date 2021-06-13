@@ -19,9 +19,14 @@ namespace Assets.Scripts.Plugins.Features.Inventory.Noesis.Resources
         IInventoryEquipmentView
     {
         public InventoryEquipmentView(IItemSlotCollectionNoesisViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
+        }
+
+        public InventoryEquipmentView()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
 
 #if NOESIS

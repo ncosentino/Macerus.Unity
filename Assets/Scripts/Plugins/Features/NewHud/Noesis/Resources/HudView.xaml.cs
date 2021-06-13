@@ -32,8 +32,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IHeaderBarView headerBarView,
             IInGameMenuView inGameMenuView,
             IEnumerable<IHudWindow> hudWindows)
+            : this()
         {
-            InitializeComponent();
             DataContext = viewModel;
 
             NoesisLogicalTreeHelper
@@ -75,6 +75,11 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                     NoesisLogicalTreeHelper.FindChildWithName(this, "InGameMenuContent"),
                     inGameMenuView)
                 .Weld();
+        }
+
+        public HudView()
+        {
+            InitializeComponent();
         }
 
 #if NOESIS
