@@ -1,10 +1,7 @@
 ﻿using System;
 
-using Assets.Scripts.Scenes.Api;
-
+using Macerus.Game.Api.Scenes;
 using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
-
-using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Scenes.MainMenu
 {
@@ -12,32 +9,30 @@ namespace Assets.Scripts.Scenes.MainMenu
     {
         private readonly Lazy<IMainMenuSetup> _lazyMainMenuSetup;
         private readonly Lazy<ISceneTransitionController> _sceneTransitionController;
+        private readonly Lazy<ISceneManager> _lazySceneManager;
 
         private bool _lastSceneWasMainMenu;
 
         public MainMenuLoadHook(
             Lazy<IMainMenuSetup> mainMenuSetup,
-            Lazy<ISceneTransitionController> sceneTransitionController)
+            Lazy<ISceneTransitionController> sceneTransitionController,
+            Lazy<ISceneManager> lazySceneManager)
         {
             _lazyMainMenuSetup = mainMenuSetup;
             _sceneTransitionController = sceneTransitionController;
-
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-        }
-
-        public void SwitchScene()
-        {
-            TrySwitchScene(SceneManager.GetActiveScene());
+            _lazySceneManager = lazySceneManager;
+            
+            lazySceneManager.Value.SceneChanged += SceneManager_SceneChanged;
         }
 
         public void Dispose()
         {
-            SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+            _lazySceneManager.Value.SceneChanged -= SceneManager_SceneChanged;
         }
 
-        private void TrySwitchScene(Scene scene)
+        private void TrySwitchScene(string sceneName)
         {
-            if (!scene.name.Equals("MainMenu", StringComparison.OrdinalIgnoreCase))
+            if (!sceneName.Equals("MainMenu", StringComparison.OrdinalIgnoreCase))
             {
                 _lastSceneWasMainMenu = false;
                 return;
@@ -57,9 +52,9 @@ namespace Assets.Scripts.Scenes.MainMenu
             _lastSceneWasMainMenu = true;
         }
 
-        private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode sceneLoadMode)
+        private void SceneManager_SceneChanged(object sender, EventArgs e)
         {
-            TrySwitchScene(scene);
+            TrySwitchScene(_lazySceneManager.Value.CurrentSceneName);
         }
     }
 }

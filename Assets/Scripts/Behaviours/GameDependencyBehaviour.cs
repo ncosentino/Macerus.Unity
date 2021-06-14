@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-
-using Assets.Scripts.Autofac;
-using Assets.Scripts.Scenes.Api;
+﻿using Assets.Scripts.Autofac;
 
 using Autofac;
+
+using Macerus.Game.Api.Scenes;
+
+using ProjectXyz.Shared.Framework;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Behaviours
 {
-    public sealed class GameDependencyBehaviour : 
-        MonoBehaviour
+    public sealed class GameDependencyBehaviour : MonoBehaviour
     {
         private static GameDependencyBehaviour _instance;
 
@@ -41,12 +42,21 @@ namespace Assets.Scripts.Behaviours
             _container = containerBuilder.CreateContainer();
             Debug.Log("Created autofac container.");
 
-            var logger = _container.Resolve<ProjectXyz.Api.Logging.ILogger>();
-            foreach (var sceneLoadHook in _container.Resolve<IEnumerable<IDiscoverableSceneLoadHook>>())
+            var sceneManager = _container.Resolve<ISceneManager>();
+            if (!string.Equals(
+                "Startup",
+                sceneManager.CurrentSceneName))
             {
-                logger.Debug($"Created scene load hook '{sceneLoadHook}'.");
-                sceneLoadHook.SwitchScene();
+                Debug.LogError(
+                    $"Expecting to start in 'Startup' scene, but was started " +
+                    $"in '{sceneManager.CurrentSceneName}'. You may experience " +
+                    $"unintended behavior, but we'll force an explicit " +
+                    $"navigation to '{sceneManager.CurrentSceneName}'");
+                sceneManager.GoToScene(new StringIdentifier(sceneManager.CurrentSceneName));
+                return;
             }
+
+            sceneManager.GoToScene(new StringIdentifier("MainMenu"));
         }
     }
 }
