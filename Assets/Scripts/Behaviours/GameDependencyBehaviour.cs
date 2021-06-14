@@ -54,11 +54,11 @@ namespace Assets.Scripts.Behaviours
                     $"in '{sceneManager.CurrentSceneName}'. You may experience " +
                     $"unintended behavior, but we'll force an explicit " +
                     $"navigation to '{sceneManager.CurrentSceneName}'");
-                sceneManager.GoToScene(new StringIdentifier(sceneManager.CurrentSceneName));
+                sceneManager.NavigateToScene(new StringIdentifier(sceneManager.CurrentSceneName));
                 return;
             }
 
-            sceneManager.GoToScene(new StringIdentifier("MainMenu"));
+            sceneManager.NavigateToScene(new StringIdentifier("MainMenu"));
         }
     }
 }

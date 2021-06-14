@@ -24,27 +24,43 @@ namespace Assets.Scripts.Plugins.Features.Application
 
         public string CurrentSceneName => UnitySceneManager.GetActiveScene().name;
 
-        public void GoToScene(IIdentifier sceneId)
+        public void NavigateToScene(IIdentifier sceneId)
         {
-            GameDependencyBehaviour.Instance.StartCoroutine(LoadScene(sceneId));
+            UnitySceneManager.LoadScene(sceneId.ToString());
         }
 
-        private IEnumerator LoadScene(IIdentifier sceneId)
+        public void BeginNavigateToScene(IIdentifier sceneId, Action<ISceneCompletion> completedCallback)
+        {
+            GameDependencyBehaviour.Instance.StartCoroutine(LoadScene(sceneId, completedCallback));
+        }
+
+        private IEnumerator LoadScene(
+            IIdentifier sceneId,
+            Action<ISceneCompletion> completedCallback)
         {
             yield return null;
 
-            //Begin to load the Scene you specify
+            // Begin to load the Scene you specify
             AsyncOperation asyncOperation = UnitySceneManager.LoadSceneAsync(sceneId.ToString());
-            //Don't let the Scene activate until you allow it to
+            
+            // Don't let the Scene activate until you allow it to
             asyncOperation.allowSceneActivation = false;
 
-            //When the load is still in progress, output the Text and progress bar
+            // When the load is still in progress, output the Text and progress bar
             while (!asyncOperation.isDone)
             {
                 // Check if the load has finished
                 if (asyncOperation.progress >= 0.9f)
                 {
-                    asyncOperation.allowSceneActivation = true;
+                    var sceneCompletion = new SceneCompletion(asyncOperation);
+                    if (completedCallback == null)
+                    {
+                        sceneCompletion.SwitchoverScenes();
+                    }
+                    else
+                    {
+                        completedCallback.Invoke(sceneCompletion);
+                    }
                 }
 
                 yield return null;
@@ -56,6 +72,21 @@ namespace Assets.Scripts.Plugins.Features.Application
             UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
         {
             SceneChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private sealed class SceneCompletion : ISceneCompletion
+        {
+            private readonly AsyncOperation _asyncOperation;
+
+            public SceneCompletion(AsyncOperation asyncOperation)
+            {
+                _asyncOperation = asyncOperation;
+            }
+
+            public void SwitchoverScenes()
+            {
+                _asyncOperation.allowSceneActivation = true;
+            }
         }
     }
 }
