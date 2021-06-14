@@ -7,9 +7,9 @@
     mc:Ignorable="d"
     Background="Black"
     Opacity="{Binding Opacity}"
+    Visibility="{Binding Visibility}"
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
-    IsHitTestVisible="false"
     d:DesignWidth="1024"
     d:DesignHeight="768">
 </UserControl>

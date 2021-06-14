@@ -18,6 +18,8 @@ using Assets.Scripts.Unity.GameObjects;
 
 using Macerus.Api.Behaviors.Filtering;
 using Macerus.Plugins.Features.GameObjects.Actors.Generation;
+using Macerus.Plugins.Features.Hud;
+using Macerus.Plugins.Features.InGameMenu.Api;
 
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.GameObjects.Generation;
@@ -51,6 +53,8 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly INoesisGuiHitTester _noesisGuiHitTester;
         private readonly IExploreGameRootPrefabFactory _exploreGameRootPrefabFactory;
         private readonly IHasFollowCameraBehaviourStitcher _hasFollowCameraBehaviourStitcher;
+        private readonly Lazy<IHudController> _lazyHudController;
+        private readonly Lazy<IInGameMenuController> _lazyInGameMenuController;
         private readonly Lazy<IHudView> _lazyHudView;
 
         public ExploreSetup(
@@ -71,6 +75,8 @@ namespace Assets.Scripts.Scenes.Explore
             INoesisGuiHitTester noesisGuiHitTester,
             IExploreGameRootPrefabFactory exploreGameRootPrefabFactory,
             IHasFollowCameraBehaviourStitcher hasFollowCameraBehaviourStitcher,
+            Lazy<IHudController> lazyHudController,
+            Lazy<IInGameMenuController> lazyInGameMenuController,
             Lazy<IHudView> lazyHudView)
         {
             _gameObjectManager = gameObjectManager;
@@ -90,6 +96,8 @@ namespace Assets.Scripts.Scenes.Explore
             _noesisGuiHitTester = noesisGuiHitTester;
             _exploreGameRootPrefabFactory = exploreGameRootPrefabFactory;
             _hasFollowCameraBehaviourStitcher = hasFollowCameraBehaviourStitcher;
+            _lazyHudController = lazyHudController;
+            _lazyInGameMenuController = lazyInGameMenuController;
             _lazyHudView = lazyHudView;
         }
 
@@ -128,6 +136,9 @@ namespace Assets.Scripts.Scenes.Explore
 
             _guiInputStitcher.Attach(exploreGameRoot.GameObject);
             _exploreSceneStartupInterceptorFacade.Intercept(exploreGameRoot.GameObject);
+
+            _lazyHudController.Value.CloseAllWindows();
+            _lazyInGameMenuController.Value.CloseMenu();
 
             _hasFollowCameraBehaviourStitcher.Attach(exploreGameRoot.GameObject);
 

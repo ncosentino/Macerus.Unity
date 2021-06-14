@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Plugins.Features.SceneTransitions.Noesis.Resources;
+﻿using Assets.Scripts.Plugins.Features.SceneTransitions.Noesis;
+using Assets.Scripts.Plugins.Features.SceneTransitions.Noesis.Resources;
 
 using Autofac;
 
@@ -9,9 +10,13 @@ namespace Assets.Scripts.Plugins.Features.SceneTransitions.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<FaderSceneTransitionView>()
+                .RegisterType<FaderSceneTransitionNoesisViewModel>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<FaderSceneTransitionView>()
+                .AsImplementedInterfaces();
+                //.SingleInstance(); // NOTE: we should allow multiple instances of this w/ shared view model
         }
     }
 }

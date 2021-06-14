@@ -17,6 +17,7 @@ using Macerus.Plugins.Features.Hud;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
+using Assets.Scripts.Plugins.Features.SceneTransitions;
 
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 {
@@ -31,7 +32,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IStatusBarView statusBarView,
             IHeaderBarView headerBarView,
             IInGameMenuView inGameMenuView,
-            IEnumerable<IHudWindow> hudWindows)
+            IEnumerable<IHudWindow> hudWindows,
+            ISceneTransitionView sceneTransitionView)
             : this()
         {
             DataContext = viewModel;
@@ -74,6 +76,11 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "InGameMenuContent"),
                     inGameMenuView)
+                .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "FaderTransitionContent"),
+                    sceneTransitionView)
                 .Weld();
         }
 

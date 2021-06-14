@@ -7,15 +7,13 @@ using Noesis;
 using System.Windows.Controls;
 #endif
 
-using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
-
 namespace Assets.Scripts.Plugins.Features.SceneTransitions.Noesis.Resources
 {
     public partial class FaderSceneTransitionView :
         UserControl,
         ISceneTransitionView
     {
-        public FaderSceneTransitionView(IFaderSceneTransitionViewModel viewModel)
+        public FaderSceneTransitionView(IFaderSceneTransitionNoesisViewModel viewModel)
             : this()
         {
             DataContext = viewModel;

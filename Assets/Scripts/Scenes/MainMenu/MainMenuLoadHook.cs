@@ -49,7 +49,7 @@ namespace Assets.Scripts.Scenes.MainMenu
             {
                 _sceneTransitionController.Value.StartTransition(
                     TimeSpan.Zero,
-                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(3),
                     null,
                     null);
             }

@@ -180,6 +180,8 @@
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\Noesis\HeaderBarNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Autofac\SceneTransitionsModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\ISceneTransitionView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\FaderSceneTransitionNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\IFaderSceneTransitionNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\Resources\FaderSceneTransitionView.xaml.cs">
       <DependentUpon>FaderSceneTransitionView.xaml</DependentUpon>
     </Compile>
