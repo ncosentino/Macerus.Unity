@@ -193,6 +193,11 @@
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\Resources\StatusBarView.xaml.cs">
       <DependentUpon>StatusBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Autofac\GuiModule.cs" />
+    <Compile Include="Assets\Scripts\Scenes\LoadingScreen\Gui\ILoadingScreenView.cs" />
+    <Compile Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\ILoadingScreenNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\LoadingScreenNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\Resources\LoadingScreenView.xaml.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Autofac\MainMenuModule.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\IMainMenuView.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Autofac\TitleScreenModule.cs" />
@@ -235,6 +240,7 @@
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.asset.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.meta" />
+    <None Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\Resources\MainMenuView.asset" />
     <None Include="Blend\App.config" />
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +301,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\Resources\StatusBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\Resources\LoadingScreenView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

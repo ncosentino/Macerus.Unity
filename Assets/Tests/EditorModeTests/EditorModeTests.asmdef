@@ -65,6 +65,8 @@
 "Macerus.Plugins.Features.Interactions.Default.dll",
 "Macerus.Plugins.Features.Inventory.Api.dll",
 "Macerus.Plugins.Features.Inventory.Default.dll",
+"Macerus.Plugins.Features.LoadingScreen.Api.dll",
+"Macerus.Plugins.Features.LoadingScreen.Default.dll",
 "Macerus.Plugins.Features.MainMenu.Api.dll",
 "Macerus.Plugins.Features.MainMenu.Default.dll",
 "Macerus.Plugins.Features.Mapping.Default.dll",

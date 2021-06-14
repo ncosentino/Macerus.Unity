@@ -11,23 +11,17 @@ using Assets.Scripts.Plugins.Features.SceneTransitions;
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources
+namespace Assets.Scripts.Scenes.LoadingScreen.Gui.Noesis.Resources
 {
-    public partial class MainMenuView :
+    public partial class LoadingScreenView :
         UserControl,
-        IMainMenuView
+        ILoadingScreenView
     {
-        public MainMenuView(
+        public LoadingScreenView(
             IViewWelderFactory viewWelderFactory,
-            ISceneTransitionView sceneTransitionView,
-            ITitleScreenView titleScreenView)
+            ISceneTransitionView sceneTransitionView)
             : this()
         {
-            viewWelderFactory
-                .Create<ISimpleWelder>(
-                    NoesisLogicalTreeHelper.FindChildWithName(this, "MainContent"),
-                    titleScreenView)
-                .Weld();
             viewWelderFactory
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "TransitionViewContent"),
@@ -35,7 +29,7 @@ namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources
                 .Weld();
         }
 
-        public MainMenuView()
+        public LoadingScreenView()
         {
             InitializeComponent();
         }

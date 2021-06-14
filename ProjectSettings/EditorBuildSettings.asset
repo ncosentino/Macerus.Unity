@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/NoesisResources.unity
+    guid: d0a0a14abcccc3945a8a808ac63e7a49
+  - enabled: 1
+    path: Assets/Scenes/Startup.unity
+    guid: eb754564252fe33428915582c7b3fca7
+  - enabled: 1
+    path: Assets/Scenes/LoadingScreen.unity
+    guid: 3f8280ef0ea4ff1409fc61d617574f3f
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: e65eb65130cd27447925fe705bcb397c
   - enabled: 1
