@@ -17,6 +17,8 @@ namespace Assets.Scripts.Behaviours
         private IContainer _container;
 
         public static IContainer Container => _instance._container;
+
+        public static GameDependencyBehaviour Instance => _instance;
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()

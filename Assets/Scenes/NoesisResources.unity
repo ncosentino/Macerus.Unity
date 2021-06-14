@@ -168,9 +168,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: b6b5311a457d71649a0c1e57972d89a4, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -224,9 +224,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 94417a3125eb06e41913131e6f6e9391, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -280,9 +280,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: afd26c2829273974b822ede95afce404, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -367,9 +367,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 8de4eb79106668244af990fbdd06fae5, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 1
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -423,9 +423,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 4c4a40537158b2a4ea42915cbd4864d4, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -479,9 +479,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 3546b150e4201fb4dab55c60c2c3e2d3, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -535,9 +535,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 671e986660d418044afba1ffaaf96b0f, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -591,9 +591,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 1c5ac3f4473d7e3438026a8d33707a49, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -647,9 +647,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 72fb2f8a9a6a13c4ea9c6e0ec1e6e368, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -739,9 +739,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 0df39ba92bc4ad44491e8e834b1eb233, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
+  _continuousRendering: 0
+  _enableExternalUpdate: 0
+  _enableKeyboard: 1
+  _enableMouse: 1
+  _enableTouch: 1
+  _enableGamepad: 0
+  _emulateTouch: 0
+  _useRealTimeClock: 0
+--- !u!1 &1152045408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1152045409}
+  - component: {fileID: 1152045410}
+  m_Layer: 0
+  m_Name: LoadingScreenView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1152045409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152045408}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1478860348}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1152045410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152045408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29355477be96127469aed699dd82b4be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _xaml: {fileID: 11400000, guid: fea2c355a549b2f4fb3c154cb5b771cc, type: 2}
+  _texture: {fileID: 0}
+  _isPPAAEnabled: 0
+  _tessellationMaxPixelError: 0.4
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -980,9 +1036,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: fcd6d40f00c095a4598dd20a5451b4a3, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -1067,6 +1123,37 @@ Transform:
   - {fileID: 283542696}
   m_Father: {fileID: 0}
   m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1478860347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1478860348}
+  m_Layer: 0
+  m_Name: LoadingScreen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1478860348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478860347}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 48.689484, y: -20.427195, z: -33.18649}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1152045409}
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1570864930
 GameObject:
@@ -1176,9 +1263,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: 275314e43b532d2498c79b6638d033cd, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
@@ -1263,9 +1350,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xaml: {fileID: 11400000, guid: a7ce302a2390ff847a801ddd8b01c617, type: 2}
   _texture: {fileID: 0}
-  _isPPAAEnabled: 1
+  _isPPAAEnabled: 0
   _tessellationMaxPixelError: 0.4
-  _renderFlags: 0
+  _renderFlags: 16
   _continuousRendering: 0
   _enableExternalUpdate: 0
   _enableKeyboard: 1
