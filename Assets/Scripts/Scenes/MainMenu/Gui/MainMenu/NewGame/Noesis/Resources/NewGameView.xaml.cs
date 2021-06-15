@@ -7,19 +7,19 @@ using Noesis;
 using System.Windows.Controls;
 #endif
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.TitleScreen.Noesis.Resources
+namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.NewGame.Noesis.Resources
 {
-    public partial class TitleScreenView :
+    public partial class NewGameView :
         UserControl,
-        ITitleScreenView
+        INewGameView
     {
-        public TitleScreenView(ITitleScreenNoesisViewModel viewModel)
+        public NewGameView(INewGameNoesisViewModel viewModel)
             : this()
         {
             DataContext = viewModel;
         }
 
-        public TitleScreenView()
+        public NewGameView()
         {
             InitializeComponent();
         }

@@ -2,49 +2,40 @@
 #define NOESIS
 using Noesis;
 #else
-using System.Windows.Media;
 #endif
 
-using System.Windows.Input;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 
 using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
-using Macerus.Plugins.Features.MainMenu.Api;
+using Macerus.Plugins.Features.MainMenu.Api.NewGame;
 
-namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.TitleScreen.Noesis
+namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.NewGame.Noesis
 {
-    public sealed class TitleScreenNoesisViewModel :
+    public sealed class NewGameNoesisViewModel :
         MacerusViewModelWrapper,
-        ITitleScreenNoesisViewModel
+        INewGameNoesisViewModel
     {
-        private readonly IMainMenuViewModel _viewModelToWrap;
+        private readonly INewGameViewModel _viewModelToWrap;
 
-        public TitleScreenNoesisViewModel(
-            IMainMenuViewModel viewModelToWrap,
-            IResourceImageSourceFactory resourceImageSourceFactory)
+        public NewGameNoesisViewModel(INewGameViewModel viewModelToWrap)
         {
             _viewModelToWrap = viewModelToWrap;
-            
-            BackgroundImage = resourceImageSourceFactory.CreateForResourceId(viewModelToWrap.BackgroundImageResourceId);
-            OptionsCommand = new DelegateCommand(_ => _viewModelToWrap.NavigateOptions());
-            ExitCommand = new DelegateCommand(_ => _viewModelToWrap.ExitGame());
+
+            BackCommand = new DelegateCommand(_ => _viewModelToWrap.GoBack());
             NewGameCommand = new DelegateCommand(_ => _viewModelToWrap.StartNewGame());
 
             _viewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
         }
 
-        public ImageSource BackgroundImage { get; }
-
-        public ICommand OptionsCommand { get; }
-
-        public ICommand ExitCommand { get; }
+        public ICommand BackCommand { get; }
 
         public ICommand NewGameCommand { get; }
 
-        [NotifyForWrappedProperty(nameof(IMainMenuViewModel.IsOpen))]
+        [NotifyForWrappedProperty(nameof(INewGameViewModel.IsOpen))]
         public Visibility Visibility => _viewModelToWrap.IsOpen
             ? Visibility.Visible
             : Visibility.Collapsed;

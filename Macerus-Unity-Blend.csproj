@@ -200,15 +200,23 @@
     <Compile Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\Resources\LoadingScreenView.xaml.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Autofac\MainMenuModule.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\IMainMenuView.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\NewGame\Autofac\NewGameModule.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\NewGame\INewGameView.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\ITitleScreenNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Gui\Noesis\ViewModels\MacerusViewModelWrapper.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\Resources\TitleScreenView.xaml.cs">
+      <DependentUpon>TitleScreenView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\TitleScreenNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Autofac\TitleScreenModule.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\ITitleScreenView.cs" />
     <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\Noesis\Resources\MainMenuView.xaml.cs">
       <DependentUpon>MainMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\ITitleScreenNoesisViewModel.cs" />
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\TitleScreenNoesisViewModel.cs" />
-    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\Resources\TitleScreenView.xaml.cs">
-      <DependentUpon>TitleScreenView.xaml</DependentUpon>
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\NewGame\Noesis\INewGameNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\NewGame\Noesis\NewGameNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\NewGame\Noesis\Resources\NewGameView.xaml.cs">
+      <DependentUpon>NewGameView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Blend\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -240,7 +248,6 @@
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.asset.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs.meta" />
     <None Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.meta" />
-    <None Include="Assets\Scripts\Scenes\LoadingScreen\Gui\Noesis\Resources\MainMenuView.asset" />
     <None Include="Blend\App.config" />
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +319,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\TitleScreen\Noesis\Resources\TitleScreenView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Scenes\MainMenu\Gui\MainMenu\NewGame\Noesis\Resources\NewGameView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

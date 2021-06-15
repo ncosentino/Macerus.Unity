@@ -45,7 +45,7 @@ namespace Assets.Blend
             {
                 Content = container.Resolve<IMainMenuView>();
                 var mainMenuController = container.Resolve<IMainMenuController>();
-                container.Resolve<ISceneTransitionController>().StartTransition(
+                container.Resolve<ITransitionController>().StartTransition(
                     TimeSpan.Zero,
                     TimeSpan.FromSeconds(3),
                     () => mainMenuController.OpenMenu(),

@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.TitleScreen.Noesis
 {
-    public interface IMainMenuNoesisViewModel
+    public interface ITitleScreenNoesisViewModel
     {
         ImageSource BackgroundImage { get; }
 

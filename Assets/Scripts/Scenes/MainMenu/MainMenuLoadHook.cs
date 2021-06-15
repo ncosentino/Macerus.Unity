@@ -8,18 +8,18 @@ namespace Assets.Scripts.Scenes.MainMenu
     public sealed class MainMenuLoadHook : IDiscoverableSceneLoadHook
     {
         private readonly Lazy<IMainMenuSetup> _lazyMainMenuSetup;
-        private readonly Lazy<ISceneTransitionController> _sceneTransitionController;
+        private readonly Lazy<ITransitionController> _lazyTransitionController;
         private readonly Lazy<ISceneManager> _lazySceneManager;
 
         private bool _lastSceneWasMainMenu;
 
         public MainMenuLoadHook(
             Lazy<IMainMenuSetup> mainMenuSetup,
-            Lazy<ISceneTransitionController> sceneTransitionController,
+            Lazy<ITransitionController> lazyTransitionController,
             Lazy<ISceneManager> lazySceneManager)
         {
             _lazyMainMenuSetup = mainMenuSetup;
-            _sceneTransitionController = sceneTransitionController;
+            _lazyTransitionController = lazyTransitionController;
             _lazySceneManager = lazySceneManager;
             
             lazySceneManager.Value.SceneChanged += SceneManager_SceneChanged;
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Scenes.MainMenu
 
             if (!_lastSceneWasMainMenu)
             {
-                _sceneTransitionController.Value.StartTransition(
+                _lazyTransitionController.Value.StartTransition(
                     TimeSpan.Zero,
                     TimeSpan.FromSeconds(3),
                     null,

@@ -7,6 +7,8 @@ using System.Windows.Controls;
 
 using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Plugins.Features.SceneTransitions;
+using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.NewGame;
+using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.TitleScreen;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
@@ -20,13 +22,19 @@ namespace Assets.Scripts.Scenes.MainMenu.Gui.MainMenu.Noesis.Resources
         public MainMenuView(
             IViewWelderFactory viewWelderFactory,
             ISceneTransitionView sceneTransitionView,
-            ITitleScreenView titleScreenView)
+            ITitleScreenView titleScreenView,
+            INewGameView newGameView)
             : this()
         {
             viewWelderFactory
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "MainContent"),
                     titleScreenView)
+                .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "MainContent"),
+                    newGameView)
                 .Weld();
             viewWelderFactory
                 .Create<ISimpleWelder>(

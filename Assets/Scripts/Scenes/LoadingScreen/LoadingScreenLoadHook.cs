@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Assets.Scripts.Scenes.MainMenu;
-
 using Macerus.Game.Api.Scenes;
 using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
 
@@ -10,16 +8,16 @@ namespace Assets.Scripts.Scenes.LoadingScreen
     public sealed class LoadingScreenLoadHook : IDiscoverableSceneLoadHook
     {
         private readonly Lazy<ILoadingScreenSetup> _lazyLoadingScreenSetup;
-        private readonly Lazy<ISceneTransitionController> _sceneTransitionController;
+        private readonly Lazy<ITransitionController> _lazyTransitionController;
         private readonly Lazy<ISceneManager> _lazySceneManager;
 
         public LoadingScreenLoadHook(
             Lazy<ILoadingScreenSetup> loadingScreenSetup,
-            Lazy<ISceneTransitionController> sceneTransitionController,
+            Lazy<ITransitionController> lazyTransitionController,
             Lazy<ISceneManager> lazySceneManager)
         {
             _lazyLoadingScreenSetup = loadingScreenSetup;
-            _sceneTransitionController = sceneTransitionController;
+            _lazyTransitionController = lazyTransitionController;
             _lazySceneManager = lazySceneManager;
 
             lazySceneManager.Value.SceneChanged += SceneManager_SceneChanged;
