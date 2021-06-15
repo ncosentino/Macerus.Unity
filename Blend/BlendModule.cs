@@ -5,6 +5,7 @@ using System.Numerics;
 
 using Autofac;
 using Macerus.Game.Api;
+using Macerus.Game.Api.Scenes;
 using Macerus.Plugins.Features.Animations.Lpc;
 using Macerus.Plugins.Features.Mapping;
 using ProjectXyz.Api.Framework;
@@ -167,9 +168,18 @@ namespace Assets.Blend
                 _logger = logger;
             }
 
-            public void GoToScene(IIdentifier sceneId)
+            public string CurrentSceneName => throw new NotImplementedException();
+
+            public event EventHandler<EventArgs> SceneChanged;
+
+            public void BeginNavigateToScene(IIdentifier sceneId, Action<ISceneCompletion> completedCallback)
             {
-                _logger.Info($"Go to scene '{sceneId}'.");
+                _logger.Info($"Begin navigate to scene '{sceneId}'...");
+            }
+
+            public void NavigateToScene(IIdentifier sceneId)
+            {
+                _logger.Info($"Navigate to scene '{sceneId}'.");
             }
         }
     }    
