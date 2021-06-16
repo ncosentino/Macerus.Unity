@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Assets.Scripts.Unity.Threading
 {
@@ -13,5 +14,9 @@ namespace Assets.Scripts.Unity.Threading
         void RunAsync(Action<object> action, object state);
 
         void RunOnMainThread(Action action);
+
+        Task RunOnMainThreadAsync(
+            Action action,
+            Func<bool> checkCompletedCallback);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Unity.Threading;
 
@@ -47,6 +48,29 @@ namespace Assets.Scripts.Behaviours.Threading
             {
                 _backlog.Add(action);
                 _queued = true;
+            }
+        }
+
+        public async Task RunOnMainThreadAsync(
+            Action action,
+            Func<bool> checkCompletedCallback)
+        {
+            if (IsMainThread)
+            {
+                action();
+                return;
+            }
+
+            RunOnMainThread(action);
+            await WaitForConditionAsync(checkCompletedCallback)
+                .ConfigureAwait(false);
+        }
+
+        private static async Task WaitForConditionAsync(Func<bool> callback)
+        {
+            while (!callback())
+            {
+                await Task.Delay(0);
             }
         }
 

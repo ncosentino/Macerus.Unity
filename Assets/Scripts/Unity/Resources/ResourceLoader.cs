@@ -42,15 +42,9 @@ namespace Assets.Scripts.Unity.Resources
 
             // we can only pull unity resource related data from the main thread.
             byte[] bytes = null;
-            _dispatcher.RunOnMainThread(() => bytes = asset.bytes);
-
-            await Task.Run(() =>
-            {
-                while (bytes == null)
-                {
-                    System.Threading.Thread.Sleep(0);
-                }
-            });
+            await _dispatcher.RunOnMainThreadAsync(
+                () => bytes = asset.bytes,
+                () => bytes != null);
 
             return bytes;
         }
@@ -107,31 +101,22 @@ namespace Assets.Scripts.Unity.Resources
                 return Load<TResource>(relativeResourcePath);
             }
 
-            TResource coroutineResult = null;
-            Exception coroutineError = null;
-            _coroutineRunner.StartCoroutine(
+            TResource resource = null;
+            var coroutineResult = await _coroutineRunner.RunCoroutineAsync(
                 LoadResourceCoroutine<TResource>(
                     relativeResourcePath,
-                    r => coroutineResult = r),
-                ex => coroutineError = ex);
+                    r => resource = r),
+                () => resource);
 
-            await Task.Run(() =>
-            {
-                while (coroutineResult == null && coroutineError == null)
-                {
-                    System.Threading.Thread.Sleep(0);
-                }
-            }).ConfigureAwait(false);
-
-            if (coroutineError != null)
+            if (!coroutineResult.Success)
             {
                 throw new InvalidOperationException(
                     $"Could not load resource with relative path " +
                     $"'{relativeResourcePath}'. See inner exception for details.",
-                    coroutineError);
+                    coroutineResult.Exception);
             }
 
-            return coroutineResult;
+            return resource;
         }
 
         private IEnumerator LoadResourceCoroutine<TResource>(

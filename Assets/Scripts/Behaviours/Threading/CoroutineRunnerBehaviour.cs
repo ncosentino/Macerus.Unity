@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Unity.Threading;
 
@@ -35,7 +37,15 @@ namespace Assets.Scripts.Behaviours.Threading
             StartCoroutine(wrappedForErrors);
         }
 
-        public static IEnumerator RunThrowingIterator(
+        public Task<CoroutineResult<T>> RunCoroutineAsync<T>(
+            IEnumerator coroutine,
+            Func<T> getResultCallback) => throw new NotSupportedException();
+
+        public Task<CoroutineResult> RunCoroutineAsync(
+            IEnumerator coroutine,
+            Func<bool> checkCompletionCallback) => throw new NotSupportedException();
+
+        private static IEnumerator RunThrowingIterator(
             IEnumerator enumerator,
             Action<Exception> errorCallback)
         {

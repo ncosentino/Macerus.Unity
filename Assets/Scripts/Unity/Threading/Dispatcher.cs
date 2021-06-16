@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Assets.Scripts.Unity.Threading
 {
     public sealed class Dispatcher : IDispatcher
     {
         private readonly Lazy<IDispatcher> _instance;
-        private readonly Func<IDispatcher> _getInstanceCallback;
 
         private IDispatcher Instance => _instance.Value;
 
@@ -23,5 +23,11 @@ namespace Assets.Scripts.Unity.Threading
         public void RunAsync(Action<object> action, object state) => Instance.RunAsync(action, state);
 
         public void RunOnMainThread(Action action) => Instance.RunOnMainThread(action);
+
+        public async Task RunOnMainThreadAsync(
+            Action action,
+            Func<bool> checkCompletedCallback) => await Instance.RunOnMainThreadAsync(
+                action,
+                checkCompletedCallback);
     }
 }
