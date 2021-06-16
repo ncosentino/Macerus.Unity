@@ -14,6 +14,8 @@ namespace Assets.Scripts.Unity.Threading
             _instance = new Lazy<IDispatcher>(getInstanceCallback);
         }
 
+        public bool IsMainThread => Instance.IsMainThread;
+
         public void RunAsync(Action action) => Instance.RunAsync(action);
 
         public void RunAsync<T>(Action<T> action, T state) => Instance.RunAsync(action, state);

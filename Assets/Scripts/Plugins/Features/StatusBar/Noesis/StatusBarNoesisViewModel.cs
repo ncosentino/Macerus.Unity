@@ -56,6 +56,10 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
             _abilityToNoesisViewModelConverter = abilityToNoesisViewModelConverter;
 
             _viewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
+
+            RefreshLeftResource();
+            RefreshRightResource();
+            RefreshAbilities();
         }
 
         // TODO: This has to happen here because the ImageSources need to be made on the UI thread
@@ -72,43 +76,52 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.RightResource))]
         public Tuple<double, double> RightResource => _translatedRightResource;
 
+        private void RefreshLeftResource()
+        {
+            _translatedLeftResource = Tuple.Create(
+                _viewModelToWrap.LeftResource.Current,
+                _viewModelToWrap.LeftResource.Maximum);
+        }
+
+        private void RefreshRightResource()
+        {
+            _translatedRightResource = Tuple.Create(
+                _viewModelToWrap.RightResource.Current,
+                _viewModelToWrap.RightResource.Maximum);
+        }
+
+        private void RefreshAbilities()
+        {
+            _uiDispatcher.RunOnMainThread(() =>
+            {
+                _abilitiesKeys.Clear();
+                _translatedAbilities.Clear();
+
+                foreach (var translated in _viewModelToWrap
+                   .Abilities
+                   .Select(_abilityToNoesisViewModelConverter.Convert))
+                {
+                    _abilitiesKeys.Add(translated.Item2);
+                    _translatedAbilities[translated.Item2] = translated;
+                }
+            });
+        }
+
         private void ViewModelToWrap_PropertyChanged(
             object sender,
             PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals(nameof(_viewModelToWrap.LeftResource)))
             {
-                _translatedLeftResource = Tuple.Create(
-                    _viewModelToWrap.LeftResource.Current,
-                    _viewModelToWrap.LeftResource.Maximum);
+                RefreshLeftResource();
             }
-
-            if (e.PropertyName.Equals(nameof(_viewModelToWrap.RightResource)))
+            else if (e.PropertyName.Equals(nameof(_viewModelToWrap.RightResource)))
             {
-                _translatedRightResource = Tuple.Create(
-                    _viewModelToWrap.RightResource.Current,
-                    _viewModelToWrap.RightResource.Maximum);
+                RefreshRightResource();
             }
-
-            if (e.PropertyName.Equals(nameof(_viewModelToWrap.Abilities)))
+            else if (e.PropertyName.Equals(nameof(_viewModelToWrap.Abilities)))
             {
-                _uiDispatcher.ExecuteAsync(() => 
-                {
-                    _abilitiesKeys.Clear();
-                    _translatedAbilities.Clear();
-
-                    foreach (var translated in _viewModelToWrap
-                       .Abilities
-                       .Select(_abilityToNoesisViewModelConverter.Convert))
-                    {
-                        _abilitiesKeys.Add(translated.Item2);
-                        _translatedAbilities[translated.Item2] = translated;
-                    }
-
-                    OnPropertyChanged(nameof(Abilities));
-                });
-
-                return;
+                RefreshAbilities();
             }
 
             if (!_lazyNotifierMapping.Value.TryGetValue(
@@ -118,7 +131,10 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
                 return;
             }
 
-            OnPropertyChanged(propertyName);
+            _uiDispatcher.RunOnMainThread(() =>
+            {
+                OnPropertyChanged(propertyName);
+            });
         }
     }
 }

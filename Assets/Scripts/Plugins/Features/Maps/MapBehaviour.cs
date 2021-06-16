@@ -101,7 +101,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
         private void MapProvider_MapChanged(
             object sender,
-            EventArgs e) => Dispatcher.RunOnMainThread(() => SwitchMap(MapProvider.ActiveMap));
+            EventArgs e) => SwitchMap(MapProvider.ActiveMap);
 
         private void SwitchMap(IGameObject map)
         {
@@ -110,7 +110,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 map);
 
             var weatherTableId = map
-                .Get<IMapWeatherTableBehavior>()
+                ?.Get<IMapWeatherTableBehavior>()
                 .SingleOrDefault()
                 ?.WeatherTableId;
             if (weatherTableId == null)

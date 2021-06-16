@@ -1,5 +1,4 @@
-﻿
-using ProjectXyz.Game.Interface.Engine;
+﻿using ProjectXyz.Game.Interface.Engine;
 
 using UnityEngine;
 

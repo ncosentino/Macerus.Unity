@@ -38,7 +38,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private async void OnTriggerEnter2D(Collider2D collision)
         {
             var collidedObject = collision.gameObject;
             var interactionBehavior = collidedObject
@@ -54,7 +54,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 var actor = gameObject
                     .GetComponent<IReadOnlyHasGameObject>()
                     .GameObject;
-                InteractionHandler.Interact(actor, interactionBehavior);
+                await InteractionHandler
+                    .InteractAsync(actor, interactionBehavior)
+                    .ConfigureAwait(false);
                 return;
             }
 

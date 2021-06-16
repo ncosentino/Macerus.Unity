@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Behaviours.Threading;
+﻿using System;
+
+using Assets.Scripts.Behaviours.Threading;
 using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Input;
@@ -32,6 +34,12 @@ namespace Assets.Scripts.Autofac.Unity
                 .Register(x => new Dispatcher(() => DispatcherBehaviour.Instance))
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+               .Register(x => new CoroutineRunner(
+                   new Lazy<ICoroutineRunner>(() => CoroutineRunnerBehaviour.Instance),
+                   x.Resolve<Lazy<IDispatcher>>()))
+               .AsImplementedInterfaces()
+               .SingleInstance();
             builder
                 .RegisterType<MouseInput>()
                 .AsImplementedInterfaces()

@@ -239,12 +239,14 @@ namespace Assets.Scripts.Scenes.Explore.Console
         }
 
         [DiscoverableConsoleCommand("Starts an encounter with the specified ID.")]
-        private void EncounterStart(string encounterId)
+        private async void EncounterStart(string encounterId)
         {
             var filterContext = _filterContextProvider.GetContext();
-            _encounterManager.StartEncounter(
-                filterContext,
-                new StringIdentifier(encounterId));
+            await _encounterManager
+                .StartEncounterAsync(
+                    filterContext,
+                    new StringIdentifier(encounterId))
+                .ConfigureAwait(false);
         }
 
         [DiscoverableConsoleCommand("Toggles the map grid lines on or off.")]

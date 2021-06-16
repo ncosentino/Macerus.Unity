@@ -8,6 +8,7 @@ using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.GameObjects;
 using Assets.Scripts.Unity.Resources.Prefabs;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Plugins.Features.Mapping;
 
@@ -36,6 +37,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
         private readonly IPrefabCreator _prefabCreator;
         private readonly ILogger _logger;
+        private readonly IDispatcher _dispatcher;
 
         private HashSet<Vector2Int> _traversableTiles;
         private HashSet<Vector2Int> _targettedTiles;
@@ -52,13 +54,15 @@ namespace Assets.Scripts.Plugins.Features.Maps
             IObjectDestroyer objectDestroyer,
             IUnityGameObjectRepository unityGameObjectRepository,
             IPrefabCreator prefabCreator,
-            ILogger logger)
+            ILogger logger,
+            IDispatcher dispatcher)
         {
             _tileLoader = tileLoader;
             _objectDestroyer = objectDestroyer;
             _unityGameObjectRepository = unityGameObjectRepository;
             _prefabCreator = prefabCreator;
             _logger = logger;
+            _dispatcher = dispatcher;
         }
 
         public void FormatMap(
@@ -68,76 +72,84 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _mapPrefab = mapPrefab;
             _logger.Debug($"Formatting map object '{mapPrefab}' for '{map}'...");
 
-            var parentMapObjectTransform = mapPrefab.GameObject.transform;
-
-            int z = 0;
-            _minimumTileX = int.MaxValue;
-            _maximumTileX = int.MinValue;
-            _minimumTileY = int.MaxValue;
-            _maximumTileY = int.MinValue;
-
-            mapPrefab.Tilemap.ClearAllTiles();
-            foreach (var mapLayer in map.GetOnly<IMapLayersBehavior>().Layers)
+            _dispatcher.RunOnMainThread(() =>
             {
-                foreach (var tile in mapLayer.Tiles)
+                var parentMapObjectTransform = mapPrefab.GameObject.transform;
+
+                int z = 0;
+                _minimumTileX = int.MaxValue;
+                _maximumTileX = int.MinValue;
+                _minimumTileY = int.MaxValue;
+                _maximumTileY = int.MinValue;
+
+
+                mapPrefab.Tilemap.ClearAllTiles();
+                foreach (var mapLayer in map?.GetOnly<IMapLayersBehavior>().Layers ?? Enumerable.Empty<IMapLayer>())
                 {
-                    var tileResource = (ITileResourceBehavior)tile.Behaviors.First(x => x is ITileResourceBehavior);
-                    var unityTile = _tileLoader.LoadTile(
-                        tileResource.TilesetResourcePath,
-                        tileResource.SpriteResourceName);
-                    var tilePosition = tile.GetOnly<IPositionBehavior>();
-                    mapPrefab.Tilemap.SetTile(
-                        new Vector3Int((int)tilePosition.X, (int)tilePosition.Y, z),
-                        unityTile);
+                    foreach (var tile in mapLayer.Tiles)
+                    {
+                        var tileResource = (ITileResourceBehavior)tile.Behaviors.First(x => x is ITileResourceBehavior);
+                        var unityTile = _tileLoader.LoadTile(
+                            tileResource.TilesetResourcePath,
+                            tileResource.SpriteResourceName);
+                        var tilePosition = tile.GetOnly<IPositionBehavior>();
 
-                    _maximumTileX = Math.Max(_maximumTileX, (int)tilePosition.X);
-                    _minimumTileX = Math.Min(_minimumTileX, (int)tilePosition.X);
-                    _maximumTileY = Math.Max(_maximumTileY, (int)tilePosition.Y);
-                    _minimumTileY = Math.Min(_minimumTileY, (int)tilePosition.Y);
+                        // must be called from main thread
+                        mapPrefab.Tilemap.SetTile(
+                            new Vector3Int((int)tilePosition.X, (int)tilePosition.Y, z),
+                            unityTile);
+
+                        _maximumTileX = Math.Max(_maximumTileX, (int)tilePosition.X);
+                        _minimumTileX = Math.Min(_minimumTileX, (int)tilePosition.X);
+                        _maximumTileY = Math.Max(_maximumTileY, (int)tilePosition.Y);
+                        _minimumTileY = Math.Min(_minimumTileY, (int)tilePosition.Y);
+                    }
+
+                    z++;
                 }
-                
-                z++;
-            }
 
-            var existingFogOfWar = parentMapObjectTransform.Find("FogOfWar");
-            if (map.TryGetFirst<IHasFogOfWarBehavior>(out var fogOfWarBehavior))
-            {
-                var fogOfWarGameObject = _prefabCreator.Create<GameObject>("FogOfWar/FogOfWar");
-                fogOfWarGameObject.name = "FogOfWar";
-                fogOfWarGameObject.transform.SetParent(parentMapObjectTransform);
+                var existingFogOfWar = parentMapObjectTransform.Find("FogOfWar");
+                if (map?.TryGetFirst<IHasFogOfWarBehavior>(out var fogOfWarBehavior) == true)
+                {
+                    var fogOfWarGameObject = _prefabCreator.Create<GameObject>("FogOfWar/FogOfWar");
+                    fogOfWarGameObject.name = "FogOfWar";
+                    fogOfWarGameObject.transform.SetParent(parentMapObjectTransform);
 
-                var fogOfWarPrefab = new FogOfWarPrefab(fogOfWarGameObject);
+                    var fogOfWarPrefab = new FogOfWarPrefab(fogOfWarGameObject);
 
-                var fogWidthInterim = (int)Math.Max(
-                    (int)Math.Abs(_minimumTileX),
-                    (int)Math.Abs(_maximumTileX));
-                var fogHeightInterim = (int)Math.Max(
-                    (int)Math.Abs(_minimumTileY),
-                    (int)Math.Abs(_maximumTileY));
-                const float ROUND_UP_HALF_TILES = 1.5f;
-                var fogSize = 2 * (Math.Max(fogWidthInterim, fogHeightInterim) + ROUND_UP_HALF_TILES);
+                    var fogWidthInterim = (int)Math.Max(
+                        (int)Math.Abs(_minimumTileX),
+                        (int)Math.Abs(_maximumTileX));
+                    var fogHeightInterim = (int)Math.Max(
+                        (int)Math.Abs(_minimumTileY),
+                        (int)Math.Abs(_maximumTileY));
+                    const float ROUND_UP_HALF_TILES = 1.5f;
+                    var fogSize = 2 * (Math.Max(fogWidthInterim, fogHeightInterim) + ROUND_UP_HALF_TILES);
 
-                fogOfWarPrefab.FogMainTextureTransform.sizeDelta = new Vector2(fogSize, fogSize);
-                fogOfWarPrefab.FogCameraMain.orthographicSize = fogSize / 2;
-            }
+                    fogOfWarPrefab.FogMainTextureTransform.sizeDelta = new Vector2(fogSize, fogSize);
+                    fogOfWarPrefab.FogCameraMain.orthographicSize = fogSize / 2;
+                }
 
-            if (existingFogOfWar != null)
-            {
-                // NOTE: we *MUST* remove the parent reference because
-                // destruction doesn't actually occur until the next engine
-                // tick. as a result, people can accidentally lookup these
-                // objects before the next tick.
-                existingFogOfWar.parent = null;
-                _objectDestroyer.Destroy(existingFogOfWar.gameObject);
-            }
+                if (existingFogOfWar != null)
+                {
+                    // NOTE: we *MUST* remove the parent reference because
+                    // destruction doesn't actually occur until the next engine
+                    // tick. as a result, people can accidentally lookup these
+                    // objects before the next tick.
+                    existingFogOfWar.parent = null;
+                    _objectDestroyer.Destroy(existingFogOfWar.gameObject);
+                }
 
-            // set these back (if needed) because we just obliterated all the
-            // tiles by formatting the tile map
-            ToggleGridLines(_gridLinesEnabled, false);
-            SetTraversableTiles(_traversableTiles ?? Enumerable.Empty<Vector2Int>(), false);
-            SetTraversableTiles(_targettedTiles ?? Enumerable.Empty<Vector2Int>(), false);
+                // set these back (if needed) because we just obliterated all the
+                // tiles by formatting the tile map
+                ToggleGridLines(_gridLinesEnabled, false);
+                SetTraversableTiles(_traversableTiles ?? Enumerable.Empty<Vector2Int>(), false);
+                SetTraversableTiles(_targettedTiles ?? Enumerable.Empty<Vector2Int>(), false);
 
-            mapPrefab.Tilemap.RefreshAllTiles();
+                // must be called from main thread
+                mapPrefab.Tilemap.RefreshAllTiles();
+            });
+
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
         }
 
@@ -244,28 +256,35 @@ namespace Assets.Scripts.Plugins.Features.Maps
             }
 
             _traversableTiles = new HashSet<Vector2Int>(traversableTiles);
+            var highlightTile = _tileLoader.LoadTile(
+                "mapping/tilesets/",
+                "traversable-tile-highlight");
 
-            for (int i = _minimumTileX; i <= _maximumTileX; i++)
+            _dispatcher.RunOnMainThread(() =>
             {
-                for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                for (int i = _minimumTileX; i <= _maximumTileX; i++)
                 {
-                    var traversable = _traversableTiles.Contains(new Vector2Int(i, j));
-                    var unityTile = traversable
-                        ? _tileLoader.LoadTile(
-                            "mapping/tilesets/",
-                            "traversable-tile-highlight")
-                        : null;
-                    var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
-                    _mapPrefab.WalkIndicatorTilemap.SetTile(
-                        tilePosition,
-                        unityTile);
-                }
-            }
+                    for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                    {
+                        var traversable = _traversableTiles.Contains(new Vector2Int(i, j));
+                        var unityTile = traversable
+                            ? highlightTile
+                            : null;
+                        var tilePosition = new Vector3Int(i, j, LAYER_TRAVERSABLE);
 
-            if (forceRefresh)
-            {
-                _mapPrefab.Tilemap.RefreshAllTiles();
-            }
+                        // must be called from main thread
+                        _mapPrefab.WalkIndicatorTilemap.SetTile(
+                            tilePosition,
+                            unityTile);
+                    }
+                }
+
+                if (forceRefresh)
+                {
+                    // must be called from main thread
+                    _mapPrefab.Tilemap.RefreshAllTiles();
+                }
+            });            
         }
 
         private void SetTargettedTiles(
@@ -279,28 +298,34 @@ namespace Assets.Scripts.Plugins.Features.Maps
             }
 
             _targettedTiles = new HashSet<Vector2Int>();
-            foreach (var set in targettedTiles.Keys)
+
+            _dispatcher.RunOnMainThread(() =>
             {
-                var setTiles = targettedTiles[set].Select(x => new Vector2Int((int)x.X, (int)x.Y));
-                foreach (var t in setTiles)
+                foreach (var set in targettedTiles.Keys)
                 {
-                    _targettedTiles.Add(t);
+                    var setTiles = targettedTiles[set].Select(x => new Vector2Int((int)x.X, (int)x.Y));
+                    foreach (var t in setTiles)
+                    {
+                        _targettedTiles.Add(t);
 
-                    var unityTile = _tileLoader.LoadTile(
-                        "mapping/tilesets/",
-                        $"targetted-tile-highlight-{set}");
-                    var tilePosition = new Vector3Int(t.x, t.y, LAYER_TRAVERSABLE);
+                        var unityTile = _tileLoader.LoadTile(
+                            "mapping/tilesets/",
+                            $"targetted-tile-highlight-{set}");
+                        var tilePosition = new Vector3Int(t.x, t.y, LAYER_TRAVERSABLE);
 
-                    _mapPrefab.WalkIndicatorTilemap.SetTile(
-                        tilePosition,
-                        unityTile);
+                        // must be called from main thread
+                        _mapPrefab.WalkIndicatorTilemap.SetTile(
+                            tilePosition,
+                            unityTile);
+                    }
                 }
-            }
 
-            if (forceRefresh)
-            {
-                _mapPrefab.Tilemap.RefreshAllTiles();
-            }
+                if (forceRefresh)
+                {
+                    // must be called from main thread
+                    _mapPrefab.Tilemap.RefreshAllTiles();
+                }
+            });
         }
 
         private void ToggleGridLines(
@@ -315,25 +340,33 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 return;
             }
 
-            for (int i = _minimumTileX; i <= _maximumTileX; i++)
-            {
-                for (int j = _minimumTileY; j <= _maximumTileY; j++)
-                {
-                    var unityTile = enabled
-                        ? _tileLoader.LoadTile(
-                            "mapping/tilesets/",
-                            "tile-border-overlay")
-                        : null;
-                    _mapPrefab.Tilemap.SetTile(
-                        new Vector3Int(i, j, LAYER_GRID_LINES),
-                        unityTile);
-                }
-            }
+            var tileBorderOverlay = _tileLoader.LoadTile(
+                "mapping/tilesets/",
+                "tile-border-overlay");
 
-            if (forceRefresh)
+            _dispatcher.RunOnMainThread(() =>
             {
-                _mapPrefab.Tilemap.RefreshAllTiles();
-            }
+                for (int i = _minimumTileX; i <= _maximumTileX; i++)
+                {
+                    for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                    {
+                        var unityTile = enabled
+                            ? tileBorderOverlay
+                            : null;
+
+                        // must be called from main thread
+                        _mapPrefab.Tilemap.SetTile(
+                            new Vector3Int(i, j, LAYER_GRID_LINES),
+                            unityTile);
+                    }
+                }
+
+                if (forceRefresh)
+                {
+                    // must be called from main thread
+                    _mapPrefab.Tilemap.RefreshAllTiles();
+                }
+            });
         }
     }
 }

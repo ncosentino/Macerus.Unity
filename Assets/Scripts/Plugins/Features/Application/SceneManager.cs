@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-using Assets.Scripts.Behaviours;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Game.Api.Scenes;
 
@@ -15,9 +15,12 @@ namespace Assets.Scripts.Plugins.Features.Application
 
     public sealed class SceneManager : ISceneManager
     {
-        public SceneManager()
+        private readonly ICoroutineRunner _coroutineRunner;
+
+        public SceneManager(ICoroutineRunner coroutineRunner)
         {
             UnitySceneManager.sceneLoaded += UnitySceneManager_sceneLoaded;
+            _coroutineRunner = coroutineRunner;
         }
 
         public event EventHandler<EventArgs> SceneChanged;
@@ -31,7 +34,9 @@ namespace Assets.Scripts.Plugins.Features.Application
 
         public void BeginNavigateToScene(IIdentifier sceneId, Action<ISceneCompletion> completedCallback)
         {
-            GameDependencyBehaviour.Instance.StartCoroutine(LoadScene(sceneId, completedCallback));
+            _coroutineRunner.StartCoroutine(
+                LoadScene(sceneId, completedCallback),
+                errorCallback: null);
         }
 
         private IEnumerator LoadScene(

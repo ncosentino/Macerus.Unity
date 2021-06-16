@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+
 using Assets.Scripts.Unity.Threading;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Behaviours.Threading
@@ -11,12 +13,15 @@ namespace Assets.Scripts.Behaviours.Threading
         IDispatcher
     {
         private static DispatcherBehaviour _instance;
+        private static Thread _mainThread;
 
         private volatile bool _queued;
         private List<Action> _backlog = new List<Action>(8);
         private List<Action> _actions = new List<Action>(8);
 
         public static IDispatcher Instance => _instance;
+
+        public bool IsMainThread => Thread.CurrentThread == _mainThread;
 
         public void RunAsync(Action action)
         {
@@ -32,6 +37,12 @@ namespace Assets.Scripts.Behaviours.Threading
 
         public void RunOnMainThread(Action action)
         {
+            if (IsMainThread)
+            {
+                action();
+                return;
+            }
+
             lock (_backlog)
             {
                 _backlog.Add(action);
@@ -46,6 +57,8 @@ namespace Assets.Scripts.Behaviours.Threading
             {
                 _instance = new GameObject("Dispatcher").AddComponent<DispatcherBehaviour>();
                 DontDestroyOnLoad(_instance.gameObject);
+
+                _mainThread = Thread.CurrentThread;
             }
         }
 

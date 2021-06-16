@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 
 using NexusLabs.Contracts;
 
@@ -10,6 +10,8 @@ namespace Assets.Scripts.Plugins.Features.GameEngine
 {
     public sealed class GameEngineUpdateBehaviour : MonoBehaviour
     {
+        private bool _stillUpdating;
+
         public IGameEngine GameEngine { get; set; }
 
         private void Start()
@@ -17,14 +19,28 @@ namespace Assets.Scripts.Plugins.Features.GameEngine
             this.RequiresNotNull(GameEngine, nameof(GameEngine));
         }
 
-        //private async void Update()
-        //{
-        //    await Task.Run(GameEngine.Update);
-        //}
-
-        private void Update()
+        private async void Update()   
         {
-            GameEngine.Update();
+            if (_stillUpdating)
+            {
+                return;
+            }
+
+            _stillUpdating = true;
+            await GameEngine
+                .UpdateAsync()
+                .ContinueWith(prev =>
+                {
+                    if (prev.IsFaulted)
+                    {
+                        throw new InvalidOperationException(
+                            "Game engine update threw an exception. See inner exception.",
+                            prev.Exception);
+                    }
+
+                    _stillUpdating = false;
+                })
+                .ConfigureAwait(false);
         }
     }
 }

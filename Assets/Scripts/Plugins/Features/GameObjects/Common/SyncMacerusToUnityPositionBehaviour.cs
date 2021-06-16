@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Assets.Scripts.Unity.Threading;
+
 using NexusLabs.Contracts;
 
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
@@ -20,11 +22,14 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 
         public IMacerusToUnityPositionSynchronizer MacerusToUnityPositionSynchronizer { get; set; }
 
+        public IDispatcher Dispatcher { get; set; }
+
         private void Start()
         {
-            UnityContracts.RequiresNotNull(this, MacerusToUnityPositionSynchronizer, nameof(MacerusToUnityPositionSynchronizer));
-            UnityContracts.RequiresNotNull(this, ObservablePositionBehavior, nameof(ObservablePositionBehavior));
-            UnityContracts.RequiresNotNull(this, ObservableSizeBehavior, nameof(ObservableSizeBehavior));
+            this.RequiresNotNull(MacerusToUnityPositionSynchronizer, nameof(MacerusToUnityPositionSynchronizer));
+            this.RequiresNotNull(ObservablePositionBehavior, nameof(ObservablePositionBehavior));
+            this.RequiresNotNull(ObservableSizeBehavior, nameof(ObservableSizeBehavior));
+            this.RequiresNotNull(Dispatcher, nameof(Dispatcher));
 
             ObservablePositionBehavior.PositionChanged += PositionBehavior_PositionChanged;
             ObservableSizeBehavior.SizeChanged += ObservableSizeBehavior_SizeChanged;
@@ -57,20 +62,26 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
             object sender,
             EventArgs e)
         {
-            MacerusToUnityPositionSynchronizer.SynchronizeMacerusToUnitySize(
+            Dispatcher.RunOnMainThread(() =>
+            {
+                MacerusToUnityPositionSynchronizer.SynchronizeMacerusToUnitySize(
                 gameObject,
                 ObservableSizeBehavior.Width,
                 ObservableSizeBehavior.Height);
+            });
         }
 
         private void PositionBehavior_PositionChanged(
             object sender,
             EventArgs e)
         {
-            MacerusToUnityPositionSynchronizer.SynchronizeMacerusToUnityPosition(
+            Dispatcher.RunOnMainThread(() =>
+            {
+                MacerusToUnityPositionSynchronizer.SynchronizeMacerusToUnityPosition(
                 gameObject,
                 ObservablePositionBehavior.X,
                 ObservablePositionBehavior.Y);
+            });
         }
     }
 }

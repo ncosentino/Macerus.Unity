@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
+
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
@@ -38,12 +40,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
         }
 
-        private void Update()
+        private async void Update()
         {
-            HandleInteractionControls();
+            await HandleInteractionControlsAsync();
         }
 
-        private void HandleInteractionControls()
+        private async Task HandleInteractionControlsAsync()
         {
             if (DebugConsoleManager.GetConsoleWindowVisible())
             {
@@ -60,7 +62,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     var actor = gameObject
                         .GetComponent<IReadOnlyHasGameObject>()
                         .GameObject;
-                    InteractionHandler.Interact(actor, interactable);
+                    await InteractionHandler
+                        .InteractAsync(actor, interactable)
+                        .ConfigureAwait(false);
                 }
             }
         }

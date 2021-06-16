@@ -11,6 +11,6 @@ namespace Assets.Scripts.Gui.Noesis
 {
     public interface IUiDispatcher
     {
-        Task ExecuteAsync(Action action);
+        void RunOnMainThread(Action action);
     }
 }

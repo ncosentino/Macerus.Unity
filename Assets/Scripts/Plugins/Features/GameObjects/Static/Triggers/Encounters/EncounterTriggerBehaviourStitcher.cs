@@ -42,12 +42,14 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Static.Triggers
                 TimeSpan.FromMilliseconds( // FIXME: this casting is horrendous
                     ((IInterval<double>)encounterTriggerPropertiesBehavior.EncounterInterval).Value));
             
-            encounterTriggerHandler.Encounter += (s, e) =>
+            encounterTriggerHandler.Encounter += async (s, e) =>
             {
                 var context = _filtercontextProvider.GetContext();
-                _encounterManager.StartEncounter(
-                    context,
-                    encounterTriggerPropertiesBehavior.EncounterId);
+                await _encounterManager
+                    .StartEncounterAsync(
+                        context,
+                        encounterTriggerPropertiesBehavior.EncounterId)
+                    .ConfigureAwait(false);
             };
         }
     }

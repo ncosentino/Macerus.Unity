@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Unity.Resources;
 
@@ -15,9 +16,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _resourceLoader = resourceLoader;
         }
 
-        public Stream LoadStream(string pathToResource)
+        public async Task<Stream> LoadStreamAsync(string pathToResource)
         {
-            return _resourceLoader.LoadStream(pathToResource);
+            return await _resourceLoader.LoadStreamAsync(pathToResource);
         }
     }
 }

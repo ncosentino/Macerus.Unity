@@ -3,7 +3,6 @@ using System.Linq;
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis;
-using Assets.Scripts.Gui.Noesis.Views.Resources;
 using Assets.Scripts.Gui.Unity;
 using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Console;
@@ -16,17 +15,8 @@ using Assets.Scripts.Scenes.Explore.Console;
 using Assets.Scripts.Scenes.Explore.Input;
 using Assets.Scripts.Unity.GameObjects;
 
-using Macerus.Api.Behaviors.Filtering;
-using Macerus.Plugins.Features.GameObjects.Actors.Generation;
 using Macerus.Plugins.Features.Hud;
 using Macerus.Plugins.Features.InGameMenu.Api;
-
-using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Api.GameObjects.Generation;
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
-using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
-using ProjectXyz.Plugins.Features.Mapping.Api;
-using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -41,12 +31,6 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IGuiInputStitcher _guiInputStitcher;
         private readonly IExploreSceneStartupInterceptorFacade _exploreSceneStartupInterceptorFacade;
         private readonly IGameEngineUpdateBehaviourStitcher _gameEngineUpdateBehaviourStitcher;
-        private readonly IMapManager _mapManager;
-        private readonly IMapGameObjectManager _mapGameObjectManager;
-        private readonly IGameObjectIdentifiers _gameObjectIdentifiers;
-        private readonly IActorIdentifiers _actorIdentifiers;
-        private readonly IActorGeneratorFacade _actorGeneratorFacade;
-        private readonly IFilterContextAmenity _filterContextAmenity;
         private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
         private readonly ISoundPlayingBehaviourStitcher _soundPlayingBehaviourStitcher;
         private readonly IUnityGuiHitTester _unityGuiHitTester;
@@ -63,12 +47,6 @@ namespace Assets.Scripts.Scenes.Explore
             IGuiInputStitcher guiInputStitcher,
             IExploreSceneStartupInterceptorFacade exploreSceneStartupInterceptorFacade,
             IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
-            IMapManager mapManager,
-            IMapGameObjectManager mapGameObjectManager,
-            IGameObjectIdentifiers gameObjectIdentifiers,
-            IActorIdentifiers actorIdentifiers,
-            IActorGeneratorFacade actorGeneratorFacade,
-            IFilterContextAmenity filterContextAmenity,
             IGuiBehaviourStitcher guiBehaviourStitcher,
             ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher,
             IUnityGuiHitTester unityGuiHitTester,
@@ -84,12 +62,6 @@ namespace Assets.Scripts.Scenes.Explore
             _guiInputStitcher = guiInputStitcher;
             _exploreSceneStartupInterceptorFacade = exploreSceneStartupInterceptorFacade;
             _gameEngineUpdateBehaviourStitcher = gameEngineUpdateBehaviourStitcher;
-            _mapManager = mapManager;
-            _mapGameObjectManager = mapGameObjectManager;
-            _gameObjectIdentifiers = gameObjectIdentifiers;
-            _actorIdentifiers = actorIdentifiers;
-            _actorGeneratorFacade = actorGeneratorFacade;
-            _filterContextAmenity = filterContextAmenity;
             _guiBehaviorStitcher = guiBehaviourStitcher;
             _soundPlayingBehaviourStitcher = soundPlayingBehaviourStitcher;
             _unityGuiHitTester = unityGuiHitTester;
@@ -141,29 +113,6 @@ namespace Assets.Scripts.Scenes.Explore
             _lazyInGameMenuController.Value.CloseMenu();
 
             _hasFollowCameraBehaviourStitcher.Attach(exploreGameRoot.GameObject);
-
-            // FIXME: this is just for testing
-            _mapManager.SwitchMap(new StringIdentifier("swamp"));
-            var player = CreatePlayerInstance();
-            player.GetOnly<IPositionBehavior>().SetPosition(40, -16);
-            _mapGameObjectManager.MarkForAddition(player);
-        }
-
-        private IGameObject CreatePlayerInstance()
-        {
-            var context = _filterContextAmenity.CreateFilterContextForSingle(
-                _filterContextAmenity.CreateRequiredAttribute(
-                    _gameObjectIdentifiers.FilterContextTypeId,
-                    _actorIdentifiers.ActorTypeIdentifier),
-                _filterContextAmenity.CreateRequiredAttribute(
-                    _actorIdentifiers.ActorDefinitionIdentifier,
-                    new StringIdentifier("player")));
-            var player = _actorGeneratorFacade
-                .GenerateActors(
-                    context,
-                    new IGeneratorComponent[] { })
-                .Single();
-            return player;
         }
     }
 }
