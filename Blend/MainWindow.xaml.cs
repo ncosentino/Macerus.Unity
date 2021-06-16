@@ -40,6 +40,13 @@ namespace Assets.Blend
             var macerusContainerBuilder = new MacerusContainerBuilder();
             var container = macerusContainerBuilder.CreateContainer();
 
+            var transitionController = container.Resolve<ITransitionController>();
+            transitionController.StartTransition(
+                TimeSpan.FromSeconds(0),
+                TimeSpan.FromSeconds(0.5),
+                () => { },
+                () => { });
+
             bool showMainMenu = false;
             if (showMainMenu)
             {
@@ -64,9 +71,11 @@ namespace Assets.Blend
                 var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
                 var filterContext = filterContextAmenity.CreateNoneFilterContext();
                 var encounterManager = container.Resolve<IEncounterManager>();
-                encounterManager.StartEncounter(
-                    filterContext,
-                    new StringIdentifier("test-encounter"));
+                encounterManager
+                    .StartEncounterAsync(
+                        filterContext,
+                        new StringIdentifier("test-encounter"))
+                    .Wait();
 
                 var dropTableId = new StringIdentifier("any_normal_magic_rare_10x_lvl10");
                 var lootGeneratorAmenity = container.Resolve<ILootGeneratorAmenity>();

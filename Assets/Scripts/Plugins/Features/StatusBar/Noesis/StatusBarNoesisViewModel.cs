@@ -79,15 +79,15 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
         private void RefreshLeftResource()
         {
             _translatedLeftResource = Tuple.Create(
-                _viewModelToWrap.LeftResource.Current,
-                _viewModelToWrap.LeftResource.Maximum);
+                _viewModelToWrap.LeftResource?.Current ?? 1,
+                _viewModelToWrap.LeftResource?.Maximum ?? 1);
         }
 
         private void RefreshRightResource()
         {
             _translatedRightResource = Tuple.Create(
-                _viewModelToWrap.RightResource.Current,
-                _viewModelToWrap.RightResource.Maximum);
+                _viewModelToWrap.RightResource?.Current ?? 1,
+                _viewModelToWrap.RightResource?.Maximum ?? 1);
         }
 
         private void RefreshAbilities()

@@ -2,9 +2,11 @@
 #define NOESIS
 using Assets.Scripts.Unity.Threading;
 #else
+using System.Windows;
 #endif
 
 using System;
+using System.Threading.Tasks;
 
 namespace Assets.Scripts.Gui.Noesis
 {
@@ -23,7 +25,11 @@ namespace Assets.Scripts.Gui.Noesis
             _dispatcher.RunOnMainThread(action);
         }
 #else
-        public void RunOnMainThread(Action action) => action();
+        public void RunOnMainThread(Action action)
+        {
+            var dispatcher = Application.Current?.Dispatcher;
+            dispatcher?.InvokeAsync(action);
+        }
 #endif
     }
 }
