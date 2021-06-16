@@ -347,8 +347,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"\t{nameof(_turnBasedManager.ClearApplicableOnUpdate)}: {_turnBasedManager.ClearApplicableOnUpdate}\r\n" +
                 $"\t{nameof(_turnBasedManager.GlobalSync)}: {_turnBasedManager.GlobalSync}\r\n" +
                 $"\t{nameof(_turnBasedManager.SyncTurnsFromElapsedTime)}: {_turnBasedManager.SyncTurnsFromElapsedTime}\r\n" +
-                $"\t{nameof(_turnBasedManager.ApplicableGameObjects)}:\r\n" +
-                $"\t\t{string.Join("\r\n\t\t", _turnBasedManager.ApplicableGameObjects)}");
+                $"\t{nameof(_turnBasedManager.GetApplicableGameObjects)}:\r\n" +
+                $"\t\t{string.Join("\r\n\t\t", _turnBasedManager.GetApplicableGameObjects())}");
         }
 
         [DiscoverableConsoleCommand("Sets the weather table to one with the specified ID.")]
