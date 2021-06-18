@@ -69,30 +69,36 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
             {
                 Logger.Debug($"Switching weather from '{_currentWeather?.WeatherResourceId}' to '{nextWeather?.WeatherResourceId}'...");
 
-                // transition all non-transitioning weather out
-                foreach (var child in WeatherSystemGameObject
-                    .GetChildGameObjects()
-                    .Where(x => 
-                        x.GetComponent<FadeAndKillBehaviour>() == null &&
-                        x.GetComponent<FadeInBehaviour>() == null))
+                if (_currentWeather != null)
                 {
-                    FadeAndKillBehaviourStitcher.Attach(
-                        child,
-                        _currentWeather.TransitionOutDuration,
-                        _currentWeather.MaxOpacity,
-                        _currentWeather.MinOpacity);
+                    // transition all non-transitioning weather out
+                    foreach (var child in WeatherSystemGameObject
+                        .GetChildGameObjects()
+                        .Where(x =>
+                            x.GetComponent<FadeAndKillBehaviour>() == null &&
+                            x.GetComponent<FadeInBehaviour>() == null))
+                    {
+                        FadeAndKillBehaviourStitcher.Attach(
+                            child,
+                            _currentWeather.TransitionOutDuration,
+                            _currentWeather.MaxOpacity,
+                            _currentWeather.MinOpacity);
+                    }
                 }
 
-                // create the new weather and add it to our object
-                var animatedWeatherObject = AnimatedWeatherFactory.Create(nextWeather.WeatherResourceId);
-                animatedWeatherObject.transform.SetParent(
-                    WeatherSystemGameObject.transform,
-                    false);
-                FadeInBehaviourStitcher.Attach(
-                    animatedWeatherObject,
-                    nextWeather.TransitionOutDuration,
-                    nextWeather.MinOpacity,
-                    nextWeather.MaxOpacity);
+                if (nextWeather != null)
+                {
+                    // create the new weather and add it to our object
+                    var animatedWeatherObject = AnimatedWeatherFactory.Create(nextWeather.WeatherResourceId);
+                    animatedWeatherObject.transform.SetParent(
+                        WeatherSystemGameObject.transform,
+                        false);
+                    FadeInBehaviourStitcher.Attach(
+                        animatedWeatherObject,
+                        nextWeather.TransitionOutDuration,
+                        nextWeather.MinOpacity,
+                        nextWeather.MaxOpacity);
+                }
 
                 Logger.Debug($"Switched weather from '{_currentWeather?.WeatherResourceId}' to '{nextWeather?.WeatherResourceId}'.");
                 _currentWeather = nextWeather;

@@ -31,6 +31,13 @@ namespace Assets.Scripts.Plugins.Features.AnimatedWeather
                 return _currentAnimatedWeather;
             }
 
+            if (nextWeather == null)
+            {
+                _currentWeather = null;
+                _currentAnimatedWeather = null;
+                return null;
+            }
+
             var weatherId = nextWeather
                 .GetOnly<IIdentifierBehavior>()
                 .Id;
