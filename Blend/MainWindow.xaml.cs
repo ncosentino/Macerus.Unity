@@ -41,11 +41,6 @@ namespace Assets.Blend
             var container = macerusContainerBuilder.CreateContainer();
 
             var transitionController = container.Resolve<ITransitionController>();
-            transitionController.StartTransition(
-                TimeSpan.FromSeconds(0),
-                TimeSpan.FromSeconds(0.5),
-                () => { },
-                () => { });
 
             bool showMainMenu = false;
             if (showMainMenu)
@@ -55,11 +50,17 @@ namespace Assets.Blend
                 container.Resolve<ITransitionController>().StartTransition(
                     TimeSpan.Zero,
                     TimeSpan.FromSeconds(3),
-                    () => mainMenuController.OpenMenu(),
-                    () => { });
+                    async () => mainMenuController.OpenMenu(),
+                    async () => { });
             }
             else
             {
+                transitionController.StartTransition(
+                    TimeSpan.FromSeconds(0),
+                    TimeSpan.FromSeconds(0.5),
+                    async () => { },
+                    async () => { });
+
                 Content = container.Resolve<IHudView>();
 
                 var mapManager = container.Resolve<IMapManager>();

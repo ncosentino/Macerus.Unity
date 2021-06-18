@@ -54,13 +54,13 @@
       Grid.Column="1"
       FontSize="64"
       Content="Save"
-      IsEnabled="False"/>
+      Command="{Binding SaveCommand}"/>
     <Button
       Grid.Row="5"
       Grid.Column="1"
       FontSize="64"
       Content="Load"
-      IsEnabled="False"/>
+      Command="{Binding LoadCommand}"/>
 
     <Button
       Grid.Row="7"

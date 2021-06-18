@@ -16,5 +16,9 @@ namespace Assets.Scripts.Plugins.Features.InGameMenu.Noesis
         ICommand ExitCommand { get; }
 
         ICommand MainMenuCommand { get; }
+
+        ICommand LoadCommand { get; }
+
+        ICommand SaveCommand { get; }
     }
 }

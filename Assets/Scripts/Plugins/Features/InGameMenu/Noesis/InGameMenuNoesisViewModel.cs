@@ -40,6 +40,8 @@ namespace Assets.Scripts.Plugins.Features.InGameMenu.Noesis
             CloseCommand = new DelegateCommand(_ => _viewModelToWrap.Close());
             ExitCommand = new DelegateCommand(_ => _viewModelToWrap.ExitGame());
             MainMenuCommand = new DelegateCommand(_ => _viewModelToWrap.GoToMainMenu());
+            LoadCommand = new DelegateCommand(_ => _viewModelToWrap.LoadGame());
+            SaveCommand = new DelegateCommand(_ => _viewModelToWrap.SaveGame());
         }
 
         [NotifyForWrappedProperty(nameof(IInGameMenuViewModel.IsOpen))]
@@ -52,6 +54,10 @@ namespace Assets.Scripts.Plugins.Features.InGameMenu.Noesis
         public ICommand ExitCommand { get; }
 
         public ICommand MainMenuCommand { get; }
+
+        public ICommand LoadCommand { get; }
+
+        public ICommand SaveCommand { get; }
 
         private void ViewModelToWrap_PropertyChanged(
             object sender,
