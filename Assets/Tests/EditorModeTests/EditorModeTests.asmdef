@@ -150,6 +150,8 @@
 "ProjectXyz.Plugins.Features.GameObjects.StatCalculation.Handlers.Default.dll",
 "ProjectXyz.Plugins.Features.Mapping.Api.dll",
 "ProjectXyz.Plugins.Features.Mapping.Default.dll",
+"ProjectXyz.Plugins.Features.PartyManagement.Default.dll",
+"ProjectXyz.Plugins.Features.PartyManagement.dll",
 "ProjectXyz.Plugins.Features.StateEnchantments.Api.dll",
 "ProjectXyz.Plugins.Features.StateEnchantments.Shared.dll",
 "ProjectXyz.Plugins.Features.TimeOfDay.Api.dll",
