@@ -2,7 +2,7 @@
 using Assets.Scripts.Unity.Threading;
 
 using ProjectXyz.Plugins.Features.Filtering.Api;
-using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.Mapping;
 using ProjectXyz.Plugins.Features.Weather.Api;
 
 namespace Assets.Scripts.Plugins.Features.Maps
