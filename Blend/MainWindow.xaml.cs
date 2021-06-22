@@ -2,13 +2,15 @@
 using System.Linq;
 using System.Threading;
 using System.Windows;
+
 using Assets.Scripts.Autofac;
 using Assets.Scripts.Plugins.Features.NewHud.Noesis;
 using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu;
+
 using Autofac;
+
 using Macerus.Api.Behaviors;
 using Macerus.Api.Behaviors.Filtering;
-using Macerus.Plugins.Features.CharacterSheet.Api;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
 using Macerus.Plugins.Features.GameObjects.Actors.Generation;
@@ -18,12 +20,13 @@ using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
 using Macerus.Plugins.Features.MainMenu.Api;
+
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.GameObjects.Generation;
 using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
-using ProjectXyz.Plugins.Features.Mapping.Api;
+using ProjectXyz.Plugins.Features.Mapping;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Blend
