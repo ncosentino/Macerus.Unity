@@ -17,6 +17,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
     public sealed class PlayerQuickSlotControlsBehaviour : MonoBehaviour
     {
         private readonly Dictionary<KeyCode, int> _keyToSlotIndex;
+        
+        private bool _handlingUpdate;
 
         public PlayerQuickSlotControlsBehaviour()
         {
@@ -55,7 +57,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private async Task Update()
         {
-            await HandleQuickSlotControlsAsync();
+            _handlingUpdate = true;
+            HandleQuickSlotControlsAsync().ContinueWith(_ => _handlingUpdate = false).Forget();
+            while (_handlingUpdate)
+            {
+                await Task.Yield();
+            }
         }
 
         private async Task HandleQuickSlotControlsAsync()
@@ -69,18 +76,20 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             {
                 if (KeyboardInput.GetKeyUp(entry.Key))
                 {
-                    await StatusBarController.ActivateSkillSlotAsync(entry.Value);
+                    await StatusBarController
+                        .ActivateSkillSlotAsync(entry.Value)
+                        .ConfigureAwait(false);
                     break;
                 }
 
                 if (KeyboardInput.GetKeyDown(entry.Key))
                 {
-                    await StatusBarController.PreviewSkillSlotAsync(entry.Value);
+                    await StatusBarController
+                        .PreviewSkillSlotAsync(entry.Value)
+                        .ConfigureAwait(false);
                     break;
                 }
             }
         }
     }
-
-
 }
