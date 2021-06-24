@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Plugins.Features.Animations.Api;
+﻿using System.Threading.Tasks;
+
+using Assets.Scripts.Plugins.Features.Animations.Api;
 using Assets.Scripts.Unity.Resources.Sprites;
 using Assets.Scripts.Unity.Threading;
 
@@ -30,7 +32,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.UnityBehaviours
 
         IObservableDynamicAnimationBehavior IReadOnlySpriteAnimationBehaviour.DynamicAnimationBehavior => DynamicAnimationBehavior;
 
-        private async void Start()
+        private async Task Start()
         {
             UnityContracts.RequiresNotNull(this, SpriteLoader, nameof(SpriteLoader));
             UnityContracts.RequiresNotNull(this, SpriteRenderer, nameof(SpriteRenderer));

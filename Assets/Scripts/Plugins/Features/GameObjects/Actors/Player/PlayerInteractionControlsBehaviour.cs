@@ -5,6 +5,7 @@ using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Plugins.Features.Interactions.Api;
 
@@ -18,6 +19,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         MonoBehaviour,
         IReadOnlyPlayerInteractionControlsBehaviour
     {
+        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
+
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 
         public IKeyboardControls KeyboardControls { get; set; }
@@ -40,9 +43,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
         }
 
-        private async void Update()
+        private async Task Update()
         {
-            await HandleInteractionControlsAsync();
+            await _runner.RunAsync(HandleInteractionControlsAsync);
         }
 
         private async Task HandleInteractionControlsAsync()

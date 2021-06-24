@@ -1,4 +1,7 @@
-﻿using Assets.Scripts.Unity;
+﻿using System.Threading.Tasks;
+
+using Assets.Scripts.Unity;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Plugins.Features.GameObjects.Actors.LightRadius;
 using Macerus.Plugins.Features.Stats.Api;
@@ -15,6 +18,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
         MonoBehaviour,
         ILightRadiusUpdateBehaviour
     {
+        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
         private double _lastUpdate;
 
         public ITimeProvider TimeProvider { get; set; }
@@ -37,6 +41,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
         }
 
         private async void FixedUpdate()
+        {
+            await _runner.RunAsync(HandleUpdateAsync);
+        }
+
+        private async Task HandleUpdateAsync()
         {
             var secondsSinceLastUpdate = TimeProvider.SecondsSinceStartOfGame - _lastUpdate;
             if (secondsSinceLastUpdate < 1)

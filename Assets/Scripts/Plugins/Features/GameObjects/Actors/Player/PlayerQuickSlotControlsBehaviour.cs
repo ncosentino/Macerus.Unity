@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Plugins.Features.StatusBar.Api;
 
@@ -16,10 +17,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerQuickSlotControlsBehaviour : MonoBehaviour
     {
+        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
         private readonly Dictionary<KeyCode, int> _keyToSlotIndex;
         
-        private bool _handlingUpdate;
-
         public PlayerQuickSlotControlsBehaviour()
         {
             _keyToSlotIndex = new Dictionary<KeyCode, int>();
@@ -57,12 +57,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         private async Task Update()
         {
-            _handlingUpdate = true;
-            HandleQuickSlotControlsAsync().ContinueWith(_ => _handlingUpdate = false).Forget();
-            while (_handlingUpdate)
-            {
-                await Task.Yield();
-            }
+            await _runner.RunAsync(HandleQuickSlotControlsAsync);
         }
 
         private async Task HandleQuickSlotControlsAsync()

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Unity.Threading;
 
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.Interactions.Api;
@@ -18,11 +20,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         MonoBehaviour,
         IObservablePlayerInteractionDetectionBehavior
     {
+        private readonly UnityAsynRunner _runner;
         private readonly List<GameObject> _interactables;
 
         public PlayerInteractionDetectionBehaviour()
         {
             _interactables = new List<GameObject>();
+            _runner = new UnityAsynRunner();
         }
 
         public event EventHandler<EventArgs> NewInteractable;
@@ -39,6 +43,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         }
 
         private async void OnTriggerEnter2D(Collider2D collision)
+        {
+            await _runner.RunAsync(() => HandleTriggerEnterAsync(collision));
+        }
+
+        private async Task HandleTriggerEnterAsync(Collider2D collision)
         {
             var collidedObject = collision.gameObject;
             var interactionBehavior = collidedObject
