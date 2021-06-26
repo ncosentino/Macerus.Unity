@@ -16,11 +16,13 @@ namespace Assets.Scripts.Plugins.Features.Application
     public sealed class SceneManager : ISceneManager
     {
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly IDispatcher _dispatcher;
 
-        public SceneManager(ICoroutineRunner coroutineRunner)
+        public SceneManager(ICoroutineRunner coroutineRunner, IDispatcher dispatcher)
         {
             UnitySceneManager.sceneLoaded += UnitySceneManager_sceneLoaded;
             _coroutineRunner = coroutineRunner;
+            _dispatcher = dispatcher;
         }
 
         public event EventHandler<EventArgs> SceneChanged;
@@ -57,7 +59,9 @@ namespace Assets.Scripts.Plugins.Features.Application
                 // Check if the load has finished
                 if (asyncOperation.progress >= 0.9f)
                 {
-                    var sceneCompletion = new SceneCompletion(asyncOperation);
+                    var sceneCompletion = new SceneCompletion(
+                        _dispatcher,
+                        asyncOperation);
                     if (completedCallback == null)
                     {
                         sceneCompletion.SwitchoverScenes();
@@ -81,16 +85,20 @@ namespace Assets.Scripts.Plugins.Features.Application
 
         private sealed class SceneCompletion : ISceneCompletion
         {
+            private readonly IDispatcher _dispatcher;
             private readonly AsyncOperation _asyncOperation;
 
-            public SceneCompletion(AsyncOperation asyncOperation)
+            public SceneCompletion(
+                IDispatcher dispatcher,
+                AsyncOperation asyncOperation)
             {
+                _dispatcher = dispatcher;
                 _asyncOperation = asyncOperation;
             }
 
             public void SwitchoverScenes()
             {
-                _asyncOperation.allowSceneActivation = true;
+                _dispatcher.RunOnMainThread(() => _asyncOperation.allowSceneActivation = true);
             }
         }
     }
