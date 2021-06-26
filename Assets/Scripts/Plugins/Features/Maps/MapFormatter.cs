@@ -144,7 +144,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 // tiles by formatting the tile map
                 ToggleGridLines(_gridLinesEnabled, false);
                 SetTraversableTiles(_traversableTiles ?? Enumerable.Empty<Vector2Int>(), false);
-                SetTraversableTiles(_targettedTiles ?? Enumerable.Empty<Vector2Int>(), false);
+                
+                // FIXME: the field we store vs the parameter we use are not compatible
+                //SetTargettedTiles(_targettedTiles ?? Enumerable.Empty<Vector2Int>(), false);
 
                 // must be called from main thread
                 mapPrefab.Tilemap.RefreshAllTiles();
