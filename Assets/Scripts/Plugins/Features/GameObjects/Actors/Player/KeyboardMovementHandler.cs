@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Input.Api;
+﻿using System;
+
+using Assets.Scripts.Input.Api;
 using Assets.Scripts.Plugins.Features.Controls;
 using Assets.Scripts.Unity.Input;
 
@@ -69,7 +71,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 throttleX = movementBehavior.ThrottleX;
             }
 
-            movementBehavior.SetThrottle(throttleX, throttleY);
+            if (_playerControlConfiguration.TileRestrictedMovement && 
+                (Math.Abs(throttleX) > 0 || Math.Abs(throttleY) > 0))
+            {
+                movementBehavior.SetDirectionByVector(throttleX, throttleY);
+            }
+            else
+            {
+                movementBehavior.SetThrottle(throttleX, throttleY);
+            }
         }
     }
 }
