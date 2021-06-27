@@ -7,7 +7,10 @@ using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu;
 using Assets.Scripts.Scenes.MainMenu.Input;
 using Assets.Scripts.Unity.GameObjects;
 
+using Macerus.Plugins.Features.Audio;
 using Macerus.Plugins.Features.MainMenu.Api;
+
+using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
 
@@ -21,6 +24,7 @@ namespace Assets.Scripts.Scenes.MainMenu
         private readonly IMainMenuController _mainMenuController;
         private readonly IGuiInputStitcher _guiInputStitcher;
         private readonly IGameEngineUpdateBehaviourStitcher _gameEngineUpdateBehaviourStitcher;
+        private readonly IAudioManager _audioManager;
 
         public MainMenuSetup(
             IUnityGameObjectManager unityGameObjectManager,
@@ -28,7 +32,8 @@ namespace Assets.Scripts.Scenes.MainMenu
             IMainMenuView mainMenuView,
             IMainMenuController mainMenuController,
             IGuiInputStitcher guiInputStitcher,
-            IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher)
+            IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
+            IAudioManager audioManager)
         {
             _unityGameObjectManager = unityGameObjectManager;
             _guiBehaviourStitcher = guiBehaviourStitcher;
@@ -36,6 +41,7 @@ namespace Assets.Scripts.Scenes.MainMenu
             _mainMenuController = mainMenuController;
             _guiInputStitcher = guiInputStitcher;
             _gameEngineUpdateBehaviourStitcher = gameEngineUpdateBehaviourStitcher;
+            _audioManager = audioManager;
         }
 
         public void Setup()
@@ -61,6 +67,8 @@ namespace Assets.Scripts.Scenes.MainMenu
                 .Single());
 
             _mainMenuController.OpenMenu();
+
+            _audioManager.PlayMusicAsync(new StringIdentifier("Audio/Music/TimBeek/The Mountains Loop"));
         }
     }
 }
