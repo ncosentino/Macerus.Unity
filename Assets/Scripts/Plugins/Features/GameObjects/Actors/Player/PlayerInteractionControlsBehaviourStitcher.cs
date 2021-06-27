@@ -18,19 +18,22 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly ILogger _logger;
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IInteractionHandlerFacade _interactionHandlerFacade;
+        private readonly IActorActionCheck _actorActionCheck;
 
         public PlayerInteractionControlsBehaviourStitcher(
             IKeyboardControls keyboardControls,
             IKeyboardInput keyboardInput,
             ILogger logger,
             IDebugConsoleManager debugConsoleManager,
-            IInteractionHandlerFacade interactionHandlerFacade)
+            IInteractionHandlerFacade interactionHandlerFacade,
+            IActorActionCheck actorActionCheck)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
             _logger = logger;
             _debugConsoleManager = debugConsoleManager;
             _interactionHandlerFacade = interactionHandlerFacade;
+            _actorActionCheck = actorActionCheck;
         }
 
         public void Attach(GameObject gameObject)
@@ -41,6 +44,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInteractionControlsBehaviour.KeyboardInput = _keyboardInput;
             playerInteractionControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerInteractionControlsBehaviour.InteractionHandler = _interactionHandlerFacade;
+            playerInteractionControlsBehaviour.ActorActionCheck = _actorActionCheck;
             playerInteractionControlsBehaviour.PlayerInteractionDetectionBehavior = gameObject
                 .GetRequiredComponent<IReadOnlyPlayerInteractionDetectionBehavior>();
         }

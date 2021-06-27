@@ -15,9 +15,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
-    public sealed class PlayerInteractionControlsBehaviour :
-        MonoBehaviour,
-        IReadOnlyPlayerInteractionControlsBehaviour
+    public sealed class PlayerInteractionControlsBehaviour : MonoBehaviour
     {
         private readonly UnityAsynRunner _runner = new UnityAsynRunner();
 
@@ -31,16 +29,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public IInteractionHandlerFacade InteractionHandler { get; set; }
 
+        public IActorActionCheck ActorActionCheck { get; set; }
+
         public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
 
         private void Start()
         {
-            UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
-            UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
-            UnityContracts.RequiresNotNull(this, PlayerInteractionDetectionBehavior, nameof(PlayerInteractionDetectionBehavior));
-            UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
-            UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
-            UnityContracts.RequiresNotNull(this, InteractionHandler, nameof(InteractionHandler));
+            this.RequiresNotNull(KeyboardControls, nameof(KeyboardControls));
+            this.RequiresNotNull(KeyboardInput, nameof(KeyboardInput));
+            this.RequiresNotNull(PlayerInteractionDetectionBehavior, nameof(PlayerInteractionDetectionBehavior));
+            this.RequiresNotNull(Logger, nameof(Logger));
+            this.RequiresNotNull(DebugConsoleManager, nameof(DebugConsoleManager));
+            this.RequiresNotNull(InteractionHandler, nameof(InteractionHandler));
+            this.RequiresNotNull(ActorActionCheck, nameof(ActorActionCheck));
         }
 
         private async Task Update()
@@ -57,14 +58,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
             if (KeyboardInput.GetKeyUp(KeyboardControls.Interact))
             {
+                var actor = gameObject
+                    .GetComponent<IReadOnlyHasGameObject>()
+                    .GameObject;
+                if (!ActorActionCheck.CanAct(actor))
+                {
+                    return;
+                }
+
                 var interactable = PlayerInteractionDetectionBehavior
                     .Interactables
                     .FirstOrDefault();
                 if (interactable != null)
                 {
-                    var actor = gameObject
-                        .GetComponent<IReadOnlyHasGameObject>()
-                        .GameObject;
                     await InteractionHandler
                         .InteractAsync(actor, interactable)
                         .ConfigureAwait(false);

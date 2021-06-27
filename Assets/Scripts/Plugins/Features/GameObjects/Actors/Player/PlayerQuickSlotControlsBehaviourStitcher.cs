@@ -4,6 +4,8 @@ using Assets.Scripts.Unity.Input;
 
 using Macerus.Plugins.Features.StatusBar.Api;
 
+using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
@@ -14,6 +16,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
     {
         private readonly IDebugConsoleManager _debugConsoleManager;
         private readonly IStatusBarController _statusBarController;
+        private readonly IActorActionCheck _actorActionCheck;
         private readonly IKeyboardControls _keyboardControls;
         private readonly IKeyboardInput _keyboardInput;
         private readonly ILogger _logger;
@@ -23,23 +26,27 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             IKeyboardInput keyboardInput,
             ILogger logger,
             IDebugConsoleManager debugConsoleManager,
-            IStatusBarController statusBarController)
+            IStatusBarController statusBarController,
+            IActorActionCheck actorActionCheck)
         {
             _keyboardControls = keyboardControls;
             _keyboardInput = keyboardInput;
             _logger = logger;
             _debugConsoleManager = debugConsoleManager;
             _statusBarController = statusBarController;
+            _actorActionCheck = actorActionCheck;
         }
 
-        public void Attach(GameObject gameObject)
+        public void Attach(GameObject unityGameObject, IGameObject actor)
         {
-            var playerQuickSlotControlsBehaviour = gameObject.AddComponent<PlayerQuickSlotControlsBehaviour>();
+            var playerQuickSlotControlsBehaviour = unityGameObject.AddComponent<PlayerQuickSlotControlsBehaviour>();
             playerQuickSlotControlsBehaviour.Logger = _logger;
             playerQuickSlotControlsBehaviour.KeyboardControls = _keyboardControls;
             playerQuickSlotControlsBehaviour.KeyboardInput = _keyboardInput;
             playerQuickSlotControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerQuickSlotControlsBehaviour.StatusBarController = _statusBarController;
+            playerQuickSlotControlsBehaviour.ActorActionCheck = _actorActionCheck;
+            playerQuickSlotControlsBehaviour.Actor = actor;
         }
     }
 }

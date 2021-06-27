@@ -58,6 +58,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder
+                .RegisterType<ActorActionCheck>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<PlayerPrefabStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

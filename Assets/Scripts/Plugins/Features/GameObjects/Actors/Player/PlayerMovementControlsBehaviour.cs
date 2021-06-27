@@ -18,12 +18,15 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         
         public IKeyboardMovementHandler KeyboardMovementHandler { get; set; }
 
+        public IActorActionCheck ActorActionCheck { get; set; }
+
         private void Start()
         {
             this.RequiresNotNull(Actor, nameof(Actor));
             this.RequiresNotNull(DebugConsoleManager, nameof(DebugConsoleManager));
             this.RequiresNotNull(KeyboardMovementHandler, nameof(KeyboardMovementHandler));
             this.RequiresNotNull(MouseMovementHandler, nameof(MouseMovementHandler));
+            this.RequiresNotNull(ActorActionCheck, nameof(ActorActionCheck));
         }
 
         private void Update()
@@ -34,6 +37,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private void HandleMovementControls()
         {
             if (DebugConsoleManager.GetConsoleWindowVisible())
+            {
+                return;
+            }
+
+            if (!ActorActionCheck.CanAct(Actor))
             {
                 return;
             }

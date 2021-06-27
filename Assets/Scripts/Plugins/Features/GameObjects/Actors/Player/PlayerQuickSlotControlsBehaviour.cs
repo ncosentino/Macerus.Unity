@@ -11,6 +11,8 @@ using Macerus.Plugins.Features.StatusBar.Api;
 
 using NexusLabs.Contracts;
 
+using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
@@ -35,13 +37,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public IStatusBarController StatusBarController { get; set; }
 
+        public IGameObject Actor { get; set; }
+
+        public IActorActionCheck ActorActionCheck { get; set; }
+
         private void Start()
         {
-            UnityContracts.RequiresNotNull(this, Logger, nameof(Logger));
-            UnityContracts.RequiresNotNull(this, KeyboardInput, nameof(KeyboardInput));
-            UnityContracts.RequiresNotNull(this, KeyboardControls, nameof(KeyboardControls));
-            UnityContracts.RequiresNotNull(this, DebugConsoleManager, nameof(DebugConsoleManager));
-            UnityContracts.RequiresNotNull(this, StatusBarController, nameof(StatusBarController));
+            this.RequiresNotNull(Logger, nameof(Logger));
+            this.RequiresNotNull(KeyboardInput, nameof(KeyboardInput));
+            this.RequiresNotNull(KeyboardControls, nameof(KeyboardControls));
+            this.RequiresNotNull(DebugConsoleManager, nameof(DebugConsoleManager));
+            this.RequiresNotNull(StatusBarController, nameof(StatusBarController));
+            this.RequiresNotNull(ActorActionCheck, nameof(ActorActionCheck));
+            this.RequiresNotNull(Actor, nameof(Actor));
 
             _keyToSlotIndex[KeyboardControls.QuickSlot1] = 0;
             _keyToSlotIndex[KeyboardControls.QuickSlot2] = 1;
@@ -67,12 +75,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 return;
             }
 
+            if (!ActorActionCheck.CanAct(Actor))
+            {
+                return;
+            }
+
             foreach (var entry in _keyToSlotIndex.OrderBy(x => x.Value))
             {
                 if (KeyboardInput.GetKeyUp(entry.Key))
                 {
                     await StatusBarController
-                        .ActivateSkillSlotAsync(entry.Value)
+                        .ActivateSkillSlotAsync(
+                            Actor,
+                            entry.Value)
                         .ConfigureAwait(false);
                     break;
                 }
@@ -80,7 +95,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 if (KeyboardInput.GetKeyDown(entry.Key))
                 {
                     await StatusBarController
-                        .PreviewSkillSlotAsync(entry.Value)
+                        .PreviewSkillSlotAsync(
+                            Actor,
+                            entry.Value)
                         .ConfigureAwait(false);
                     break;
                 }

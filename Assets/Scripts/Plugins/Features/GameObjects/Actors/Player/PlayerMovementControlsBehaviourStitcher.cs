@@ -11,15 +11,18 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         private readonly IMouseMovementHandler _mouseMovementHandler;
         private readonly IKeyboardMovementHandler _keyboardMovementHandler;
         private readonly IDebugConsoleManager _debugConsoleManager;
+        private readonly IActorActionCheck _actorActionCheck;
 
         public PlayerMovementControlsBehaviourStitcher(
             IMouseMovementHandler mouseMovementHandler,
             IKeyboardMovementHandler keyboardMovementHandler,
-            IDebugConsoleManager debugConsoleManager)
+            IDebugConsoleManager debugConsoleManager,
+            IActorActionCheck actorActionCheck)
         {
             _mouseMovementHandler = mouseMovementHandler;
             _keyboardMovementHandler = keyboardMovementHandler;
             _debugConsoleManager = debugConsoleManager;
+            _actorActionCheck = actorActionCheck;
         }
 
         public void Attach(GameObject unityGameObject, IGameObject gameObject)
@@ -28,6 +31,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             playerInputControlsBehaviour.DebugConsoleManager = _debugConsoleManager;
             playerInputControlsBehaviour.MouseMovementHandler = _mouseMovementHandler;
             playerInputControlsBehaviour.KeyboardMovementHandler = _keyboardMovementHandler;
+            playerInputControlsBehaviour.ActorActionCheck = _actorActionCheck;
             playerInputControlsBehaviour.Actor = gameObject;
         }
     }

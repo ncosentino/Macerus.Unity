@@ -39,7 +39,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _playerInteractionDetectionBehaviourStitcher.Stitch(unityGameObject);
             _playerInputControlsBehaviourStitcher.Attach(unityGameObject, gameObject);
             _playerInteractionControlsBehaviourStitcher.Attach(unityGameObject);
-            _playerQuickSlotControlsBehaviourStitcher.Attach(unityGameObject);
+            _playerQuickSlotControlsBehaviourStitcher.Attach(unityGameObject, gameObject);
         }
     }
 }
