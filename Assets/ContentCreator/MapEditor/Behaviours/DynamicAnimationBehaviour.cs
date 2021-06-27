@@ -6,8 +6,6 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
         MonoBehaviour,
         IConvertableBehaviour
     {
-        public string SourcePattern;
-
         public string AnimationId;
 
         public bool Visible;

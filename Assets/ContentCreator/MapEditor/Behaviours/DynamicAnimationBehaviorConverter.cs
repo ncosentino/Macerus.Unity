@@ -29,9 +29,8 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
         {
             var castedBehavior = (IReadOnlyDynamicAnimationBehavior)behavior;
             var component = target.AddComponent<DynamicAnimationBehaviour>();
-            component.AnimationId = castedBehavior.CurrentAnimationId?.ToString();
+            component.AnimationId = castedBehavior.BaseAnimationId?.ToString();
             component.Visible = castedBehavior.Visible;
-            component.SourcePattern = castedBehavior.SourcePattern;
             yield return component;
         }
 
@@ -39,7 +38,6 @@ namespace Assets.ContentCreator.MapEditor.Behaviours
         {
             var castedBehaviour = (DynamicAnimationBehaviour)component;
             var behavior = _dynamicAnimationBehaviorFactory.Create(
-                castedBehaviour.SourcePattern,
                 new StringIdentifier(castedBehaviour.AnimationId ?? string.Empty),
                 castedBehaviour.Visible,
                 0);
