@@ -7,7 +7,8 @@
     xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.StatusBar.Noesis"
     xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
     d:DesignWidth="1000"
-    d:DesignHeight="600">
+    d:DesignHeight="600"
+    Visibility="{Binding Visibility}">
 
     <UserControl.Resources>
         <ResourceDictionary>

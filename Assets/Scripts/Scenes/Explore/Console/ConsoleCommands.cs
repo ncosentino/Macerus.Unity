@@ -298,7 +298,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 .Single(x => x.Has<IPlayerControlledBehavior>())
                 .GetOnly<IPositionBehavior>();
             var unityPlayerObject = _unityGameObjectManager
-                .FindAll(x => x.IsPlayerControlled())
+                .FindAll(x => x.IsActivePlayerControlled())
                 .Single();
 
             positionBehavior.SetPosition(x, y);

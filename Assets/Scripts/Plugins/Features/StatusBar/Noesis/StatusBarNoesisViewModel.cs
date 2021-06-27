@@ -62,6 +62,11 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
             RefreshAbilities();
         }
 
+        [NotifyForWrappedProperty(nameof(IStatusBarViewModel.IsOpen))]
+        public Visibility Visibility => _viewModelToWrap.IsOpen
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
         // TODO: This has to happen here because the ImageSources need to be made on the UI thread
         // Find a better way to do this!
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.Abilities))]

@@ -13,13 +13,15 @@ using ProjectXyz.Api.GameObjects.Behaviors;
 
 using UnityEngine;
 
-namespace Assets.Scripts // shortened namespace for ease of ue
+namespace Assets.Scripts // shortened namespace for ease of use
 {
     public static class GameObjectExtensionMethods
     {
-        public static bool IsPlayerControlled(this GameObject unityGameObject)
+        public static bool IsActivePlayerControlled(this GameObject unityGameObject)
         {
-            var playerControlled = unityGameObject.Has<IPlayerControlledBehavior>();
+            var playerControlled = unityGameObject
+                .Get<IPlayerControlledBehavior>()
+                .FirstOrDefault(x => x.IsActive) != null;
             return playerControlled;
         }
 
