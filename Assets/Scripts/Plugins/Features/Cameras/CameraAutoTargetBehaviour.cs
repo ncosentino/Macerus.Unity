@@ -8,6 +8,8 @@ using Macerus.Plugins.Features.Camera;
 
 using NexusLabs.Contracts;
 
+using ProjectXyz.Api.GameObjects;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Cameras
@@ -15,6 +17,7 @@ namespace Assets.Scripts.Plugins.Features.Cameras
     public sealed class CameraAutoTargetBehaviour : MonoBehaviour
     {
         private float _triggerTime;
+        private IGameObject _followTargetGameObject;
 
         public IUnityGameObjectManager GameObjectManager { get; set; }
 
@@ -42,7 +45,8 @@ namespace Assets.Scripts.Plugins.Features.Cameras
 
         private void FixedUpdate()
         {
-            if (CameraTargetting.CameraTarget != null ||
+            var targetGameObject = CameraManager.FollowTarget;
+            if (_followTargetGameObject == targetGameObject ||
                 Time.fixedTime < _triggerTime)
             {
                 return;
@@ -50,13 +54,15 @@ namespace Assets.Scripts.Plugins.Features.Cameras
 
             ResetTriggerTime();
 
-            var targetGameObject = CameraManager.FollowTarget;
             var targetUnityGameObject = targetGameObject == null
                 ? null
                 : GameObjectManager
                     .FindAll(x => x.GetGameObject() == targetGameObject)
                     .FirstOrDefault();
             CameraTargetting.SetTarget(targetUnityGameObject?.transform);
+            _followTargetGameObject = targetGameObject == null
+                ? null
+                : targetGameObject;
         }
 
         private void ResetTriggerTime()
