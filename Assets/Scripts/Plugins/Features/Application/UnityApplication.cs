@@ -4,6 +4,15 @@ namespace Assets.Scripts.Plugins.Features.Application
 {
     public sealed class UnityApplication : IApplication
     {
+        private readonly IObservableUpdateFrequencyManager _updateFrequencyManager;
+
+        public UnityApplication(IObservableUpdateFrequencyManager updateFrequencyManager)
+        {
+            _updateFrequencyManager = updateFrequencyManager;
+            _updateFrequencyManager.MaxUpdatesPerSecondChanged += (_, __) => EnforceFrameRate();
+            EnforceFrameRate();
+        }
+
         public void Exit()
         {
 #if UNITY_EDITOR
@@ -13,6 +22,11 @@ namespace Assets.Scripts.Plugins.Features.Application
 #else
          UnityEngine.Application.Quit();
 #endif
+        }
+
+        private void EnforceFrameRate()
+        {
+            UnityEngine.Application.targetFrameRate = _updateFrequencyManager.MaxUpdatesPerSecond;
         }
     }
 }
