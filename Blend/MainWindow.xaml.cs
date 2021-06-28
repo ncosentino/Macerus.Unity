@@ -9,7 +9,6 @@ using Assets.Scripts.Scenes.MainMenu.Gui.MainMenu;
 
 using Autofac;
 
-using Macerus.Api.Behaviors;
 using Macerus.Api.Behaviors.Filtering;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Actors.Api;
@@ -25,6 +24,7 @@ using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.GameObjects.Generation;
 using ProjectXyz.Game.Interface.Engine;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping;
 using ProjectXyz.Shared.Framework;
