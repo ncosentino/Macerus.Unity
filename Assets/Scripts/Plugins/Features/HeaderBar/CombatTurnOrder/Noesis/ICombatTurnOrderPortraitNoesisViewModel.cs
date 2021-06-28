@@ -5,12 +5,16 @@ using Noesis;
 using System.Windows.Media;
 #endif
 
+using System.Windows.Input;
+
 using ProjectXyz.Api.Framework;
 
 namespace Assets.Scripts.Plugins.Features.HeaderBar.CombatTurnOrder.Noesis
 {
     public interface ICombatTurnOrderPortraitNoesisViewModel
     {
+        ICommand ActivateCommand { get; }
+
         ImageSource Icon { get; }
 
         IIdentifier ActorIdentifier { get; }

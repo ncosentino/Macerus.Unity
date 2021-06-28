@@ -43,7 +43,8 @@ namespace Assets.Scripts.Plugins.Features.HeaderBar.CombatTurnOrder.Noesis
                 viewModel.ActorIdentifier,
                 borderBrush,
                 backgroundBrush,
-                viewModel.ActorName);
+                viewModel.ActorName,
+                viewModel.Activate);
             return convertedViewModel;
         }
     }

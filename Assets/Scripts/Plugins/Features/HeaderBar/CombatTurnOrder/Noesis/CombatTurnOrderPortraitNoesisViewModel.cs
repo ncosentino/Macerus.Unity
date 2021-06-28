@@ -6,7 +6,12 @@ using Color = Noesis.Color;
 using System.Windows.Media;
 #endif
 
+using System;
+using System.Windows.Input;
+
 using ProjectXyz.Api.Framework;
+
+using Assets.Scripts.Gui.Noesis;
 
 namespace Assets.Scripts.Plugins.Features.HeaderBar.CombatTurnOrder.Noesis
 {
@@ -17,14 +22,18 @@ namespace Assets.Scripts.Plugins.Features.HeaderBar.CombatTurnOrder.Noesis
             IIdentifier actorIdentifier,
             Brush borderBrush,
             Brush backgroundBrush,
-            string actorName)
+            string actorName,
+            Action activateCallback)
         {
             Icon = icon;
             ActorIdentifier = actorIdentifier;
             BorderBrush = borderBrush;
             BackgroundBrush = backgroundBrush;
             ActorName = actorName;
+            ActivateCommand = new DelegateCommand(_ => activateCallback());
         }
+
+        public ICommand ActivateCommand { get; }
 
         public ImageSource Icon { get; }
 

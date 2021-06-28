@@ -65,21 +65,23 @@
                     <DataTemplate>
                         <Border 
                             BorderBrush="{Binding BorderBrush}"
-                            BorderThickness="1"
-                            Background="{Binding BackgroundBrush}">
-                            <StackPanel>
-                                <Label
-                                    Height="20"
-                                    Content="{Binding ActorName}"
-                                    HorizontalAlignment="Center"/>
-                                <Image 
-                                    Width="60"
-                                    Height="60"
-                                    Source="{Binding Icon}"
-                                    VerticalAlignment="Bottom"
-                                    HorizontalAlignment="Center"/>
-
-                            </StackPanel>
+                            BorderThickness="1">
+                            <Button
+                                Command="{Binding ActivateCommand}"
+                                Background="{Binding BackgroundBrush}">
+                                <StackPanel>
+                                    <Label
+                                        Height="20"
+                                        Content="{Binding ActorName}"
+                                        HorizontalAlignment="Center"/>
+                                    <Image 
+                                        Width="60"
+                                        Height="60"
+                                        Source="{Binding Icon}"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
