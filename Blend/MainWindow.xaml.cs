@@ -19,6 +19,7 @@ using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
 using Macerus.Plugins.Features.MainMenu.Api;
+using Macerus.Plugins.Features.StatusBar.Api;
 
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.GameObjects.Generation;
@@ -27,6 +28,7 @@ using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping;
+using ProjectXyz.Plugins.Features.PartyManagement;
 using ProjectXyz.Shared.Framework;
 
 namespace Assets.Blend
@@ -68,8 +70,14 @@ namespace Assets.Blend
 
                 var mapManager = container.Resolve<IMapManager>();
 
+                var player = CreatePlayerInstance(container);
+                var rosterManager = container.Resolve<IRosterManager>();
+                rosterManager.AddToRoster(player);
+                player.GetOnly<IRosterBehavior>().IsPartyLeader = true;
+                rosterManager.SetActorToControl(player);
+
                 var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
-                mapGameObjectManager.MarkForAddition(CreatePlayerInstance(container));
+                mapGameObjectManager.MarkForAddition(player);
                 mapGameObjectManager.Synchronize();
 
                 var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
@@ -110,6 +118,9 @@ namespace Assets.Blend
 
                 var craftingController = container.Resolve<ICraftingController>();
                 craftingController.OpenCraftingWindow();
+
+                var statusBarViewModel = container.Resolve<IStatusBarViewModel>();
+                statusBarViewModel.IsOpen = true;
             }
 
             container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
