@@ -10,7 +10,7 @@ using ProjectXyz.Api.Framework;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Audio
+namespace Assets.Scripts.Plugins.Features.Audio
 {
     public sealed class AudioManager : IAudioManager
     {

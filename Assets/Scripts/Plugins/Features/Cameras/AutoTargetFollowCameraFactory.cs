@@ -3,7 +3,7 @@ using Assets.Scripts.Unity.Resources.Prefabs;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Camera
+namespace Assets.Scripts.Plugins.Features.Cameras
 {
     public sealed class AutoTargetFollowCameraFactory : ICameraFactory
     {

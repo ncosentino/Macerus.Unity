@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Camera
+namespace Assets.Scripts.Plugins.Features.Cameras
 {
     public interface ICameraTargetting
     {
-        #region Properties
         Transform CameraTarget { get; }
-        #endregion
 
-        #region Methods
         void SetTarget(Transform target);
-        #endregion
     }
 }

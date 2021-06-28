@@ -2,7 +2,7 @@ using Assets.Scripts.Unity.GameObjects;
 
 using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Camera
+namespace Assets.Scripts.Plugins.Features.Cameras
 {
     public sealed class HasFollowCameraBehaviourStitcher : IHasFollowCameraBehaviourStitcher
     {

@@ -1,26 +1,21 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Scenes.Explore.Camera
+namespace Assets.Scripts.Plugins.Features.Cameras
 {
     public sealed class CameraFollowBehaviour :
         MonoBehaviour,
         ICameraTargetting
     {
-        #region Unity Properties
         public float Dampening = 10;
-        #endregion
 
-        #region Properties
         public Transform CameraTarget { get; private set; }
-        #endregion
 
-        #region Methods
         public void SetTarget(Transform target)
         {
             CameraTarget = target;
         }
 
-        public void Update()
+        public void FixedUpdate()
         {
             if (CameraTarget == null)
             {
@@ -39,6 +34,5 @@ namespace Assets.Scripts.Scenes.Explore.Camera
                 destinationPosition,
                 Time.deltaTime * Dampening);
         }
-        #endregion
     }
 }

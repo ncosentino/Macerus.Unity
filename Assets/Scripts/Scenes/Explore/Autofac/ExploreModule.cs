@@ -1,8 +1,6 @@
 ﻿using Assets.Scripts.Input;
-using Assets.Scripts.Plugins.Features.Controls;
 using Assets.Scripts.Plugins.Features.GameEngine;
 using Assets.Scripts.Scenes.Explore.Api;
-using Assets.Scripts.Scenes.Explore.Camera;
 using Assets.Scripts.Scenes.Explore.Input;
 
 using Autofac;
@@ -38,7 +36,6 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            RegisterCamera(builder);
             RegisterInput(builder);
         }
 
@@ -54,22 +51,6 @@ namespace Assets.Scripts.Scenes.Explore.Autofac
                 .SingleInstance();
             builder
                 .RegisterType<GuiInputStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-        }
-
-        private static void RegisterCamera(ContainerBuilder builder)
-        {
-            builder
-                .RegisterType<AutoTargetFollowCameraFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<CameraAutoTargetBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
-                .RegisterType<HasFollowCameraBehaviourStitcher>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }
