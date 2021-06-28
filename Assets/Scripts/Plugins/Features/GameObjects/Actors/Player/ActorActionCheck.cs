@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 
-using Macerus.Api.Behaviors;
-
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.Combat.Api;
 using ProjectXyz.Plugins.Features.Filtering.Api;
+using ProjectXyz.Plugins.Features.GameObjects.Actors.Api;
 
 namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
@@ -24,7 +23,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         public bool CanAct(IGameObject actor)
         {
             var isActivePlayerControlled =
-                actor.TryGetFirst<IPlayerControlledBehavior>(out var playerControlledBehavior) &&
+                actor.TryGetFirst<IReadOnlyPlayerControlledBehavior>(out var playerControlledBehavior) &&
                 playerControlledBehavior.IsActive;
             var isCurrentCombatTurn =
                 _combatTurnManager.InCombat &&

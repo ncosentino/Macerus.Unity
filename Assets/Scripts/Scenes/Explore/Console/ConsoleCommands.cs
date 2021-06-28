@@ -14,6 +14,7 @@ using Autofac;
 using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
+using Macerus.Plugins.Features.Mapping;
 using Macerus.Plugins.Features.Stats.Api;
 using Macerus.Plugins.Features.Weather;
 
@@ -38,6 +39,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private ProjectXyz.Api.Logging.ILogger _logger;
         private IUnityGameObjectManager _unityGameObjectManager;
         private IMapGameObjectManager _mapGameObjectManager;
+        private IMappingAmenity _mappingAmenity;
         private ISkillAmenity _skillAmenity;
         private IReadOnlyStatDefinitionToTermMappingRepository _statDefinitionToTermMappingRepository;
         private IStatCalculationServiceAmenity _statCalculationServiceAmenity;
@@ -63,6 +65,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
             _logger = container.Resolve<ProjectXyz.Api.Logging.ILogger>();
             _mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
+            _mappingAmenity = container.Resolve<IMappingAmenity>();
             _unityGameObjectManager = container.Resolve<IUnityGameObjectManager>();
             _skillAmenity = container.Resolve<ISkillAmenity>();
             _statDefinitionToTermMappingRepository = container.Resolve<IReadOnlyStatDefinitionToTermMappingRepository>();
@@ -282,9 +285,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets the position of the player.")]
         private void PlayerGetPosition()
         {
-            var positionBehavior = _mapGameObjectManager
-                .GameObjects
-                .Single(x => x.Has<IPlayerControlledBehavior>())
+            var positionBehavior = _mappingAmenity
+                .GetActivePlayerControlled()
                 .GetOnly<IReadOnlyPositionBehavior>();
             _logger.Info(
                 $"({positionBehavior.X},{positionBehavior.Y})");
@@ -293,12 +295,10 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Sets the location of the player.")]
         private void PlayerSetPosition(double x, double y)
         {
-            var positionBehavior = _mapGameObjectManager
-                .GameObjects
-                .Single(x => x.Has<IPlayerControlledBehavior>())
-                .GetOnly<IPositionBehavior>();
+            var player = _mappingAmenity.GetActivePlayerControlled();
+            var positionBehavior = player.GetOnly<IPositionBehavior>();
             var unityPlayerObject = _unityGameObjectManager
-                .FindAll(x => x.IsActivePlayerControlled())
+                .FindAll(x => x.GetGameObject() == player)
                 .Single();
 
             positionBehavior.SetPosition(x, y);
@@ -313,9 +313,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets the size of the player.")]
         private void PlayerGetSize()
         {
-            var sizeBehavior = _mapGameObjectManager
-                .GameObjects
-                .Single(x => x.Has<IPlayerControlledBehavior>())
+            var sizeBehavior = _mappingAmenity
+                .GetActivePlayerControlled()
                 .GetOnly<IReadOnlySizeBehavior>();
             _logger.Info(
                 $"({sizeBehavior.Width},{sizeBehavior.Height})");
@@ -369,9 +368,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets a stat value with the specified ID (or term) from the player.")]
         private void PlayerGetStat(string rawStatDefinitionId)
         {
-            var player = _mapGameObjectManager
-                .GameObjects
-                .Single(x => x.Has<IPlayerControlledBehavior>());
+            var player = _mappingAmenity.GetActivePlayerControlled();
 
             IIdentifier statDefinitionId;
             if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
@@ -399,9 +396,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Sets a base stat value with the specified ID (or term) and valu on the player.")]
         private void PlayerSetBaseStat(string rawStatDefinitionId, double value)
         {
-            var player = _mapGameObjectManager
-                .GameObjects
-                .Single(x => x.Has<IPlayerControlledBehavior>());
+            var player = _mappingAmenity.GetActivePlayerControlled();
 
             IIdentifier statDefinitionId;
             if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
@@ -428,9 +423,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Adds a skill with the specified ID to the player.")]
         private void PlayerAddSkill(string skillId)
         {
-            var player = _mapGameObjectManager
-                .GameObjects
-                .Single(x => x.Has<IPlayerControlledBehavior>());
+            var player = _mappingAmenity.GetActivePlayerControlled();
 
             var skill = _skillAmenity.GetSkillById(new StringIdentifier(skillId));
             if (skill == null)

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
-
-using Macerus.Api.Behaviors;
 
 using NexusLabs.Contracts;
 
@@ -17,14 +14,6 @@ namespace Assets.Scripts // shortened namespace for ease of use
 {
     public static class GameObjectExtensionMethods
     {
-        public static bool IsActivePlayerControlled(this GameObject unityGameObject)
-        {
-            var playerControlled = unityGameObject
-                .Get<IPlayerControlledBehavior>()
-                .FirstOrDefault(x => x.IsActive) != null;
-            return playerControlled;
-        }
-
         public static bool Has<T>(this GameObject unityGameObject)
             where T : IBehavior
         {

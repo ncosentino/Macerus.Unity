@@ -50,10 +50,13 @@ namespace Assets.Scripts.Plugins.Features.Cameras
 
             ResetTriggerTime();
 
-            var cameraTargetCandidate = GameObjectManager
-                .FindAll(x => x.GetGameObject() == CameraManager.FollowTarget)
-                .FirstOrDefault();
-            CameraTargetting.SetTarget(cameraTargetCandidate?.transform);
+            var targetGameObject = CameraManager.FollowTarget;
+            var targetUnityGameObject = targetGameObject == null
+                ? null
+                : GameObjectManager
+                    .FindAll(x => x.GetGameObject() == targetGameObject)
+                    .FirstOrDefault();
+            CameraTargetting.SetTarget(targetUnityGameObject?.transform);
         }
 
         private void ResetTriggerTime()
