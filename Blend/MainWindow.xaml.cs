@@ -11,7 +11,7 @@ using Autofac;
 
 using Macerus.Api.Behaviors.Filtering;
 using Macerus.Plugins.Features.Encounters;
-using Macerus.Plugins.Features.GameObjects.Actors.Api;
+using Macerus.Plugins.Features.GameObjects.Actors;
 using Macerus.Plugins.Features.GameObjects.Actors.Generation;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
