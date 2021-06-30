@@ -18,7 +18,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
         MonoBehaviour,
         ILightRadiusUpdateBehaviour
     {
-        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
+        private readonly UnityAsyncRunner _runner = new UnityAsyncRunner();
         private double _lastUpdate;
 
         public ITimeProvider TimeProvider { get; set; }

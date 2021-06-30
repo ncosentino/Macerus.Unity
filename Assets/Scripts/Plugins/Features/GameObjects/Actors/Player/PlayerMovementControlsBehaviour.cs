@@ -1,4 +1,7 @@
-﻿using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
+﻿using System.Threading.Tasks;
+
+using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
+using Assets.Scripts.Unity.Threading;
 
 using NexusLabs.Contracts;
 
@@ -10,6 +13,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerMovementControlsBehaviour : MonoBehaviour
     {
+        private readonly UnityAsyncRunner _unityAsyncRunner = new UnityAsyncRunner();
+
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 
         public IGameObject Actor { get; set; }
@@ -29,12 +34,12 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             this.RequiresNotNull(ActorActionCheck, nameof(ActorActionCheck));
         }
 
-        private void Update()
+        private async Task Update()
         {
-            HandleMovementControls();
+            await _unityAsyncRunner.RunAsync(HandleMovementControlsAsync);
         }
 
-        private void HandleMovementControls()
+        private async Task HandleMovementControlsAsync()
         {
             if (DebugConsoleManager.GetConsoleWindowVisible())
             {
@@ -46,7 +51,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 return;
             }
 
-            MouseMovementHandler.HandleMouseMovement(Actor);
+            await MouseMovementHandler
+                .HandleMouseMovementAsync(Actor)
+                .ConfigureAwait(false);
             KeyboardMovementHandler.HandleKeyboardMovement(Actor);
         }
     }

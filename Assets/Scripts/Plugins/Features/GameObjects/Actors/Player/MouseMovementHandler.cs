@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Assets.Scripts.Gui;
 using Assets.Scripts.Plugins.Features.Controls;
@@ -56,7 +57,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             _mappingAmenity = mappingAmenity;
         }
 
-        public void HandleMouseMovement(IGameObject actor)
+        public async Task HandleMouseMovementAsync(IGameObject actor)
         {
             if (!_playerControlConfiguration.MouseMovementEnabled ||
                 !_mouseInput.GetMouseButtonDown(0))
@@ -106,13 +107,14 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     return;
                 }
 
-                var foundPath = _mapManager
+                var foundPath = await _mapManager
                     .PathFinder
-                    .FindPath(
+                    .FindPathAsync(
                         actorPosition,
                         new System.Numerics.Vector2(destinationPosition.x, destinationPosition.y),
                         actorSize,
-                        allowedWalkDiagonally);
+                        allowedWalkDiagonally)
+                    .ConfigureAwait(false);
                 Contract.Requires(
                     foundPath.TotalDistance <= allowedWalkDistance,
                     $"The found path was distance {foundPath.TotalDistance} " +

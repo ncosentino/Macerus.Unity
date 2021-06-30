@@ -12,7 +12,7 @@ namespace Assets.Scripts.Plugins.Features.GameEngine
 {
     public sealed class GameEngineUpdateBehaviour : MonoBehaviour
     {
-        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
+        private readonly UnityAsyncRunner _runner = new UnityAsyncRunner();
 
         public IGameEngine GameEngine { get; set; }
 

@@ -87,15 +87,16 @@ namespace Assets.Scripts.Scenes.Explore.Console
         }
 
         [DiscoverableConsoleCommand("Prints the path between two points.")]
-        private void PathBetweenPoints(double startX, double startY, double endX, double endY, bool includeDiagonals)
+        private async void PathBetweenPoints(double startX, double startY, double endX, double endY, bool includeDiagonals)
         {
-            var path = _mapProvider
+            var path = await _mapProvider
                 .PathFinder
-                .FindPath(
+                .FindPathAsync(
                     new System.Numerics.Vector2((float)startX, (float)startY),
                     new System.Numerics.Vector2((float)endX, (float)endY),
                     new System.Numerics.Vector2(1, 1),
-                    includeDiagonals);
+                    includeDiagonals)
+                .ConfigureAwait(false);
 
             var debugVisualPath = new GameObject();
             debugVisualPath.name = $"Path from ({startX},{startY}) to ({endX},{endY})";

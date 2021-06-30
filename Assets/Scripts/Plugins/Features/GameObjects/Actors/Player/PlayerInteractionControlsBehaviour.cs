@@ -17,7 +17,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerInteractionControlsBehaviour : MonoBehaviour
     {
-        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
+        private readonly UnityAsyncRunner _runner = new UnityAsyncRunner();
 
         public IDebugConsoleManager DebugConsoleManager { get; set; }
 

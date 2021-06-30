@@ -20,13 +20,13 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
         MonoBehaviour,
         IObservablePlayerInteractionDetectionBehavior
     {
-        private readonly UnityAsynRunner _runner;
+        private readonly UnityAsyncRunner _runner;
         private readonly List<GameObject> _interactables;
 
         public PlayerInteractionDetectionBehaviour()
         {
             _interactables = new List<GameObject>();
-            _runner = new UnityAsynRunner();
+            _runner = new UnityAsyncRunner();
         }
 
         public event EventHandler<EventArgs> NewInteractable;

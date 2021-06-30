@@ -19,7 +19,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerQuickSlotControlsBehaviour : MonoBehaviour
     {
-        private readonly UnityAsynRunner _runner = new UnityAsynRunner();
+        private readonly UnityAsyncRunner _runner = new UnityAsyncRunner();
         private readonly Dictionary<KeyCode, int> _keyToSlotIndex;
         
         public PlayerQuickSlotControlsBehaviour()

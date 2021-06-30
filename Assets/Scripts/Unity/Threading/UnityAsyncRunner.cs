@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Unity.Threading
 {
-    public sealed class UnityAsynRunner
+    public sealed class UnityAsyncRunner
     {
         private bool _running;
 
