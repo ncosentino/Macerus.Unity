@@ -29,7 +29,7 @@ namespace Assets.Scripts.Gui.Noesis
         public ImageSource CreateForResourceId(IIdentifier resourceId)
         {
             var relativePath = resourceId.ToString(); // FIXME: this is still a hack
-            var texture = _resourceLoader.Load<Texture2D>(relativePath);
+            var texture = _resourceLoader.Load<UnityEngine.Texture>(relativePath);
             var imageSource = new TextureSource(texture);
             return imageSource;
         }
