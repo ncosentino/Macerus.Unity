@@ -53,7 +53,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
             await MouseMovementHandler
                 .HandleMouseMovementAsync(Actor)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true); // we need this to resume back on the main thread
             KeyboardMovementHandler.HandleKeyboardMovement(Actor);
         }
     }
