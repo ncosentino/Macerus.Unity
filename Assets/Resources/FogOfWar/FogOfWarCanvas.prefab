@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5326497252412996353}
   - component: {fileID: 5921199626760852722}
   - component: {fileID: 6347792751920855120}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: FogOfWar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 7120204100787682047}
   - component: {fileID: 9209799318699582082}
   - component: {fileID: 3014200221960220070}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: FogOfWarCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3014200221960220070
 MonoBehaviour:
   m_ObjectHideFlags: 0

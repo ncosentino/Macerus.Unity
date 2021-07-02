@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5335158465030535751}
   - component: {fileID: 5012086998834156455}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FogOfWarSecondaryCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1326865859627462924}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FogOfWar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 2208689947336398513}
   - component: {fileID: 4791266168166557535}
   - component: {fileID: 8204013755856191583}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: FogOfWarCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4331630642900596497}
   - component: {fileID: 2515584211402348543}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FogOfWarMainCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 5921386908865668327}
   - component: {fileID: 3472133072387175186}
   - component: {fileID: 3309295603052987031}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: FogOfWarRenderTexture
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -33,12 +33,22 @@
 
         <Grid
             x:Name="HeaderBar"
-            Grid.Row="0"
-            Grid.ColumnSpan="3">
-
+            Grid.Row="0">
             <Grid x:Name="HeaderBarContent"/>
         </Grid>
-        
+
+        <Grid
+            x:Name="MinimapOverlay"
+            Grid.Row="1"
+            IsHitTestVisible="False"
+            Opacity="0.5">
+            <Image 
+                x:Name="MinimapCamera"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="{Binding Height, RelativeSource={RelativeSource Self}}"/>
+        </Grid>
+
         <Grid
             x:Name="MainContent"
             Grid.Row="1">

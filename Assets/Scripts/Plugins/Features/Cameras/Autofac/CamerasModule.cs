@@ -7,6 +7,10 @@ namespace Assets.Scripts.Plugins.Features.Cameras.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder
+                .RegisterType<MinimapCameraFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            builder
                 .RegisterType<AutoTargetFollowCameraFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

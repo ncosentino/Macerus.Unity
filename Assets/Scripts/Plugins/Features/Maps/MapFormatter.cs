@@ -32,6 +32,9 @@ namespace Assets.Scripts.Plugins.Features.Maps
         // traversable tile map
         private const int LAYER_TRAVERSABLE = 0;
 
+        // targetting
+        private const int LAYER_TARGETTING = 20000;
+
         private readonly ITileLoader _tileLoader;
         private readonly IObjectDestroyer _objectDestroyer;
         private readonly IUnityGameObjectRepository _unityGameObjectRepository;
@@ -159,7 +162,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         {
             if (_lastHoverSelectTilePosition.HasValue)
             {
-                _mapPrefab.Tilemap.SetTile(
+                _mapPrefab.WalkIndicatorTilemap.SetTile(
                     _lastHoverSelectTilePosition.Value,
                     null);
             }
@@ -176,7 +179,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 var unityTile = _tileLoader.LoadTile(
                     "mapping/tilesets/",
                     "tile-hover-select-overlay");
-                _mapPrefab.Tilemap.SetTile(
+                _mapPrefab.WalkIndicatorTilemap.SetTile(
                     _lastHoverSelectTilePosition.Value,
                     unityTile);
             }
@@ -313,7 +316,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                         var unityTile = _tileLoader.LoadTile(
                             "mapping/tilesets/",
                             $"targetted-tile-highlight-{set}");
-                        var tilePosition = new Vector3Int(t.x, t.y, LAYER_TRAVERSABLE);
+                        var tilePosition = new Vector3Int(t.x, t.y, LAYER_TARGETTING);
 
                         // must be called from main thread
                         _mapPrefab.WalkIndicatorTilemap.SetTile(
@@ -357,7 +360,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                             : null;
 
                         // must be called from main thread
-                        _mapPrefab.Tilemap.SetTile(
+                        _mapPrefab.WalkIndicatorTilemap.SetTile(
                             new Vector3Int(i, j, LAYER_GRID_LINES),
                             unityTile);
                     }
@@ -366,7 +369,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 if (forceRefresh)
                 {
                     // must be called from main thread
-                    _mapPrefab.Tilemap.RefreshAllTiles();
+                    _mapPrefab.WalkIndicatorTilemap.RefreshAllTiles();
                 }
             });
         }

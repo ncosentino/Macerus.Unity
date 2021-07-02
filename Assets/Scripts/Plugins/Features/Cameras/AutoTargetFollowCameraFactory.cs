@@ -5,20 +5,23 @@ using UnityEngine;
 
 namespace Assets.Scripts.Plugins.Features.Cameras
 {
-    public sealed class AutoTargetFollowCameraFactory : ICameraFactory
+    public sealed class AutoTargetFollowCameraFactory : IFollowCameraFactory
     {
         private readonly IPrefabCreator _prefabCreator;
         private readonly ICameraAutoTargetBehaviourStitcher _cameraAutoTargetStitcher;
         private readonly IWeatherSystemFactory _weatherSystemFactory;
+        private readonly IMinimapCameraFactory _minimapCameraFactory;
 
         public AutoTargetFollowCameraFactory(
             IPrefabCreator prefabCreator,
             ICameraAutoTargetBehaviourStitcher cameraAutoTargetStitcher,
-            IWeatherSystemFactory weatherSystemFactory)
+            IWeatherSystemFactory weatherSystemFactory,
+            IMinimapCameraFactory minimapCameraFactory)
         {
             _prefabCreator = prefabCreator;
             _cameraAutoTargetStitcher = cameraAutoTargetStitcher;
             _weatherSystemFactory = weatherSystemFactory;
+            _minimapCameraFactory = minimapCameraFactory;
         }
 
         public GameObject CreateCamera()
@@ -30,6 +33,13 @@ namespace Assets.Scripts.Plugins.Features.Cameras
             weatherSystem.transform.SetParent(followCamera.transform);
 
             _cameraAutoTargetStitcher.Attach(followCamera);
+
+            var minimapCamera = _minimapCameraFactory.CreateCamera();
+            minimapCamera.transform.SetParent(followCamera.transform);
+            minimapCamera.transform.localPosition = new Vector3(
+                minimapCamera.transform.localPosition.x,
+                minimapCamera.transform.localPosition.y,
+                0);
 
             return followCamera;
         }

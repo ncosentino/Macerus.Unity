@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Plugins.Features.Cameras
 {
-    public interface ICameraFactory
+    public interface IFollowCameraFactory
     {
         GameObject CreateCamera();
     }

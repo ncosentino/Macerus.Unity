@@ -11,13 +11,14 @@ using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Plugins.Features.HeaderBar.Noesis;
 using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Plugins.Features.InGameMenu;
+using Assets.Scripts.Plugins.Features.SceneTransitions;
 
 using Macerus.Plugins.Features.StatusBar.Api;
 using Macerus.Plugins.Features.Hud;
 
 using ProjectXyz.Framework.ViewWelding.Api;
 using ProjectXyz.Framework.ViewWelding.Api.Welders;
-using Assets.Scripts.Plugins.Features.SceneTransitions;
+using ProjectXyz.Shared.Framework;
 
 namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
 {
@@ -33,7 +34,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IHeaderBarView headerBarView,
             IInGameMenuView inGameMenuView,
             IEnumerable<IHudWindow> hudWindows,
-            ISceneTransitionView sceneTransitionView)
+            ISceneTransitionView sceneTransitionView,
+            IResourceImageSourceFactory resourceImageSourceFactory)
             : this()
         {
             DataContext = viewModel;
@@ -82,6 +84,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                     NoesisLogicalTreeHelper.FindChildWithName(this, "FaderTransitionContent"),
                     sceneTransitionView)
                 .Weld();
+
+            ((Image)NoesisLogicalTreeHelper.FindChildWithName(this, "MinimapCamera")).Source = resourceImageSourceFactory.CreateForResourceId(new StringIdentifier("Minimap/MinimapRenderTexture"));
         }
 
         public HudView()

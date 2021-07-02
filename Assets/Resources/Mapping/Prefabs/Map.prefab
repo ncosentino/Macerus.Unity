@@ -163,6 +163,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WalkIndicatorTileMap
       objectReference: {fileID: 0}
+    - target: {fileID: 6109735102616258043, guid: 4f4760cc7d6620740b625ac6fee559ef,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f4760cc7d6620740b625ac6fee559ef, type: 3}
 --- !u!4 &4208246217990200019 stripped

@@ -8,7 +8,7 @@ namespace Assets.Scripts.Plugins.Features.Cameras
 {
     public sealed class HasFollowCameraBehaviour : MonoBehaviour
     {
-        public ICameraFactory CameraFactory { get; set; }
+        public IFollowCameraFactory CameraFactory { get; set; }
 
         public IObjectDestroyer ObjectDestroyer { get; set; }
 

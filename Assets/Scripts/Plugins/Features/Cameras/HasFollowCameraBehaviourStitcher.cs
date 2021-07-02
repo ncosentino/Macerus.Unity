@@ -6,11 +6,11 @@ namespace Assets.Scripts.Plugins.Features.Cameras
 {
     public sealed class HasFollowCameraBehaviourStitcher : IHasFollowCameraBehaviourStitcher
     {
-        private readonly ICameraFactory _cameraFactory;
+        private readonly IFollowCameraFactory _cameraFactory;
         private readonly IObjectDestroyer _objectDestroyer;
 
         public HasFollowCameraBehaviourStitcher(
-            ICameraFactory cameraFactory,
+            IFollowCameraFactory cameraFactory,
             IObjectDestroyer objectDestroyer)
         {
             _cameraFactory = cameraFactory;
