@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7559863480504241835}
   - component: {fileID: 3331645225414224225}
   - component: {fileID: 8835062602010589518}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: RainParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}

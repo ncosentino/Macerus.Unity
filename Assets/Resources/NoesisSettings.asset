@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32cb0206ed0bc0d4b91a4e54d600f906, type: 3}
   m_Name: NoesisSettings
   m_EditorClassIdentifier: 
-  licenseName: Nexus Software Labs
-  licenseKey: enQpUgA9KVKWyzEgZ0WBZ7MST5Fmal9qi0LPRPsBUKXXw72O
+  licenseName: Nexus Labs
+  licenseKey: R9wzd96VM3d/rOI0fcrTXUvBE85OfUFtvi/wGTjwWQjcWP/4
   applicationResources: {fileID: 11400000, guid: 9288dd36a3813e04a8a073467dc8d22f,
     type: 2}
   defaultFont: {fileID: 11400000, guid: b3ab3e4919f1b524381735ffc56c8632, type: 2}

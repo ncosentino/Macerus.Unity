@@ -153,6 +153,10 @@
     <Compile Include="Assets\Scripts\Plugins\Features\InGameMenu\Noesis\Resources\InGameMenuView.xaml.cs">
       <DependentUpon>InGameMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\IIMinimapOverlayView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\Noesis\IMinimapBadgeNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\Noesis\IMinimapOverlayNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\Noesis\MinimapBadgeNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\DropItemBehavior.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\NewHud\Noesis\GreaterThanZeroConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Inventory\Noesis\Resources\InventoryEquipmentView.xaml.cs">
@@ -185,6 +189,11 @@
     <Compile Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\Resources\FaderSceneTransitionView.xaml.cs">
       <DependentUpon>FaderSceneTransitionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\Autofac\MinimapModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\Noesis\Resources\MinimapOverlayView.xaml.cs">
+      <DependentUpon>MinimapOverlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\Minimap\Noesis\MinimapOverlayNoesisViewModel.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Autofac\StatusBarModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\AbilityToNoesisViewModelConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\StatusBar\Noesis\IAbilityToNoesisViewModelConverter.cs" />
@@ -304,6 +313,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Scripts\Plugins\Features\SceneTransitions\Noesis\Resources\FaderSceneTransitionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Scripts\Plugins\Features\Minimap\Noesis\Resources\MinimapOverlayView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

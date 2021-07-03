@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 using Assets.Scripts.Gui.Noesis.ViewModels;
 
-using Macerus.Plugins.Features.Gui.Api.SceneTransitions;
+using Macerus.Plugins.Features.Gui.SceneTransitions;
 using Macerus.Plugins.Features.Gui.Default;
 
 namespace Assets.Scripts.Plugins.Features.SceneTransitions.Noesis

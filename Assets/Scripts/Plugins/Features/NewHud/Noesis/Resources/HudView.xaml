@@ -39,14 +39,9 @@
 
         <Grid
             x:Name="MinimapOverlay"
-            Grid.Row="1"
-            IsHitTestVisible="False"
-            Opacity="0.5">
-            <Image 
-                x:Name="MinimapCamera"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Width="{Binding Height, RelativeSource={RelativeSource Self}}"/>
+            Grid.Row="1">
+            <Grid 
+                x:Name="MinimapOverlayContent"/>
         </Grid>
 
         <Grid

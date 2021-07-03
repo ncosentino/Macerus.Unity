@@ -61,6 +61,9 @@ namespace Assets.Scripts.Input
         public KeyCode ToggleCharacterSheet { get; } = KeyCode.C;
 
         /// <inheritdoc />
+        public KeyCode ToggleMinimapOverlay { get; } = KeyCode.Tab;
+
+        /// <inheritdoc />
         public KeyCode GuiClose { get; } = KeyCode.Escape;
     }
 }

@@ -36,6 +36,8 @@ namespace Assets.Scripts.Input.Api
 
         KeyCode ToggleCrafting { get; }
 
+        KeyCode ToggleMinimapOverlay { get; }
+
         KeyCode ToggleInventory { get; }
 
         KeyCode ToggleCharacterSheet { get; }

@@ -6,6 +6,7 @@ using Macerus.Plugins.Features.Hud;
 using Macerus.Plugins.Features.InGameMenu.Api;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
+using Macerus.Plugins.Features.Minimap;
 
 namespace Assets.Scripts.Scenes.Explore.Input
 {
@@ -20,6 +21,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
         private readonly IHudController _hudController;
         private readonly IInGameMenuViewModel _inGameMenuViewModel;
         private readonly IInGameMenuController _inGameMenuController;
+        private readonly IMinimapController _minimapController;
 
         public GuiInputController(
             IDebugConsoleManager debugConsoleManager,
@@ -30,7 +32,8 @@ namespace Assets.Scripts.Scenes.Explore.Input
             IHudViewModel hudViewModel,
             IHudController hudController,
             IInGameMenuViewModel inGameMenuViewModel,
-            IInGameMenuController inGameMenuController)
+            IInGameMenuController inGameMenuController,
+            IMinimapController minimapController)
         {
             _debugConsoleManager = debugConsoleManager;
             _keyboardControls = keyboardControls;
@@ -41,6 +44,7 @@ namespace Assets.Scripts.Scenes.Explore.Input
             _hudController = hudController;
             _inGameMenuViewModel = inGameMenuViewModel;
             _inGameMenuController = inGameMenuController;
+            _minimapController = minimapController;
         }
 
         public void Update(float deltaTime)
@@ -76,6 +80,17 @@ namespace Assets.Scripts.Scenes.Explore.Input
             else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleCharacterSheet))
             {
                 _characterSheetController.ToggleCharacterSheet();
+            }
+            else if (UnityEngine.Input.GetKeyUp(_keyboardControls.ToggleMinimapOverlay))
+            {
+                if (_minimapController.ShowingMinimapOverlay)
+                {
+                    _minimapController.HideMinimap();
+                }
+                else
+                {
+                    _minimapController.ShowMinimap(false);
+                }
             }
         }
     }
