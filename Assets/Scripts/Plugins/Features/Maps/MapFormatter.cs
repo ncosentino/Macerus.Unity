@@ -43,7 +43,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
         private readonly IDispatcher _dispatcher;
 
         private HashSet<Vector2Int> _traversableTiles;
-        private HashSet<Vector2Int> _targettedTiles;
+        private IReadOnlyDictionary<int, HashSet<System.Numerics.Vector2>> _targettedTiles;
         private bool _gridLinesEnabled;
         private IMapPrefab _mapPrefab;
         private int _maximumTileX;
@@ -147,12 +147,11 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 // tiles by formatting the tile map
                 ToggleGridLines(_gridLinesEnabled, false);
                 SetTraversableTiles(_traversableTiles ?? Enumerable.Empty<Vector2Int>(), false);
-                
-                // FIXME: the field we store vs the parameter we use are not compatible
-                //SetTargettedTiles(_targettedTiles ?? Enumerable.Empty<Vector2Int>(), false);
+                SetTargettedTiles(_targettedTiles ?? new Dictionary<int, HashSet<System.Numerics.Vector2>>(), false);
 
                 // must be called from main thread
                 mapPrefab.Tilemap.RefreshAllTiles();
+                mapPrefab.WalkIndicatorTilemap.RefreshAllTiles();
             });
 
             _logger.Debug($"Formatted map object '{mapPrefab}' for '{map}'.");
@@ -190,7 +189,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 traversableTiles.Select(p => new Vector2Int((int)p.X, (int)p.Y)),
                 true);
 
-        public void SetTargettedTiles(Dictionary<int, HashSet<System.Numerics.Vector2>> targettedTiles) =>
+        public void SetTargettedTiles(IReadOnlyDictionary<int, HashSet<System.Numerics.Vector2>> targettedTiles) =>
             SetTargettedTiles(
                 targettedTiles,
                 true);
@@ -255,7 +254,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             bool forceRefresh)
         {
             // may not have been loaded yet
-            if (_mapPrefab == null || _mapPrefab.Tilemap == null)
+            if (_mapPrefab == null || _mapPrefab.WalkIndicatorTilemap == null)
             {
                 return;
             }
@@ -287,36 +286,49 @@ namespace Assets.Scripts.Plugins.Features.Maps
                 if (forceRefresh)
                 {
                     // must be called from main thread
-                    _mapPrefab.Tilemap.RefreshAllTiles();
+                    _mapPrefab.WalkIndicatorTilemap.RefreshAllTiles();
                 }
             });            
         }
 
         private void SetTargettedTiles(
-            Dictionary<int, HashSet<System.Numerics.Vector2>> targettedTiles,
+            IReadOnlyDictionary<int, HashSet<System.Numerics.Vector2>> targettedTiles,
             bool forceRefresh)
         {
             // may not have been loaded yet
-            if (_mapPrefab == null || _mapPrefab.Tilemap == null)
+            if (_mapPrefab == null || _mapPrefab.WalkIndicatorTilemap == null)
             {
                 return;
             }
 
-            _targettedTiles = new HashSet<Vector2Int>();
+            _targettedTiles = targettedTiles;
 
             _dispatcher.RunOnMainThread(() =>
             {
-                foreach (var set in targettedTiles.Keys)
+                var targetLookup = new Dictionary<Vector3Int, int>();
+                foreach (var entry in targettedTiles
+                    .Keys
+                    .SelectMany(set => targettedTiles[set]
+                        .Select(targetPosition => Tuple.Create(
+                            new Vector3Int(
+                                (int)targetPosition.X,
+                                (int)targetPosition.Y,
+                                LAYER_TARGETTING),
+                            set))))
                 {
-                    var setTiles = targettedTiles[set].Select(x => new Vector2Int((int)x.X, (int)x.Y));
-                    foreach (var t in setTiles)
-                    {
-                        _targettedTiles.Add(t);
+                    targetLookup[entry.Item1] = entry.Item2;
+                }
 
-                        var unityTile = _tileLoader.LoadTile(
-                            "mapping/tilesets/",
-                            $"targetted-tile-highlight-{set}");
-                        var tilePosition = new Vector3Int(t.x, t.y, LAYER_TARGETTING);
+                for (int i = _minimumTileX; i <= _maximumTileX; i++)
+                {
+                    for (int j = _minimumTileY; j <= _maximumTileY; j++)
+                    {
+                        var tilePosition = new Vector3Int(i, j, LAYER_TARGETTING);
+                        var unityTile = targetLookup.TryGetValue(tilePosition, out var set)
+                            ? _tileLoader.LoadTile(
+                                "mapping/tilesets/",
+                                $"targetted-tile-highlight-{set}")
+                            : null;
 
                         // must be called from main thread
                         _mapPrefab.WalkIndicatorTilemap.SetTile(
@@ -324,11 +336,20 @@ namespace Assets.Scripts.Plugins.Features.Maps
                             unityTile);
                     }
                 }
+                
+                foreach (var set in targettedTiles.Keys)
+                {
+                    var setTiles = targettedTiles[set].Select(x => new Vector2Int((int)x.X, (int)x.Y));
+                    foreach (var t in setTiles)
+                    {
+                        
+                    }
+                }
 
                 if (forceRefresh)
                 {
                     // must be called from main thread
-                    _mapPrefab.Tilemap.RefreshAllTiles();
+                    _mapPrefab.WalkIndicatorTilemap.RefreshAllTiles();
                 }
             });
         }
@@ -340,7 +361,7 @@ namespace Assets.Scripts.Plugins.Features.Maps
             _gridLinesEnabled = enabled;
 
             // may not have been loaded yet
-            if (_mapPrefab == null || _mapPrefab.Tilemap == null)
+            if (_mapPrefab == null || _mapPrefab.WalkIndicatorTilemap == null)
             {
                 return;
             }
