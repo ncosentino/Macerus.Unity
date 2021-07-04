@@ -97,6 +97,17 @@
     <Compile Include="Assets\Scripts\Plugins\Features\CharacterSheet\Noesis\Resources\CharacterSheetView.xaml.cs">
       <DependentUpon>CharacterSheetView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Autofac\PartyBarModule.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\IPartyBarView.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\PartyBarPortraitNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\PartyBarNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\PartyBarPortraitNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\IPartyBarPortraitNoesisViewModelConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\IPartyBarNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\IPartyBarPortraitNoesisViewModel.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\Resources\PartyBarView.xaml.cs">
+      <DependentUpon>PartyBarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Autofac\CombatTurnOrderModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\ICombatTurnOrderView.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\CombatPortraitNoesisViewModelConverter.cs" />
@@ -260,6 +271,10 @@
     <None Include="Blend\App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\Resources\PartyBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\Scripts\Plugins\Features\HeaderBar\CombatTurnOrder\Noesis\Resources\CombatTurnOrderView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

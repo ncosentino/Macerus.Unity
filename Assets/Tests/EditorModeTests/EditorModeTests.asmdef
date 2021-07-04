@@ -80,6 +80,8 @@
 "Macerus.Plugins.Features.Mapping.dll",
 "Macerus.Plugins.Features.Minimap.Default.dll",
 "Macerus.Plugins.Features.Minimap.dll",
+"Macerus.Plugins.Features.PartyBar.Default.dll",
+"Macerus.Plugins.Features.PartyBar.dll",
 "Macerus.Plugins.Features.Stats.Api.dll",
 "Macerus.Plugins.Features.Stats.dll",
 "Macerus.Plugins.Features.StatusBar.Api.dll",

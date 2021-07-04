@@ -13,6 +13,7 @@ using Assets.Scripts.Plugins.Features.Inventory.Noesis;
 using Assets.Scripts.Plugins.Features.InGameMenu;
 using Assets.Scripts.Plugins.Features.SceneTransitions;
 using Assets.Scripts.Plugins.Features.Minimap;
+using Assets.Scripts.Plugins.Features.PartyBar;
 
 using Macerus.Plugins.Features.StatusBar.Api;
 using Macerus.Plugins.Features.Hud;
@@ -35,7 +36,8 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
             IInGameMenuView inGameMenuView,
             IEnumerable<IHudWindow> hudWindows,
             ISceneTransitionView sceneTransitionView,
-            IMinimapOverlayView minimapOverlayView)
+            IMinimapOverlayView minimapOverlayView,
+            IPartyBarView partyBarView)
             : this()
         {
             DataContext = viewModel;
@@ -88,6 +90,11 @@ namespace Assets.Scripts.Plugins.Features.NewHud.Noesis.Resources
                 .Create<ISimpleWelder>(
                     NoesisLogicalTreeHelper.FindChildWithName(this, "MinimapOverlayContent"),
                     minimapOverlayView)
+                .Weld();
+            viewWelderFactory
+                .Create<ISimpleWelder>(
+                    NoesisLogicalTreeHelper.FindChildWithName(this, "PartyBarContent"),
+                    partyBarView)
                 .Weld();
         }
 

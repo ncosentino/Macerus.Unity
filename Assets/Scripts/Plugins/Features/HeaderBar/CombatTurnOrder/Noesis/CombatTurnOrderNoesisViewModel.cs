@@ -18,20 +18,13 @@ using Macerus.Plugins.Features.HeaderBar.Api.CombatTurnOrder;
 namespace Assets.Scripts.Plugins.Features.HeaderBar.CombatTurnOrder.Noesis
 {
     public sealed class CombatTurnOrderNoesisViewModel :
-        NotifierBase,
+        MacerusViewModelWrapper,
         ICombatTurnOrderNoesisViewModel
     {
-        private static readonly Lazy<IReadOnlyDictionary<string, string>> _lazyNotifierMapping;
-
         private readonly ICombatTurnOrderViewModel _viewModelToWrap;
         private readonly ICombatPortraitNoesisViewModelConverter _combatPortraitNoesisViewModelConverter;
 
         private ObservableCollection<ICombatTurnOrderPortraitNoesisViewModel> _portraits;
-
-        static CombatTurnOrderNoesisViewModel()
-        {
-            _lazyNotifierMapping = LazyNotifierMappingBuilder.BuildMapping<CombatTurnOrderNoesisViewModel>();
-        }
 
         public CombatTurnOrderNoesisViewModel(
             ICombatTurnOrderViewModel viewModelToWrap,
@@ -72,7 +65,7 @@ namespace Assets.Scripts.Plugins.Features.HeaderBar.CombatTurnOrder.Noesis
                 return;
             }
 
-            if (!_lazyNotifierMapping.Value.TryGetValue(
+            if (!NotifierMapping.TryGetValue(
                 e.PropertyName,
                 out var propertyName))
             {

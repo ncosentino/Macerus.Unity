@@ -11,7 +11,6 @@ using Assets.Scripts.Unity.GameObjects;
 
 using Autofac;
 
-using Macerus.Api.Behaviors;
 using Macerus.Plugins.Features.Encounters;
 using Macerus.Plugins.Features.GameObjects.Skills.Api;
 using Macerus.Plugins.Features.Mapping;
@@ -19,13 +18,13 @@ using Macerus.Plugins.Features.Stats.Api;
 using Macerus.Plugins.Features.Weather;
 
 using ProjectXyz.Api.Framework;
-using ProjectXyz.Api.Framework.Entities;
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Api.Stats;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Filtering.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping;
+using ProjectXyz.Plugins.Features.PartyManagement;
 using ProjectXyz.Plugins.Features.TurnBased;
 using ProjectXyz.Plugins.Features.Weather.Api;
 using ProjectXyz.Shared.Framework;
@@ -53,6 +52,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private ITimeProvider _timeProvider;
         private IObjectDestroyer _objectDestroyer;
         private ITileMarkerFactory _tileMarkerFactory;
+        private IRosterManager _rosterManager;
 
         private void Start()
         {
@@ -80,6 +80,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             _objectDestroyer = container.Resolve<IObjectDestroyer>();
             _timeProvider = container.Resolve<ITimeProvider>();
             _tileMarkerFactory = container.Resolve<ITileMarkerFactory>();
+            _rosterManager = container.Resolve<IRosterManager>();
 
             container
                 .Resolve<IConsoleCommandRegistrar>()
@@ -286,8 +287,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets the position of the player.")]
         private void PlayerGetPosition()
         {
-            var positionBehavior = _mappingAmenity
-                .GetActivePlayerControlled()
+            var positionBehavior = _rosterManager
+                .CurrentlyControlledActor
                 .GetOnly<IReadOnlyPositionBehavior>();
             _logger.Info(
                 $"({positionBehavior.X},{positionBehavior.Y})");
@@ -296,7 +297,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Sets the location of the player.")]
         private void PlayerSetPosition(double x, double y)
         {
-            var player = _mappingAmenity.GetActivePlayerControlled();
+            var player = _rosterManager.CurrentlyControlledActor;
             var positionBehavior = player.GetOnly<IPositionBehavior>();
             var unityPlayerObject = _unityGameObjectManager
                 .FindAll(x => x.GetGameObject() == player)
@@ -314,8 +315,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets the size of the player.")]
         private void PlayerGetSize()
         {
-            var sizeBehavior = _mappingAmenity
-                .GetActivePlayerControlled()
+            var sizeBehavior = _rosterManager
+                .CurrentlyControlledActor
                 .GetOnly<IReadOnlySizeBehavior>();
             _logger.Info(
                 $"({sizeBehavior.Width},{sizeBehavior.Height})");
@@ -369,7 +370,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets a stat value with the specified ID (or term) from the player.")]
         private void PlayerGetStat(string rawStatDefinitionId)
         {
-            var player = _mappingAmenity.GetActivePlayerControlled();
+            var player = _rosterManager.CurrentlyControlledActor;
 
             IIdentifier statDefinitionId;
             if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
@@ -397,7 +398,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Sets a base stat value with the specified ID (or term) and valu on the player.")]
         private void PlayerSetBaseStat(string rawStatDefinitionId, double value)
         {
-            var player = _mappingAmenity.GetActivePlayerControlled();
+            var player = _rosterManager.CurrentlyControlledActor;
 
             IIdentifier statDefinitionId;
             if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
@@ -424,7 +425,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Adds a skill with the specified ID to the player.")]
         private void PlayerAddSkill(string skillId)
         {
-            var player = _mappingAmenity.GetActivePlayerControlled();
+            var player = _rosterManager.CurrentlyControlledActor;
 
             var skill = _skillAmenity.GetSkillById(new StringIdentifier(skillId));
             if (skill == null)

@@ -19,6 +19,7 @@ using Macerus.Plugins.Features.Gui.SceneTransitions;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
 using Macerus.Plugins.Features.MainMenu.Api;
+using Macerus.Plugins.Features.PartyBar;
 using Macerus.Plugins.Features.StatusBar.Api;
 
 using ProjectXyz.Api.GameObjects;
@@ -121,6 +122,8 @@ namespace Assets.Blend
 
                 var statusBarViewModel = container.Resolve<IStatusBarViewModel>();
                 statusBarViewModel.IsOpen = true;
+
+                container.Resolve<IPartyBarViewModel>().Open();
             }
 
             container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
