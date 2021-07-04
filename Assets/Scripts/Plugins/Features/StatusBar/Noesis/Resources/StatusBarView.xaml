@@ -6,8 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
     xmlns:local="clr-namespace:Assets.Scripts.Plugins.Features.StatusBar.Noesis"
     xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
-    d:DesignWidth="1000"
-    d:DesignHeight="600"
+    d:DesignWidth="1920"
+    d:DesignHeight="256"
     Visibility="{Binding Visibility}">
 
     <UserControl.Resources>
@@ -48,20 +48,36 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
+                <!--RESOURCE ORB-->
                 <ColumnDefinition Width="*"/>
+
+                <!--EMPTY-->
                 <ColumnDefinition Width="4*"/>
+                
+                <!--SKILLS-->
                 <ColumnDefinition Width="4*"/>
+                
+                <!--COMBAT CONTROLS-->
+                <ColumnDefinition Width="auto"/>
+                
+                <!--EMPTY-->
                 <ColumnDefinition Width="4*"/>
+
+                <!--RESOURCE ORB-->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Viewbox Grid.Column="0" Stretch="Fill">
+            <Viewbox
+                x:Name="ResourceOrbLeft"
+                Grid.Column="0"
+                Stretch="Fill">
                 <Border Width="10" Height="{Binding LeftResource.Item2}" Background="DarkGray" Opacity="0.75">
                     <Border Height="{Binding LeftResource.Item1}" Background="DarkRed" VerticalAlignment="Bottom"/>
                 </Border>
             </Viewbox>
 
             <ItemsControl
+                x:Name="Skills"
                 Grid.Column="2"
                 Background="#00000001"
                 ItemsSource="{Binding Abilities, UpdateSourceTrigger=PropertyChanged}"
@@ -89,8 +105,31 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <Grid
+                x:Name="CombatControls"
+                Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <UniformGrid
+                    Grid.Row="1"
+                    Columns="1">
+                    <Button
+                        x:Name="CompleteTurnButton"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding CompleteTurnButtonVisibility}"
+                        Content="{Binding CompleteTurnButtonLabel}"
+                        Command="{Binding CompleteTurnCommand}"/>
+                </UniformGrid>
+            </Grid>
             
-            <Viewbox Grid.Column="5" Stretch="Fill">
+            <Viewbox
+                x:Name="ResourceOrbRight"
+                Grid.Column="5"
+                Stretch="Fill">
                 <Border Width="10" Height="{Binding RightResource.Item2}" Background="DarkGray" Opacity="0.75">
                     <Border Height="{Binding RightResource.Item1}" Background="DarkBlue" VerticalAlignment="Bottom"/>
                 </Border>

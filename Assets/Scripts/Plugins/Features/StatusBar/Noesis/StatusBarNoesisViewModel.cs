@@ -4,14 +4,14 @@ using Noesis;
 #else
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 #endif
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Collections.Concurrent;
+using System.Windows.Input;
 
 using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Noesis.ViewModels;
@@ -55,12 +55,25 @@ namespace Assets.Scripts.Plugins.Features.StatusBar.Noesis
             _viewModelToWrap = viewModelToWrap;
             _abilityToNoesisViewModelConverter = abilityToNoesisViewModelConverter;
 
+            CompleteTurnCommand = new DelegateCommand(_ => _viewModelToWrap.CompleteTurn());
+
             _viewModelToWrap.PropertyChanged += ViewModelToWrap_PropertyChanged;
 
             RefreshLeftResource();
             RefreshRightResource();
             RefreshAbilities();
         }
+
+        [NotifyForWrappedProperty(nameof(IStatusBarViewModel.CanCompleteTurn))]
+        public Visibility CompleteTurnButtonVisibility => _viewModelToWrap.CanCompleteTurn
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
+        public string CompleteTurnButtonLabel => _viewModelToWrap
+            .StringProvider
+            .CompleteTurnButtonLabel;
+
+        public ICommand CompleteTurnCommand { get; }
 
         [NotifyForWrappedProperty(nameof(IStatusBarViewModel.IsOpen))]
         public Visibility Visibility => _viewModelToWrap.IsOpen
