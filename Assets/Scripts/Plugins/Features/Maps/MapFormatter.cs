@@ -303,22 +303,22 @@ namespace Assets.Scripts.Plugins.Features.Maps
 
             _targettedTiles = targettedTiles;
 
+            var targetLookup = new Dictionary<Vector3Int, int>();
+            foreach (var entry in targettedTiles
+                .Keys
+                .SelectMany(set => targettedTiles[set]
+                    .Select(targetPosition => Tuple.Create(
+                        new Vector3Int(
+                            (int)targetPosition.X,
+                            (int)targetPosition.Y,
+                            LAYER_TARGETTING),
+                        set))))
+            {
+                targetLookup[entry.Item1] = entry.Item2;
+            }
+
             _dispatcher.RunOnMainThread(() =>
             {
-                var targetLookup = new Dictionary<Vector3Int, int>();
-                foreach (var entry in targettedTiles
-                    .Keys
-                    .SelectMany(set => targettedTiles[set]
-                        .Select(targetPosition => Tuple.Create(
-                            new Vector3Int(
-                                (int)targetPosition.X,
-                                (int)targetPosition.Y,
-                                LAYER_TARGETTING),
-                            set))))
-                {
-                    targetLookup[entry.Item1] = entry.Item2;
-                }
-
                 for (int i = _minimumTileX; i <= _maximumTileX; i++)
                 {
                     for (int j = _minimumTileY; j <= _maximumTileY; j++)
