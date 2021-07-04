@@ -36,27 +36,57 @@ namespace Assets.Scripts.Gui.Noesis
 #else
         public ImageSource CreateForResourceId(IIdentifier resourceId)
         {
+            var assetsRoot = new DirectoryInfo(@"..\..\..\Assets");
+            var allResourcesDirectories = Directory.GetDirectories(
+                assetsRoot.FullName,
+                "Resources",
+                SearchOption.AllDirectories);
+
+            FileInfo fileInfo = null;
             var relativePath = resourceId.ToString(); // FIXME: this is still a hack
-            var fullPathWithoutExtension = Path.Combine(@"..\..\..\Assets\Resources", relativePath);
-            var fileInfo = new FileInfo(fullPathWithoutExtension + ".png");
-            if (!fileInfo.Exists)
+            foreach (var resourceDirectory in allResourcesDirectories)
             {
-                fileInfo = new FileInfo(fullPathWithoutExtension + ".jpg");
-                if (!fileInfo.Exists)
+                var fullPathWithoutExtension = Path.Combine(
+                    resourceDirectory,
+                    relativePath);
+                fileInfo = new FileInfo(fullPathWithoutExtension + ".png");
+                if (fileInfo.Exists)
                 {
-                    fileInfo = new FileInfo(fullPathWithoutExtension + ".jpeg");
-                    if (!fileInfo.Exists)
-                    {
-                        throw new FileNotFoundException(
-                            $"Cannot find resource '{resourceId}'. Trying to " +
-                            $"look for it at '{fullPathWithoutExtension}' but " +
-                            $"the attempted file extensions cannot find a match. " +
-                            $"Please check the code in " +
-                            $"'{GetType()}.{nameof(CreateForResourceId)}' to " +
-                            $"see if there's additional support that should be " +
-                            $"added.");
-                    }
+                    break;
                 }
+                    
+                fileInfo = new FileInfo(fullPathWithoutExtension + ".jpg");
+                if (fileInfo.Exists)
+                {
+                    break;
+                }
+
+                fileInfo = new FileInfo(fullPathWithoutExtension + ".jpeg");
+                if (fileInfo.Exists)
+                {
+                    break;
+                }
+
+                fileInfo = new FileInfo(fullPathWithoutExtension + ".renderTexture");
+                if (fileInfo.Exists)
+                {
+                    // NOTE: these are unity-specific and won't work in Blend/VS
+                    return null;
+                }
+
+                fileInfo = null;
+            }
+
+            if (fileInfo == null)
+            {
+                throw new FileNotFoundException(
+                    $"Cannot find resource '{resourceId}'. Trying to " +
+                    $"look for it within '{assetsRoot.FullName}' but " +
+                    $"the attempted file extensions cannot find a match. " +
+                    $"Please check the code in " +
+                    $"'{GetType()}.{nameof(CreateForResourceId)}' to " +
+                    $"see if there's additional support that should be " +
+                    $"added.");
             }
 
             var uri = new Uri(fileInfo.FullName);
