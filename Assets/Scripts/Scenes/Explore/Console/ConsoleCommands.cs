@@ -288,7 +288,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private void PlayerGetPosition()
         {
             var positionBehavior = _rosterManager
-                .CurrentlyControlledActor
+                .ActiveControlledActor
                 .GetOnly<IReadOnlyPositionBehavior>();
             _logger.Info(
                 $"({positionBehavior.X},{positionBehavior.Y})");
@@ -297,7 +297,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Sets the location of the player.")]
         private void PlayerSetPosition(double x, double y)
         {
-            var player = _rosterManager.CurrentlyControlledActor;
+            var player = _rosterManager.ActiveControlledActor;
             var positionBehavior = player.GetOnly<IPositionBehavior>();
             var unityPlayerObject = _unityGameObjectManager
                 .FindAll(x => x.GetGameObject() == player)
@@ -316,7 +316,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         private void PlayerGetSize()
         {
             var sizeBehavior = _rosterManager
-                .CurrentlyControlledActor
+                .ActiveControlledActor
                 .GetOnly<IReadOnlySizeBehavior>();
             _logger.Info(
                 $"({sizeBehavior.Width},{sizeBehavior.Height})");
@@ -370,7 +370,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Gets a stat value with the specified ID (or term) from the player.")]
         private void PlayerGetStat(string rawStatDefinitionId)
         {
-            var player = _rosterManager.CurrentlyControlledActor;
+            var player = _rosterManager.ActiveControlledActor;
 
             IIdentifier statDefinitionId;
             if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
@@ -398,7 +398,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Sets a base stat value with the specified ID (or term) and valu on the player.")]
         private void PlayerSetBaseStat(string rawStatDefinitionId, double value)
         {
-            var player = _rosterManager.CurrentlyControlledActor;
+            var player = _rosterManager.ActiveControlledActor;
 
             IIdentifier statDefinitionId;
             if (int.TryParse(rawStatDefinitionId, out var intStatDefinitionId))
@@ -425,7 +425,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
         [DiscoverableConsoleCommand("Adds a skill with the specified ID to the player.")]
         private void PlayerAddSkill(string skillId)
         {
-            var player = _rosterManager.CurrentlyControlledActor;
+            var player = _rosterManager.ActiveControlledActor;
 
             var skill = _skillAmenity.GetSkillById(new StringIdentifier(skillId));
             if (skill == null)
