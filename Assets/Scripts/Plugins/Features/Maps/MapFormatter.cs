@@ -336,15 +336,6 @@ namespace Assets.Scripts.Plugins.Features.Maps
                             unityTile);
                     }
                 }
-                
-                foreach (var set in targettedTiles.Keys)
-                {
-                    var setTiles = targettedTiles[set].Select(x => new Vector2Int((int)x.X, (int)x.Y));
-                    foreach (var t in setTiles)
-                    {
-                        
-                    }
-                }
 
                 if (forceRefresh)
                 {
