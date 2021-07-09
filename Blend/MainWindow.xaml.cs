@@ -45,6 +45,7 @@ namespace Assets.Blend
 
             var macerusContainerBuilder = new MacerusContainerBuilder();
             var container = macerusContainerBuilder.CreateContainer();
+            container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
 
             var transitionController = container.Resolve<ITransitionController>();
 
@@ -75,7 +76,7 @@ namespace Assets.Blend
                 var rosterManager = container.Resolve<IRosterManager>();
                 rosterManager.AddToRoster(player);
                 player.GetOnly<IRosterBehavior>().IsPartyLeader = true;
-                rosterManager.SetActorToControl(player);
+                player.GetOnly<IPlayerControlledBehavior>().IsActive = true;
 
                 var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
                 mapGameObjectManager.MarkForAddition(player);
@@ -125,8 +126,6 @@ namespace Assets.Blend
 
                 container.Resolve<IPartyBarViewModel>().Open();
             }
-
-            container.Resolve<IAsyncGameEngine>().RunAsync(CancellationToken.None);
         }
 
         // FIXME: this is just a hack to force player creation
