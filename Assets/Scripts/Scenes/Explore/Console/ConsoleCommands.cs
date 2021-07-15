@@ -322,18 +322,6 @@ namespace Assets.Scripts.Scenes.Explore.Console
                 $"({sizeBehavior.Width},{sizeBehavior.Height})");
         }
 
-        [DiscoverableConsoleCommand("Sets whether or not to use global syncing for the turn based manager.")]
-        private void TurnBasedManagerSetGlobalSync(bool value)
-        {
-            _turnBasedManager.GlobalSync = value;
-        }
-
-        [DiscoverableConsoleCommand("Sets whether or not to clear the applicable objects on update for the turn based manager.")]
-        private void TurnBasedManagerSetClearApplicableOnUpdate(bool value)
-        {
-            _turnBasedManager.ClearApplicableOnUpdate = value;
-        }
-
         [DiscoverableConsoleCommand("Sets whether or not to sync turns from elapsed time for the turn based manager.")]
         private void TurnBasedManagerSetSyncTurnsFromElapsedTime(bool value)
         {
@@ -345,11 +333,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
         {
             _logger.Info(
                 $"Turn Based Manager:\r\n" +
-                $"\t{nameof(_turnBasedManager.ClearApplicableOnUpdate)}: {_turnBasedManager.ClearApplicableOnUpdate}\r\n" +
-                $"\t{nameof(_turnBasedManager.GlobalSync)}: {_turnBasedManager.GlobalSync}\r\n" +
-                $"\t{nameof(_turnBasedManager.SyncTurnsFromElapsedTime)}: {_turnBasedManager.SyncTurnsFromElapsedTime}\r\n" +
-                $"\t{nameof(_turnBasedManager.GetApplicableGameObjects)}:\r\n" +
-                $"\t\t{string.Join("\r\n\t\t", _turnBasedManager.GetApplicableGameObjects())}");
+                $"\t{nameof(_turnBasedManager.HasActionTakenQueued)}: {_turnBasedManager.HasActionTakenQueued}\r\n" +
+                $"\t{nameof(_turnBasedManager.HasTurnTakenQueued)}: {_turnBasedManager.HasTurnTakenQueued}\r\n" +
+                $"\t{nameof(_turnBasedManager.SyncTurnsFromElapsedTime)}: {_turnBasedManager.SyncTurnsFromElapsedTime}");
         }
 
         [DiscoverableConsoleCommand("Sets the weather table to one with the specified ID.")]
