@@ -26,7 +26,7 @@ using ProjectXyz.Plugins.Features.GameObjects.Skills;
 using ProjectXyz.Plugins.Features.Mapping;
 using ProjectXyz.Plugins.Features.PartyManagement;
 using ProjectXyz.Plugins.Features.TurnBased;
-using ProjectXyz.Plugins.Features.Weather.Api;
+using ProjectXyz.Plugins.Features.Weather;
 using ProjectXyz.Shared.Framework;
 
 using UnityEngine;
