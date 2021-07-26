@@ -12,7 +12,7 @@ using Assets.Scripts.Unity.GameObjects;
 using Autofac;
 
 using Macerus.Plugins.Features.Encounters;
-using Macerus.Plugins.Features.GameObjects.Skills.Api;
+using Macerus.Plugins.Features.GameObjects.Skills;
 using Macerus.Plugins.Features.Mapping;
 using Macerus.Plugins.Features.Stats.Api;
 using Macerus.Plugins.Features.Weather;
