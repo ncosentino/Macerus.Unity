@@ -5,6 +5,10 @@ using Assets.Scripts.Unity.Resources;
 
 using Autofac;
 
+using Macerus.Plugins.Features.Audio.SoundGeneration;
+
+using ProjectXyz.Plugins.Features.Filtering.Api;
+
 namespace Assets.Scripts.Plugins.Features.Audio
 {
     public sealed class AudioModule : Module
@@ -14,14 +18,12 @@ namespace Assets.Scripts.Plugins.Features.Audio
             base.Load(builder);
 
             builder
-                .RegisterType<SoundPlayingBehaviourStitcher>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder
                 .Register(c =>
                 {
                     var audioManager = new AudioManager(
                         new Lazy<IUnityAudioManager>(() => AudioManagerBehaviour.Instance),
+                        c.Resolve<Lazy<ISoundGenerator>>(),
+                        c.Resolve<Lazy<IFilterContextProvider>>(),
                         c.Resolve<IResourceLoader>());
                     return audioManager;
                 })

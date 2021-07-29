@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace Assets.Scripts.Behaviours.Audio
 {
-
     public sealed class AudioManagerBehaviour :
         MonoBehaviour,
         IUnityAudioManager
@@ -10,6 +11,7 @@ namespace Assets.Scripts.Behaviours.Audio
         private static AudioManagerBehaviour _instance;
 
         private AudioSource _musicSource;
+        private AudioSource _effectsSource;
 
         public static IUnityAudioManager Instance => _instance;
 
@@ -24,16 +26,24 @@ namespace Assets.Scripts.Behaviours.Audio
             }
         }
 
-        public void PlayMusic(AudioClip musicClip)
+        public void PlayMusic(AudioClip musicClip) =>
+            PlayAudio(_musicSource, musicClip);
+
+        public void PlayEffect(AudioClip audioClip) =>
+            PlayAudio(_effectsSource, audioClip);
+
+        private void PlayAudio(
+            AudioSource audioSource,
+            AudioClip audioClip)
         {
-            if (_musicSource.clip == musicClip)
+            if (audioSource.clip == audioClip)
             {
                 return;
             }
 
-            _musicSource.Stop();
-            _musicSource.clip = musicClip;
-            _musicSource.Play();
+            audioSource.Stop();
+            audioSource.clip = audioClip;
+            audioSource.Play();
         }
 
         private void Start()
@@ -41,6 +51,10 @@ namespace Assets.Scripts.Behaviours.Audio
             _musicSource = gameObject.AddComponent<AudioSource>();
             _musicSource.loop = true;
             _musicSource.volume = 0.5f;
+
+            _effectsSource = gameObject.AddComponent<AudioSource>();
+            _effectsSource.loop = false;
+            _effectsSource.volume = 0.5f;
         }
     }
 }

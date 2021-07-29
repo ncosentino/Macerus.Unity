@@ -4,7 +4,6 @@ using System.Linq;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Noesis;
 using Assets.Scripts.Gui.Unity;
-using Assets.Scripts.Plugins.Features.Audio.Api;
 using Assets.Scripts.Plugins.Features.Cameras;
 using Assets.Scripts.Plugins.Features.Console;
 using Assets.Scripts.Plugins.Features.GameEngine;
@@ -32,7 +31,6 @@ namespace Assets.Scripts.Scenes.Explore
         private readonly IExploreSceneStartupInterceptorFacade _exploreSceneStartupInterceptorFacade;
         private readonly IGameEngineUpdateBehaviourStitcher _gameEngineUpdateBehaviourStitcher;
         private readonly IGuiBehaviourStitcher _guiBehaviorStitcher;
-        private readonly ISoundPlayingBehaviourStitcher _soundPlayingBehaviourStitcher;
         private readonly IUnityGuiHitTester _unityGuiHitTester;
         private readonly INoesisGuiHitTester _noesisGuiHitTester;
         private readonly IExploreGameRootPrefabFactory _exploreGameRootPrefabFactory;
@@ -48,7 +46,6 @@ namespace Assets.Scripts.Scenes.Explore
             IExploreSceneStartupInterceptorFacade exploreSceneStartupInterceptorFacade,
             IGameEngineUpdateBehaviourStitcher gameEngineUpdateBehaviourStitcher,
             IGuiBehaviourStitcher guiBehaviourStitcher,
-            ISoundPlayingBehaviourStitcher soundPlayingBehaviourStitcher,
             IUnityGuiHitTester unityGuiHitTester,
             INoesisGuiHitTester noesisGuiHitTester,
             IExploreGameRootPrefabFactory exploreGameRootPrefabFactory,
@@ -63,7 +60,6 @@ namespace Assets.Scripts.Scenes.Explore
             _exploreSceneStartupInterceptorFacade = exploreSceneStartupInterceptorFacade;
             _gameEngineUpdateBehaviourStitcher = gameEngineUpdateBehaviourStitcher;
             _guiBehaviorStitcher = guiBehaviourStitcher;
-            _soundPlayingBehaviourStitcher = soundPlayingBehaviourStitcher;
             _unityGuiHitTester = unityGuiHitTester;
             _noesisGuiHitTester = noesisGuiHitTester;
             _exploreGameRootPrefabFactory = exploreGameRootPrefabFactory;
@@ -78,7 +74,6 @@ namespace Assets.Scripts.Scenes.Explore
             var exploreGameRoot = _exploreGameRootPrefabFactory.GetInstance();
 
             _gameEngineUpdateBehaviourStitcher.Attach(exploreGameRoot.GameObject);
-            _soundPlayingBehaviourStitcher.Attach(exploreGameRoot.GameObject);
 
             _guiBehaviorStitcher.Stitch(
                 exploreGameRoot.GameObject,
