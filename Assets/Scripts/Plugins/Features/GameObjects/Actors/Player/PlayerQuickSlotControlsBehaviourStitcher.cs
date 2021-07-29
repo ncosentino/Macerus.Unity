@@ -3,6 +3,7 @@ using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Plugins.Features.Maps.Api;
 using Assets.Scripts.Unity.Input;
 
+using Macerus.Plugins.Features.GameObjects.Actors.Interactions;
 using Macerus.Plugins.Features.StatusBar.Api;
 
 using ProjectXyz.Api.GameObjects;

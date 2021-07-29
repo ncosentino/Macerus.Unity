@@ -3,6 +3,8 @@
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Threading;
 
+using Macerus.Plugins.Features.GameObjects.Actors.Interactions;
+
 using NexusLabs.Contracts;
 
 using ProjectXyz.Api.GameObjects;

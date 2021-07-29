@@ -1,4 +1,4 @@
-﻿using Macerus.Plugins.Features.Interactions.Api;
+﻿using Macerus.Plugins.Features.GameObjects.Actors.Interactions;
 
 using UnityEngine;
 
@@ -6,17 +6,18 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 {
     public sealed class PlayerInteractionDetectionBehaviourStitcher : IPlayerInteractionDetectionBehaviourStitcher
     {
-        private readonly IInteractionHandlerFacade _interactionHandler;
+        private readonly IActorInteractionManager _actorInteractionManager;
 
-        public PlayerInteractionDetectionBehaviourStitcher(IInteractionHandlerFacade interactionHandlerFacade)
+        public PlayerInteractionDetectionBehaviourStitcher(IActorInteractionManager actorInteractionManager)
         {
-            _interactionHandler = interactionHandlerFacade;
+            _actorInteractionManager = actorInteractionManager;
         }
 
         public void Stitch(GameObject unityGameObject)
         {
             var playerInteractionDetectionBehaviour = unityGameObject.AddComponent<PlayerInteractionDetectionBehaviour>();
-            playerInteractionDetectionBehaviour.InteractionHandler = _interactionHandler;
+            playerInteractionDetectionBehaviour.ActorInteractionManager = _actorInteractionManager;
+            playerInteractionDetectionBehaviour.Actor = unityGameObject.GetGameObject();
         }
     }
 }

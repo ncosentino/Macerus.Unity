@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 
+using Macerus.Plugins.Features.GameObjects.Actors.Interactions;
+
 using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;

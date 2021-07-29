@@ -10,6 +10,7 @@ using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Threading;
 
 using Macerus.Api.Behaviors;
+using Macerus.Plugins.Features.GameObjects.Actors.Interactions;
 using Macerus.Plugins.Features.StatusBar.Api;
 
 using NexusLabs.Contracts;

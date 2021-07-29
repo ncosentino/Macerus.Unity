@@ -1,15 +1,15 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Assets.Scripts.Input.Api;
-using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 using Assets.Scripts.Plugins.Features.IngameDebugConsole.Api;
 using Assets.Scripts.Unity.Input;
 using Assets.Scripts.Unity.Threading;
 
-using Macerus.Plugins.Features.Interactions.Api;
+using Macerus.Plugins.Features.GameObjects.Actors.Interactions;
 
 using NexusLabs.Contracts;
+
+using ProjectXyz.Api.GameObjects;
 
 using UnityEngine;
 
@@ -25,23 +25,17 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
         public IKeyboardInput KeyboardInput { get; set; }
 
-        public IReadOnlyPlayerInteractionDetectionBehavior PlayerInteractionDetectionBehavior { get; set; }
+        public IActorInteractionManager ActorInteractionManager { get; set; }
 
-        public IInteractionHandlerFacade InteractionHandler { get; set; }
-
-        public IActorActionCheck ActorActionCheck { get; set; }
-
-        public ProjectXyz.Api.Logging.ILogger Logger { get; set; }
+        public IGameObject Actor { get; set; }
 
         private void Start()
         {
             this.RequiresNotNull(KeyboardControls, nameof(KeyboardControls));
             this.RequiresNotNull(KeyboardInput, nameof(KeyboardInput));
-            this.RequiresNotNull(PlayerInteractionDetectionBehavior, nameof(PlayerInteractionDetectionBehavior));
-            this.RequiresNotNull(Logger, nameof(Logger));
             this.RequiresNotNull(DebugConsoleManager, nameof(DebugConsoleManager));
-            this.RequiresNotNull(InteractionHandler, nameof(InteractionHandler));
-            this.RequiresNotNull(ActorActionCheck, nameof(ActorActionCheck));
+            this.RequiresNotNull(ActorInteractionManager, nameof(ActorInteractionManager));
+            this.RequiresNotNull(Actor, nameof(Actor));
         }
 
         private async Task Update()
@@ -58,23 +52,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
             if (KeyboardInput.GetKeyUp(KeyboardControls.Interact))
             {
-                var actor = gameObject
-                    .GetComponent<IReadOnlyHasGameObject>()
-                    .GameObject;
-                if (!ActorActionCheck.CanAct(actor))
-                {
-                    return;
-                }
-
-                var interactable = PlayerInteractionDetectionBehavior
-                    .Interactables
-                    .FirstOrDefault();
-                if (interactable != null)
-                {
-                    await InteractionHandler
-                        .InteractAsync(actor, interactable)
-                        .ConfigureAwait(false);
-                }
+                await ActorInteractionManager
+                    .TryInteractAsync(Actor)
+                    .ConfigureAwait(false);
             }
         }
     }
