@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
+using Assets.Scripts.Unity.Threading;
 
 using ProjectXyz.Api.GameObjects;
 using ProjectXyz.Plugins.Features.Combat.Api;
@@ -13,11 +14,16 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
     {
         private readonly IActorIdentifiers _actorIdentifiers;
         private readonly ICombatTurnManager _combatTurnManager;
+        private readonly IDispatcher _dispatcher;
 
-        public ActorsCantBePushedInterceptor(IActorIdentifiers actorIdentifiers, ICombatTurnManager combatTurnManager)
+        public ActorsCantBePushedInterceptor(
+            IActorIdentifiers actorIdentifiers,
+            ICombatTurnManager combatTurnManager,
+            IDispatcher dispatcher)
         {
             _actorIdentifiers = actorIdentifiers;
             _combatTurnManager = combatTurnManager;
+            _dispatcher = dispatcher;
         }
 
         public void Intercept(
@@ -32,6 +38,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Interceptors
             // FIXME: set this up as a stitcher?
             var cantBePushedBehaviour = unityGameObject.AddComponent<CantBePushedBehaviour>();
             cantBePushedBehaviour.CombatTurnManager = _combatTurnManager;
+            cantBePushedBehaviour.Dispatcher = _dispatcher;
             cantBePushedBehaviour.RigidBody = unityGameObject.GetComponent<Rigidbody2D>();
         }
     }
