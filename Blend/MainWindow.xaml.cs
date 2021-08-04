@@ -81,7 +81,7 @@ namespace Assets.Blend
 
                 var mapGameObjectManager = container.Resolve<IMapGameObjectManager>();
                 mapGameObjectManager.MarkForAddition(player);
-                mapGameObjectManager.Synchronize();
+                mapGameObjectManager.SynchronizeAsync().Wait();
 
                 var filterContextAmenity = container.Resolve<IFilterContextAmenity>();
                 var filterContext = filterContextAmenity.CreateNoneFilterContext();

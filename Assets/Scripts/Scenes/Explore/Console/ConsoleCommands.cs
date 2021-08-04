@@ -261,14 +261,16 @@ namespace Assets.Scripts.Scenes.Explore.Console
         }
 
         [DiscoverableConsoleCommand("Clears the map game objects.")]
-        private void MapGameObjectsClear()
+        private async void MapGameObjectsClear()
         {
             _mapGameObjectManager.MarkForRemoval(_mapGameObjectManager.GameObjects.ToArray());
-            _mapGameObjectManager.Synchronize();
+            await _mapGameObjectManager
+                .SynchronizeAsync()
+                .ConfigureAwait(false);
         }
 
         [DiscoverableConsoleCommand("Removes the map game object with the specified id.")]
-        private void MapGameObjectsRemoveById(string idAsString)
+        private async void MapGameObjectsRemoveById(string idAsString)
         {
             var objId = new StringIdentifier(idAsString);
             var matchingObj = _mapGameObjectManager
@@ -281,7 +283,9 @@ namespace Assets.Scripts.Scenes.Explore.Console
             }
 
             _mapGameObjectManager.MarkForRemoval(matchingObj);
-            _mapGameObjectManager.Synchronize();
+            await _mapGameObjectManager
+                .SynchronizeAsync()
+                .ConfigureAwait(false);
         }
 
         [DiscoverableConsoleCommand("Gets the position of the player.")]
