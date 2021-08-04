@@ -15,6 +15,7 @@ using Macerus.Plugins.Features.GameObjects.Actors;
 using Macerus.Plugins.Features.GameObjects.Actors.Generation;
 using Macerus.Plugins.Features.GameObjects.Items.Generation.Api;
 using Macerus.Plugins.Features.GameObjects.Skills;
+using Macerus.Plugins.Features.Gui;
 using Macerus.Plugins.Features.Gui.SceneTransitions;
 using Macerus.Plugins.Features.Inventory.Api;
 using Macerus.Plugins.Features.Inventory.Api.Crafting;
@@ -125,6 +126,11 @@ namespace Assets.Blend
                 statusBarViewModel.IsOpen = true;
 
                 container.Resolve<IPartyBarViewModel>().Open();
+
+                container
+                    .Resolve<IModalManager>()
+                    .ShowMessageBoxAsync("This is a message box that has one button.")
+                    .Wait();
             }
         }
 

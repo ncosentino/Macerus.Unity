@@ -25,6 +25,7 @@
 "Macerus.Plugins.Features.Animations.Api.dll",
 "Macerus.Plugins.Features.Animations.Default.dll",
 "Macerus.Plugins.Features.Animations.Lpc.dll",
+"Macerus.Plugins.Features.Audio.Default.dll",
 "Macerus.Plugins.Features.Audio.dll",
 "Macerus.Plugins.Features.Audio.SoundGeneration.Default.dll",
 "Macerus.Plugins.Features.Audio.SoundGeneration.dll",
