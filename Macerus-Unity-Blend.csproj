@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="Assets\Scripts\Plugins\Features\Gui\ModalWindow.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\Gui\StringModalContentConverter.cs" />
+    <Compile Include="Assets\Scripts\Plugins\Features\Inventory\HoverCards\BaseStatsHoverCardPartConverter.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Autofac\PartyBarModule.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\IPartyBarView.cs" />
     <Compile Include="Assets\Scripts\Plugins\Features\PartyBar\Noesis\PartyBarPortraitNoesisViewModelConverter.cs" />

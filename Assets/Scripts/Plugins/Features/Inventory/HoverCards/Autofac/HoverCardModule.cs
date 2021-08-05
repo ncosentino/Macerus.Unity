@@ -18,6 +18,10 @@ namespace Assets.Scripts.Plugins.Features.Inventory.HoverCards.Autofac
                 .RegisterType<MultiNameHoverCardPartConverter>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder
+                .RegisterType<BaseStatsHoverCardPartConverter>()
+                .AsImplementedInterfaces()
+                .SingleInstance();            
         }
     }
 }
