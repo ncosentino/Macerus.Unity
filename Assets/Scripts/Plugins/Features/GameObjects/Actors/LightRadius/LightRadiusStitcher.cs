@@ -2,7 +2,7 @@
 using Assets.Scripts.Unity.Resources.Prefabs;
 
 using Macerus.Plugins.Features.GameObjects.Actors.Default.LightRadius;
-using Macerus.Plugins.Features.Stats.Api;
+using Macerus.Plugins.Features.Stats;
 
 using ProjectXyz.Api.GameObjects;
 

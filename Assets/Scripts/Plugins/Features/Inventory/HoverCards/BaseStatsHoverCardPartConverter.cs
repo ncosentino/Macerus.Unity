@@ -8,6 +8,7 @@ using System.Windows.Controls;
 #endif
 
 using Macerus.Plugins.Features.Inventory.Api.HoverCards;
+using System.Globalization;
 
 namespace Assets.Scripts.Plugins.Features.Inventory.HoverCards
 {

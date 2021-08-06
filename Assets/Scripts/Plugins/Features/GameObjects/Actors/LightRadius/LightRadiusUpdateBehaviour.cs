@@ -4,7 +4,7 @@ using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.Threading;
 
 using Macerus.Plugins.Features.GameObjects.Actors.Default.LightRadius;
-using Macerus.Plugins.Features.Stats.Api;
+using Macerus.Plugins.Features.Stats;
 
 using NexusLabs.Contracts;
 
