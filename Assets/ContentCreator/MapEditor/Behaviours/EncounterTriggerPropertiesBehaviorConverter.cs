@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Macerus.Plugins.Features.Encounters.Triggers;
+using Macerus.Plugins.Features.Encounters.Default.Triggers;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;

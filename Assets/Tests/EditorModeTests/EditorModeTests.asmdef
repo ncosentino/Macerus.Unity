@@ -40,6 +40,7 @@
 "Macerus.Plugins.Features.DataPersistence.dll",
 "Macerus.Plugins.Features.DataPersistence.Kvp.dll",
 "Macerus.Plugins.Features.DataPersistence.Kvp.InMemory.dll",
+"Macerus.Plugins.Features.Encounters.Default.dll",
 "Macerus.Plugins.Features.Encounters.dll",
 "Macerus.Plugins.Features.GameObjects.Actors.Default.dll",
 "Macerus.Plugins.Features.GameObjects.Actors.dll",
