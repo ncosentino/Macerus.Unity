@@ -71,31 +71,43 @@ namespace Assets.Scripts.UnityEditor
             var destinationPluginsDirectory = Path.Combine(
                 _dataPath,
                 @"MacerusPlugins");
-            // FIXME: this can't be general resources because there's unity-
-            // specific resources we don't want to nuke on import
-            var destinationResourcesDirectory = Path.Combine(
-                _dataPath,
-                @"Resources/Mapping/Maps");
             Debug.Log($"Destination Plugins Directory: '{destinationPluginsDirectory}'");
-            Debug.Log($"Destination Resources Directory: '{destinationResourcesDirectory}'");
+
+            var resourcePairings = new[]
+            {
+                new ResourcePair(
+                    "content/mapping/maps/",
+                    Path.Combine(_dataPath, @"Resources/Mapping/Maps")),
+                new ResourcePair(
+                    "content/resources/graphics/",
+                    Path.Combine(_dataPath, @"Resources/Graphics")),
+            };
+            Debug.Log($"Resource Pairings:");
+            foreach (var pair in resourcePairings)
+            {
+                Debug.Log(
+                    $"\tSource Prefix: '{pair.SourceResourcePathPrefix}'\r\n" +
+                    $"\tDestination: '{pair.DestinationResourcePath}'");
+            }
 
             UsingEnsuredPluginsDirectory(
                 destinationPluginsDirectory,
                 () =>
-            UsingEnsuredResourcesDirectory(
-                destinationResourcesDirectory,
+            UsingEnsuredDirectory(
+                Path.Combine(_dataPath, "Resources"),
+                null,
                 () =>
             {
                 ProcessDependencies(
                     destinationPluginsDirectory,
-                    destinationResourcesDirectory);
+                    resourcePairings);
                 UpdateTestAssemblyReferences(destinationPluginsDirectory);
             }));
         }
 
         private void UpdateTestAssemblyReferences(string destinationPluginsDirectory)
         {
-            var asmDefPath = "Assets/Tests/EditorModeTests/EditorModeTests.asmdef";
+            var asmDefPath = "Assets /Tests/EditorModeTests/EditorModeTests.asmdef";
             var asmDefContents = File.ReadAllText(asmDefPath);
             var dependencyRegex = new Regex("(\"precompiledReferences\": \\[)(.+)(\\],)", RegexOptions.Singleline);
             var dlls = Directory.GetFiles(destinationPluginsDirectory, "*.dll");
@@ -145,25 +157,16 @@ namespace Assets.Scripts.UnityEditor
                 callback);
         }
 
-        private void UsingEnsuredResourcesDirectory(
-            string destinationDirectory,
-            Action callback)
-        {
-            var backupDirectory = Path.Combine(
-                _dataPath,
-                @"ResourcesBackup");
-            UsingEnsuredDirectory(
-                destinationDirectory,
-                backupDirectory,
-                callback);
-        }
-
         private void UsingEnsuredDirectory(
             string destinationDirectory,
             string backupDirectory,
             Action callback)
         {
-            if (Directory.Exists(backupDirectory))
+            if (string.IsNullOrWhiteSpace(backupDirectory))
+            {
+                Debug.Log($"No backup directory specified for '{destinationDirectory}'.");
+            }
+            else if (Directory.Exists(backupDirectory))
             {
                 Debug.Log($"Deleting '{backupDirectory}'...");
                 Directory.Delete(backupDirectory, true);
@@ -172,9 +175,19 @@ namespace Assets.Scripts.UnityEditor
 
             if (Directory.Exists(destinationDirectory))
             {
-                Debug.Log($"Backing up '{destinationDirectory}' to {backupDirectory}...");
-                Directory.Move(destinationDirectory, backupDirectory);
-                Debug.Log($"Backed up '{destinationDirectory}' to {backupDirectory}.");
+                if (string.IsNullOrWhiteSpace(backupDirectory))
+                {
+                    Debug.LogWarning(
+                        $"No backup directory specified for '{destinationDirectory}' " +
+                        $"but the directory already exists. Contents may be " +
+                        $"interleaved between old and new.");
+                }
+                else
+                {
+                    Debug.Log($"Backing up '{destinationDirectory}' to {backupDirectory}...");
+                    Directory.Move(destinationDirectory, backupDirectory);
+                    Debug.Log($"Backed up '{destinationDirectory}' to {backupDirectory}.");
+                }
             }
 
             if (!Directory.Exists(destinationDirectory))
@@ -190,7 +203,7 @@ namespace Assets.Scripts.UnityEditor
             }
             catch
             {
-                if (backupDirectory != null &&
+                if (!string.IsNullOrWhiteSpace(backupDirectory) &&
                     Directory.Exists(backupDirectory))
                 {
                     Debug.Log($"Attempting restoration of backup '{backupDirectory}' due to failure...");
@@ -209,7 +222,7 @@ namespace Assets.Scripts.UnityEditor
             }
             finally
             {
-                if (Directory.Exists(backupDirectory))
+                if (!string.IsNullOrWhiteSpace(backupDirectory) && Directory.Exists(backupDirectory))
                 {
                     Debug.Log($"Deleting '{backupDirectory}'...");
                     Directory.Delete(backupDirectory, true);
@@ -220,7 +233,7 @@ namespace Assets.Scripts.UnityEditor
 
         private void ProcessDependencies(
             string destinationPluginsDirectory,
-            string destinationResourcesDirectory)
+            IReadOnlyCollection<ResourcePair> resourcePairings)
         {
             var dependencyEntries = new IDependencyEntry[]
             {
@@ -255,14 +268,14 @@ namespace Assets.Scripts.UnityEditor
             {
                 ProcessDependencyEntry(
                     destinationPluginsDirectory,
-                    destinationResourcesDirectory,
+                    resourcePairings,
                     dependencyEntry);
             }
         }
 
         private void ProcessDependencyEntry(
             string destinationPluginsDirectory,
-            string destinationResourcesDirectory,
+            IReadOnlyCollection<ResourcePair> resourcePairings,
             IDependencyEntry dependencyEntry)
         {
             if (dependencyEntry is DependencyDirectoryEntry)
@@ -275,7 +288,7 @@ namespace Assets.Scripts.UnityEditor
             {
                 ProcessNugetDependencyEntry(
                     destinationPluginsDirectory,
-                    destinationResourcesDirectory,
+                    resourcePairings,
                     (NugetDependencyEntry)dependencyEntry);
             }
             else
@@ -287,7 +300,7 @@ namespace Assets.Scripts.UnityEditor
 
         private void ProcessNugetDependencyEntry(
             string destinationPluginsDirectory,
-            string destinationResourcesDirectory,
+            IReadOnlyCollection<ResourcePair> resourcePairings,
             NugetDependencyEntry dependencyEntry)
         {
             Debug.Log($"{dependencyEntry.Name} Nuget Package");
@@ -335,29 +348,32 @@ namespace Assets.Scripts.UnityEditor
                     entry.ExtractToFile(destinationFileName, true);
                 }
 
-                // FIXME: this is map specific just because we don't yet
-                // support fully mixing back-end + unity resources
-                var resourcePrefix = "content/mapping/maps/";
+                // resources!
                 foreach (var entry in zipFile
                     .Entries
-                    .Where(x => x.FullName.IndexOf(
-                        resourcePrefix,
-                        StringComparison.OrdinalIgnoreCase) != -1))
+                    .Select(x => new
+                    {
+                        ZipEntry = x,
+                        ResourcePair = resourcePairings.FirstOrDefault(resPair => x.FullName.IndexOf(
+                            resPair.SourceResourcePathPrefix,
+                            StringComparison.OrdinalIgnoreCase) != -1)
+                    })
+                    .Where(x => x.ResourcePair != null))
                 {
                     if (dependencyEntry
                         .ExcludePatterns
-                        ?.Any(x => x.Equals(entry.Name, StringComparison.OrdinalIgnoreCase)) == true)
+                        ?.Any(x => x.Equals(entry.ZipEntry.Name, StringComparison.OrdinalIgnoreCase)) == true)
                     {
-                        Debug.Log($"Skipping '{entry.Name}' because it matches an exclude pattern.");
+                        Debug.Log($"Skipping '{entry.ZipEntry.Name}' because it matches an exclude pattern.");
                         continue;
                     }
 
-                    var filePathPart = entry.FullName.Substring(
-                        entry.FullName.IndexOf(resourcePrefix, StringComparison.OrdinalIgnoreCase) + resourcePrefix.Length);
+                    var filePathPart = entry.ZipEntry.FullName.Substring(
+                        entry.ZipEntry.FullName.IndexOf(entry.ResourcePair.SourceResourcePathPrefix, StringComparison.OrdinalIgnoreCase) + entry.ResourcePair.SourceResourcePathPrefix.Length);
                     var destinationFileName = Path.Combine(
-                        destinationResourcesDirectory,
+                        entry.ResourcePair.DestinationResourcePath,
                         filePathPart);
-                    Debug.Log($"Extracting '{entry.Name}' to '{destinationFileName}'...");
+                    Debug.Log($"Extracting '{entry.ZipEntry.Name}' to '{destinationFileName}'...");
 
                     if (!Directory.Exists(Path.GetDirectoryName(destinationFileName)))
                     {
@@ -365,7 +381,7 @@ namespace Assets.Scripts.UnityEditor
                         Directory.CreateDirectory(Path.GetDirectoryName(destinationFileName));
                     }
 
-                    entry.ExtractToFile(destinationFileName, true);
+                    entry.ZipEntry.ExtractToFile(destinationFileName, true);
                 }
             }
         }
@@ -451,6 +467,21 @@ namespace Assets.Scripts.UnityEditor
             public IReadOnlyCollection<string> SearchPatterns { get; }
 
             public IReadOnlyCollection<string> ExcludePatterns { get; }
+        }
+
+        private sealed class ResourcePair
+        {
+            public ResourcePair(
+                string sourceResourcePathPrefix,
+                string destinationResourcePath)
+            {
+                SourceResourcePathPrefix = sourceResourcePathPrefix;
+                DestinationResourcePath = destinationResourcePath;
+            }
+
+            public string SourceResourcePathPrefix { get; }
+
+            public string DestinationResourcePath { get; }
         }
     }
 }
