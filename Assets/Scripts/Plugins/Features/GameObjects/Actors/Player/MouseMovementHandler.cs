@@ -139,7 +139,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 
                 // FIXME: actually calculate the path distance (i.e. account for things like diagonals)
                 actor
-                    .GetOnly<IHasMutableStatsBehavior>()
+                    .GetOnly<IHasStatsBehavior>()
                     .MutateStats(stats => stats[_actorIdentifiers.MoveDistancePerTurnCurrentStatDefinitionId] -= foundPath.TotalDistance);
             }
             else

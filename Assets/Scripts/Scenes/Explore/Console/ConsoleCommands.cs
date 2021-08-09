@@ -19,7 +19,7 @@ using Macerus.Plugins.Features.Weather;
 
 using ProjectXyz.Api.Framework;
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Api.Stats;
+using ProjectXyz.Plugins.Features.Stats;
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
 using ProjectXyz.Plugins.Features.Filtering.Api;
 using ProjectXyz.Plugins.Features.GameObjects.Skills;
@@ -408,7 +408,7 @@ namespace Assets.Scripts.Scenes.Explore.Console
             }
 
             player
-                .GetOnly<IHasMutableStatsBehavior>()
+                .GetOnly<IHasStatsBehavior>()
                 .MutateStats(stats => stats[statDefinitionId] = value);
         }
 
