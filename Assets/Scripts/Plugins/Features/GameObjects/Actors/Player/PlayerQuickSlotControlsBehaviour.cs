@@ -90,6 +90,19 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
             await _runner.RunAsync(HandleQuickSlotControlsAsync);
         }
 
+        private async Task UsePrimedSkillAsync()
+        {
+            var skillSlotIndex = _primedSkillIndex.Value;
+            _primedSkillIndex = null;
+            _lastMouseTargetPosition = null;
+            _lastDirection = null;
+            await StatusBarController
+                .ActivateSkillSlotAsync(
+                    Actor,
+                    skillSlotIndex)
+                .ConfigureAwait(false);
+        }
+
         private async Task HandleQuickSlotControlsAsync()
         {
             if (DebugConsoleManager.GetConsoleWindowVisible())
@@ -102,6 +115,11 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                 return;
             }
 
+            if (MouseInput.GetMouseButtonUp(0) && _primedSkillIndex.HasValue)
+            {
+                await UsePrimedSkillAsync().ConfigureAwait(false);
+            }
+
             foreach (var entry in _keyToSlotIndex.OrderBy(x => x.Value))
             {
                 if (!KeyboardInput.GetKeyUp(entry.Key))
@@ -111,14 +129,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
                 if (_primedSkillIndex.HasValue)
                 {
-                    _primedSkillIndex = null;
-                    _lastMouseTargetPosition = null;
-                    _lastDirection = null;
-                    await StatusBarController
-                        .ActivateSkillSlotAsync(
-                            Actor,
-                            entry.Value)
-                        .ConfigureAwait(false);
+                    await UsePrimedSkillAsync().ConfigureAwait(false);
                 }
                 else
                 {
