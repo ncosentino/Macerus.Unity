@@ -26,37 +26,43 @@ namespace Assets.Scripts.Plugins.Features.Gui
         private readonly IModalContentConverterFacade _modalContentConverter;
         private readonly IViewWelderFactory _viewWelderFactory;
         private readonly IModalWindow _modalWindow;
+        private readonly IUiDispatcher _uiDispatcher;
 
         public ModalContentPresenter(
             IModalContentConverterFacade modalContentConverter,
             IViewWelderFactory viewWelderFactory,
-            IModalWindow modalWindow)
+            IModalWindow modalWindow,
+            IUiDispatcher uiDispatcher)
         {
             _modalContentConverter = modalContentConverter;
             _viewWelderFactory = viewWelderFactory;
             _modalWindow = modalWindow;
+            _uiDispatcher = uiDispatcher;
         }
 
         public async Task PresentAsync(
             object content,
             IEnumerable<IModalButtonViewModel> buttons)
         {
-            var wpfButtonViewModels = buttons.Select(x => new ModalButtonNoesisViewModel(
+            _uiDispatcher.RunOnMainThread(() =>
+            {
+                var wpfButtonViewModels = buttons.Select(x => new ModalButtonNoesisViewModel(
                 x.StringResourceId.ToString(),
                 new DelegateCommand(_ => x.ButtonSelected())));
 
-            var modalChild = _modalContentConverter.ConvertContentToWeldableView(content);
-            var modalContainer = new ModalContainer(
-                _viewWelderFactory,
-                (UIElement)modalChild,
-                wpfButtonViewModels);
-            modalContainer.Closed += ModalContainer_Closed;
-            _viewWelderFactory
-                .Create<ISimpleWelder>(
-                    _modalWindow,
-                    modalContainer)
-                .Weld();
-            _modalWindow.Visibility = Visibility.Visible;
+                var modalChild = _modalContentConverter.ConvertContentToWeldableView(content);
+                var modalContainer = new ModalContainer(
+                    _viewWelderFactory,
+                    (UIElement)modalChild,
+                    wpfButtonViewModels);
+                modalContainer.Closed += ModalContainer_Closed;
+                _viewWelderFactory
+                    .Create<ISimpleWelder>(
+                        _modalWindow,
+                        modalContainer)
+                    .Weld();
+                _modalWindow.Visibility = Visibility.Visible;
+            });            
         }
 
         private void ModalContainer_Closed(object sender, EventArgs e)
