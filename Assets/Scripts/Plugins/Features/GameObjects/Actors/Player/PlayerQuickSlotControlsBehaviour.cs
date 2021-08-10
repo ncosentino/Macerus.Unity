@@ -117,7 +117,9 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
             if (MouseInput.GetMouseButtonUp(0) && _primedSkillIndex.HasValue)
             {
+                // NOTE: false here means no more UI-specific things are safe to implicitly run after
                 await UsePrimedSkillAsync().ConfigureAwait(false);
+                return;
             }
 
             foreach (var entry in _keyToSlotIndex.OrderBy(x => x.Value))
@@ -129,6 +131,7 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
 
                 if (_primedSkillIndex.HasValue)
                 {
+                    // NOTE: false here means no more UI-specific things are safe to implicitly run after
                     await UsePrimedSkillAsync().ConfigureAwait(false);
                 }
                 else
