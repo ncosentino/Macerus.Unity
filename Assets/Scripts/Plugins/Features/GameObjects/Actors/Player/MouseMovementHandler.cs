@@ -138,9 +138,10 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Actors.Player
                     $"{string.Join("\r\n", path.Select(p => $"\t({p.X},{p.Y})"))}");
                 
                 // FIXME: actually calculate the path distance (i.e. account for things like diagonals)
-                actor
+                await actor
                     .GetOnly<IHasStatsBehavior>()
-                    .MutateStats(stats => stats[_actorIdentifiers.MoveDistancePerTurnCurrentStatDefinitionId] -= foundPath.TotalDistance);
+                    .MutateStatsAsync(async stats => stats[_actorIdentifiers.MoveDistancePerTurnCurrentStatDefinitionId] -= foundPath.TotalDistance)
+                    .ConfigureAwait(false);
             }
             else
             {

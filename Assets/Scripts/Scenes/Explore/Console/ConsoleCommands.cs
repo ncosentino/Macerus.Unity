@@ -409,7 +409,8 @@ namespace Assets.Scripts.Scenes.Explore.Console
 
             player
                 .GetOnly<IHasStatsBehavior>()
-                .MutateStats(stats => stats[statDefinitionId] = value);
+                .MutateStatsAsync(async stats => stats[statDefinitionId] = value)
+                .Wait();
         }
 
         [DiscoverableConsoleCommand("Adds a skill with the specified ID to the player.")]
