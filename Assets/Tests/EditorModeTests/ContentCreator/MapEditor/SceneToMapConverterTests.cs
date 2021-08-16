@@ -11,6 +11,7 @@ using Macerus.ContentCreator.MapEditor.Behaviors.Shared;
 using NUnit.Framework;
 
 using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping;
 
 using UnityEngine;
 

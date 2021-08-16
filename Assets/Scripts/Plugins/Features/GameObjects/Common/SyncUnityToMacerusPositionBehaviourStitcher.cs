@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Plugins.Features.GameObjects.Common.Api;
 
 using ProjectXyz.Api.GameObjects;
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping;
 
 using UnityEngine;
 

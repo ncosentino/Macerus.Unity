@@ -6,7 +6,7 @@ using Macerus.Api.Behaviors;
 
 using NexusLabs.Contracts;
 
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping;
 
 using UnityEngine;
 

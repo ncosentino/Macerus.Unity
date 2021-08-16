@@ -1,6 +1,6 @@
 ﻿using NexusLabs.Contracts;
 
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping;
 
 using UnityEngine;
 
@@ -18,8 +18,8 @@ namespace Assets.Scripts.Plugins.Features.GameObjects.Common
 
         private void Start()
         {
-            UnityContracts.RequiresNotNull(this, MacerusToUnityPositionSynchronizer, nameof(MacerusToUnityPositionSynchronizer));
-            UnityContracts.RequiresNotNull(this, PositionBehavior, nameof(PositionBehavior));
+            this.RequiresNotNull(MacerusToUnityPositionSynchronizer, nameof(MacerusToUnityPositionSynchronizer));
+            this.RequiresNotNull(PositionBehavior, nameof(PositionBehavior));
 
             // sync macerus (source of truth) to unity
             MacerusToUnityPositionSynchronizer.SynchronizeMacerusToUnityPosition(

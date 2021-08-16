@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
 using ProjectXyz.Api.GameObjects.Behaviors;
-using ProjectXyz.Plugins.Features.CommonBehaviors;
-using ProjectXyz.Plugins.Features.CommonBehaviors.Api;
+using ProjectXyz.Plugins.Features.Mapping;
+using ProjectXyz.Plugins.Features.Mapping.Default;
 
 using UnityEngine;
 
